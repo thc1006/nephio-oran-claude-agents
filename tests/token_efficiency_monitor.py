@@ -31,7 +31,36 @@ class TokenEfficiencyMonitor:
                 "max_acceptable": 6000,
                 "cost_per_1k_tokens": 0.075
             },
-            # Add all 8 agents here...
+            "performance-optimization-agent": {
+                "model": "opus",
+                "avg_tokens_per_task": 2800,
+                "max_acceptable": 5500,
+                "cost_per_1k_tokens": 0.075
+            },
+            "nephio-oran-orchestrator-agent": {
+                "model": "opus",
+                "avg_tokens_per_task": 3500,
+                "max_acceptable": 7000,
+                "cost_per_1k_tokens": 0.075
+            },
+            "configuration-management-agent": {
+                "model": "sonnet",
+                "avg_tokens_per_task": 1200,
+                "max_acceptable": 2500,
+                "cost_per_1k_tokens": 0.015
+            },
+            "monitoring-analytics-agent": {
+                "model": "sonnet",
+                "avg_tokens_per_task": 1800,
+                "max_acceptable": 3500,
+                "cost_per_1k_tokens": 0.015
+            },
+            "data-analytics-agent": {
+                "model": "haiku",
+                "avg_tokens_per_task": 600,
+                "max_acceptable": 1200,
+                "cost_per_1k_tokens": 0.0015
+            }
         }
         self.csv_log_file = "token_usage_log.csv"
         self._initialize_csv_log()
