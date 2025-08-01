@@ -144,9 +144,11 @@ git clone https://github.com/[your-username]/nephio-oran-claude-agents.git
 # Make changes to agent files
 # Test with: ./tests/validate_agents.sh
 # Submit pull request
-## 📄 License
 
+```
+## 📄 License
 MIT License - see [LICENSE](LICENSE) for details.
+
 
 ## 🙏 Acknowledgments
 
