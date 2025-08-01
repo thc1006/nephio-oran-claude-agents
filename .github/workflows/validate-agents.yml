@@ -1,0 +1,23 @@
+name: Validate Nephio-O-RAN Agents
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: Install dependencies
+      run: pip install pyyaml
+    - name: Validate agent structure
+      run: ./tests/validate_agents.sh
+    - name: Run comprehensive validation
+      run: python3 tests/agent_validator.py
+    - name: Upload validation report
+      uses: actions/upload-artifact@v3
+      with:
+        name: validation-report
+        path: agent_validation_report.md
