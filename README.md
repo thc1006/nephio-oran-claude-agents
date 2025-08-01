@@ -156,6 +156,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 - Optimized for Nephio and O-RAN integration ecosystems
 - Designed following proven agent repository patterns
 
----
-
-**Ready to automate your telecom infrastructure?** Just `git clone`, copy the agent files, and start building with Claude Code! 🚀
+> **Ready to automate your telecom infrastructure?** Just `git clone`, copy the agent files, and start building with Claude Code! 🚀
