@@ -2,7 +2,7 @@
 
 **Ready-to-use** specialized AI agents for Nephio and O-RAN telecommunications automation. Clone once, copy files, and start automating telecom infrastructure immediately.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Claude Code Compatible](https://img.shields.io/badge/Claude%20Code-Compatible-blue.svg)]()
 [![Telecom Automation](https://img.shields.io/badge/Domain-Telecom%20Automation-green.svg)]()
 

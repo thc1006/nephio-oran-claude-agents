@@ -3,10 +3,16 @@
 echo "🔍 Starting Nephio-O-RAN Agent Validation..."
 echo "================================================"
 
+# Check if the ~/.claude directory exists
+if [ ! -d "$HOME/.claude" ]; then
+    echo "⚠️  Warning: ~/.claude directory not found. Creating it."
+    mkdir -p "$HOME/.claude"
+fi
+
 VALIDATION_PASSED=0
 VALIDATION_FAILED=0
 
-for agent_file in *-agent.md; do
+for agent_file in ../*-agent.md; do
     if [ ! -f "$agent_file" ]; then
         echo "ℹ️  No agent files found matching pattern '*-agent.md'"
         break

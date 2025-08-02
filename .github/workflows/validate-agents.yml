@@ -13,7 +13,9 @@ jobs:
     - name: Install dependencies
       run: pip install pyyaml
     - name: Validate agent structure
-      run: ./tests/validate_agents.sh
+      run: |
+        chmod +x tests/validate_agents.sh
+        ./tests/validate_agents.sh
     - name: Run agent scenario tests
       run: python3 tests/test_agent_scenarios.py
     - name: Test token efficiency monitoring

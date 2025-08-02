@@ -55,6 +55,7 @@ def generate_weekly_report():
     
     except FileNotFoundError:
         print("📄 No usage data found. Start logging token usage first!")
+        return
 
 if __name__ == "__main__":
     generate_weekly_report()
