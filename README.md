@@ -26,20 +26,28 @@ That's it! All 8 specialized agents are now available in Claude Code.
 **8 Production-Ready Agents** - Just copy the `.md` files and start using:
 
 ### 🏗️ Infrastructure Management
-- `nephio-infrastructure-agent.md` - O-Cloud provisioning & Kubernetes lifecycle
-- `configuration-management-agent.md` - YANG models & Infrastructure as Code
+- `nephio-infrastructure-agent.md`
+- O-Cloud provisioning & Kubernetes lifecycle
+- `configuration-management-agent.md`
+- YANG models & Infrastructure as Code
 
 ### 📡 O-RAN Network Functions  
-- `oran-network-functions-agent.md` - CNF/VNF deployment & xApp management
-- `nephio-oran-orchestrator-agent.md` - End-to-end service orchestration
+- `oran-network-functions-agent.md`
+- CNF/VNF deployment & xApp management
+- `nephio-oran-orchestrator-agent.md`
+- End-to-end service orchestration
 
 ### 📊 Monitoring & Data
-- `monitoring-analytics-agent.md` - Observability & performance monitoring
-- `data-analytics-agent.md` - Network intelligence & AI/ML pipelines
+- `monitoring-analytics-agent.md`
+- Observability & performance monitoring
+- `data-analytics-agent.md`
+- Network intelligence & AI/ML pipelines
 
 ### 🔒 Security & Optimization
-- `security-compliance-agent.md` - O-RAN security standards & compliance
-- `performance-optimization-agent.md` - Network optimization & intelligent scaling
+- `security-compliance-agent.md`
+- O-RAN security standards & compliance
+- `performance-optimization-agent.md`
+- Network optimization & intelligent scaling
 
 ## 💡 Installation Options
 
@@ -144,9 +152,11 @@ git clone https://github.com/[your-username]/nephio-oran-claude-agents.git
 # Make changes to agent files
 # Test with: ./tests/validate_agents.sh
 # Submit pull request
-## 📄 License
 
+```
+## 📄 License
 MIT License - see [LICENSE](LICENSE) for details.
+
 
 ## 🙏 Acknowledgments
 
@@ -154,6 +164,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 - Optimized for Nephio and O-RAN integration ecosystems
 - Designed following proven agent repository patterns
 
----
-
-**Ready to automate your telecom infrastructure?** Just `git clone`, copy the agent files, and start building with Claude Code! 🚀
+> **Ready to automate your telecom infrastructure?** Just `git clone`, copy the agent files, and start building with Claude Code! 🚀
