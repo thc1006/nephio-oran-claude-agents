@@ -4,8 +4,19 @@ Generate token efficiency reports
 """
 
 import csv
+import sys
+import os
 from datetime import datetime, timedelta
-from token_efficiency_monitor import TokenEfficiencyMonitor
+from pathlib import Path
+
+# Add current directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent))
+
+try:
+    from token_efficiency_monitor import TokenEfficiencyMonitor
+except ImportError:
+    print("Error: Could not import TokenEfficiencyMonitor. Make sure token_efficiency_monitor.py is in the same directory.")
+    sys.exit(1)
 
 def generate_weekly_report():
     monitor = TokenEfficiencyMonitor()
@@ -15,7 +26,8 @@ def generate_weekly_report():
     agent_stats = {}
     
     try:
-        with open('token_usage_log.csv', 'r') as f:
+        csv_file = monitor.csv_log_file
+        with open(csv_file, 'r') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 row_date = datetime.fromisoformat(row['timestamp'])

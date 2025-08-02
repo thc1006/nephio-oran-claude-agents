@@ -4,7 +4,17 @@ Simple script to log token usage after Claude Code tasks
 """
 
 import sys
-from token_efficiency_monitor import TokenEfficiencyMonitor
+import os
+from pathlib import Path
+
+# Add current directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent))
+
+try:
+    from token_efficiency_monitor import TokenEfficiencyMonitor
+except ImportError:
+    print("Error: Could not import TokenEfficiencyMonitor. Make sure token_efficiency_monitor.py is in the same directory.")
+    sys.exit(1)
 
 def main():
     if len(sys.argv) < 4:

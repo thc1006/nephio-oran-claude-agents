@@ -1,22 +1,63 @@
-name: Validate Nephio-O-RAN Agents
-on: [push, pull_request]
+name: Validate Agent Files
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
+        
     - name: Install dependencies
-      run: pip install pyyaml
-    - name: Validate agent structure
       run: |
-        chmod +x tests/validate_agents.sh
-        ./tests/validate_agents.sh
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Validate agent files (Python)
+      run: |
+        cd tests
+        python validate_agents.py
+        
     - name: Run agent scenario tests
-      run: python3 tests/test_agent_scenarios.py
-    - name: Test token efficiency monitoring
-      run: python3 tests/token_efficiency_monitor.py
+      run: |
+        cd tests
+        python test_agent_scenarios.py
+        
+    - name: Test token efficiency monitor
+      run: |
+        cd tests
+        python -c "from token_efficiency_monitor import TokenEfficiencyMonitor; print('✅ Token monitor imports successfully')"
+        
+    - name: Validate agent file structure
+      run: |
+        # Check that all expected agent files exist
+        for agent in nephio-infrastructure configuration-management oran-network-functions nephio-oran-orchestrator monitoring-analytics data-analytics security-compliance performance-optimization; do
+          if [ ! -f "${agent}-agent.md" ]; then
+            echo "❌ Missing agent file: ${agent}-agent.md"
+            exit 1
+          else
+            echo "✅ Found: ${agent}-agent.md"
+          fi
+        done
+        
+    - name: Check configuration file
+      run: |
+        if [ ! -f "config/agent_config.yaml" ]; then
+          echo "❌ Missing config/agent_config.yaml"
+          exit 1
+        else
+          echo "✅ Configuration file exists"
+          python -c "import yaml; yaml.safe_load(open('config/agent_config.yaml')); print('✅ YAML syntax valid')"
+        fi

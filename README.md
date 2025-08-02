@@ -10,7 +10,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/[your-username]/nephio-oran-claude-agents.git
+git clone https://github.com/thc1006/nephio-oran-claude-agents.git
 
 # 2. Copy all agent files to your Claude Code directory
 cp nephio-oran-claude-agents/*-agent.md ~/.claude/
@@ -110,9 +110,10 @@ claude "Get security-compliance-agent to audit our O-RAN deployment for vulnerab
 All agents include comprehensive testing:
 
 ```bash
-# Run agent validation tests
+# Run agent validation tests (cross-platform)
 cd tests/
-./validate_agents.sh
+python3 validate_agents.py  # Recommended for Windows/cross-platform
+# OR: ./validate_agents.sh   # Unix/Linux systems
 
 # Test agent scenarios
 python3 test_agent_scenarios.py
@@ -126,8 +127,11 @@ python3 token_efficiency_monitor.py
 ```
 nephio-oran-claude-agents/
 ├── *-agent.md                    # 8 ready-to-use agent files
+├── config/
+│   └── agent_config.yaml         # Cost data and model assignments
 ├── tests/                        # Testing & validation tools
-│   ├── validate_agents.sh        # Agent structure validation
+│   ├── validate_agents.py        # Cross-platform agent validation
+│   ├── validate_agents.sh        # Unix/Linux validation script
 │   ├── test_agent_scenarios.py   # Scenario testing
 │   ├── token_efficiency_monitor.py # Cost monitoring
 │   └── generate_report.py        # Usage analytics
@@ -148,14 +152,14 @@ nephio-oran-claude-agents/
 
 ```bash
 # Fork, clone, and contribute
-git clone https://github.com/[your-username]/nephio-oran-claude-agents.git
+git clone https://github.com/thc1006/nephio-oran-claude-agents.git
 # Make changes to agent files
 # Test with: ./tests/validate_agents.sh
 # Submit pull request
 
 ```
 ## 📄 License
-MIT License - see [LICENSE](LICENSE) for details.
+Apache 2.0 License - see [LICENSE](LICENSE) for details.
 
 
 ## 🙏 Acknowledgments

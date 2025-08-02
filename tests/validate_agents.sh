@@ -1,6 +1,8 @@
 #!/bin/bash
 # Enhanced Agent Validation Script for Nephio-O-RAN Claude Code Agents
-echo "🔍 Starting Nephio-O-RAN Agent Validation..."
+# For cross-platform compatibility, use validate_agents.py instead
+echo "🔍 Cross-platform validation available!"
+echo "For Windows/cross-platform support, use: python3 validate_agents.py"
 echo "================================================"
 
 # Check if the ~/.claude directory exists
