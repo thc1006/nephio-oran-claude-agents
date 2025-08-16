@@ -192,6 +192,24 @@ ls -la ~/.claude/agents/
 dir %USERPROFILE%\.claude\agents\
 ```
 
+## 🤝 Multi-Agent Collaboration
+
+### Quick Start
+Run complete automated workflows:
+- `./scripts/run-workflow.sh deploy` - Full O-RAN deployment
+- `./scripts/run-workflow.sh troubleshoot` - Issue diagnosis and resolution
+- `./scripts/run-workflow.sh validate` - Security and compliance check
+- `./scripts/run-workflow.sh upgrade` - System upgrade
+
+### Advanced Usage
+Use Python orchestrator for detailed control:
+```bash
+python3 orchestration/orchestrator.py deploy --verbose
+```
+
+### Manual Agent Chaining
+Agents provide `handoff_to` suggestions for workflow continuation.
+
 ## 📊 Repository Structure
 
 ```

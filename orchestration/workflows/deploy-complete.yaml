@@ -1,0 +1,130 @@
+name: deploy-complete
+description: Full O-RAN deployment workflow with infrastructure setup through optimization
+version: 1.0.0
+author: Nephio-O-RAN Team
+
+stages:
+  - id: infrastructure
+    name: Infrastructure Setup
+    description: Provision and configure Kubernetes infrastructure
+    agent: nephio-infrastructure-agent
+    inputs:
+      cluster_size: large
+      region: us-east-1
+      kubernetes_version: "1.28"
+    validation:
+      - check: kubernetes_ready
+        command: kubectl get nodes
+      - check: nephio_installed
+        command: kubectl get deployments -n nephio-system
+    timeout: 1800
+    retry: 3
+
+  - id: dependencies
+    name: Dependency Resolution
+    description: Resolve and install all system dependencies
+    agent: oran-nephio-dep-doctor
+    depends_on: [infrastructure]
+    inputs:
+      check_mode: full
+      auto_fix: true
+    validation:
+      - check: operators_ready
+        command: kubectl get pods -n nephio-system
+      - check: crds_installed
+        command: kubectl get crds | grep nephio
+    timeout: 900
+    retry: 2
+
+  - id: configuration
+    name: Configuration Management
+    description: Apply configuration packages and policies
+    agent: configuration-management-agent
+    depends_on: [dependencies]
+    inputs:
+      config_type: production
+      encryption: enabled
+      audit_logging: true
+    validation:
+      - check: configs_applied
+        command: kubectl get configmaps -A
+      - check: policies_active
+        command: kubectl get networkpolicies -A
+    timeout: 600
+    retry: 2
+
+  - id: network-functions
+    name: Network Functions Deployment
+    description: Deploy O-RAN network functions (CU, DU, RIC)
+    agent: oran-network-functions-agent
+    depends_on: [configuration]
+    inputs:
+      deploy_cu: true
+      deploy_du: true
+      deploy_ric: true
+      scaling_mode: auto
+    validation:
+      - check: cu_running
+        command: kubectl get pods -n oran-cu
+      - check: du_running
+        command: kubectl get pods -n oran-du
+      - check: ric_running
+        command: kubectl get pods -n oran-ric
+    timeout: 1200
+    retry: 3
+
+  - id: monitoring
+    name: Monitoring Setup
+    description: Deploy monitoring and analytics stack
+    agent: monitoring-analytics-agent
+    depends_on: [network-functions]
+    inputs:
+      prometheus: enabled
+      grafana: enabled
+      elasticsearch: enabled
+      alert_rules: production
+    validation:
+      - check: prometheus_ready
+        command: kubectl get pods -n monitoring | grep prometheus
+      - check: grafana_accessible
+        command: curl -s http://grafana.monitoring.svc.cluster.local:3000/api/health
+    timeout: 900
+    retry: 2
+
+  - id: optimization
+    name: Performance Optimization
+    description: Optimize system performance and apply tuning
+    agent: performance-optimization-agent
+    depends_on: [monitoring]
+    inputs:
+      optimization_level: aggressive
+      resource_limits: auto
+      network_tuning: enabled
+    validation:
+      - check: performance_baseline
+        command: kubectl top nodes
+      - check: resource_utilization
+        command: kubectl top pods -A
+    timeout: 600
+    retry: 1
+    final: true
+
+completion:
+  notifications:
+    - type: slack
+      channel: "#deployments"
+      message: "O-RAN deployment completed successfully"
+    - type: email
+      recipients: ["ops-team@example.com"]
+      subject: "Deployment Complete"
+  artifacts:
+    - name: deployment-report
+      format: html
+      location: ~/.claude-workflows/reports/
+    - name: metrics-baseline
+      format: json
+      location: ~/.claude-workflows/metrics/
+  rollback:
+    enabled: true
+    snapshot: pre-deployment
+    retention: 7d

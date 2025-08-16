@@ -1,0 +1,102 @@
+name: troubleshoot
+description: Issue resolution workflow with diagnosis through verification
+version: 1.0.0
+author: Nephio-O-RAN Team
+
+stages:
+  - id: diagnosis
+    name: Issue Diagnosis
+    description: Identify and diagnose system issues
+    agent: oran-nephio-dep-doctor
+    inputs:
+      scan_mode: comprehensive
+      collect_logs: true
+      generate_report: true
+    outputs:
+      - issue_type
+      - severity
+      - affected_components
+    validation:
+      - check: scan_complete
+        command: ls ~/.claude-workflows/diagnosis/
+    timeout: 600
+    retry: 1
+
+  - id: root-cause
+    name: Root Cause Analysis
+    description: Perform deep root cause analysis
+    agent: data-analytics-agent
+    depends_on: [diagnosis]
+    inputs:
+      analysis_depth: deep
+      correlation_window: 24h
+      ml_models: enabled
+    outputs:
+      - root_cause
+      - contributing_factors
+      - impact_assessment
+    validation:
+      - check: analysis_complete
+        command: cat ~/.claude-workflows/analysis/root_cause.json
+    timeout: 900
+    retry: 2
+
+  - id: remediation
+    name: Apply Remediation
+    description: Execute remediation actions
+    agent: configuration-management-agent
+    depends_on: [root-cause]
+    inputs:
+      auto_remediate: true
+      backup_first: true
+      rollback_enabled: true
+    outputs:
+      - actions_taken
+      - resources_modified
+      - rollback_plan
+    validation:
+      - check: remediation_applied
+        command: kubectl get events -A --sort-by='.lastTimestamp' | head -20
+    timeout: 1200
+    retry: 3
+
+  - id: verification
+    name: Verify Resolution
+    description: Verify issue has been resolved
+    agent: testing-validation-agent
+    depends_on: [remediation]
+    inputs:
+      test_suite: post-remediation
+      health_checks: comprehensive
+      performance_baseline: true
+    outputs:
+      - resolution_status
+      - test_results
+      - performance_metrics
+    validation:
+      - check: all_tests_pass
+        command: kubectl get pods -A | grep -v Running | grep -v Completed
+      - check: metrics_normal
+        command: kubectl top nodes
+    timeout: 600
+    retry: 2
+    final: true
+
+completion:
+  notifications:
+    - type: slack
+      channel: "#incidents"
+      message: "Issue resolved - {{issue_type}}"
+    - type: pagerduty
+      action: resolve
+      incident_key: "{{incident_id}}"
+  artifacts:
+    - name: incident-report
+      format: pdf
+      location: ~/.claude-workflows/reports/
+    - name: remediation-log
+      format: json
+      location: ~/.claude-workflows/logs/
+  post_actions:
+    - update_runbook: true
+    - create_postmortem: true
