@@ -5,6 +5,10 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Claude Code Compatible](https://img.shields.io/badge/Claude%20Code-v1.0.60+-blue.svg)](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
 [![Telecom Automation](https://img.shields.io/badge/Domain-Telecom%20Automation-green.svg)]()
+[![Industry First](https://img.shields.io/badge/Industry-First-gold.svg)]()
+[![O-RAN Compatible](https://img.shields.io/badge/O--RAN-L%20Release-blue.svg)]()
+[![Nephio Version](https://img.shields.io/badge/Nephio-R5-green.svg)]()
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Agents-purple.svg)]()
 
 ## 🚀 Quick Start (2 minutes)
 
