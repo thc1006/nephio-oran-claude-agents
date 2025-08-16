@@ -1,5 +1,5 @@
 ---
-name: oran-nephio-dep-doctor
+name: oran-nephio-dep-doctor-agent
 description: Expert dependency resolver for O-RAN SC L Release and Nephio R5 components. Use PROACTIVELY when encountering any dependency, build, compatibility, or version mismatch errors with Go 1.24+ environments. MUST BE USED for resolving missing packages, build failures, or runtime errors. Searches authoritative sources and provides precise, minimal fixes.
 model: sonnet
 tools: Read, Write, Bash, Search, Git

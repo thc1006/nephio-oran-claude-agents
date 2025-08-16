@@ -65,13 +65,14 @@ def main():
     validation_passed = 0
     validation_failed = 0
 
-    # Find agent files in parent directory
+    # Find agent files in agents directory
     script_dir = Path(__file__).parent
     parent_dir = script_dir.parent
-    agent_files = list(parent_dir.glob('*-agent.md'))
+    agents_dir = parent_dir / 'agents'
+    agent_files = list(agents_dir.glob('*-agent.md'))
     
     if not agent_files:
-        print("ℹ️  No agent files found matching pattern '*-agent.md'")
+        print("ℹ️  No agent files found matching pattern '*-agent.md' in agents/ directory")
         return 1
 
     for agent_file in agent_files:
