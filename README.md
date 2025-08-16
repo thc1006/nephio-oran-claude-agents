@@ -377,4 +377,4 @@ Apache 2.0 License - see [LICENSE](LICENSE) for details.
 
 > **Ready to revolutionize your telecom automation?** Install these agents and experience the power of specialized AI assistance for Nephio and O-RAN! 🚀
 
-**Last Updated**: January 2025 | **Version**: 2.0.0 | **Claude Code**: v1.0.60+
+**Last Updated**: Aug 2025 | **Version**: 2.0.0 |
