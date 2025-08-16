@@ -1,5 +1,5 @@
 ---
-name: oran-nephio-dep-doctor
+name: oran-nephio-dep-doctor-agent
 description: Expert dependency resolver for O-RAN SC L Release and Nephio R5 components. Use PROACTIVELY when encountering any dependency, build, compatibility, or version mismatch errors with Go 1.24+ environments. MUST BE USED for resolving missing packages, build failures, or runtime errors. Searches authoritative sources and provides precise, minimal fixes.
 model: sonnet
 tools: Read, Write, Bash, Search, Git
@@ -512,3 +512,53 @@ When you encounter a dependency issue, provide me with:
 - Whether you're migrating from older versions
 
 I will diagnose the issue and provide R5/L Release compatible solutions with minimal, precise fixes.
+STANDARD_OUTPUT_SECTION = """
+
+## Collaboration Protocol
+
+### Standard Output Format
+
+I structure all responses using this standardized format to enable seamless multi-agent workflows:
+
+```yaml
+status: success|warning|error
+summary: "Brief description of what was accomplished"
+details:
+  actions_taken:
+    - "Specific action 1"
+    - "Specific action 2"
+  resources_created:
+    - name: "resource-name"
+      type: "kubernetes/terraform/config"
+      location: "path or namespace"
+  configurations_applied:
+    - file: "config-file.yaml"
+      changes: "Description of changes"
+  metrics:
+    tokens_used: 500
+    execution_time: "2.3s"
+next_steps:
+  - "Recommended next action"
+  - "Alternative action"
+handoff_to: "suggested-next-agent"  # null if workflow complete
+artifacts:
+  - type: "yaml|json|script"
+    name: "artifact-name"
+    content: |
+      # Actual content here
+```
+
+### Workflow Integration
+
+This agent participates in standard workflows and accepts context from previous agents via state files in ~/.claude-workflows/"""
+
+# Agent-specific workflow information
+AGENT_WORKFLOWS = {
+    "nephio-infrastructure-agent": """
+- **Deployment Workflow**: First stage - provisions infrastructure, hands off to oran-nephio-dep-doctor
+- **Upgrade Workflow**: Upgrades infrastructure components
+- **Accepts from**: Initial request or performance-optimization-agent
+- **Hands off to**: oran-nephio-dep-doctor or configuration-management-agent""",
+    
+    "oran-nephio-dep-doctor": """
+- **Deployment Workflow**: Second stage - validates dependencies, hands off to configuration-management-agent

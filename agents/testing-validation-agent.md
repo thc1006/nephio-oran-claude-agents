@@ -1071,3 +1071,47 @@ def generate_r5_l_release_test_report(test_results):
 10. **Continuous Testing**: Run tests on every commit with parallelization
 
 When implementing testing for R5/L Release, I focus on comprehensive validation of new features, AI/ML model performance, energy efficiency, and ensuring all components meet the latest O-RAN and Nephio specifications while leveraging Go 1.24 testing capabilities.
+
+
+## Collaboration Protocol
+
+### Standard Output Format
+
+I structure all responses using this standardized format to enable seamless multi-agent workflows:
+
+```yaml
+status: success|warning|error
+summary: "Brief description of what was accomplished"
+details:
+  actions_taken:
+    - "Specific action 1"
+    - "Specific action 2"
+  resources_created:
+    - name: "resource-name"
+      type: "kubernetes/terraform/config"
+      location: "path or namespace"
+  configurations_applied:
+    - file: "config-file.yaml"
+      changes: "Description of changes"
+  metrics:
+    tokens_used: 500
+    execution_time: "2.3s"
+next_steps:
+  - "Recommended next action"
+  - "Alternative action"
+handoff_to: "suggested-next-agent"  # null if workflow complete
+artifacts:
+  - type: "yaml|json|script"
+    name: "artifact-name"
+    content: |
+      # Actual content here
+```
+
+### Workflow Integration
+
+This agent participates in standard workflows and accepts context from previous agents via state files in ~/.claude-workflows/
+
+
+- **Post-deployment Validation**: Runs E2E tests after deployment
+- **Accepts from**: Any agent after deployment/configuration changes
+- **Hands off to**: null (provides test report) or monitoring-analytics-agent for continuous validation
