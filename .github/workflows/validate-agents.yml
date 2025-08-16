@@ -42,13 +42,13 @@ jobs:
         
     - name: Validate agent file structure
       run: |
-        # Check that all expected agent files exist
-        for agent in nephio-infrastructure configuration-management oran-network-functions nephio-oran-orchestrator monitoring-analytics data-analytics security-compliance performance-optimization; do
-          if [ ! -f "${agent}-agent.md" ]; then
-            echo "❌ Missing agent file: ${agent}-agent.md"
+        # Check that all expected agent files exist in agents/ directory
+        for agent in nephio-infrastructure configuration-management oran-network-functions nephio-oran-orchestrator monitoring-analytics data-analytics security-compliance performance-optimization oran-nephio-dep-doctor testing-validation; do
+          if [ ! -f "agents/${agent}-agent.md" ]; then
+            echo "❌ Missing agent file: agents/${agent}-agent.md"
             exit 1
           else
-            echo "✅ Found: ${agent}-agent.md"
+            echo "✅ Found: agents/${agent}-agent.md"
           fi
         done
         
