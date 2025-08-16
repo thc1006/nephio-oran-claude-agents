@@ -86,8 +86,19 @@ class TokenEfficiencyMonitor:
                 "avg_tokens_per_task": 600,
                 "max_acceptable": 1200,
                 "cost_per_1k_tokens": 0.0015
+            },
+            "oran-nephio-dep-doctor-agent": {
+                "model": "sonnet",
+                "avg_tokens_per_task": 1000,
+                "max_acceptable": 2000,
+                "cost_per_1k_tokens": 0.015
+            },
+            "testing-validation-agent": {
+                "model": "sonnet",
+                "avg_tokens_per_task": 1400,
+                "max_acceptable": 2800,
+                "cost_per_1k_tokens": 0.015
             }
-        }
         }
     
     def _initialize_csv_log(self):
