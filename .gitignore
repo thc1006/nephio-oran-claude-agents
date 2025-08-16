@@ -1,6 +1,7 @@
 # Claude Code files
 .claude/
 CLAUDE.md
+.mcp.json
 
 # Python cache
 __pycache__/
