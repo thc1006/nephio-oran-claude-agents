@@ -231,7 +231,7 @@ func parseAgentFile(filePath string) (*Agent, error) {
 }
 
 func parseAgentList(input string) []string {
-	var agents []string
+	agents := make([]string, 0) // Initialize as empty slice, not nil
 	
 	// Remove quotes and brackets
 	input = strings.Trim(input, `"[]`)
@@ -259,7 +259,7 @@ func parseAgentList(input string) []string {
 
 func deduplicate(items []string) []string {
 	seen := make(map[string]bool)
-	var result []string
+	result := make([]string, 0) // Initialize as empty slice, not nil
 	
 	for _, item := range items {
 		if !seen[item] {
