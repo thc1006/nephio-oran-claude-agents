@@ -22,7 +22,7 @@ stages:
     agent: oran-nephio-dep-doctor-agent
     description: Validate all dependencies
     tasks:
-      - Check Go 1.24.6 compatibility
+      - Check Go 1.24.6 compatibility (with Go Cryptographic Module v1.0.0)
       - Verify package versions
       - Scan for CVEs
       - Check license compliance

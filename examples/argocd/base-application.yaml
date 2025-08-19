@@ -1,0 +1,49 @@
+# Base ArgoCD Application for Nephio R5
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nephio-base
+  namespace: argocd
+  labels:
+    nephio.org/version: r5
+    nephio.org/component: base
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  
+  source:
+    repoURL: https://github.com/nephio-project/nephio-packages
+    targetRevision: r5.0.0
+    path: base
+    
+    # Kpt function processing
+    plugin:
+      name: kpt-functions
+      env:
+        - name: KPT_FN_RUNTIME
+          value: "gcr.io/kpt-fn/set-namespace:v0.4.1"
+        - name: NAMESPACE
+          value: "nephio-system"
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nephio-system
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  
+  revisionHistoryLimit: 10

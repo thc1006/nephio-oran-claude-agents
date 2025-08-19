@@ -1,0 +1,125 @@
+# ApplicationSet for deploying O-RAN Network Functions across clusters
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: oran-network-functions
+  namespace: argocd
+  labels:
+    nephio.org/version: r5
+    oran.org/release: l-release
+spec:
+  generators:
+  # Matrix generator combining clusters and network functions
+  - matrix:
+      generators:
+      # Cluster generator - finds all registered clusters
+      - clusters:
+          selector:
+            matchLabels:
+              nephio.org/type: workload
+              nephio.org/ready: "true"
+      
+      # List generator for network functions
+      - list:
+          elements:
+          - nf: oran-du
+            path: network-functions/du
+            replicas: 1
+            cpu: "16"
+            memory: "32Gi"
+          - nf: oran-cu-cp
+            path: network-functions/cu-cp
+            replicas: 2
+            cpu: "8"
+            memory: "16Gi"
+          - nf: oran-cu-up
+            path: network-functions/cu-up
+            replicas: 2
+            cpu: "12"
+            memory: "24Gi"
+          - nf: ric-near-rt
+            path: network-functions/ric
+            replicas: 1
+            cpu: "4"
+            memory: "8Gi"
+  
+  template:
+    metadata:
+      name: '{{name}}-{{nf}}'
+      labels:
+        nephio.org/cluster: '{{name}}'
+        nephio.org/nf-type: '{{nf}}'
+        oran.org/component: '{{nf}}'
+    spec:
+      project: default
+      
+      source:
+        repoURL: https://github.com/nephio-project/oai-packages
+        targetRevision: r5.0.0
+        path: '{{path}}'
+        
+        # Helm values for configuration
+        helm:
+          valueFiles:
+            - values.yaml
+            - values-{{name}}.yaml
+          values: |
+            global:
+              cluster: {{name}}
+              region: {{metadata.labels.region}}
+            
+            replicaCount: {{replicas}}
+            
+            resources:
+              requests:
+                cpu: {{cpu}}
+                memory: {{memory}}
+              limits:
+                cpu: {{cpu}}
+                memory: {{memory}}
+            
+            # FIPS compliance for Go 1.24.6
+            env:
+              - name: GODEBUG
+                value: "fips140=on"
+              - name: GO_VERSION
+                value: "1.24.6"
+            
+            # Metal3 bare-metal affinity
+            {{- if eq server "https://metal3-cluster.local" }}
+            nodeSelector:
+              metal3.io/baremetal: "true"
+            {{- end }}
+      
+      destination:
+        server: '{{server}}'
+        namespace: 'oran-{{nf}}'
+      
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 10s
+            factor: 2
+            maxDuration: 3m
+      
+      # Health assessment
+      health:
+        progressDeadlineSeconds: 600
+      
+      # Ignore differences for dynamic fields
+      ignoreDifferences:
+      - group: apps
+        kind: Deployment
+        jsonPointers:
+        - /spec/replicas
+      - group: ""
+        kind: Service
+        jsonPointers:
+        - /spec/clusterIP

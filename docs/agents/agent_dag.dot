@@ -1,0 +1,77 @@
+digraph AgentCollaboration {
+    rankdir=TB;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=12];
+    edge [fontname="Arial", fontsize=10];
+    
+    // Source agents (entry points)
+    "nephio-infrastructure-agent" [fillcolor=lightgreen, style="rounded,filled", label="nephio-infrastructure-agent\n(Primary Source)"];
+    "nephio-oran-orchestrator-agent" [fillcolor=lightblue, style="rounded,filled", label="nephio-oran-orchestrator-agent\n(Orchestration Source)"];
+    "oran-nephio-orchestrator-agent" [fillcolor=lightblue, style="rounded,filled", label="oran-nephio-orchestrator-agent\n(Alternative Source)"];
+    
+    // Sink agent (terminal point)
+    "testing-validation-agent" [fillcolor=lightgreen, style="rounded,filled", label="testing-validation-agent\n(Primary Sink)"];
+    
+    // Intermediate agents
+    "configuration-management-agent" [label="configuration-management-agent\n(GitOps/Config)"];
+    "oran-network-functions-agent" [label="oran-network-functions-agent\n(CNF/VNF Deploy)"];
+    "security-compliance-agent" [label="security-compliance-agent\n(Security Validation)"];
+    "oran-nephio-dep-doctor-agent" [label="oran-nephio-dep-doctor-agent\n(Dependency Resolution)"];
+    "monitoring-analytics-agent" [label="monitoring-analytics-agent\n(Observability)"];
+    "data-analytics-agent" [label="data-analytics-agent\n(Data Processing)"];
+    "performance-optimization-agent" [label="performance-optimization-agent\n(Performance Tuning)"];
+    
+    // Primary deployment flow (green edges)
+    "nephio-infrastructure-agent" -> "configuration-management-agent" [color=darkgreen, penwidth=2];
+    "configuration-management-agent" -> "oran-network-functions-agent" [color=darkgreen, penwidth=2];
+    "oran-network-functions-agent" -> "monitoring-analytics-agent" [color=darkgreen, penwidth=2];
+    "monitoring-analytics-agent" -> "data-analytics-agent" [color=darkgreen, penwidth=2];
+    "data-analytics-agent" -> "performance-optimization-agent" [color=darkgreen, penwidth=2];
+    "performance-optimization-agent" -> "testing-validation-agent" [color=darkgreen, penwidth=2];
+    
+    // Dependency resolution path (blue edges)
+    "nephio-infrastructure-agent" -> "oran-nephio-dep-doctor-agent" [color=blue];
+    "oran-nephio-dep-doctor-agent" -> "oran-network-functions-agent" [color=blue];
+    
+    // Security-first path (red edges)
+    "nephio-oran-orchestrator-agent" -> "security-compliance-agent" [color=red];
+    "security-compliance-agent" -> "nephio-infrastructure-agent" [color=red];
+    
+    // Alternative orchestration path
+    "oran-nephio-orchestrator-agent" -> "nephio-infrastructure-agent" [color=purple];
+    
+    // Legend
+    subgraph cluster_legend {
+        label="Legend";
+        style=dotted;
+        fontname="Arial";
+        fontsize=10;
+        
+        node [shape=box, style="rounded,filled", width=2, height=0.5];
+        
+        "legend_source" [fillcolor=lightblue, label="Source Agent"];
+        "legend_sink" [fillcolor=lightcoral, label="Sink Agent"];
+        "legend_expected" [fillcolor=lightgreen, label="Expected Source/Sink"];
+        "legend_normal" [fillcolor=white, label="Intermediate Agent"];
+        
+        edge [style=invis];
+        "legend_source" -> "legend_sink" -> "legend_expected" -> "legend_normal";
+    }
+    
+    // Workflow annotations
+    subgraph cluster_workflows {
+        label="Workflow Patterns";
+        style=dotted;
+        fontname="Arial";
+        fontsize=10;
+        color=gray;
+        
+        node [shape=note, style=filled, fillcolor=lightyellow, width=3];
+        
+        "workflow1" [label="Primary Flow:\nInfra → Config → NF → Monitor\n→ Analytics → Optimize → Test"];
+        "workflow2" [label="Security Flow:\nOrchestrator → Security\n→ Infrastructure → Primary"];
+        "workflow3" [label="Dependency Flow:\nInfra → Dependencies\n→ Network Functions"];
+        
+        edge [style=invis];
+        "workflow1" -> "workflow2" -> "workflow3";
+    }
+}

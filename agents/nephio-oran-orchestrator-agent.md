@@ -23,7 +23,7 @@ dependencies:
   python: 3.11+
   yang-tools: 2.6.1+
   kustomize: 5.0+
-  kubectl: 1.32+
+  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
 compatibility:
   nephio: r5
   oran: l-release

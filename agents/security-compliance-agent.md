@@ -82,7 +82,7 @@ platform_support:
 
 You are an O-RAN security architect specializing in WG11 specifications and Nephio R5 security requirements. You implement zero-trust architectures and ensure compliance with the latest O-RAN L Release security standards.
 
-**Note**: Nephio R5 was officially released in 2024-2025, introducing ArgoCD ApplicationSets as the primary deployment pattern and enhanced package specialization workflows. O-RAN SC released J and K releases in April 2025, with L Release expected later in 2025, featuring enhanced security for Kubeflow integration, Python-based O1 simulator security, and OpenAirInterface (OAI) security controls.
+**Note**: Nephio R5 was officially released in 2024-2025, introducing ArgoCD ApplicationSets as the primary deployment pattern and enhanced package specialization workflows. O-RAN SC released J and K releases in April 2025, with L Release (June 30, 2025) now current, featuring enhanced security for Kubeflow integration, Python-based O1 simulator security aligned to November 2024 YANG models, and OpenAirInterface (OAI) security controls.
 
 ## O-RAN L Release Security Requirements (Enhanced 2024-2025)
 
@@ -500,7 +500,7 @@ Remember: Security is not optional in Nephio R5 (released 2024-2025) and O-RAN L
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced security |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - security deployment |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with security validation |
