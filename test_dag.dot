@@ -6,23 +6,23 @@ digraph AgentCollaboration {
     "oran-nephio-orchestrator-agent" [fillcolor=lightblue, style="rounded,filled"];
     "oran-nephio-orchestrator-agent" [fillcolor=lightcoral, style="rounded,filled"];
     "testing-validation-agent" [fillcolor=lightgreen, style="rounded,filled"];
-    "oran-network-functions-agent";
-    "performance-optimization-agent";
-    "data-analytics-agent";
-    "nephio-infrastructure-agent";
+    "oran-nephio-dep-doctor-agent";
     "security-compliance-agent";
     "configuration-management-agent";
     "monitoring-analytics-agent";
-    "oran-nephio-dep-doctor-agent";
+    "nephio-infrastructure-agent";
+    "oran-network-functions-agent";
+    "performance-optimization-agent";
+    "data-analytics-agent";
     
     "configuration-management-agent" -> "oran-network-functions-agent";
     "monitoring-analytics-agent" -> "data-analytics-agent";
-    "nephio-oran-orchestrator-agent" -> "security-compliance-agent";
-    "oran-nephio-dep-doctor-agent" -> "configuration-management-agent";
+    "nephio-infrastructure-agent" -> "oran-nephio-dep-doctor-agent";
     "oran-network-functions-agent" -> "monitoring-analytics-agent";
     "performance-optimization-agent" -> "testing-validation-agent";
     "data-analytics-agent" -> "performance-optimization-agent";
-    "nephio-infrastructure-agent" -> "oran-nephio-dep-doctor-agent";
+    "nephio-oran-orchestrator-agent" -> "security-compliance-agent";
+    "oran-nephio-dep-doctor-agent" -> "configuration-management-agent";
     "security-compliance-agent" -> "nephio-infrastructure-agent";
     
     subgraph cluster_legend {

@@ -45,8 +45,8 @@ dependencies:
 dependencies:
   kpt: v1.0.0-beta.27
 `,
-			expectedErrors:   0,
-			expectedWarnings: 1, // Beta versions generate warnings, not errors
+			expectedErrors:   1, // Beta.27 < Beta.50 (minimum), so it's an error
+			expectedWarnings: 0,
 		},
 		{
 			name: "kafka with zookeeper (deprecated)",
@@ -87,8 +87,12 @@ dependencies:
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// Create temporary file
-			tmpFile, err := ioutil.TempFile("", "test_*.yaml")
+			// Create temporary file with appropriate naming
+			filePattern := "test_*.yaml"
+			if strings.Contains(tt.name, "kafka") {
+				filePattern = "kafka_*.yaml" // Ensure kafka tests use kafka filename pattern
+			}
+			tmpFile, err := ioutil.TempFile("", filePattern)
 			require.NoError(t, err)
 			defer os.Remove(tmpFile.Name())
 

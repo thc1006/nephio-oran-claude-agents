@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -213,17 +214,6 @@ func validateFile(filepath string) []ValidationResult {
 			})
 		}
 
-		// Check for old kpt versions
-		if strings.Contains(line, "beta.27") && strings.Contains(line, "kpt") {
-			results = append(results, ValidationResult{
-				File:     filepath,
-				Line:     lineNum,
-				Component: "kpt",
-				Version:  "v1.0.0-beta.27",
-				Issue:    "Outdated kpt version, upgrade to v1.0.0-beta.55+",
-				Severity: "WARNING",
-			})
-		}
 	}
 
 	return results
@@ -292,6 +282,18 @@ func compareVersions(v1, v2 string) int {
 		v1Parts := strings.Split(v1, "beta.")
 		v2Parts := strings.Split(v2, "beta.")
 		if len(v1Parts) > 1 && len(v2Parts) > 1 {
+			// Convert beta numbers to integers for proper comparison
+			beta1, err1 := strconv.Atoi(v1Parts[1])
+			beta2, err2 := strconv.Atoi(v2Parts[1])
+			if err1 == nil && err2 == nil {
+				if beta1 < beta2 {
+					return -1
+				} else if beta1 > beta2 {
+					return 1
+				}
+				return 0
+			}
+			// Fallback to string comparison if conversion fails
 			if v1Parts[1] < v2Parts[1] {
 				return -1
 			} else if v1Parts[1] > v2Parts[1] {
