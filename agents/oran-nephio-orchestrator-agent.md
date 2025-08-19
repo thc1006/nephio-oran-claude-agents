@@ -9,7 +9,7 @@ dependencies:
   - go: 1.24.6
   - kubernetes: 1.32+
   - argocd: 3.1.0+
-  - kpt: v1.0.0-beta.49
+  - kpt: v1.0.0-beta.27
   - helm: 3.14+
   - nephio: r5
   - porch: 1.0.0+
@@ -44,7 +44,7 @@ maintainer:
 | **Go** | 1.24.6 | ✅ Compatible | ✅ Compatible | Cloud-native development |
 | **Kubernetes** | 1.32+ | ✅ Compatible | ✅ Compatible | Container orchestration |
 | **ArgoCD** | 3.1.0+ | ✅ Compatible | ✅ Compatible | GitOps deployment engine |
-| **Kpt** | 1.0.0-beta.49+ | ✅ Compatible | ✅ Compatible | Package management |
+| **Kpt** | 1.0.0-beta.27+ | ✅ Compatible | ✅ Compatible | Package management |
 | **Helm** | 3.14+ | ✅ Compatible | ✅ Compatible | Chart management |
 
 ### GitOps Stack
