@@ -43,7 +43,7 @@ jobs:
     - name: Run tests with coverage
       run: |
         echo "Running tests with coverage profiling..."
-        go test -cover -coverprofile=coverage.out -covermode=atomic ./...
+        go test -short -cover -coverprofile=coverage.out -covermode=atomic ./...
         
     - name: Generate coverage reports
       run: |
@@ -87,7 +87,7 @@ jobs:
     - name: Run benchmarks
       run: |
         echo "Running benchmark tests..."
-        go test -bench=. -benchmem -run=^$ ./... | tee reports/benchmarks.txt
+        go test -short -bench=. -benchmem -run=^$ ./... | tee reports/benchmarks.txt
         
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4

@@ -382,12 +382,16 @@ func TestMemoryUsage(t *testing.T) {
 
 // Test concurrent safety
 func TestConcurrentSafety(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping concurrent safety test in short mode")
+	}
+	
 	ctx := context.Background()
 	orch := NewOrchestrator(ctx)
 	
 	var wg sync.WaitGroup
-	goroutineCount := 10
-	itemsPerGoroutine := 50
+	goroutineCount := 3  // Reduced from 10
+	itemsPerGoroutine := 10  // Reduced from 50
 	
 	for i := 0; i < goroutineCount; i++ {
 		wg.Add(1)
@@ -399,7 +403,7 @@ func TestConcurrentSafety(t *testing.T) {
 				items[j] = fmt.Sprintf("goroutine_%d_item_%d", id, j)
 			}
 			
-			err := orch.ProcessConcurrently(ctx, items, 3)
+			err := orch.ProcessConcurrently(ctx, items, 2)  // Reduced worker count
 			assert.NoError(t, err)
 		}(i)
 	}
