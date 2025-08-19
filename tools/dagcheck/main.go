@@ -164,6 +164,8 @@ func parseAgentFile(filePath string) (*Agent, error) {
 	upstreamPattern := regexp.MustCompile(`upstream:\s*(.+)`)
 	downstreamPattern := regexp.MustCompile(`downstream:\s*(.+)`)
 
+	var currentListField string
+	
 	for scanner.Scan() {
 		lineNum++
 		line := scanner.Text()
@@ -186,11 +188,33 @@ func parseAgentFile(filePath string) (*Agent, error) {
 			}
 		}
 
+		// Check for YAML list items (lines starting with "  - ")
+		if currentListField != "" && strings.HasPrefix(line, "  - ") {
+			item := strings.TrimSpace(strings.TrimPrefix(line, "  - "))
+			item = strings.Trim(item, `"`)
+			if item != "" && item != "null" && item != "none" {
+				if currentListField == "accepts_from" {
+					agent.AcceptsFrom = append(agent.AcceptsFrom, item)
+				}
+			}
+			continue
+		} else if currentListField != "" && !strings.HasPrefix(line, "  ") && strings.TrimSpace(line) != "" {
+			// End of list - line doesn't start with spaces and isn't empty
+			currentListField = ""
+		}
+
 		// Parse accepts_from
 		if matches := acceptsPattern.FindStringSubmatch(line); len(matches) > 1 {
-			agents := parseAgentList(matches[1])
-			agent.AcceptsFrom = append(agent.AcceptsFrom, agents...)
-			agent.LineNumbers["accepts_from"] = lineNum
+			value := strings.TrimSpace(matches[1])
+			if value == "" {
+				// This is a YAML list, set up for parsing subsequent lines
+				currentListField = "accepts_from"
+				agent.LineNumbers["accepts_from"] = lineNum
+			} else {
+				agents := parseAgentList(matches[1])
+				agent.AcceptsFrom = append(agent.AcceptsFrom, agents...)
+				agent.LineNumbers["accepts_from"] = lineNum
+			}
 		}
 
 		// Parse handoff_to

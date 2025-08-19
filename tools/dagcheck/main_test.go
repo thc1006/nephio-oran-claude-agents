@@ -28,8 +28,9 @@ handoff_to: "target-agent"
 # Test Agent
 Some content here.`,
 			expected: Agent{
-				Name:      "test-agent",
-				HandoffTo: []string{"target-agent"},
+				Name:        "test-agent",
+				AcceptsFrom: []string{}, // Now expect empty slice instead of nil
+				HandoffTo:   []string{"target-agent"},
 				LineNumbers: map[string]int{
 					"handoff_to": 3,
 				},

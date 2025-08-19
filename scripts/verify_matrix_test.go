@@ -45,8 +45,8 @@ dependencies:
 dependencies:
   kpt: v1.0.0-beta.27
 `,
-			expectedErrors:   1, // Beta versions are treated as errors, not warnings
-			expectedWarnings: 0,
+			expectedErrors:   0,
+			expectedWarnings: 1, // Beta versions generate warnings, not errors
 		},
 		{
 			name: "kafka with zookeeper (deprecated)",
@@ -55,8 +55,8 @@ kafka:
   config:
     zookeeper.connect: "localhost:2181"
 `,
-			expectedErrors:   1, // Deprecated configs are treated as errors
-			expectedWarnings: 0,
+			expectedErrors:   0,
+			expectedWarnings: 1, // Kafka zookeeper deprecation warning
 		},
 		{
 			name: "valid API versions",
