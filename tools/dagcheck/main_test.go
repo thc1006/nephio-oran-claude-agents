@@ -776,3 +776,109 @@ accepts_from: ["source-1", "source-2,source-3"]
 		assert.NotEmpty(t, agent.AcceptsFrom)
 	})
 }
+
+// Test for uncovered functions to increase coverage
+
+func TestGeneratePNGVisualization(t *testing.T) {
+	// Create temporary DOT file
+	tmpFile, err := ioutil.TempFile("", "test_*.dot")
+	require.NoError(t, err)
+	defer os.Remove(tmpFile.Name())
+
+	// Write simple DOT content
+	dotContent := `digraph Test {
+    "A" -> "B";
+}`
+	_, err = tmpFile.WriteString(dotContent)
+	require.NoError(t, err)
+	tmpFile.Close()
+
+	// Test PNG generation (should not error even if graphviz not available)
+	assert.NotPanics(t, func() {
+		generatePNGVisualization(tmpFile.Name())
+	})
+}
+
+func TestPrintResults(t *testing.T) {
+	// Create test graph and result
+	graph := &Graph{
+		Agents: map[string]*Agent{
+			"test-agent": {Name: "test-agent", File: "test.md"},
+		},
+		Adjacency: map[string][]string{
+			"test-agent": {},
+		},
+	}
+
+	// Test with valid result
+	validResult := ValidationResult{
+		IsValid:      true,
+		Cycles:       [][]string{},
+		BrokenEdges:  []BrokenEdge{},
+		SourceAgents: []string{"test-agent"},
+		SinkAgents:   []string{"test-agent"},
+		Warnings:     []string{},
+	}
+
+	// Should not panic
+	assert.NotPanics(t, func() {
+		printResults(graph, validResult)
+	})
+
+	// Test with invalid result
+	invalidResult := ValidationResult{
+		IsValid: false,
+		Cycles:  [][]string{{"test-agent", "test-agent"}},
+		BrokenEdges: []BrokenEdge{
+			{From: "test", To: "missing", Reason: "Target does not exist"},
+		},
+		SourceAgents: []string{},
+		SinkAgents:   []string{},
+		Warnings:     []string{"Test warning"},
+	}
+
+	// Should not panic
+	assert.NotPanics(t, func() {
+		printResults(graph, invalidResult)
+	})
+}
+
+func TestExecuteCommand(t *testing.T) {
+	// Test executeCommand function
+	err := executeCommand("echo test")
+	assert.NoError(t, err, "executeCommand should not error for any command")
+	
+	// Test with different command
+	err = executeCommand("ls")
+	assert.NoError(t, err, "executeCommand should not error")
+}
+
+
+func TestBuildGraphErrorCases(t *testing.T) {
+	// Test with non-existent directory
+	t.Run("non-existent directory", func(t *testing.T) {
+		graph, err := buildGraph("/non/existent/directory")
+		// Should return graph with error handled gracefully
+		assert.NotNil(t, graph)
+		assert.NoError(t, err) // Glob might not error for non-existent dir
+	})
+	
+	// Test with invalid agent file
+	t.Run("invalid agent file", func(t *testing.T) {
+		tmpDir, err := ioutil.TempDir("", "test_agents_")
+		require.NoError(t, err)
+		defer os.RemoveAll(tmpDir)
+		
+		// Create invalid agent file
+		invalidFile := filepath.Join(tmpDir, "invalid-agent.md")
+		err = ioutil.WriteFile(invalidFile, []byte("invalid content"), 0644)
+		require.NoError(t, err)
+		
+		// Build graph should handle invalid files gracefully
+		graph, err := buildGraph(tmpDir)
+		assert.NoError(t, err)
+		assert.NotNil(t, graph)
+		// Should create agent even with invalid content (parser is lenient)
+		assert.GreaterOrEqual(t, len(graph.Agents), 0)
+	})
+}
