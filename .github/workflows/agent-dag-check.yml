@@ -47,6 +47,7 @@ jobs:
         go build -o dagcheck main.go
         
     - name: Run DAG validation
+      shell: bash -euo pipefail {0}
       run: |
         ./tools/dagcheck/dagcheck \
           --dir agents \
@@ -55,16 +56,13 @@ jobs:
           --png \
           --verbose
           
-    - name: Generate PNG visualization
-      if: always()
+    - name: Render DAG visuals (png + svg)
+      if: ${{ hashFiles('docs/agents/agent_dag.dot') != '' }}
+      shell: bash -euo pipefail {0}
       run: |
-        if [ -f "docs/agents/agent_dag.dot" ]; then
-          dot -Tpng docs/agents/agent_dag.dot -o docs/agents/agent_dag.png
-          dot -Tsvg docs/agents/agent_dag.dot -o docs/agents/agent_dag.svg
-          echo "✅ Generated DAG visualizations"
-        else
-          echo "⚠️ No DOT file generated"
-        fi
+        dot -Tpng docs/agents/agent_dag.dot -o docs/agents/agent_dag.png
+        dot -Tsvg docs/agents/agent_dag.dot -o docs/agents/agent_dag.svg
+        echo "✅ Generated DAG visualizations"
         
     - name: Upload DAG report
       if: always()
@@ -77,82 +75,44 @@ jobs:
           docs/agents/agent_dag.png
           docs/agents/agent_dag.svg
           
-    - name: Comment on PR
+    - name: Comment DAG status
       if: github.event_name == 'pull_request' && always()
       uses: actions/github-script@v7
       with:
         script: |
           const fs = require('fs');
-          const path = require('path');
-          
-          let report = '## 🔄 Agent DAG Validation Report\n\n';
-          
+          let body = '## 🔄 Agent DAG Validation Report\n\n';
+          let ok = true;
+
+          const report = 'docs/agents/dag_report.md';
           try {
-            const dagReport = fs.readFileSync('docs/agents/dag_report.md', 'utf8');
-            
-            // Extract key information
-            const lines = dagReport.split('\n');
-            let status = '❓ Unknown';
-            let stats = '';
-            
-            for (const line of lines) {
-              if (line.includes('✅ **PASSED**')) {
-                status = '✅ **PASSED**: The agent collaboration graph is valid';
-              } else if (line.includes('❌ **FAILED**')) {
-                status = '❌ **FAILED**: The agent collaboration graph has issues';
-              } else if (line.startsWith('- Total Agents:') || 
-                         line.startsWith('- Cycles Detected:') ||
-                         line.startsWith('- Broken Edges:')) {
-                stats += line + '\n';
-              }
-            }
-            
-            report += status + '\n\n';
-            report += '### Statistics\n' + stats + '\n';
-            
-            // Add link to full report
-            report += '\n[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n';
-            
-            // Check if visualization exists
-            if (fs.existsSync('docs/agents/agent_dag.svg')) {
-              report += '\n### Visualization\n';
-              report += '```mermaid\n';
-              report += 'graph TD\n';
-              
-              // Parse DOT file for simplified Mermaid
-              if (fs.existsSync('docs/agents/agent_dag.dot')) {
-                const dot = fs.readFileSync('docs/agents/agent_dag.dot', 'utf8');
-                const edges = dot.match(/"[^"]*" -> "[^"]*"/g) || [];
-                edges.forEach(edge => {
-                  const [from, to] = edge.split(' -> ').map(s => s.replace(/"/g, ''));
-                  report += `    ${from} --> ${to}\n`;
-                });
-              }
-              report += '```\n';
-            }
-            
-          } catch (error) {
-            report += '⚠️ Could not read DAG report: ' + error.message;
+            const text = fs.readFileSync(report, 'utf8');
+            body += '✅ **PASSED**: The agent collaboration graph is valid\n\n';
+            body += '### Report excerpt\n```markdown\n' + text.split('\n').slice(0, 40).join('\n') + '\n```\n';
+          } catch (e) {
+            ok = false;
+            body += '❌ **FAILED**: Report not found or unreadable.\n\n';
           }
-          
-          // Post comment
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
+
+          if (fs.existsSync('docs/agents/agent_dag.dot')) {
+            body += '\n### Visualization (Mermaid, simplified)\n```mermaid\ngraph TD\n';
+            const dot = fs.readFileSync('docs/agents/agent_dag.dot', 'utf8');
+            const edges = dot.match(/"[^"]*"\\s*->\\s*"[^"]*"/g) || [];
+            for (const e of edges) {
+              const [from, to] = e.split(/->/).map(s => s.replace(/"/g, '').trim());
+              body += `  ${from} --> ${to}\n`;
+            }
+            body += '```\n';
+          }
+
+          await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: report
+            issue_number: context.issue.number,
+            body
           });
-          
-    - name: Check validation result
-      run: |
-        if grep -q "✅ **PASSED**" docs/agents/dag_report.md; then
-          echo "✅ DAG validation passed"
-          exit 0
-        else
-          echo "❌ DAG validation failed"
-          cat docs/agents/dag_report.md
-          exit 1
-        fi
+
+          if (!ok) core.setFailed('DAG validation failed or report missing');
 
   update-docs:
     name: Update DAG Documentation
