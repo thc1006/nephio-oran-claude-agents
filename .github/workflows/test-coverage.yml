@@ -1,0 +1,158 @@
+name: Test Coverage Gate
+
+on:
+  push:
+    branches: [ main, develop, 'feat/*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.24.6'
+        check-latest: true
+        
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+          
+    - name: Install dependencies
+      run: go mod download
+      
+    - name: Create reports directory
+      run: mkdir -p reports
+      
+    - name: Run tests with coverage
+      run: |
+        echo "Running tests with coverage profiling..."
+        go test -cover -coverprofile=coverage.out -covermode=atomic ./...
+        
+    - name: Generate coverage reports
+      run: |
+        echo "Generating coverage function report..."
+        go tool cover -func=coverage.out | tee reports/coverage.txt
+        
+        echo "Generating HTML coverage report..."
+        go tool cover -html=coverage.out -o reports/coverage.html
+        
+        echo "Extracting global coverage percentage..."
+        COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
+        echo "Global coverage: ${COVERAGE}%"
+        echo "COVERAGE_PERCENTAGE=${COVERAGE}" >> $GITHUB_ENV
+        
+    - name: Check coverage threshold
+      run: |
+        THRESHOLD=85.0
+        COVERAGE=${{ env.COVERAGE_PERCENTAGE }}
+        
+        echo "Coverage threshold: ${THRESHOLD}%"
+        echo "Actual coverage: ${COVERAGE}%"
+        
+        if (( $(echo "$COVERAGE >= $THRESHOLD" | bc -l) )); then
+          echo "✅ Coverage ${COVERAGE}% meets threshold of ${THRESHOLD}%"
+        else
+          echo "❌ Coverage ${COVERAGE}% below threshold of ${THRESHOLD}%"
+          echo "::error::Coverage ${COVERAGE}% is below the required ${THRESHOLD}%"
+          exit 1
+        fi
+        
+    - name: Generate package-level coverage report
+      run: |
+        echo "Package-level coverage breakdown:" | tee -a reports/coverage.txt
+        echo "=================================" | tee -a reports/coverage.txt
+        go tool cover -func=coverage.out | grep -v "total:" | while read line; do
+          package=$(echo "$line" | awk '{print $1}' | sed 's/.*\///g' | sed 's/\.go.*//g')
+          coverage=$(echo "$line" | awk '{print $3}')
+          echo "Package: $package - Coverage: $coverage" | tee -a reports/coverage.txt
+        done
+        
+    - name: Run benchmarks
+      run: |
+        echo "Running benchmark tests..."
+        go test -bench=. -benchmem -run=^$ ./... | tee reports/benchmarks.txt
+        
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v3
+      if: always()  # Upload even if tests fail
+      with:
+        name: coverage-reports-${{ github.sha }}
+        path: |
+          reports/coverage.txt
+          reports/coverage.html
+          reports/benchmarks.txt
+          coverage.out
+        retention-days: 30
+        
+    - name: Upload coverage to Codecov (optional)
+      uses: codecov/codecov-action@v3
+      if: success()
+      with:
+        file: coverage.out
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false  # Don't fail CI if Codecov upload fails
+        
+    - name: Comment coverage on PR
+      if: github.event_name == 'pull_request' && success()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const coverage = process.env.COVERAGE_PERCENTAGE;
+          const coverageReport = fs.readFileSync('reports/coverage.txt', 'utf8');
+          
+          const body = `## 📊 Test Coverage Report
+          
+          **Global Coverage:** ${coverage}%
+          **Threshold:** 85% ✅
+          
+          <details>
+          <summary>📋 Detailed Coverage Report</summary>
+          
+          \`\`\`
+          ${coverageReport}
+          \`\`\`
+          
+          </details>
+          
+          📎 [View HTML Coverage Report](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          });
+          
+    - name: Set job summary
+      if: always()
+      run: |
+        echo "## 🧪 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Global Coverage:** ${{ env.COVERAGE_PERCENTAGE }}%" >> $GITHUB_STEP_SUMMARY
+        echo "- **Threshold:** 85%" >> $GITHUB_STEP_SUMMARY
+        
+        if (( $(echo "${{ env.COVERAGE_PERCENTAGE }} >= 85.0" | bc -l) )); then
+          echo "- **Status:** ✅ PASSED" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "- **Status:** ❌ FAILED" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Coverage by Function" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        head -20 reports/coverage.txt >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY

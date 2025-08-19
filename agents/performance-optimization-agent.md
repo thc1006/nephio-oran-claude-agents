@@ -29,7 +29,7 @@ dependencies:
   pytorch: 2.2+
   kubeflow: 1.8+
   python: 3.11+
-  kubectl: 1.32+
+  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
 compatibility:
   nephio: r5
   oran: l-release

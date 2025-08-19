@@ -1,0 +1,181 @@
+name: Agent DAG Check
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'agents/*.md'
+      - 'tools/dagcheck/**'
+      - '.github/workflows/agent-dag-check.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'agents/*.md'
+      - 'tools/dagcheck/**'
+      - '.github/workflows/agent-dag-check.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-dag:
+    name: Validate Agent Collaboration DAG
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+        
+    - name: Install Graphviz
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y graphviz
+        dot -version
+        
+    - name: Build DAG checker
+      run: |
+        cd tools/dagcheck
+        go build -o dagcheck main.go
+        
+    - name: Run DAG validation
+      run: |
+        ./tools/dagcheck/dagcheck \
+          --dir agents \
+          --output docs/agents/dag_report.md \
+          --dot docs/agents/agent_dag.dot \
+          --png \
+          --verbose
+          
+    - name: Generate PNG visualization
+      if: always()
+      run: |
+        if [ -f "docs/agents/agent_dag.dot" ]; then
+          dot -Tpng docs/agents/agent_dag.dot -o docs/agents/agent_dag.png
+          dot -Tsvg docs/agents/agent_dag.dot -o docs/agents/agent_dag.svg
+          echo "✅ Generated DAG visualizations"
+        else
+          echo "⚠️ No DOT file generated"
+        fi
+        
+    - name: Upload DAG report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: dag-report
+        path: |
+          docs/agents/dag_report.md
+          docs/agents/agent_dag.dot
+          docs/agents/agent_dag.png
+          docs/agents/agent_dag.svg
+          
+    - name: Comment on PR
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          
+          let report = '## 🔄 Agent DAG Validation Report\n\n';
+          
+          try {
+            const dagReport = fs.readFileSync('docs/agents/dag_report.md', 'utf8');
+            
+            // Extract key information
+            const lines = dagReport.split('\n');
+            let status = '❓ Unknown';
+            let stats = '';
+            
+            for (const line of lines) {
+              if (line.includes('✅ **PASSED**')) {
+                status = '✅ **PASSED**: The agent collaboration graph is valid';
+              } else if (line.includes('❌ **FAILED**')) {
+                status = '❌ **FAILED**: The agent collaboration graph has issues';
+              } else if (line.startsWith('- Total Agents:') || 
+                         line.startsWith('- Cycles Detected:') ||
+                         line.startsWith('- Broken Edges:')) {
+                stats += line + '\n';
+              }
+            }
+            
+            report += status + '\n\n';
+            report += '### Statistics\n' + stats + '\n';
+            
+            // Add link to full report
+            report += '\n[View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n';
+            
+            // Check if visualization exists
+            if (fs.existsSync('docs/agents/agent_dag.svg')) {
+              report += '\n### Visualization\n';
+              report += '```mermaid\n';
+              report += 'graph TD\n';
+              
+              // Parse DOT file for simplified Mermaid
+              if (fs.existsSync('docs/agents/agent_dag.dot')) {
+                const dot = fs.readFileSync('docs/agents/agent_dag.dot', 'utf8');
+                const edges = dot.match(/"[^"]*" -> "[^"]*"/g) || [];
+                edges.forEach(edge => {
+                  const [from, to] = edge.split(' -> ').map(s => s.replace(/"/g, ''));
+                  report += `    ${from} --> ${to}\n`;
+                });
+              }
+              report += '```\n';
+            }
+            
+          } catch (error) {
+            report += '⚠️ Could not read DAG report: ' + error.message;
+          }
+          
+          // Post comment
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: report
+          });
+          
+    - name: Check validation result
+      run: |
+        if grep -q "✅ **PASSED**" docs/agents/dag_report.md; then
+          echo "✅ DAG validation passed"
+          exit 0
+        else
+          echo "❌ DAG validation failed"
+          cat docs/agents/dag_report.md
+          exit 1
+        fi
+
+  update-docs:
+    name: Update DAG Documentation
+    runs-on: ubuntu-latest
+    needs: validate-dag
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: dag-report
+        path: docs/agents/
+        
+    - name: Commit documentation
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        if [ -n "$(git status --porcelain docs/agents/)" ]; then
+          git add docs/agents/
+          git commit -m "docs: Update agent DAG report and visualization [skip ci]"
+          git push
+          echo "✅ Updated DAG documentation"
+        else
+          echo "ℹ️ No changes to commit"
+        fi

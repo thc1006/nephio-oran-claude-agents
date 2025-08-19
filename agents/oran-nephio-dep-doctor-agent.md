@@ -11,7 +11,7 @@ dependencies:
   kpt: v1.0.0-beta.27
   argocd: 3.1.0+
   helm: 3.14+
-  kubectl: 1.32+
+  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
   docker: 24.0+
   containerd: 1.7+
   yq: 4.40+
@@ -279,7 +279,7 @@ xapp_framework_l_release:
     
     go_mod_example: |
       module example.com/xapp
-      go 1.24
+      go 1.24.6
       
       require (
           gerrit.o-ran-sc.org/r/ric-plt/xapp-frame v1.0.0
@@ -307,8 +307,8 @@ porch_r5:
   
   build_fix: |
     # R5 requires Go 1.24.6 (generics stable since Go 1.18)
-    go mod edit -go=1.24
-    go mod tidy -compat=1.24
+    go mod edit -go=1.24.6
+    go mod tidy -compat=1.24.6
 
 # ArgoCD Integration (Primary in R5)
 argocd_r5:
@@ -408,8 +408,9 @@ dnf install -y \
 go mod edit -go=1.24
 
 # Fix: FIPS 140-3 compliance
-# Go 1.24.6 includes native FIPS 140-3 compliance through the Go Cryptographic Module
+# Go 1.24.6 includes native FIPS 140-3 compliance through the Go Cryptographic Module v1.0.0
 # without requiring BoringCrypto or external libraries
+# Optional build-time default: export GOFIPS140=v1.0.0
 export GODEBUG=fips140=on
 
 # Fix: Tool dependencies - use go install
@@ -452,7 +453,8 @@ pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simpl
 FROM golang:1.24-alpine AS builder
 
 # Enable FIPS 140-3 compliance
-# Go 1.24.6 native FIPS support - no external libraries required
+# Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
+# Optional build-time default: ENV GOFIPS140=v1.0.0
 ENV GODEBUG=fips140=on
 # Generics stable since Go 1.18 - no experimental flags needed
 

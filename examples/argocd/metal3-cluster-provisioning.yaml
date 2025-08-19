@@ -1,0 +1,217 @@
+# ArgoCD Application for Metal3 bare-metal cluster provisioning
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metal3-cluster-provisioning
+  namespace: argocd
+  labels:
+    nephio.org/version: r5
+    nephio.org/infra: metal3
+spec:
+  project: infrastructure
+  
+  sources:
+  # Metal3 components
+  - repoURL: https://github.com/metal3-io/baremetal-operator
+    targetRevision: v0.5.0
+    path: deploy/default
+    
+  # Cluster API provider
+  - repoURL: https://github.com/kubernetes-sigs/cluster-api-provider-metal3
+    targetRevision: v1.6.0
+    path: config/default
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: metal3-system
+  
+  syncPolicy:
+    automated:
+      prune: false  # Don't prune bare-metal resources
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# ApplicationSet for provisioning bare-metal hosts
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: baremetal-hosts
+  namespace: argocd
+spec:
+  generators:
+  # Git generator to discover host definitions
+  - git:
+      repoURL: https://github.com/nephio-project/metal3-hosts
+      revision: main
+      files:
+      - path: "hosts/*/host.yaml"
+  
+  template:
+    metadata:
+      name: 'bm-host-{{path.basename}}'
+    spec:
+      project: infrastructure
+      
+      source:
+        repoURL: https://github.com/nephio-project/metal3-hosts
+        targetRevision: main
+        path: '{{path.dirname}}'
+        
+        # Kustomize to patch host-specific values
+        kustomize:
+          patches:
+          - target:
+              kind: BareMetalHost
+              name: '{{path.basename}}'
+            patch: |
+              - op: add
+                path: /metadata/labels/nephio.org~1cluster
+                value: '{{path.basename}}'
+              - op: add
+                path: /metadata/labels/nephio.org~1provisioned
+                value: "false"
+      
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: metal3-system
+      
+      syncPolicy:
+        manual: {}  # Manual sync for bare-metal provisioning
+---
+# BareMetalHost template
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: edge-node-template
+  namespace: metal3-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  online: false  # Start offline
+  bootMACAddress: "00:00:00:00:00:00"  # To be filled
+  bootMode: UEFI
+  
+  bmc:
+    address: ""  # To be filled per host
+    credentialsName: bmc-credentials
+    disableCertificateVerification: true
+  
+  # Firmware settings for Nephio
+  firmware:
+    sriovEnabled: true
+    virtualizationEnabled: true
+    simultaneousMultithreadingEnabled: true
+  
+  # Root device selection
+  rootDeviceHints:
+    deviceName: /dev/sda
+    minSizeGigabytes: 500
+    rotational: false  # Prefer SSD
+  
+  # Network configuration for Nephio
+  networkData:
+    name: nephio-network-data
+    namespace: metal3-system
+  
+  # Cloud-init user data
+  userData:
+    name: nephio-user-data
+    namespace: metal3-system
+  
+  # Ubuntu 22.04 for Nephio R5
+  image:
+    url: http://images.metal3.io/ubuntu-22.04-server-cloudimg-amd64.img
+    checksum: "sha256:1234567890abcdef"
+    checksumType: sha256
+    format: qcow2
+  
+  # Hardware profile
+  hardwareProfile: ""  # Auto-detect
+  
+  # RAID configuration (optional)
+  raid:
+    hardwareRAIDVolumes:
+    - name: root
+      level: "1"
+      sizeGibibytes: 500
+      controller: RAID.Integrated.1-1
+      numberOfPhysicalDisks: 2
+---
+# Secret for BMC credentials
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bmc-credentials
+  namespace: metal3-system
+type: Opaque
+data:
+  username: YWRtaW4=  # admin
+  password: cGFzc3dvcmQ=  # password
+---
+# ConfigMap for network data
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nephio-network-data
+  namespace: metal3-system
+data:
+  networkData: |
+    version: 2
+    ethernets:
+      enp1s0:
+        dhcp4: false
+        addresses:
+        - 192.168.1.10/24
+        gateway4: 192.168.1.1
+        nameservers:
+          addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      enp2s0:
+        dhcp4: false
+        addresses:
+        - 10.0.0.10/24
+    vlans:
+      vlan100:
+        id: 100
+        link: enp2s0
+        addresses:
+        - 10.100.0.10/24
+---
+# ConfigMap for user data
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nephio-user-data
+  namespace: metal3-system
+data:
+  userData: |
+    #cloud-config
+    users:
+    - name: nephio
+      groups: sudo
+      shell: /bin/bash
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC...
+    
+    package_update: true
+    package_upgrade: true
+    packages:
+    - docker.io
+    - kubelet
+    - kubeadm
+    - kubectl
+    
+    runcmd:
+    - [systemctl, enable, docker]
+    - [systemctl, start, docker]
+    - [kubeadm, init, --pod-network-cidr=10.244.0.0/16]
+    
+    write_files:
+    - path: /etc/sysctl.d/99-kubernetes.conf
+      content: |
+        net.bridge.bridge-nf-call-iptables = 1
+        net.ipv4.ip_forward = 1
+        net.bridge.bridge-nf-call-ip6tables = 1

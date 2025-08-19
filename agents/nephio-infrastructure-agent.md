@@ -20,7 +20,7 @@ dependencies:
   rook: 1.13+
   crossplane: 1.15+
   containerd: 1.7+
-  kubectl: 1.32+
+  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
   python: 3.11+
   terraform: 1.7+
 compatibility:
@@ -197,9 +197,9 @@ When invoked, I will:
    # Install prerequisites
    function install_r5_prerequisites() {
      # Install Go 1.24.6
-     wget https://go.dev/dl/go1.24.linux-amd64.tar.gz
+     wget https://go.dev/dl/go1.24.6.linux-amd64.tar.gz
      sudo rm -rf /usr/local/go
-     sudo tar -C /usr/local -xzf go1.24.linux-amd64.tar.gz
+     sudo tar -C /usr/local -xzf go1.24.6.linux-amd64.tar.gz
      export PATH=$PATH:/usr/local/go/bin
      
      # Install kpt v1.0.0-beta.27

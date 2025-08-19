@@ -7,14 +7,14 @@ version: 2.1.0
 last_updated: 2025-01-19T12:00:00Z
 dependencies:
   go: 1.24.6
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   argocd: 3.1.0+
   kustomize: 5.0+
   helm: 3.14+
   pyang: 2.6.1+
   terraform: 1.7+
   ansible: 9.2+
-  kubectl: 1.32+
+  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
   kubernetes: 1.32+
   python: 3.11+
   yaml: 1.2
@@ -23,10 +23,10 @@ compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.32+
   argocd: 3.1.0+
-  prometheus: 2.48+
-  grafana: 10.3+
+  prometheus: 3.5.0  # LTS version
+  grafana: 12.1.0  # Latest stable
 validation_status: tested
 maintainer:
   name: "Nephio R5/O-RAN L Release Team"
@@ -320,7 +320,7 @@ module o-ran-interfaces {
 // - Nephio R5 Package Specialization using PackageVariant/PackageVariantSet
 // - O-RAN L Release AI/ML model management with Kubeflow integration  
 // - ArgoCD ApplicationSet automation (R5 primary GitOps pattern)
-// - Native FIPS 140-3 compliance using Go 1.24.6 built-in cryptographic module
+// - Native FIPS 140-3 compliance using Go 1.24.6 built-in Go Cryptographic Module v1.0.0
 // - Python O1 simulator integration for L Release testing
 // - Enhanced Service Manager integration with improved rApp Manager
 //
@@ -470,7 +470,7 @@ func (c *ConfigManager) configureFIPS(ctx context.Context) error {
         default:
         }
         
-        // Enable native FIPS 140-3 mode in Go 1.24.6
+        // Enable native FIPS 140-3 mode in Go 1.24.6 via Go Cryptographic Module v1.0.0
         if err := os.Setenv("GODEBUG", "fips140=on"); err != nil {
             c.Logger.WarnContext(ctx, "Failed to set FIPS environment variable, will retry",
                 slog.String("error", err.Error()),
@@ -733,7 +733,8 @@ function validate_package() {
     -- policy-library=/policies/l-release
   
   # Security scanning with FIPS 140-3 compliance
-  # Go 1.24.6 native FIPS support - no external libraries required
+  # Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
+  # Optional build-time default: export GOFIPS140=v1.0.0
   GODEBUG=fips140=on kpt fn eval $package_path \
     --image gcr.io/kpt-fn/security-scanner:v0.2.0
 }

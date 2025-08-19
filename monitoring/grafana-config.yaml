@@ -1,0 +1,426 @@
+# Grafana 12.x Configuration for Nephio R5/O-RAN L Release
+# Updated: 2025-01-19
+# Migration guide: https://grafana.com/docs/grafana/latest/breaking-changes/
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-config
+  namespace: monitoring
+  labels:
+    app: grafana
+    version: "12.1.0"
+    component: monitoring
+data:
+  grafana.ini: |
+    # Grafana 12.x Configuration
+    # Major changes from 10.x/11.x:
+    # - New authentication system with enhanced RBAC
+    # - Redesigned alerting with improved multi-dimensional alerts
+    # - Enhanced dashboard drilldown capabilities
+    # - New Canvas panel type is stable
+    # - Scenes framework for dynamic dashboards
+    # - AI-powered insights (Enterprise features)
+    
+    [server]
+    protocol = http
+    http_port = 3000
+    domain = grafana.nephio.local
+    root_url = %(protocol)s://%(domain)s:%(http_port)s/
+    serve_from_sub_path = false
+    # New in 12.x: improved router
+    router_logging = false
+    enable_gzip = true
+    
+    [database]
+    type = sqlite3
+    path = grafana.db
+    # New in 12.x: improved connection pooling
+    max_idle_conn = 2
+    max_open_conn = 0
+    conn_max_lifetime = 14400
+    cache_mode = private
+    
+    [datasources]
+    # Datasources can now be provisioned through UI or API in 12.x
+    
+    [analytics]
+    reporting_enabled = false
+    check_for_updates = true
+    # New in 12.x: enhanced telemetry
+    check_for_plugin_updates = true
+    
+    [security]
+    admin_user = admin
+    admin_password = admin
+    secret_key = SW2YcwTIb9zpOOhoPsMm
+    # New in 12.x: enhanced security features
+    cookie_secure = false
+    cookie_samesite = lax
+    strict_transport_security = false
+    content_security_policy = false
+    content_security_policy_report_only = false
+    
+    [users]
+    allow_sign_up = false
+    allow_org_create = false
+    auto_assign_org = true
+    auto_assign_org_id = 1
+    auto_assign_org_role = Viewer
+    # New in 12.x: improved user management
+    default_language = en-US
+    
+    [auth]
+    disable_login_form = false
+    disable_signout_menu = false
+    # New in 12.x: OAuth improvements
+    oauth_auto_login = false
+    oauth_state_cookie_max_age = 600
+    oauth_skip_org_role_update_sync = false
+    
+    [auth.anonymous]
+    enabled = false
+    org_name = Main Org.
+    org_role = Viewer
+    
+    [auth.basic]
+    enabled = true
+    
+    [auth.proxy]
+    enabled = false
+    
+    # New in 12.x: Enhanced RBAC
+    [rbac]
+    permission_cache = true
+    permission_validation_enabled = true
+    
+    # Alerting configuration (redesigned in 12.x)
+    [unified_alerting]
+    enabled = true
+    # New in 12.x: multi-dimensional alerting
+    ha_listen_address = "0.0.0.0:9094"
+    ha_advertise_address = ""
+    ha_peers = ""
+    ha_peer_timeout = 15s
+    execute_alerts = true
+    evaluation_timeout = 30s
+    max_attempts = 3
+    min_interval = 10s
+    
+    [alerting]
+    enabled = false  # Legacy alerting disabled in favor of unified alerting
+    
+    # New in 12.x: Scenes configuration
+    [scenes]
+    enabled = true
+    
+    # New in 12.x: Canvas panel configuration
+    [panels]
+    enable_canvas = true
+    enable_scenes = true
+    disable_sanitize_html = false
+    
+    # Dashboard features (enhanced in 12.x)
+    [dashboards]
+    versions_to_keep = 20
+    min_refresh_interval = 5s
+    default_home_dashboard_path = "/var/lib/grafana/dashboards/home.json"
+    
+    # Explore feature (improved in 12.x)
+    [explore]
+    enabled = true
+    
+    # Logs (enhanced in 12.x)
+    [log]
+    mode = console
+    level = info
+    filters = rendering:debug
+    
+    [log.console]
+    format = console
+    
+    # Metrics (for self-monitoring)
+    [metrics]
+    enabled = true
+    interval_seconds = 10
+    disable_total_stats = false
+    # New in 12.x: enhanced metrics
+    basic_auth_username = ""
+    basic_auth_password = ""
+    
+    # Grafana Live (improved in 12.x)
+    [live]
+    max_connections = 100
+    allowed_origins = ""
+    # New in 12.x: WebSocket improvements
+    engine = "centrifuge"
+    
+    # Feature toggles (12.x specific)
+    [feature_toggles]
+    enable = correlations,newTraceView,traceToMetrics,publicDashboards,scenes,canvasPanel,transformationsVariableSupport
+    
+    # Caching (improved in 12.x)
+    [caching]
+    enabled = true
+    ttl = 120
+    
+    # Query caching (new in 12.x)
+    [query_caching]
+    enabled = true
+    ttl = 60
+    max_size = 50
+    
+    # Rendering (for PDF/PNG export)
+    [rendering]
+    server_url = 
+    callback_url = 
+    concurrent_render_request_limit = 30
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    # Datasource configuration for Prometheus 3.5 LTS
+    apiVersion: 1
+    datasources:
+      - name: Prometheus-3.5
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        isDefault: true
+        version: 1
+        editable: true
+        jsonData:
+          # New in Grafana 12.x: improved Prometheus integration
+          prometheusVersion: "3.5.0"
+          prometheusType: "Prometheus"
+          # Enable native histogram support (Prometheus 3.x feature)
+          enableNativeHistograms: true
+          # New in 12.x: incremental querying
+          incrementalQuerying: true
+          incrementalQueryOverlapWindow: 10m
+          # New in 12.x: query caching
+          cacheLevel: "High"
+          cacheDurationSeconds: 300
+          # Timeout settings
+          timeout: 60
+          queryTimeout: 60
+          httpMethod: "POST"
+          # New in 12.x: custom headers support
+          customQueryParameters: "promql_engine=prometheus"
+          # Exemplar support
+          exemplarTraceIdDestinations:
+            - name: traceID
+              datasourceUid: jaeger
+              urlDisplayLabel: "View in Jaeger"
+      
+      - name: VictoriaMetrics
+        type: prometheus
+        access: proxy
+        url: http://victoria-metrics:8428
+        version: 1
+        editable: true
+        jsonData:
+          prometheusVersion: "2.24.0"
+          prometheusType: "VictoriaMetrics"
+          timeout: 60
+          queryTimeout: 60
+          httpMethod: "POST"
+      
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki:3100
+        version: 1
+        editable: true
+        jsonData:
+          # New in 12.x: improved Loki integration
+          maxLines: 5000
+          derivedFields:
+            - datasourceUid: jaeger
+              matcherRegex: "traceID=(\\w+)"
+              name: TraceID
+              url: "$${__value.raw}"
+              urlDisplayLabel: "View Trace"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards-config
+  namespace: monitoring
+data:
+  dashboards.yml: |
+    apiVersion: 1
+    providers:
+      - name: 'Nephio R5 Dashboards'
+        orgId: 1
+        folder: 'Nephio R5'
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 10
+        allowUiUpdates: true
+        options:
+          path: /var/lib/grafana/dashboards/nephio
+      
+      - name: 'O-RAN L Release Dashboards'
+        orgId: 1
+        folder: 'O-RAN L Release'
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 10
+        allowUiUpdates: true
+        options:
+          path: /var/lib/grafana/dashboards/oran
+      
+      - name: 'Prometheus 3.x Dashboards'
+        orgId: 1
+        folder: 'Monitoring'
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 10
+        allowUiUpdates: true
+        options:
+          path: /var/lib/grafana/dashboards/monitoring
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-prometheus-3x
+  namespace: monitoring
+data:
+  prometheus-3x.json: |
+    {
+      "dashboard": {
+        "title": "Prometheus 3.5 LTS Monitoring",
+        "uid": "prometheus-3x-lts",
+        "version": 1,
+        "description": "Monitoring dashboard for Prometheus 3.5 LTS with native histograms",
+        "tags": ["prometheus", "3.x", "monitoring"],
+        "timezone": "browser",
+        "schemaVersion": 39,
+        "panels": [
+          {
+            "id": 1,
+            "title": "Prometheus Version",
+            "type": "stat",
+            "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+            "targets": [{
+              "expr": "prometheus_build_info",
+              "legendFormat": "{{version}}",
+              "refId": "A"
+            }],
+            "fieldConfig": {
+              "defaults": {
+                "mappings": [{
+                  "type": "regex",
+                  "options": {
+                    "pattern": "3\\.5\\..*",
+                    "result": {
+                      "text": "✅ 3.5.x LTS"
+                    }
+                  }
+                }],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"color": "green", "value": null}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 2,
+            "title": "Native Histograms Enabled",
+            "type": "stat",
+            "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+            "targets": [{
+              "expr": "prometheus_tsdb_native_histogram_samples_total > 0",
+              "refId": "A"
+            }],
+            "fieldConfig": {
+              "defaults": {
+                "mappings": [{
+                  "type": "value",
+                  "options": {
+                    "1": {
+                      "text": "✅ Enabled",
+                      "color": "green"
+                    },
+                    "0": {
+                      "text": "❌ Disabled",
+                      "color": "red"
+                    }
+                  }
+                }]
+              }
+            }
+          },
+          {
+            "id": 3,
+            "title": "TSDB Compression Ratio",
+            "type": "gauge",
+            "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+            "targets": [{
+              "expr": "prometheus_tsdb_compaction_chunk_size_bytes / prometheus_tsdb_compaction_chunk_samples",
+              "refId": "A"
+            }],
+            "fieldConfig": {
+              "defaults": {
+                "unit": "bytes",
+                "min": 0,
+                "max": 100,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"color": "green", "value": null},
+                    {"color": "yellow", "value": 50},
+                    {"color": "red", "value": 80}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 4,
+            "title": "Scrape Targets",
+            "type": "graph",
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+            "targets": [{
+              "expr": "up",
+              "legendFormat": "{{job}} - {{instance}}",
+              "refId": "A"
+            }],
+            "yaxes": [
+              {"format": "short", "min": 0, "max": 1.5},
+              {"format": "short"}
+            ]
+          },
+          {
+            "id": 5,
+            "title": "Native Histogram Sample Rate",
+            "type": "timeseries",
+            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+            "targets": [{
+              "expr": "rate(prometheus_tsdb_native_histogram_samples_total[5m])",
+              "legendFormat": "Native Histograms/sec",
+              "refId": "A"
+            }],
+            "fieldConfig": {
+              "defaults": {
+                "custom": {
+                  "drawStyle": "line",
+                  "lineInterpolation": "smooth",
+                  "fillOpacity": 10
+                }
+              }
+            }
+          }
+        ]
+      }
+    }

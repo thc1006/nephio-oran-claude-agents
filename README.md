@@ -32,6 +32,13 @@ claude code "Deploy O-Cloud infrastructure with Nephio"
 - Agents use Claude Code's built-in tools only (Read, Write, Bash, Search, Git)
 - No external tool dependencies needed
 
+## 🎯 Version Compatibility
+
+- **O-RAN SC**: L Release (June 30, 2025) - Current
+- **Nephio**: R5 (2024-2025)
+- **Go**: 1.24.6 with FIPS 140-3
+- **Kubernetes**: 1.32.x
+
 ## 📦 What You Get
 
 **9 Production-Ready Subagents** with proper YAML frontmatter and Claude Code tool configuration:
@@ -335,6 +342,8 @@ python3 tests/validate_agents.py
 - [Nephio Project](https://nephio.org/)
 - [O-RAN Alliance](https://www.o-ran.org/)
 - [O-RAN Software Community](https://o-ran-sc.org/)
+- [O-RAN SC L Release Documentation (June 30, 2025)](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/)
+- [L Release Notes](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/release-notes.html)
 
 ## 🐛 Troubleshooting
 
