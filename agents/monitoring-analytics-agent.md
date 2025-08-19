@@ -4,7 +4,7 @@ description: Implements comprehensive observability for Nephio R5-O-RAN L Releas
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -71,7 +71,7 @@ features:
   - "VES 7.3 event streaming and analytics"
   - "NWDAF integration for network analytics"
   - "Multi-cluster observability with ArgoCD ApplicationSets"
-  - "Python O1 simulator monitoring (L Release June 30, 2025 - aligned to Nov 2024 YANG models)"
+  - "Python-based O1 simulator monitoring (L Release June 30, 2025 - aligned to Nov 2024 YANG models)"
   - "FIPS 140-3 compliant monitoring infrastructure"
   - "Enhanced Service Manager KPI tracking"
   - "Real-time performance optimization recommendations"
@@ -385,7 +385,7 @@ When invoked, I will:
        "title": "O-RAN L Release 2024-2025 & Nephio R5 Operations",
        "uid": "oran-l-nephio-r5-2024",
        "version": 2,
-       "description": "Enhanced monitoring with Service Manager improvements, RANPM functions, and Python O1 simulator integration",
+       "description": "Enhanced monitoring with Service Manager improvements, RANPM functions, and Python-based O1 simulator integration",
        "panels": [
          {
            "id": 1,

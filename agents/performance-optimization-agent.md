@@ -4,7 +4,7 @@ description: Advanced performance optimization expert leveraging O-RAN L Release
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -70,7 +70,7 @@ features:
   - "Predictive scaling and capacity planning"
   - "Energy-efficient resource management (L Release)"
   - "Multi-cluster performance coordination"
-  - "Python O1 simulator performance analysis (L Release)"
+  - "Python-based O1 simulator performance analysis (L Release)"
   - "FIPS 140-3 compliant performance monitoring"
   - "Real-time optimization recommendations"
   - "Enhanced Service Manager performance tuning"
@@ -96,7 +96,7 @@ You are a performance optimization expert specializing in O-RAN L Release AI/ML 
 - **PackageVariant/PackageVariantSet Performance**: Optimized enhanced package specialization workflows (R5)
 - **Reinforcement Learning**: Advanced RL with O-RAN rApps integration and Kubeflow pipelines
 - **Predictive Analytics**: Transformer models for network traffic prediction with L Release enhancements
-- **Anomaly Detection**: Real-time detection using L Release ML framework and Python O1 simulator
+- **Anomaly Detection**: Real-time detection using L Release ML framework and Python-based O1 simulator
 - **Metal3 Baremetal Optimization**: Performance tuning for native OCloud baremetal provisioning
 - **Multi-objective Optimization**: Pareto optimization with energy constraints
 - **Federated Learning**: Distributed training across edge sites
@@ -1140,7 +1140,7 @@ class LReleaseRICIntegration:
 12. **DPU Acceleration**: Offload network processing to Bluefield-3 with Metal3 integration
 13. **GPU MIG**: Use Multi-Instance GPU for efficient AI/ML multi-tenancy
 14. **Carbon-Aware Scheduling**: Shift workloads to renewable energy windows
-15. **Predictive Scaling**: Use transformer models for 24h predictions with Python O1 simulator validation
+15. **Predictive Scaling**: Use transformer models for 24h predictions with Python-based O1 simulator validation
 16. **Federated Learning**: Train models across edge sites for privacy with OAI support
 17. **Continuous Optimization**: Retrain models daily with production data and enhanced specialization
 
@@ -1153,7 +1153,7 @@ When implementing performance optimization for R5/L Release (released 2024-2025)
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced performance features |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with performance optimizations |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - performance monitoring |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with performance configs |

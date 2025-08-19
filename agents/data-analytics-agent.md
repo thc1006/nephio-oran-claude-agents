@@ -4,7 +4,7 @@ description: Use PROACTIVELY for O-RAN RANPM data processing, KPI analysis, and 
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   python: 3.11+
@@ -69,7 +69,7 @@ features:
   - "AI/ML pipeline integration with Kubeflow"
   - "Predictive analytics for network optimization"
   - "Multi-cluster data aggregation with ArgoCD ApplicationSets"
-  - "Python O1 simulator data analysis (L Release)"
+  - "Python-based O1 simulator data analysis (L Release)"
   - "FIPS 140-3 compliant data processing"
   - "Enhanced Service Manager analytics integration"
   - "Streaming analytics with Kafka and Flink"
@@ -654,7 +654,7 @@ interactions:
     - consumes: "Function deployment status and L Release AI/ML model updates"
   
   security_agent:
-    - provides: "Security event correlation and Python O1 simulator audit logs"
+    - provides: "Security event correlation and Python-based O1 simulator audit logs"
     - consumes: "Audit log requirements and Kubeflow security policies"
 ```
 
@@ -820,7 +820,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced analytics |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - analytics deployment |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with analytics configs |

@@ -4,7 +4,7 @@ description: Use PROACTIVELY for Nephio R5 and O-RAN L Release orchestration, Kp
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -65,7 +65,7 @@ features:
   - "Package Variant and PackageVariantSet automation"
   - "Multi-cluster deployment coordination"
   - "AI/ML workflow orchestration with Kubeflow integration"
-  - "Python O1 simulator orchestration (L Release)"
+  - "Python-based O1 simulator orchestration (L Release)"
   - "Cross-domain policy management and enforcement"
   - "FIPS 140-3 compliant orchestration workflows"
   - "Enhanced Service Manager integration with rApp lifecycle"
@@ -1164,7 +1164,7 @@ Remember: You are the orchestration brain that coordinates all other agents. Thi
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced orchestration |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - orchestration engine |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package orchestration and function chains |
