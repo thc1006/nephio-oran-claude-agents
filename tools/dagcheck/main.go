@@ -195,7 +195,13 @@ func parseAgentFile(filePath string) (*Agent, error) {
 
 		// Parse handoff_to
 		if matches := handoffPattern.FindStringSubmatch(line); len(matches) > 1 {
-			target := strings.TrimSpace(strings.Trim(matches[1], `"`))
+			target := strings.TrimSpace(matches[1])
+			// Remove comments (everything after #)
+			if commentIndex := strings.Index(target, "#"); commentIndex != -1 {
+				target = strings.TrimSpace(target[:commentIndex])
+			}
+			// Remove quotes
+			target = strings.Trim(target, `"`)
 			if target != "null" && target != "" {
 				agent.HandoffTo = append(agent.HandoffTo, target)
 				agent.LineNumbers["handoff_to"] = lineNum
@@ -237,6 +243,12 @@ func parseAgentList(input string) []string {
 	
 	for _, part := range parts {
 		agent := strings.TrimSpace(part)
+		// Remove comments (everything after #)
+		if commentIndex := strings.Index(agent, "#"); commentIndex != -1 {
+			agent = strings.TrimSpace(agent[:commentIndex])
+		}
+		// Remove quotes
+		agent = strings.Trim(agent, `"`)
 		if agent != "" && agent != "null" && agent != "none" {
 			agents = append(agents, agent)
 		}

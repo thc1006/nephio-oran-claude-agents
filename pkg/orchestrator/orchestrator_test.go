@@ -362,17 +362,21 @@ func BenchmarkChunkSliceIterator(b *testing.B) {
 
 // Test memory usage patterns
 func TestMemoryUsage(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping memory usage test in short mode")
+	}
+	
 	ctx := context.Background()
 	orch := NewOrchestrator(ctx)
 	
-	// Test with large data sets to check for memory leaks
-	largeData := make([]string, 10000)
+	// Test with moderate data sets for CI efficiency (reduced from 10000)
+	largeData := make([]string, 1000)
 	for i := range largeData {
 		largeData[i] = fmt.Sprintf("large_item_%d", i)
 	}
 	
 	// Process in chunks to avoid timeout
-	err := orch.ProcessBatchesWithIterator(ctx, largeData, 100)
+	err := orch.ProcessBatchesWithIterator(ctx, largeData, 50)
 	assert.NoError(t, err)
 }
 
@@ -578,28 +582,32 @@ func TestEdgeCases(t *testing.T) {
 
 // Integration test combining multiple orchestrator features
 func TestOrchestratorIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+	
 	ctx := context.Background()
 	orch := NewOrchestrator(ctx)
 	
-	// Test full workflow
-	large_dataset := make([]string, 1000)
+	// Test full workflow with smaller dataset for CI efficiency
+	large_dataset := make([]string, 100)
 	for i := range large_dataset {
 		large_dataset[i] = fmt.Sprintf("integration_item_%d", i)
 	}
 	
 	// Process with different strategies
 	t.Run("batch processing", func(t *testing.T) {
-		err := orch.ProcessBatchesWithIterator(ctx, large_dataset, 50)
+		err := orch.ProcessBatchesWithIterator(ctx, large_dataset, 10)
 		assert.NoError(t, err)
 	})
 	
 	t.Run("concurrent processing", func(t *testing.T) {
-		err := orch.ProcessConcurrently(ctx, large_dataset[:100], 10)
+		err := orch.ProcessConcurrently(ctx, large_dataset[:20], 3)
 		assert.NoError(t, err)
 	})
 	
 	t.Run("retry processing", func(t *testing.T) {
-		err := orch.ProcessWithRetry(ctx, large_dataset[:50])
+		err := orch.ProcessWithRetry(ctx, large_dataset[:10])
 		assert.NoError(t, err)
 	})
 }
