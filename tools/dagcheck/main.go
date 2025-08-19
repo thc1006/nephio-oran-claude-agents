@@ -134,22 +134,22 @@ func buildGraph(dir string) (*Graph, error) {
 	return graph, nil
 }
 
-func parseAgentFile(filepath string) (*Agent, error) {
-	file, err := os.Open(filepath)
+func parseAgentFile(filePath string) (*Agent, error) {
+	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
 	agent := &Agent{
-		File:        filepath,
+		File:        filePath,
 		LineNumbers: make(map[string]int),
 		AcceptsFrom: []string{},
 		HandoffTo:   []string{},
 	}
 
 	// Extract agent name from filename
-	baseName := filepath.Base(filepath)
+	baseName := filepath.Base(filePath)
 	agent.Name = strings.TrimSuffix(strings.TrimSuffix(baseName, ".md"), "-agent")
 
 	scanner := bufio.NewScanner(file)
