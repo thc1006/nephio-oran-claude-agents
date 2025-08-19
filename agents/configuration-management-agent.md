@@ -734,7 +734,7 @@ function validate_package() {
   
   # Security scanning with FIPS 140-3 compliance
   # Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
-  # Optional build-time default: export GOFIPS140=v1.0.0
+  # Runtime FIPS mode activation (Go 1.24.6 standard approach)
   GODEBUG=fips140=on kpt fn eval $package_path \
     --image gcr.io/kpt-fn/security-scanner:v0.2.0
 }

@@ -410,7 +410,7 @@ go mod edit -go=1.24
 # Fix: FIPS 140-3 compliance
 # Go 1.24.6 includes native FIPS 140-3 compliance through the Go Cryptographic Module v1.0.0
 # without requiring BoringCrypto or external libraries
-# Optional build-time default: export GOFIPS140=v1.0.0
+# Runtime FIPS mode activation (Go 1.24.6 standard approach)
 export GODEBUG=fips140=on
 
 # Fix: Tool dependencies - use go install
@@ -454,7 +454,7 @@ FROM golang:1.24-alpine AS builder
 
 # Enable FIPS 140-3 compliance
 # Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
-# Optional build-time default: ENV GOFIPS140=v1.0.0
+# Runtime FIPS mode activation (Go 1.24.6 standard approach)
 ENV GODEBUG=fips140=on
 # Generics stable since Go 1.18 - no experimental flags needed
 
