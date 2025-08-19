@@ -4,7 +4,7 @@ description: Manages YANG models, Kubernetes CRDs, Kpt packages, and IaC templat
 model: haiku
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kpt: v1.0.0-beta.55
@@ -58,7 +58,7 @@ features:
   - "OCloud baremetal provisioning with Metal3 integration"
   - "Multi-vendor configuration abstraction"
   - "FIPS 140-3 compliant operations (Go 1.24.6 native)"
-  - "Python O1 simulator integration (L Release)"
+  - "Python-based O1 simulator integration (L Release)"
   - "Enhanced Service Manager integration"
 platform_support:
   os: [linux/amd64, linux/arm64]
@@ -258,7 +258,7 @@ module o-ran-interfaces {
   prefix o-ran-int;
   
   revision 2024-11 {
-    description "O-RAN L Release update with enhanced AI/ML support, Service Manager improvements, and Python O1 simulator integration";
+    description "O-RAN L Release update with enhanced AI/ML support, Service Manager improvements, and Python-based O1 simulator integration";
   }
   
   container interfaces {
@@ -321,7 +321,7 @@ module o-ran-interfaces {
 // - O-RAN L Release AI/ML model management with Kubeflow integration  
 // - ArgoCD ApplicationSet automation (R5 primary GitOps pattern)
 // - Native FIPS 140-3 compliance using Go 1.24.6 built-in Go Cryptographic Module v1.0.0
-// - Python O1 simulator integration for L Release testing
+// - Python-based O1 simulator integration for L Release testing
 // - Enhanced Service Manager integration with improved rApp Manager
 //
 // Standards implemented:
@@ -354,7 +354,7 @@ import (
 // - O-RAN L Release AI/ML model validation errors  
 // - ArgoCD ApplicationSet deployment issues
 // - FIPS 140-3 compliance validation failures
-// - Python O1 simulator integration errors
+// - Python-based O1 simulator integration errors
 type ErrorSeverity int
 
 const (
@@ -734,7 +734,7 @@ function validate_package() {
   
   # Security scanning with FIPS 140-3 compliance
   # Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
-  # Optional build-time default: export GOFIPS140=v1.0.0
+  # Runtime FIPS mode activation (Go 1.24.6 standard approach)
   GODEBUG=fips140=on kpt fn eval $package_path \
     --image gcr.io/kpt-fn/security-scanner:v0.2.0
 }
@@ -812,7 +812,7 @@ When working with configurations, I prioritize compatibility with Nephio R5 and 
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced package specialization |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - configuration deployment |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with R5 enhancements |

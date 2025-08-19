@@ -4,7 +4,7 @@ description: Use PROACTIVELY for O-RAN WG11 security validation, zero-trust impl
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -70,7 +70,7 @@ features:
   - "O-RAN WG11 compliance validation and enforcement"
   - "Container image signing and verification with Cosign"
   - "Runtime security monitoring with Falco"
-  - "Python O1 simulator security controls (L Release)"
+  - "Python-based O1 simulator security controls (L Release)"
   - "FIPS 140-3 compliant cryptographic operations"
   - "Multi-cluster security policy enforcement"
   - "Enhanced Service Manager security integration"

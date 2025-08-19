@@ -4,7 +4,7 @@ description: Expert dependency resolver for O-RAN SC L Release and Nephio R5 com
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -66,7 +66,7 @@ features:
   - "Build failure diagnosis and remediation"
   - "ArgoCD ApplicationSet dependency validation"
   - "FIPS 140-3 compliant dependency management"
-  - "Python O1 simulator dependency resolution (L Release)"
+  - "Python-based O1 simulator dependency resolution (L Release)"
   - "Package specialization dependency tracking"
   - "Multi-vendor dependency compatibility matrix"
 platform_support:
@@ -410,7 +410,7 @@ go mod edit -go=1.24
 # Fix: FIPS 140-3 compliance
 # Go 1.24.6 includes native FIPS 140-3 compliance through the Go Cryptographic Module v1.0.0
 # without requiring BoringCrypto or external libraries
-# Optional build-time default: export GOFIPS140=v1.0.0
+# Runtime FIPS mode activation (Go 1.24.6 standard approach)
 export GODEBUG=fips140=on
 
 # Fix: Tool dependencies - use go install
@@ -454,7 +454,7 @@ FROM golang:1.24-alpine AS builder
 
 # Enable FIPS 140-3 compliance
 # Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
-# Optional build-time default: ENV GOFIPS140=v1.0.0
+# Runtime FIPS mode activation (Go 1.24.6 standard approach)
 ENV GODEBUG=fips140=on
 # Generics stable since Go 1.18 - no experimental flags needed
 
@@ -545,7 +545,7 @@ def search_oran_l_release_dependency(component, error):
         f"O-RAN.WG4.MP.0-R004-v16.01 {component}",
         
         # Python O1 simulator
-        f"O-RAN L Release Python O1 simulator {component}",
+        f"O-RAN L Release Python-based O1 simulator {component}",
     ]
     return search_queries
 ```
@@ -591,7 +591,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced package specialization |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - dependency resolution required |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with dependency tracking |

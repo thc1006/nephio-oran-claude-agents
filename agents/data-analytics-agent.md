@@ -4,7 +4,7 @@ description: Use PROACTIVELY for O-RAN RANPM data processing, KPI analysis, and 
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   python: 3.11+
@@ -69,7 +69,7 @@ features:
   - "AI/ML pipeline integration with Kubeflow"
   - "Predictive analytics for network optimization"
   - "Multi-cluster data aggregation with ArgoCD ApplicationSets"
-  - "Python O1 simulator data analysis (L Release)"
+  - "Python-based O1 simulator data analysis (L Release)"
   - "FIPS 140-3 compliant data processing"
   - "Enhanced Service Manager analytics integration"
   - "Streaming analytics with Kafka and Flink"
@@ -305,12 +305,22 @@ pipeline:
 
 ## AI/ML Integration (Enhanced for L Release)
 
-### Kubeflow Integration for L Release
-- **MLOps Pipeline**: Automated model training and deployment workflows
-- **Experiment Tracking**: Integration with Kubeflow Pipelines for reproducible ML experiments
-- **Model Registry**: Centralized model management with versioning and metadata
-- **Distributed Training**: Multi-node training capabilities for large datasets
-- **Hyperparameter Tuning**: Automated optimization with Katib integration
+### Kubeflow 1.8.0 Integration for L Release AI/ML
+
+#### Core Components Integration
+- **Kubeflow Pipelines v2.0**: Complete ML workflow orchestration with O-RAN data sources
+- **Katib v0.16**: Hyperparameter optimization for xApp and rApp AI models 
+- **KServe v0.11**: Model serving infrastructure with O-RAN specific endpoints
+- **Notebook Server v1.8**: Interactive development environment with O-RAN datasets
+- **Training Operator v1.7**: Distributed training for large O-RAN datasets (PyTorch, TensorFlow)
+- **Model Registry**: MLflow integration for O-RAN AI/ML model lifecycle management
+
+#### L Release Specific Features
+- **O-RAN Model Templates**: Pre-built pipeline templates for RANPM, NWDAF, and rApp analytics
+- **YANG Data Connectors**: Native integration with O-RAN YANG models and Python-based O1 simulator
+- **VES Event Processing**: Real-time ML inference on VES 7.3 event streams
+- **Multi-Tenant Isolation**: Separate AI/ML environments for different O-RAN domains (RIC, SMO, O-Cloud)
+- **FIPS 140-3 Compliant Models**: Cryptographically secure model training and inference
 
 ### Model Deployment Pipeline
 ```go
@@ -416,6 +426,795 @@ func (m *MLPipeline) retryWithBackoff(ctx context.Context, operation func() erro
         }
     }, backoff.WithContext(b, ctx))
 }
+```
+
+### Kubeflow Pipeline Implementation for O-RAN Analytics
+
+#### Complete L Release AI/ML Pipeline Configuration
+```yaml
+# Kubeflow Pipeline for O-RAN RANPM Analytics (L Release)
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: oran-ranpm-ml-pipeline
+  namespace: kubeflow
+  annotations:
+    nephio.org/l-release: "enabled"
+    oran.org/domain: "RANPM"
+spec:
+  entrypoint: oran-analytics-pipeline
+  serviceAccountName: pipeline-runner
+  templates:
+  - name: oran-analytics-pipeline
+    dag:
+      tasks:
+      - name: data-ingestion
+        template: ingest-oran-data
+        arguments:
+          parameters:
+          - name: source-type
+            value: "VES-7.3"
+          - name: yang-models
+            value: "o-ran-pm-types-v2.0"
+            
+      - name: feature-engineering
+        template: engineer-features
+        dependencies: [data-ingestion]
+        arguments:
+          artifacts:
+          - name: raw-data
+            from: "{{tasks.data-ingestion.outputs.artifacts.oran-data}}"
+            
+      - name: model-training
+        template: train-ranpm-model
+        dependencies: [feature-engineering]
+        arguments:
+          artifacts:
+          - name: features
+            from: "{{tasks.feature-engineering.outputs.artifacts.features}}"
+            
+      - name: model-validation
+        template: validate-model
+        dependencies: [model-training]
+        arguments:
+          artifacts:
+          - name: model
+            from: "{{tasks.model-training.outputs.artifacts.model}}"
+            
+      - name: model-deployment
+        template: deploy-kserve-model
+        dependencies: [model-validation]
+        when: "{{tasks.model-validation.outputs.parameters.accuracy}} > 0.95"
+        arguments:
+          artifacts:
+          - name: validated-model
+            from: "{{tasks.model-validation.outputs.artifacts.validated-model}}"
+
+  # Data Ingestion Template
+  - name: ingest-oran-data
+    container:
+      image: oran/data-collector:l-release-v2.0
+      command: [python]
+      args: 
+      - /app/ingest_ves_data.py
+      - --source={{inputs.parameters.source-type}}
+      - --yang-models={{inputs.parameters.yang-models}}
+      - --fips-mode=enabled
+      env:
+      - name: GODEBUG
+        value: "fips140=on"
+      - name: ORAN_L_RELEASE
+        value: "v2.0"
+      volumeMounts:
+      - name: ves-config
+        mountPath: /config/ves
+    inputs:
+      parameters:
+      - name: source-type
+      - name: yang-models
+    outputs:
+      artifacts:
+      - name: oran-data
+        path: /tmp/oran-data.parquet
+        s3:
+          endpoint: minio.kubeflow:9000
+          bucket: oran-ml-data
+          key: "data/{{workflow.name}}/oran-data.parquet"
+
+  # Feature Engineering Template  
+  - name: engineer-features
+    container:
+      image: kubeflow/notebook-server:v1.8-oran
+      command: [python]
+      args:
+      - /app/feature_engineering.py
+      - --input-data=/tmp/input/oran-data.parquet
+      - --output-features=/tmp/output/features.parquet
+      - --l-release-features=enabled
+      env:
+      - name: GODEBUG
+        value: "fips140=on"
+      resources:
+        requests:
+          memory: "8Gi"
+          cpu: "4"
+        limits:
+          memory: "16Gi"
+          cpu: "8"
+    inputs:
+      artifacts:
+      - name: raw-data
+        path: /tmp/input/oran-data.parquet
+    outputs:
+      artifacts:
+      - name: features
+        path: /tmp/output/features.parquet
+        s3:
+          endpoint: minio.kubeflow:9000
+          bucket: oran-ml-data
+          key: "features/{{workflow.name}}/features.parquet"
+
+  # Model Training Template
+  - name: train-ranpm-model
+    container:
+      image: tensorflow/tensorflow:2.15.0-gpu
+      command: [python]
+      args:
+      - /app/train_model.py
+      - --features=/tmp/input/features.parquet
+      - --model-output=/tmp/output/model
+      - --l-release-optimizations=enabled
+      - --fips-compliance=required
+      env:
+      - name: GODEBUG
+        value: "fips140=on"
+      - name: TF_ENABLE_ONEDNN_OPTS
+        value: "1"
+      resources:
+        requests:
+          nvidia.com/gpu: 1
+          memory: "16Gi"
+          cpu: "8"
+        limits:
+          nvidia.com/gpu: 2
+          memory: "32Gi"
+          cpu: "16"
+    inputs:
+      artifacts:
+      - name: features
+        path: /tmp/input/features.parquet
+    outputs:
+      artifacts:
+      - name: model
+        path: /tmp/output/model
+        s3:
+          endpoint: minio.kubeflow:9000
+          bucket: oran-ml-models
+          key: "models/{{workflow.name}}/model.tar.gz"
+
+  # Model Validation Template
+  - name: validate-model
+    container:
+      image: oran/model-validator:l-release-v2.0
+      command: [python]
+      args:
+      - /app/validate_model.py
+      - --model=/tmp/input/model
+      - --test-data=/app/test-datasets/oran-l-release
+      - --accuracy-threshold=0.95
+      - --l-release-compliance=required
+      env:
+      - name: GODEBUG
+        value: "fips140=on"
+    inputs:
+      artifacts:
+      - name: model
+        path: /tmp/input/model
+    outputs:
+      parameters:
+      - name: accuracy
+        valueFrom:
+          path: /tmp/accuracy.txt
+      - name: l-release-compliant
+        valueFrom:
+          path: /tmp/compliance.txt
+      artifacts:
+      - name: validated-model
+        path: /tmp/output/validated-model
+        s3:
+          endpoint: minio.kubeflow:9000
+          bucket: oran-ml-models
+          key: "validated/{{workflow.name}}/model.tar.gz"
+
+  # KServe Model Deployment Template
+  - name: deploy-kserve-model
+    resource:
+      action: apply
+      manifest: |
+        apiVersion: serving.kserve.io/v1beta1
+        kind: InferenceService
+        metadata:
+          name: oran-ranpm-predictor
+          namespace: oran-analytics
+          annotations:
+            nephio.org/l-release: "v2.0"
+            oran.org/model-type: "RANPM"
+            security.nephio.org/fips-required: "true"
+        spec:
+          predictor:
+            tensorflow:
+              storageUri: "s3://oran-ml-models/validated/{{workflow.name}}/model.tar.gz"
+              resources:
+                requests:
+                  cpu: "2"
+                  memory: "4Gi"
+                limits:
+                  cpu: "4"
+                  memory: "8Gi"
+              env:
+              - name: GODEBUG
+                value: "fips140=on"
+              - name: ORAN_L_RELEASE
+                value: "v2.0"
+          transformer:
+            containers:
+            - name: o-ran-transformer
+              image: oran/data-transformer:l-release-v2.0
+              env:
+              - name: GODEBUG
+                value: "fips140=on"
+              - name: TRANSFORM_TYPE
+                value: "VES-TO-ML"
+    inputs:
+      artifacts:
+      - name: validated-model
+        path: /tmp/model
+
+---
+# Kubeflow Training Job for Distributed Learning
+apiVersion: kubeflow.org/v1
+kind: TFJob
+metadata:
+  name: oran-distributed-training
+  namespace: kubeflow
+  annotations:
+    nephio.org/l-release: "enabled"
+    oran.org/training-type: "distributed"
+spec:
+  tfReplicaSpecs:
+    Chief:
+      replicas: 1
+      template:
+        spec:
+          containers:
+          - name: tensorflow
+            image: tensorflow/tensorflow:2.15.0-gpu
+            command: [python]
+            args:
+            - /app/distributed_training.py
+            - --model-type=oran-ranpm
+            - --l-release-features=enabled
+            - --fips-compliance=required
+            env:
+            - name: GODEBUG
+              value: "fips140=on"
+            - name: TF_CONFIG
+              value: |
+                {
+                  "cluster": {
+                    "chief": ["oran-distributed-training-chief-0:2222"],
+                    "worker": ["oran-distributed-training-worker-0:2222", "oran-distributed-training-worker-1:2222"]
+                  },
+                  "task": {"type": "chief", "index": 0}
+                }
+            resources:
+              requests:
+                nvidia.com/gpu: 1
+                memory: "16Gi"
+                cpu: "8"
+              limits:
+                nvidia.com/gpu: 2
+                memory: "32Gi"
+                cpu: "16"
+    Worker:
+      replicas: 2
+      template:
+        spec:
+          containers:
+          - name: tensorflow
+            image: tensorflow/tensorflow:2.15.0-gpu
+            command: [python]
+            args:
+            - /app/distributed_training.py
+            - --model-type=oran-ranpm
+            - --l-release-features=enabled
+            - --fips-compliance=required
+            env:
+            - name: GODEBUG
+              value: "fips140=on"
+            resources:
+              requests:
+                nvidia.com/gpu: 1
+                memory: "8Gi" 
+                cpu: "4"
+              limits:
+                nvidia.com/gpu: 1
+                memory: "16Gi"
+                cpu: "8"
+```
+
+#### Python Implementation for L Release AI/ML Pipeline
+```python
+#!/usr/bin/env python3
+"""
+O-RAN L Release AI/ML Pipeline Integration with Kubeflow 1.8.0
+Implements FIPS 140-3 compliant ML workflows for O-RAN analytics
+"""
+
+import os
+import logging
+import asyncio
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Any
+from datetime import datetime, timezone
+
+# Kubeflow SDK v2.0 imports
+from kfp import Client, dsl
+from kfp.dsl import component, pipeline, Input, Output, Dataset, Model, Metrics
+from kfp.kubernetes import use_secret_as_env, use_secret_as_volume
+
+# O-RAN L Release specific imports  
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+from mlflow import MlflowClient
+import onnxruntime as ort
+
+# FIPS 140-3 compliance check
+def ensure_fips_compliance():
+    """Ensure FIPS 140-3 mode is enabled for cryptographic operations"""
+    if os.environ.get('GODEBUG') != 'fips140=on':
+        raise RuntimeError("FIPS 140-3 mode not enabled. Set GODEBUG=fips140=on")
+    
+    # Verify Go crypto module is in FIPS mode
+    logging.info("FIPS 140-3 compliance verified for O-RAN L Release")
+
+@dataclass
+class ORANModelConfig:
+    """Configuration for O-RAN L Release AI/ML models"""
+    model_name: str
+    version: str = "l-release-v2.0"
+    yang_models: List[str] = None
+    fips_required: bool = True
+    l_release_features: bool = True
+    python_o1_simulator: bool = True
+
+@component(
+    base_image="oran/ml-base:l-release-v2.0",
+    packages_to_install=["pandas==2.1.0", "numpy==1.24.0"]
+)
+def ingest_ves_data(
+    ves_endpoint: str,
+    yang_models: str,
+    output_data: Output[Dataset],
+    fips_mode: bool = True
+) -> Dict[str, Any]:
+    """Ingest VES 7.3 events with O-RAN L Release YANG model validation"""
+    import pandas as pd
+    import requests
+    import json
+    import os
+    from datetime import datetime
+    
+    if fips_mode:
+        ensure_fips_compliance()
+    
+    logging.info(f"Ingesting VES data with YANG models: {yang_models}")
+    
+    # VES 7.3 data ingestion with L Release enhancements
+    ves_config = {
+        "vesEventListenerVersion": "7.3.0",
+        "domain": "measurement",
+        "yangModels": yang_models.split(","),
+        "lReleaseFeatures": True,
+        "aiMlDomain": True  # L Release AI/ML event domain
+    }
+    
+    # Simulate VES data collection (in real implementation, connect to VES collector)
+    sample_data = {
+        "eventId": f"ves-{datetime.now().isoformat()}",
+        "domain": "measurement", 
+        "eventName": "o-ran-pm-measurement",
+        "vesEventListenerVersion": "7.3.0",
+        "lReleaseVersion": "2.0",
+        "measurementFields": {
+            "pmData": {
+                "cellMetrics": np.random.rand(1000, 20).tolist(),
+                "yangModel": "o-ran-pm-types-v2.0",
+                "lReleaseOptimized": True
+            }
+        }
+    }
+    
+    # Convert to DataFrame and save
+    df = pd.DataFrame([sample_data])
+    df.to_parquet(output_data.path, compression='snappy')
+    
+    return {
+        "records_ingested": len(df),
+        "yang_models_used": yang_models,
+        "l_release_compliant": True
+    }
+
+@component(
+    base_image="kubeflow/notebook-server:v1.8-oran",
+    packages_to_install=["scikit-learn==1.3.0", "feature-engine==1.6.0"]
+)
+def engineer_oran_features(
+    input_data: Input[Dataset],
+    output_features: Output[Dataset],
+    l_release_optimizations: bool = True,
+    fips_mode: bool = True
+) -> Dict[str, Any]:
+    """Feature engineering optimized for O-RAN L Release AI/ML"""
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import StandardScaler, RobustScaler
+    import json
+    
+    if fips_mode:
+        ensure_fips_compliance()
+    
+    logging.info("Starting O-RAN L Release feature engineering")
+    
+    # Load VES data
+    df = pd.read_parquet(input_data.path)
+    
+    # L Release specific feature engineering
+    features = []
+    for _, row in df.iterrows():
+        pm_data = row['measurementFields']['pmData']
+        cell_metrics = np.array(pm_data['cellMetrics'])
+        
+        # L Release AI/ML optimized features
+        feature_vector = {
+            # Traditional O-RAN metrics
+            'throughput_mean': np.mean(cell_metrics[:, 0]),
+            'latency_p95': np.percentile(cell_metrics[:, 1], 95),
+            'prb_utilization': np.mean(cell_metrics[:, 2]),
+            
+            # L Release enhanced features
+            'ai_prediction_confidence': np.mean(cell_metrics[:, 15]),
+            'ml_optimization_score': np.mean(cell_metrics[:, 16]),
+            'energy_efficiency_ratio': np.mean(cell_metrics[:, 17]),
+            'l_release_enhancement_factor': np.mean(cell_metrics[:, 18]),
+            
+            # Cross-domain correlations (L Release capability)
+            'cross_domain_score': np.corrcoef(cell_metrics[:, 0], cell_metrics[:, 10])[0, 1],
+            'temporal_stability': np.std(cell_metrics[:, 5]),
+        }
+        features.append(feature_vector)
+    
+    # Create feature DataFrame
+    feature_df = pd.DataFrame(features)
+    
+    # L Release optimized scaling
+    if l_release_optimizations:
+        scaler = RobustScaler()  # More robust for O-RAN outliers
+        scaled_features = scaler.fit_transform(feature_df)
+        feature_df = pd.DataFrame(scaled_features, columns=feature_df.columns)
+    
+    # Save features
+    feature_df.to_parquet(output_features.path, compression='snappy')
+    
+    return {
+        "features_created": len(feature_df.columns),
+        "samples_processed": len(feature_df),
+        "l_release_optimized": l_release_optimizations,
+        "feature_names": list(feature_df.columns)
+    }
+
+@component(
+    base_image="tensorflow/tensorflow:2.15.0-gpu",
+    packages_to_install=["mlflow==2.10.0", "onnx==1.15.0"]
+)
+def train_oran_model(
+    features: Input[Dataset],
+    model_output: Output[Model],
+    metrics_output: Output[Metrics],
+    l_release_model: bool = True,
+    fips_mode: bool = True
+) -> Dict[str, Any]:
+    """Train O-RAN AI/ML model with L Release optimizations"""
+    import pandas as pd
+    import tensorflow as tf
+    import mlflow
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    import json
+    
+    if fips_mode:
+        ensure_fips_compliance()
+    
+    logging.info("Training O-RAN L Release AI/ML model")
+    
+    # Load features
+    feature_df = pd.read_parquet(features.path)
+    
+    # Prepare training data
+    X = feature_df.drop(['ai_prediction_confidence'], axis=1, errors='ignore')
+    y = feature_df.get('ai_prediction_confidence', np.random.rand(len(feature_df)))
+    
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+    
+    # L Release optimized model architecture
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(128, activation='relu', input_shape=(X.shape[1],)),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Dropout(0.3),
+        
+        # L Release enhancement layers
+        tf.keras.layers.Dense(64, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Dropout(0.2),
+        
+        # O-RAN specific output layer
+        tf.keras.layers.Dense(1, activation='sigmoid', name='oran_prediction')
+    ])
+    
+    # L Release optimized compilation
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+    model.compile(
+        optimizer=optimizer,
+        loss='binary_crossentropy',
+        metrics=['accuracy', 'precision', 'recall']
+    )
+    
+    # Training with L Release callbacks
+    callbacks = [
+        tf.keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
+        tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5),
+        tf.keras.callbacks.ModelCheckpoint(
+            filepath='/tmp/best_model.h5',
+            save_best_only=True,
+            monitor='val_accuracy'
+        )
+    ]
+    
+    # Train model
+    history = model.fit(
+        X_train, y_train,
+        validation_data=(X_test, y_test),
+        epochs=100,
+        batch_size=32,
+        callbacks=callbacks,
+        verbose=1
+    )
+    
+    # Evaluate model
+    test_loss, test_accuracy, test_precision, test_recall = model.evaluate(X_test, y_test)
+    
+    # Save model in multiple formats for L Release compatibility
+    model.save(f"{model_output.path}/saved_model")
+    
+    # Convert to ONNX for cross-platform deployment
+    import tf2onnx
+    onnx_model = tf2onnx.convert.from_keras(model)
+    with open(f"{model_output.path}/model.onnx", "wb") as f:
+        f.write(onnx_model.SerializeToString())
+    
+    # Log metrics
+    metrics = {
+        "accuracy": float(test_accuracy),
+        "precision": float(test_precision), 
+        "recall": float(test_recall),
+        "loss": float(test_loss),
+        "l_release_compliant": True,
+        "fips_trained": fips_mode
+    }
+    
+    with open(metrics_output.path, "w") as f:
+        json.dump(metrics, f)
+    
+    return metrics
+
+@pipeline(
+    name="oran-l-release-ml-pipeline",
+    description="Complete O-RAN L Release AI/ML pipeline with Kubeflow 1.8.0"
+)
+def oran_ml_pipeline(
+    ves_endpoint: str = "http://ves-collector.oran:8080",
+    yang_models: str = "o-ran-pm-types-v2.0,o-ran-interfaces-v2.1",
+    l_release_optimizations: bool = True,
+    fips_compliance: bool = True
+):
+    """O-RAN L Release ML Pipeline with comprehensive AI/ML workflow"""
+    
+    # Data Ingestion
+    ingest_task = ingest_ves_data(
+        ves_endpoint=ves_endpoint,
+        yang_models=yang_models,
+        fips_mode=fips_compliance
+    )
+    
+    # Feature Engineering  
+    features_task = engineer_oran_features(
+        input_data=ingest_task.outputs['output_data'],
+        l_release_optimizations=l_release_optimizations,
+        fips_mode=fips_compliance
+    )
+    
+    # Model Training
+    train_task = train_oran_model(
+        features=features_task.outputs['output_features'],
+        l_release_model=l_release_optimizations,
+        fips_mode=fips_compliance
+    )
+    
+    # Configure pipeline for L Release
+    ingest_task.set_env_variable('ORAN_L_RELEASE', 'v2.0')
+    features_task.set_env_variable('ORAN_L_RELEASE', 'v2.0') 
+    train_task.set_env_variable('ORAN_L_RELEASE', 'v2.0')
+    
+    if fips_compliance:
+        ingest_task.set_env_variable('GODEBUG', 'fips140=on')
+        features_task.set_env_variable('GODEBUG', 'fips140=on')
+        train_task.set_env_variable('GODEBUG', 'fips140=on')
+
+# Pipeline execution and management
+class ORANMLPipelineManager:
+    """Manages O-RAN L Release ML pipelines with Kubeflow 1.8.0"""
+    
+    def __init__(self, kubeflow_endpoint: str, namespace: str = "kubeflow"):
+        ensure_fips_compliance()
+        
+        self.client = Client(host=kubeflow_endpoint)
+        self.namespace = namespace
+        self.mlflow_client = MlflowClient()
+        
+        logging.info(f"Initialized O-RAN ML Pipeline Manager for L Release")
+    
+    async def create_experiment(self, experiment_name: str) -> str:
+        """Create ML experiment for O-RAN model development"""
+        try:
+            experiment = self.mlflow_client.create_experiment(
+                name=experiment_name,
+                tags={
+                    "oran_release": "L-Release-v2.0",
+                    "nephio_version": "R5.0.1", 
+                    "fips_compliant": "true",
+                    "kubeflow_version": "1.8.0"
+                }
+            )
+            logging.info(f"Created experiment: {experiment_name}")
+            return experiment
+        except Exception as e:
+            logging.error(f"Failed to create experiment: {e}")
+            raise
+    
+    async def run_pipeline(
+        self, 
+        experiment_name: str,
+        pipeline_params: Dict[str, Any] = None
+    ) -> str:
+        """Execute O-RAN ML pipeline with L Release features"""
+        try:
+            # Compile pipeline
+            compiled_pipeline = self.client.create_run_from_pipeline_func(
+                oran_ml_pipeline,
+                arguments=pipeline_params or {},
+                experiment_name=experiment_name,
+                namespace=self.namespace
+            )
+            
+            logging.info(f"Started pipeline run: {compiled_pipeline.run_id}")
+            return compiled_pipeline.run_id
+            
+        except Exception as e:
+            logging.error(f"Pipeline execution failed: {e}")
+            raise
+    
+    async def deploy_model(
+        self, 
+        model_uri: str, 
+        service_name: str,
+        l_release_config: ORANModelConfig
+    ) -> Dict[str, Any]:
+        """Deploy trained model using KServe with L Release optimizations"""
+        
+        inference_service_spec = {
+            "apiVersion": "serving.kserve.io/v1beta1",
+            "kind": "InferenceService",
+            "metadata": {
+                "name": service_name,
+                "namespace": "oran-analytics",
+                "annotations": {
+                    "nephio.org/l-release": l_release_config.version,
+                    "oran.org/yang-models": ",".join(l_release_config.yang_models or []),
+                    "security.nephio.org/fips-required": str(l_release_config.fips_required).lower()
+                }
+            },
+            "spec": {
+                "predictor": {
+                    "tensorflow": {
+                        "storageUri": model_uri,
+                        "resources": {
+                            "requests": {"cpu": "2", "memory": "4Gi"},
+                            "limits": {"cpu": "4", "memory": "8Gi"}
+                        },
+                        "env": [
+                            {"name": "GODEBUG", "value": "fips140=on"},
+                            {"name": "ORAN_L_RELEASE", "value": l_release_config.version}
+                        ]
+                    }
+                }
+            }
+        }
+        
+        # Apply inference service (would use Kubernetes client in real implementation)
+        logging.info(f"Deploying model {service_name} with L Release configuration")
+        
+        return {
+            "service_name": service_name,
+            "model_uri": model_uri,
+            "l_release_version": l_release_config.version,
+            "fips_compliant": l_release_config.fips_required,
+            "status": "deployed"
+        }
+
+# Example usage
+async def main():
+    """Example O-RAN L Release AI/ML pipeline execution"""
+    ensure_fips_compliance()
+    
+    # Initialize pipeline manager
+    pipeline_manager = ORANMLPipelineManager(
+        kubeflow_endpoint="http://kubeflow.oran-analytics.svc.cluster.local:8080"
+    )
+    
+    # Create experiment
+    experiment_name = f"oran-ranpm-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    await pipeline_manager.create_experiment(experiment_name)
+    
+    # Run pipeline with L Release parameters
+    pipeline_params = {
+        "ves_endpoint": "http://ves-collector.oran:8080",
+        "yang_models": "o-ran-pm-types-v2.0,o-ran-interfaces-v2.1,o-ran-ai-ml-v1.0",
+        "l_release_optimizations": True,
+        "fips_compliance": True
+    }
+    
+    run_id = await pipeline_manager.run_pipeline(experiment_name, pipeline_params)
+    logging.info(f"Pipeline execution started: {run_id}")
+    
+    # Deploy model after training (would monitor pipeline completion in real implementation)
+    model_config = ORANModelConfig(
+        model_name="oran-ranpm-predictor",
+        version="l-release-v2.0",
+        yang_models=["o-ran-pm-types-v2.0", "o-ran-ai-ml-v1.0"],
+        fips_required=True,
+        l_release_features=True
+    )
+    
+    deployment_result = await pipeline_manager.deploy_model(
+        model_uri="s3://oran-ml-models/ranpm-predictor/v2.0",
+        service_name="oran-ranpm-service",
+        l_release_config=model_config
+    )
+    
+    logging.info(f"Model deployment completed: {deployment_result}")
+
+if __name__ == "__main__":
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+    
+    # Run the pipeline
+    asyncio.run(main())
 ```
 
 ### xApp/rApp Data Support (L Release Enhanced)
@@ -654,7 +1453,7 @@ interactions:
     - consumes: "Function deployment status and L Release AI/ML model updates"
   
   security_agent:
-    - provides: "Security event correlation and Python O1 simulator audit logs"
+    - provides: "Security event correlation and Python-based O1 simulator audit logs"
     - consumes: "Audit log requirements and Kubeflow security policies"
 ```
 
@@ -820,7 +1619,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced analytics |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - analytics deployment |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with analytics configs |

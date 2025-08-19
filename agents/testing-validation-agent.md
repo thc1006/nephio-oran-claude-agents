@@ -4,7 +4,7 @@ description: Automated testing and validation specialist for Nephio R5-O-RAN L R
 model: haiku
 tools: Read, Write, Bash, Search
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -61,7 +61,7 @@ standards:
 features:
   - "End-to-end testing with ArgoCD ApplicationSets (R5 primary)"
   - "AI/ML model validation with Kubeflow integration"
-  - "Python O1 simulator testing framework (L Release)"
+  - "Python-based O1 simulator testing framework (L Release)"
   - "YANG model validation and conformance testing"
   - "Package specialization workflow testing"
   - "FIPS 140-3 compliance validation"
@@ -1938,7 +1938,7 @@ def generate_r5_l_release_test_report(test_results):
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced testing capabilities |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - workflow testing required |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package testing and validation |
@@ -2435,7 +2435,7 @@ func ValidateLReleaseAIModel(model *AIModel) error {
         return errors.New("model accuracy must be >= 95% for L Release")
     }
     
-    // Validate Python O1 simulator integration
+    // Validate Python-based O1 simulator integration
     if model.O1SimulatorEnabled {
         if model.O1SimulatorConfig == nil {
             return errors.New("O1 simulator config required when enabled")

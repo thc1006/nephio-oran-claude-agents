@@ -4,7 +4,7 @@ description: Manages O-Cloud infrastructure, Kubernetes cluster lifecycle, and e
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: 2025-01-19T12:00:00Z
+last_updated: August 20, 2025
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -64,7 +64,7 @@ features:
   - "Enhanced package specialization with PackageVariant/PackageVariantSet"
   - "Multi-cluster edge orchestration with AI/ML optimization"
   - "FIPS 140-3 compliant operations (Go 1.24.6 native)"
-  - "Python O1 simulator integration (L Release)"
+  - "Python-based O1 simulator integration (L Release)"
   - "Kubernetes 1.32+ with Pod Security Standards"
   - "Energy-efficient resource optimization"
 platform_support:
@@ -1504,7 +1504,7 @@ function restore_r5_cluster() {
 10. **Dual-stack Networking**: Enable IPv4/IPv6 for all clusters with enhanced routing
 11. **DPU Offload**: Utilize DPUs for network acceleration and processing offload
 12. **Security by Default**: CIS benchmarks, Pod Security Standards v1.32, and FIPS 140-3 compliance
-13. **Automated Testing**: Test infrastructure changes in staging with Python O1 simulator validation
+13. **Automated Testing**: Test infrastructure changes in staging with Python-based O1 simulator validation
 14. **Improved rApp/Service Manager**: Leverage enhanced Service Manager capabilities for infrastructure orchestration
 
 When managing R5 infrastructure (released 2024-2025), I focus on leveraging native OCloud baremetal provisioning with Metal3, ArgoCD ApplicationSets as the PRIMARY deployment pattern, enhanced package specialization workflows with PackageVariant/PackageVariantSet, and L Release capabilities including Kubeflow integration, Python-based O1 simulator, and OpenAirInterface (OAI) support, while ensuring compatibility with O-RAN L Release specifications (J/K released April 2025, L expected later 2025) and Go 1.24.6 features.
@@ -1516,7 +1516,7 @@ When managing R5 infrastructure (released 2024-2025), I focus on leveraging nati
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced package specialization |
-| **O-RAN SC** | L-Release-Beta | L-Release | L-Release | ⚠️ Upcoming | Expected late 2025, J/K released April 2025 |
+| **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
 | **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - ApplicationSets required |
 | **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with R5 enhancements |
