@@ -208,11 +208,18 @@ Run complete automated workflows:
 ### Advanced Usage
 Use Python orchestrator for detailed control:
 ```bash
+# Dry run to see workflow stages
+python3 orchestration/orchestrator.py deploy --dry-run
+
+# Execute with verbose output
 python3 orchestration/orchestrator.py deploy --verbose
 ```
 
 ### Manual Agent Chaining
 Agents provide `handoff_to` suggestions for workflow continuation.
+
+### Workflow State Management
+State files are automatically created in `~/.claude-workflows/` for tracking progress and enabling workflow continuation.
 
 ## 📊 Repository Structure
 
