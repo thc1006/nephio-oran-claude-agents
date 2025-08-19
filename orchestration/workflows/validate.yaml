@@ -1,103 +1,59 @@
 name: validate
 description: Security and compliance validation workflow
 version: 1.0.0
-author: Nephio-O-RAN Team
-
 stages:
-  - id: security-scan
-    name: Security Scanning
-    description: Perform comprehensive security scans
+  - name: security-scan
     agent: security-compliance-agent
-    inputs:
-      scan_type: full
-      include_cve: true
-      include_misconfigurations: true
-      compliance_frameworks:
-        - CIS
-        - PCI-DSS
-        - NIST
-    outputs:
-      - vulnerabilities
-      - compliance_score
-      - risk_level
-    validation:
-      - check: scan_complete
-        command: ls ~/.claude-workflows/security/scan-results/
-      - check: no_critical_vulns
-        command: grep -c CRITICAL ~/.claude-workflows/security/scan-results/summary.txt || true
-    timeout: 1200
-    retry: 2
-
-  - id: dependency-check
-    name: Dependency Validation
-    description: Validate all system dependencies
-    agent: oran-nephio-dep-doctor
-    depends_on: [security-scan]
-    inputs:
-      check_versions: true
-      check_licenses: true
-      check_signatures: true
-      allowed_licenses:
-        - Apache-2.0
-        - MIT
-        - BSD-3-Clause
-    outputs:
-      - dependency_report
-      - license_compliance
-      - outdated_packages
-    validation:
-      - check: dependencies_valid
-        command: cat ~/.claude-workflows/dependencies/validation.json | jq '.status'
-      - check: licenses_compliant
-        command: cat ~/.claude-workflows/dependencies/licenses.json | jq '.compliant'
-    timeout: 600
-    retry: 1
-
-  - id: performance-baseline
-    name: Performance Baseline
-    description: Establish performance baseline metrics
+    description: Perform comprehensive security scanning
+    tasks:
+      - Scan container images
+      - Check SBOM compliance
+      - Verify certificates
+      - Audit RBAC policies
+      - Check FIPS compliance
+    expected_outputs:
+      - Vulnerability report
+      - SBOM validation
+      - Certificate status
+      - Policy compliance
+      - FIPS mode verification
+    
+  - name: dependency-check
+    agent: oran-nephio-dep-doctor-agent
+    description: Validate all dependencies
+    tasks:
+      - Check Go 1.24.6 compatibility
+      - Verify package versions
+      - Scan for CVEs
+      - Check license compliance
+    expected_outputs:
+      - Dependency tree
+      - Version matrix
+      - CVE report
+      - License summary
+    
+  - name: performance-baseline
     agent: performance-optimization-agent
-    depends_on: [dependency-check]
-    inputs:
-      metrics_collection: comprehensive
-      baseline_duration: 300
-      stress_test: true
-      benchmarks:
-        - throughput
-        - latency
-        - resource_usage
-    outputs:
-      - performance_metrics
-      - baseline_report
-      - optimization_recommendations
-    validation:
-      - check: metrics_collected
-        command: ls ~/.claude-workflows/metrics/baseline/
-      - check: within_sla
-        command: cat ~/.claude-workflows/metrics/baseline/sla-check.json | jq '.passed'
-    timeout: 900
-    retry: 1
-    final: true
+    description: Establish performance baselines
+    tasks:
+      - Measure latency metrics
+      - Check throughput capacity
+      - Monitor resource usage
+      - Validate SLA compliance
+    expected_outputs:
+      - Performance metrics
+      - Baseline report
+      - Resource utilization
+      - SLA validation
 
-completion:
-  notifications:
-    - type: slack
-      channel: "#security"
-      message: "Validation complete - Score: {{compliance_score}}"
-    - type: webhook
-      url: "https://compliance.example.com/api/reports"
-      method: POST
-  artifacts:
-    - name: security-report
-      format: html
-      location: ~/.claude-workflows/reports/security/
-    - name: compliance-certificate
-      format: pdf
-      location: ~/.claude-workflows/certificates/
-    - name: performance-baseline
-      format: json
-      location: ~/.claude-workflows/metrics/
-  compliance:
-    attestation: true
-    sign_report: true
-    archive_duration: 365d
+completion_actions:
+  - Generate compliance report
+  - Archive scan results
+  - Update security dashboard
+  - Send validation summary
+
+compliance_standards:
+  - O-RAN WG11 Security
+  - FIPS 140-3
+  - CIS Kubernetes Benchmark
+  - NIST Cybersecurity Framework

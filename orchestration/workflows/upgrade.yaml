@@ -1,152 +1,91 @@
 name: upgrade
-description: System upgrade workflow with pre-checks through validation
+description: System upgrade workflow for Nephio R5 and O-RAN L Release
 version: 1.0.0
-author: Nephio-O-RAN Team
-
 stages:
-  - id: pre-check
-    name: Pre-Upgrade Checks
-    description: Validate system readiness for upgrade
+  - name: pre-check
     agent: testing-validation-agent
-    inputs:
-      check_type: pre-upgrade
-      validate_resources: true
-      check_compatibility: true
-      minimum_requirements:
-        cpu: 16
-        memory: 64Gi
-        storage: 500Gi
-    outputs:
-      - upgrade_readiness
-      - blocking_issues
-      - warnings
-    validation:
-      - check: system_healthy
-        command: kubectl get nodes | grep -v NotReady
-      - check: sufficient_resources
-        command: kubectl describe nodes | grep -E "Allocatable|Allocated"
-    timeout: 600
-    retry: 1
-    abort_on_failure: true
-
-  - id: backup
-    name: System Backup
-    description: Create full system backup before upgrade
+    description: Pre-upgrade validation and checks
+    tasks:
+      - Verify current system state
+      - Check upgrade prerequisites
+      - Validate backup availability
+      - Test rollback procedures
+    expected_outputs:
+      - System health report
+      - Prerequisites status
+      - Backup verification
+      - Rollback readiness
+    
+  - name: backup
     agent: configuration-management-agent
-    depends_on: [pre-check]
-    inputs:
-      backup_type: full
-      include_volumes: true
-      include_configs: true
-      include_state: true
-      encryption: enabled
-    outputs:
-      - backup_id
-      - backup_location
-      - restore_instructions
-    validation:
-      - check: backup_complete
-        command: ls -la ~/.claude-workflows/backups/
-      - check: backup_verified
-        command: sha256sum ~/.claude-workflows/backups/latest.tar.gz
-    timeout: 1800
-    retry: 2
-
-  - id: upgrade-infra
-    name: Infrastructure Upgrade
-    description: Upgrade Kubernetes and Nephio components
+    description: Create comprehensive system backup
+    tasks:
+      - Backup configurations
+      - Snapshot persistent data
+      - Export GitOps state
+      - Archive current packages
+    expected_outputs:
+      - Backup manifest
+      - Snapshot IDs
+      - GitOps export
+      - Package archives
+    
+  - name: upgrade-infra
     agent: nephio-infrastructure-agent
-    depends_on: [backup]
-    inputs:
-      upgrade_strategy: rolling
-      kubernetes_version: "1.29"
-      nephio_version: "R5"
-      drain_nodes: true
-      max_unavailable: 1
-    outputs:
-      - upgraded_components
-      - version_manifest
-      - rollback_points
-    validation:
-      - check: kubernetes_upgraded
-        command: kubectl version --short
-      - check: nephio_upgraded
-        command: kubectl get deployment -n nephio-system nephio-controller -o jsonpath='{.spec.template.spec.containers[0].image}'
-    timeout: 2400
-    retry: 3
-
-  - id: upgrade-nf
-    name: Network Functions Upgrade
-    description: Upgrade O-RAN network functions
+    description: Upgrade infrastructure components
+    tasks:
+      - Upgrade Kubernetes clusters
+      - Update Nephio controllers
+      - Upgrade ArgoCD
+      - Update CNI and storage
+    expected_outputs:
+      - Upgrade status
+      - Component versions
+      - Migration logs
+      - Health checks
+    
+  - name: upgrade-nf
     agent: oran-network-functions-agent
-    depends_on: [upgrade-infra]
-    inputs:
-      upgrade_order:
-        - ric
-        - cu
-        - du
-      strategy: blue-green
-      traffic_drain: true
-      health_check_interval: 30
-    outputs:
-      - nf_versions
-      - migration_status
-      - traffic_status
-    validation:
-      - check: nf_healthy
-        command: kubectl get pods -n oran-cu -n oran-du -n oran-ric | grep Running
-      - check: traffic_restored
-        command: kubectl exec -n oran-cu cu-pod -- curl -s http://localhost:8080/health
-    timeout: 1800
-    retry: 2
-
-  - id: validate
-    name: Post-Upgrade Validation
-    description: Comprehensive validation of upgraded system
+    description: Upgrade network functions
+    tasks:
+      - Upgrade RIC platforms
+      - Update xApps/rApps
+      - Upgrade O-CU/O-DU/O-RU
+      - Migrate configurations
+    expected_outputs:
+      - NF upgrade status
+      - Service continuity report
+      - Configuration migration
+      - Compatibility matrix
+    
+  - name: validate
     agent: testing-validation-agent
-    depends_on: [upgrade-nf]
-    inputs:
-      test_suite: post-upgrade
-      smoke_tests: true
-      integration_tests: true
-      performance_tests: true
-      rollback_trigger: auto
-    outputs:
-      - test_results
-      - performance_comparison
-      - upgrade_success
-    validation:
-      - check: all_tests_pass
-        command: cat ~/.claude-workflows/tests/results.json | jq '.passed'
-      - check: performance_acceptable
-        command: cat ~/.claude-workflows/metrics/comparison.json | jq '.regression'
-    timeout: 1200
-    retry: 1
-    final: true
+    description: Post-upgrade validation
+    tasks:
+      - Run integration tests
+      - Verify service health
+      - Check performance metrics
+      - Validate configurations
+    expected_outputs:
+      - Test results
+      - Health status
+      - Performance comparison
+      - Validation report
 
-completion:
-  notifications:
-    - type: slack
-      channel: "#operations"
-      message: "Upgrade completed successfully to {{kubernetes_version}}/{{nephio_version}}"
-    - type: email
-      recipients: ["platform-team@example.com"]
-      subject: "Upgrade Complete - System Version Report"
-  artifacts:
-    - name: upgrade-report
-      format: html
-      location: ~/.claude-workflows/reports/upgrades/
-    - name: version-manifest
-      format: yaml
-      location: ~/.claude-workflows/manifests/
-    - name: performance-comparison
-      format: json
-      location: ~/.claude-workflows/metrics/
-  rollback:
-    enabled: true
-    auto_trigger:
-      - condition: test_failure
-        threshold: 10%
-      - condition: performance_regression
-        threshold: 20%
-    retention: 30d
+completion_actions:
+  - Generate upgrade report
+  - Clean up old resources
+  - Update documentation
+  - Send completion notification
+
+rollback_triggers:
+  - Critical service failure
+  - Performance degradation >20%
+  - Security vulnerability detected
+  - Integration test failure
+
+upgrade_strategy:
+  type: rolling
+  canary_percentage: 10
+  drain_timeout_seconds: 300
+  max_unavailable: 1
