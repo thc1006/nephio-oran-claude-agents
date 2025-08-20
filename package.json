@@ -7,9 +7,6 @@
     "type": "git",
     "url": "https://github.com/thc1006/nephio-oran-claude-agents"
   },
-  "workspaces": [
-    "website"
-  ],
   "scripts": {
     "website:start": "cd website && npm start",
     "website:build": "cd website && npm run build",
