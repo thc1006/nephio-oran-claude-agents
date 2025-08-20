@@ -44,17 +44,17 @@ Creates preview deployments for pull requests:
 The pipeline enforces strict content validation:
 
 ```bash
-# Banned phrases (will fail CI)
+## Banned phrases (will fail CI)
 - Outdated release references
 - Incorrect version formats
 - Beta versions below beta.55
 
-# Required versions (must be present)
+## Required versions (must be present)
 - "O-RAN L (2025-06-30)"
 - "kpt v1.0.0-beta.55"
 - Nephio R5 (v5.x pattern)
 
-# Kubernetes policy
+## Kubernetes policy
 - "latest three minor releases" policy reference
 ```
 
@@ -76,8 +76,8 @@ The pipeline enforces strict content validation:
 ### Multi-stage Production Build
 
 ```dockerfile
-# Features:
-- Node.js 18 Alpine base
+## Features:
+- Node.js 20 Alpine base
 - Non-root user execution
 - Security headers (CSP, HSTS, etc.)
 - Gzip compression
@@ -88,7 +88,7 @@ The pipeline enforces strict content validation:
 ### Development Environment
 
 ```yaml
-# docker-compose.yml services:
+## docker-compose.yml services:
 - dev: Hot reload development server
 - production: Production build testing
 - lighthouse: Performance testing
@@ -101,46 +101,46 @@ The pipeline enforces strict content validation:
 ### Quick Start
 
 ```bash
-# Development server
+## Development server
 npm start
 
-# Fast start (skip validation)
+## Fast start (skip validation)
 npm run start:fast
 
-# Production build
+## Production build
 npm run build
 
-# Docker development
+## Docker development
 npm run docker:dev
 ```
 
 ### Testing Commands
 
 ```bash
-# Full test suite
+## Full test suite
 npm test
 
-# Individual tests
+## Individual tests
 npm run typecheck
 npm run lint:check
 npm run validate:content
 npm run test:links
 npm run lighthouse
 
-# Docker testing
+## Docker testing
 npm run docker:test
 ```
 
 ### Validation Scripts
 
 ```bash
-# TypeScript validation
+## TypeScript validation
 npm run validate:content
 
-# Shell script validation  
+## Shell script validation  
 npm run validate:content:shell
 
-# Content structure validation
+## Content structure validation
 bash scripts/validation/validate-content.sh
 ```
 
@@ -197,7 +197,7 @@ The pipeline implements aggressive caching:
 ### Metrics Collection
 
 ```yaml
-# Available monitoring (docker-compose --profile monitoring up)
+## Available monitoring (docker-compose --profile monitoring up)
 - Prometheus: Metrics collection
 - Grafana: Dashboards and alerting
 - Build metrics: Size, duration, success rate
@@ -217,10 +217,10 @@ The deploy workflow includes automatic rollback capabilities:
 ### Manual Rollback
 
 ```bash
-# Trigger rollback workflow
+## Trigger rollback workflow
 gh workflow run deploy.yml --ref previous-working-commit
 
-# Local rollback testing
+## Local rollback testing
 npm run docker:prod  # Test previous version
 ```
 
@@ -270,14 +270,14 @@ npm run docker:prod  # Test previous version
 ### Debug Commands
 
 ```bash
-# Verbose build
+## Verbose build
 DEBUG=1 npm run build
 
-# Docker debug
+## Docker debug
 docker-compose logs production
 
-# Pipeline debug
-# Check GitHub Actions logs in repository
+## Pipeline debug
+## Check GitHub Actions logs in repository
 ```
 
 ## Maintenance
