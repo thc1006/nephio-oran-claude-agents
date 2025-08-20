@@ -4,7 +4,7 @@ Thank you for your interest in contributing to the Nephio O-RAN Claude Agents do
 
 ## Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 20+ and npm
 - Git
 - Basic knowledge of Markdown and React (for advanced customizations)
 
@@ -24,7 +24,7 @@ npm install
 3. Copy environment variables:
 ```bash
 cp .env.example .env.local
-# Edit .env.local with your configuration
+## Edit .env.local with your configuration
 ```
 
 4. Start the development server:

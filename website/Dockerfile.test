@@ -1,7 +1,7 @@
 # Test Dockerfile for Docusaurus v3
 # Includes testing tools and CI dependencies
 
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Install testing dependencies
 RUN apk add --no-cache \

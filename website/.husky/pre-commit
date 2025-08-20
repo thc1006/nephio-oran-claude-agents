@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Run markdownlint fix on staged markdown files
-npx markdownlint --fix docs/**/*.md blog/**/*.md --ignore node_modules
+# Change to website directory for proper npm script execution
+cd "$(dirname "$0")/.."
+
+# Run lint-staged for staged files
+npx lint-staged
+
+# Run content validation for regression prevention
+npm run validate:content

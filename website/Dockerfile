@@ -2,7 +2,7 @@
 # Optimized for production builds with security best practices
 
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Security: Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
