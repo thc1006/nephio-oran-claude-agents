@@ -1,0 +1,321 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Trigger on push to main branch
+  push:
+    branches: [ main ]
+    paths:
+      - 'website/**'
+      - 'agents/**'
+      - 'docs/**'
+      - '.github/workflows/deploy.yml'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+# Set GITHUB_TOKEN permissions
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: pages-deployment
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '18'
+  DEPLOYMENT_TIMEOUT: '600' # 10 minutes
+
+jobs:
+  # Build job
+  build:
+    name: Build Website
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for proper git info
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: website/package-lock.json
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: website/node_modules
+          key: ${{ runner.os }}-node-deploy-${{ hashFiles('website/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-deploy-
+
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci --production=false
+
+      - name: Content validation
+        working-directory: website
+        run: npm run validate:content
+
+      - name: Build website
+        working-directory: website
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Validate build output
+        working-directory: website
+        run: |
+          echo "Validating build output..."
+          
+          # Check critical files exist
+          REQUIRED_FILES=(
+            "build/index.html"
+            "build/sitemap.xml"
+            "build/robots.txt"
+          )
+          
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Required file missing: $file"
+              exit 1
+            fi
+            echo "✅ Found: $file"
+          done
+          
+          # Check build size (warn if too large)
+          BUILD_SIZE=$(du -sm build/ | cut -f1)
+          echo "Build size: ${BUILD_SIZE}MB"
+          
+          if [ "$BUILD_SIZE" -gt 100 ]; then
+            echo "⚠️ Build size is quite large: ${BUILD_SIZE}MB"
+          fi
+          
+          # Verify essential content
+          if ! grep -q "Nephio O-RAN Claude Agents" build/index.html; then
+            echo "❌ Main title not found in build"
+            exit 1
+          fi
+          
+          echo "✅ Build validation completed successfully"
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/build/
+
+  # Deploy job
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        timeout-minutes: ${{ fromJson(env.DEPLOYMENT_TIMEOUT) }}
+
+      - name: Verify deployment
+        run: |
+          echo "Deployment completed successfully!"
+          echo "Website URL: ${{ steps.deployment.outputs.page_url }}"
+          
+          # Wait a moment for deployment to propagate
+          sleep 30
+          
+          # Basic connectivity test
+          if curl -f -s "${{ steps.deployment.outputs.page_url }}" > /dev/null; then
+            echo "✅ Website is accessible"
+          else
+            echo "⚠️ Website may not be immediately accessible (DNS propagation)"
+          fi
+
+  # Post-deployment validation
+  post-deploy-validation:
+    name: Post-Deployment Validation
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always() && needs.deploy.result == 'success'
+    steps:
+      - name: Wait for deployment propagation
+        run: |
+          echo "Waiting for deployment to propagate..."
+          sleep 60
+
+      - name: Test website accessibility
+        run: |
+          SITE_URL="${{ needs.deploy.outputs.page_url || 'https://thc1006.github.io/nephio-oran-claude-agents/' }}"
+          echo "Testing website: $SITE_URL"
+          
+          # Test main page
+          if curl -f -s "$SITE_URL" > /dev/null; then
+            echo "✅ Main page accessible"
+          else
+            echo "❌ Main page not accessible"
+            exit 1
+          fi
+          
+          # Test sitemap
+          if curl -f -s "${SITE_URL}sitemap.xml" > /dev/null; then
+            echo "✅ Sitemap accessible"
+          else
+            echo "⚠️ Sitemap not accessible"
+          fi
+          
+          # Test robots.txt
+          if curl -f -s "${SITE_URL}robots.txt" > /dev/null; then
+            echo "✅ Robots.txt accessible"
+          else
+            echo "⚠️ Robots.txt not accessible"
+          fi
+
+      - name: Test critical pages
+        run: |
+          SITE_URL="${{ needs.deploy.outputs.page_url || 'https://thc1006.github.io/nephio-oran-claude-agents/' }}"
+          
+          CRITICAL_PATHS=(
+            ""  # homepage
+            "docs/"
+            "blog/"
+          )
+          
+          for path in "${CRITICAL_PATHS[@]}"; do
+            FULL_URL="${SITE_URL}${path}"
+            echo "Testing: $FULL_URL"
+            
+            if curl -f -s "$FULL_URL" > /dev/null; then
+              echo "✅ $FULL_URL accessible"
+            else
+              echo "❌ $FULL_URL not accessible"
+              exit 1
+            fi
+          done
+
+  # Rollback capability (manual trigger only)
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: failure() && github.event_name == 'workflow_dispatch'
+    needs: [build, deploy]
+    environment:
+      name: github-pages-rollback
+    steps:
+      - name: Checkout previous successful deployment
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.before }} # Previous commit
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+
+      - name: Build previous version
+        working-directory: website
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Setup Pages for rollback
+        uses: actions/configure-pages@v4
+
+      - name: Upload rollback version
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/build/
+
+      - name: Deploy rollback
+        uses: actions/deploy-pages@v4
+
+      - name: Notify rollback
+        run: |
+          echo "🔄 Rollback deployment completed"
+          echo "Previous commit: ${{ github.event.before }}"
+          echo "Failed commit: ${{ github.sha }}"
+
+  # Cleanup job
+  cleanup:
+    name: Cleanup Artifacts
+    runs-on: ubuntu-latest
+    needs: [deploy, post-deploy-validation]
+    if: always()
+    steps:
+      - name: Clean old artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            
+            // Keep only the last 5 artifacts
+            const artifacts = await github.rest.actions.listArtifactsForRepo({
+              owner,
+              repo,
+              per_page: 100
+            });
+            
+            const sortedArtifacts = artifacts.data.artifacts
+              .filter(artifact => artifact.name.includes('website-build-'))
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            const artifactsToDelete = sortedArtifacts.slice(5);
+            
+            for (const artifact of artifactsToDelete) {
+              try {
+                await github.rest.actions.deleteArtifact({
+                  owner,
+                  repo,
+                  artifact_id: artifact.id
+                });
+                console.log(`Deleted artifact: ${artifact.name}`);
+              } catch (error) {
+                console.log(`Failed to delete artifact ${artifact.name}: ${error.message}`);
+              }
+            }
+
+  # Deployment summary
+  summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [build, deploy, post-deploy-validation]
+    if: always()
+    steps:
+      - name: Generate deployment summary
+        run: |
+          echo "## Deployment Summary 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Step | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ needs.build.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Deploy | ${{ needs.deploy.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Validation | ${{ needs.post-deploy-validation.result == 'success' && '✅ Success' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "🌐 **Website URL**: https://thc1006.github.io/nephio-oran-claude-agents/" >> $GITHUB_STEP_SUMMARY
+            echo "📊 **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+            echo "🕒 **Deployed at**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Deployment failed**" >> $GITHUB_STEP_SUMMARY
+            echo "🔍 **Check the logs above for details**" >> $GITHUB_STEP_SUMMARY
+          fi

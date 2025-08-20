@@ -1,0 +1,324 @@
+name: PR Preview
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'website/**'
+      - 'agents/**'
+      - 'docs/**'
+      - '.github/workflows/preview.yml'
+    types: [opened, synchronize, reopened]
+  
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+# Set permissions for commenting on PRs and creating deployments
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
+# Allow only one concurrent preview per PR
+concurrency:
+  group: preview-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '18'
+  PREVIEW_RETENTION_DAYS: '7'
+
+jobs:
+  # Build preview
+  build-preview:
+    name: Build PR Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.preview-url }}
+      deployment-id: ${{ steps.deploy.outputs.deployment-id }}
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: website/package-lock.json
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: website/node_modules
+          key: ${{ runner.os }}-node-preview-${{ hashFiles('website/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-preview-
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+
+      - name: Content validation
+        working-directory: website
+        run: npm run validate:content
+
+      - name: Build preview with PR context
+        working-directory: website
+        run: npm run build
+        env:
+          NODE_ENV: production
+          # Add preview banner context
+          DOCUSAURUS_PREVIEW: 'true'
+          DOCUSAURUS_PR_NUMBER: ${{ github.event.pull_request.number }}
+          DOCUSAURUS_PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+
+      - name: Add preview banner
+        working-directory: website
+        run: |
+          # Add a preview banner to indicate this is a PR preview
+          BANNER_HTML="<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);'><strong>📋 PR Preview #${{ github.event.pull_request.number }}</strong> - Branch: <code>${{ github.event.pull_request.head.ref }}</code> | <a href='${{ github.event.pull_request.html_url }}' style='color: white; text-decoration: underline;'>View PR</a></div>"
+          
+          # Insert banner after <body> tag in all HTML files
+          find build -name "*.html" -type f -exec sed -i "s|<body[^>]*>|&$BANNER_HTML|" {} \;
+          
+          echo "✅ Preview banner added to HTML files"
+
+      - name: Upload preview build
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-build-pr-${{ github.event.pull_request.number || github.run_id }}
+          path: website/build/
+          retention-days: ${{ env.PREVIEW_RETENTION_DAYS }}
+
+      - name: Deploy to Surge.sh (Alternative preview platform)
+        id: deploy
+        run: |
+          # Install Surge.sh for free preview deployments
+          npm install -g surge
+          
+          # Generate unique subdomain for this PR
+          SUBDOMAIN="nephio-oran-pr-${{ github.event.pull_request.number || github.run_id }}-$(echo ${{ github.sha }} | cut -c1-8)"
+          PREVIEW_URL="https://${SUBDOMAIN}.surge.sh"
+          
+          # Deploy to Surge.sh
+          cd website/build
+          echo "$PREVIEW_URL" > CNAME
+          surge . "$PREVIEW_URL" --token "${{ secrets.SURGE_TOKEN || 'dummy-token' }}" || {
+            echo "⚠️ Surge deployment failed - using artifact-only preview"
+            echo "preview-url=artifact-only" >> $GITHUB_OUTPUT
+            exit 0
+          }
+          
+          echo "preview-url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+          echo "deployment-id=${SUBDOMAIN}" >> $GITHUB_OUTPUT
+          echo "✅ Preview deployed to: $PREVIEW_URL"
+
+  # Lighthouse preview testing
+  lighthouse-preview:
+    name: Lighthouse Preview Testing
+    runs-on: ubuntu-latest
+    needs: build-preview
+    if: needs.build-preview.outputs.preview-url != 'artifact-only'
+    steps:
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli
+
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Run Lighthouse on preview
+        run: |
+          PREVIEW_URL="${{ needs.build-preview.outputs.preview-url }}"
+          echo "Running Lighthouse on: $PREVIEW_URL"
+          
+          # Create Lighthouse config for preview
+          cat > lighthouserc.json << 'EOF'
+          {
+            "ci": {
+              "collect": {
+                "url": ["PREVIEW_URL_PLACEHOLDER"],
+                "numberOfRuns": 1,
+                "settings": {
+                  "preset": "desktop"
+                }
+              },
+              "assert": {
+                "assertions": {
+                  "categories:performance": ["warn", {"minScore": 0.8}],
+                  "categories:accessibility": ["warn", {"minScore": 0.9}],
+                  "categories:best-practices": ["warn", {"minScore": 0.8}],
+                  "categories:seo": ["warn", {"minScore": 0.8}]
+                }
+              }
+            }
+          }
+          EOF
+          
+          # Replace placeholder with actual URL
+          sed -i "s|PREVIEW_URL_PLACEHOLDER|$PREVIEW_URL|g" lighthouserc.json
+          
+          # Run Lighthouse (don't fail the build on performance issues for previews)
+          lhci autorun || echo "⚠️ Lighthouse completed with warnings"
+
+      - name: Upload Lighthouse results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-preview-pr-${{ github.event.pull_request.number || github.run_id }}
+          path: .lighthouseci/
+          retention-days: ${{ env.PREVIEW_RETENTION_DAYS }}
+
+  # Comment on PR with preview links
+  comment-preview:
+    name: Comment Preview Links
+    runs-on: ubuntu-latest
+    needs: [build-preview, lighthouse-preview]
+    if: always() && github.event_name == 'pull_request'
+    steps:
+      - name: Find existing preview comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '## 📋 PR Preview'
+
+      - name: Create or update preview comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ## 📋 PR Preview
+            
+            **Build Status**: ${{ needs.build-preview.result == 'success' && '✅ Success' || '❌ Failed' }}
+            **Lighthouse Status**: ${{ needs.lighthouse-preview.result == 'success' && '✅ Passed' || needs.lighthouse-preview.result == 'failure' && '⚠️ Warnings' || '⏭️ Skipped' }}
+            
+            ### Preview Links
+            ${{ needs.build-preview.outputs.preview-url != 'artifact-only' && format('🌐 **Live Preview**: {0}', needs.build-preview.outputs.preview-url) || '📁 **Preview available in build artifacts**' }}
+            
+            ### Quick Links
+            - 📊 **Commit**: `${{ github.event.pull_request.head.sha }}`
+            - 🌿 **Branch**: `${{ github.event.pull_request.head.ref }}`
+            - 🔗 **Compare**: [View changes](${{ github.event.pull_request.html_url }}/files)
+            
+            ### Testing Checklist
+            - [ ] Navigation works correctly
+            - [ ] All links are functional
+            - [ ] Content displays properly on desktop
+            - [ ] Content displays properly on mobile
+            - [ ] Search functionality works (if applicable)
+            - [ ] Performance is acceptable
+            
+            ### Artifacts
+            ${{ needs.build-preview.result == 'success' && '📦 Build artifacts are available for download in the workflow run.' || '❌ No build artifacts available due to build failure.' }}
+            ${{ needs.lighthouse-preview.result == 'success' && '🔍 Lighthouse results are available in the workflow artifacts.' || '' }}
+            
+            ---
+            <sub>This preview will be available for ${{ env.PREVIEW_RETENTION_DAYS }} days. Auto-updated on each commit.</sub>
+
+  # Visual regression testing (if screenshots available)
+  visual-regression:
+    name: Visual Regression Testing
+    runs-on: ubuntu-latest
+    needs: build-preview
+    if: needs.build-preview.outputs.preview-url != 'artifact-only'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Puppeteer
+        run: |
+          npm init -y
+          npm install puppeteer
+
+      - name: Capture screenshots
+        run: |
+          node -e "
+          const puppeteer = require('puppeteer');
+          const fs = require('fs');
+          
+          (async () => {
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            
+            const urls = [
+              '${{ needs.build-preview.outputs.preview-url }}',
+              '${{ needs.build-preview.outputs.preview-url }}/docs/',
+              '${{ needs.build-preview.outputs.preview-url }}/blog/'
+            ];
+            
+            for (const url of urls) {
+              try {
+                console.log('Capturing: ' + url);
+                await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
+                
+                // Wait for content to load
+                await page.waitForTimeout(2000);
+                
+                const filename = url.split('/').pop() || 'home';
+                await page.screenshot({ 
+                  path: \`screenshot-\${filename}.png\`,
+                  fullPage: true 
+                });
+                console.log('✅ Captured: ' + filename);
+              } catch (error) {
+                console.log('⚠️ Failed to capture: ' + url, error.message);
+              }
+            }
+            
+            await browser.close();
+          })();
+          "
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-pr-${{ github.event.pull_request.number || github.run_id }}
+          path: screenshot-*.png
+          retention-days: ${{ env.PREVIEW_RETENTION_DAYS }}
+
+  # Cleanup old previews
+  cleanup-previews:
+    name: Cleanup Old Previews
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed' && github.event_name == 'pull_request'
+    steps:
+      - name: Cleanup Surge.sh deployment
+        run: |
+          npm install -g surge
+          SUBDOMAIN="nephio-oran-pr-${{ github.event.pull_request.number }}-$(echo ${{ github.sha }} | cut -c1-8)"
+          PREVIEW_URL="https://${SUBDOMAIN}.surge.sh"
+          
+          # Try to teardown the preview (requires surge token)
+          if [ "${{ secrets.SURGE_TOKEN }}" != "" ]; then
+            surge teardown "$PREVIEW_URL" --token "${{ secrets.SURGE_TOKEN }}" || echo "⚠️ Could not teardown preview"
+          fi
+          
+          echo "🧹 Cleanup requested for: $PREVIEW_URL"
+
+      - name: Comment cleanup notification
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## 🧹 Preview Cleanup
+            
+            PR has been closed. Preview deployments and artifacts will be cleaned up automatically.
+            
+            - 🗑️ Preview URL will be removed
+            - 📦 Build artifacts will expire in ${{ env.PREVIEW_RETENTION_DAYS }} days
+            - 🔍 Test results will expire in ${{ env.PREVIEW_RETENTION_DAYS }} days
