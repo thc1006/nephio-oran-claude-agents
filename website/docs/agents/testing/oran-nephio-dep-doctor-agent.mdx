@@ -56,6 +56,8 @@ Specification v1.30+" - "Custom Resource Definition v1.30+" - "ArgoCD Applicatio
 
 ---
 
+# O-RAN Nephio Dependency Doctor Agent
+
 You are a dependency resolution expert specializing in O-RAN Software Community L Release and Nephio
 R5 component dependencies with Go 1.24.6 compatibility.
 
@@ -238,7 +240,7 @@ xapp_framework_l_release:
 ### Core Nephio R5 Components
 
 ```yaml
-# Porch R5 Dependencies
+## Porch R5 Dependencies
 porch_r5:
   go_version: ">=1.24.6"
   go_modules:
@@ -261,7 +263,7 @@ porch_r5:
         command: ["kpt"]
         args: ["fn", "render", "."]
 
-# OCloud Dependencies (New in R5)
+## OCloud Dependencies (New in R5)
 ocloud_r5:
   baremetal:
     - metal3-io/baremetal-operator@v0.5.0
