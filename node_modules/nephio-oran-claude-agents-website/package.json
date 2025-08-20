@@ -20,6 +20,7 @@
     "build": "npm run import:agents && npm run validate:content && docusaurus build",
     "build:fast": "docusaurus build",
     "build:production": "NODE_ENV=production npm run build",
+    "build:analyze": "ANALYZE=true npm run build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "build-and-deploy": "npm run build && docusaurus deploy",
@@ -57,6 +58,7 @@
     "predeploy": "npm run build",
     "prestart": "echo 'Starting development server...'",
     "postinstall": "echo 'Dependencies installed successfully!'",
+    "prepare": "cd .. && husky install website/.husky",
     "version": "docusaurus docs:version",
     "docker:build": "docker build -t nephio-oran-docs .",
     "docker:run": "docker run -p 8080:8080 nephio-oran-docs",
@@ -90,14 +92,17 @@
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "husky": "^8.0.3",
     "linkinator": "^6.0.4",
+    "lint-staged": "^15.2.0",
     "markdownlint-cli": "^0.37.0",
     "prettier": "^3.3.3",
     "puppeteer": "^24.17.0",
     "serve": "^14.2.4",
     "tsx": "^4.19.0",
     "typescript": "~5.5.4",
-    "wait-on": "^7.2.0"
+    "wait-on": "^7.2.0",
+    "webpack-bundle-analyzer": "^4.10.0"
   },
   "browserslist": {
     "production": [

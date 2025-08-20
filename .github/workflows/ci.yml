@@ -113,27 +113,13 @@ jobs:
       - name: Setup markdownlint-cli
         run: npm install -g markdownlint-cli
 
-      - name: Create markdownlint config
-        run: |
-          cat > .markdownlint.json << 'EOF'
-          {
-            "default": true,
-            "MD013": {
-              "line_length": 120,
-              "code_blocks": false,
-              "tables": false
-            },
-            "MD033": false,
-            "MD041": false,
-            "MD036": false
-          }
-          EOF
-
       - name: Run markdownlint
         run: |
-          markdownlint website/docs/**/*.md website/blog/**/*.md agents/**/*.md docs/**/*.md \
-            --config .markdownlint.json \
-            --ignore website/node_modules
+          # Only lint .md files, not .mdx files
+          find website/docs website/blog agents docs -name "*.md" -type f \
+            ! -path "*/node_modules/*" \
+            ! -path "*/build/*" \
+            -exec markdownlint {} --config .markdownlint.json \;
 
   # Build and test
   build-and-test:
@@ -413,6 +399,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies for security scan
+        working-directory: website
+        run: npm ci --audit=false
 
       - name: Run npm audit
         working-directory: website
