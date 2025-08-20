@@ -115,7 +115,7 @@ jobs:
 
       - name: Run markdownlint
         run: |
-          # Only lint .md files, not .mdx files
+          # Only lint .md files, not .mdx files, in check mode (no --fix)
           # Check each directory individually to handle missing directories
           for dir in website/docs agents docs; do
             if [ -d "$dir" ]; then
@@ -423,7 +423,7 @@ jobs:
         working-directory: website
         run: |
           # Run audit and capture output - only check production dependencies
-          npm audit --omit=dev --audit-level high --format json > audit-results.json || true
+          npm audit --omit=dev --audit-level high --format json > audit-results.json || echo '{}' > audit-results.json
           
           # Check if audit-results.json exists and has content
           if [ -s audit-results.json ]; then

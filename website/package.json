@@ -89,7 +89,7 @@
     "@typescript-eslint/parser": "^8.2.0",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
-    "eslint": "^9.9.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "husky": "^8.0.3",
@@ -115,6 +115,9 @@
       "last 3 firefox version",
       "last 5 safari version"
     ]
+  },
+  "overrides": {
+    "eslint": "^8.57.1"
   },
   "engines": {
     "node": ">=18.0"

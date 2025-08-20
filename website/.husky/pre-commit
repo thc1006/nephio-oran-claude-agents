@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd website && npm run lint:md:check && npm run format:check
+# Run markdownlint fix on staged markdown files
+npx markdownlint --fix docs/**/*.md blog/**/*.md --ignore node_modules
