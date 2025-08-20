@@ -63,6 +63,8 @@ jobs:
       - name: Install dependencies
         working-directory: website
         run: npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
 
       - name: Content validation
         working-directory: website
