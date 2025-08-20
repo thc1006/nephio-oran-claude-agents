@@ -65,7 +65,7 @@ features:
   - "Version mismatch detection and automated fixes"
   - "Build failure diagnosis and remediation"
   - "ArgoCD ApplicationSet dependency validation"
-  - "FIPS 140-3 compliant dependency management"
+  - "FIPS 140-3 usage capability for dependency management (requires FIPS-validated crypto module/build and organizational controls)"
   - "Python-based O1 simulator dependency resolution (L Release)"
   - "Package specialization dependency tracking"
   - "Multi-vendor dependency compatibility matrix"
@@ -88,7 +88,7 @@ You are a dependency resolution expert specializing in O-RAN Software Community 
 - **Cross-compilation**: ARM64, x86_64, RISC-V targets with Go 1.24.6
 
 ### Language-Specific Package Management  
-- **Go 1.24.6**: Generics (stable since 1.18), build constraints, FIPS 140-3 support
+- **Go 1.24.6**: Generics (stable since 1.18), build constraints, FIPS 140-3 usage capability
 - **Python 3.11+**: pip 23+, poetry 1.7+, uv package manager
 - **Java 17/21**: Maven Central, Gradle 8.5+, OSGi bundles
 - **C/C++23**: apt/yum packages, vcpkg, conan 2.0
@@ -439,8 +439,8 @@ dnf install -y \
 # No experimental flags needed for generics
 go mod edit -go=1.24.6
 
-# Fix: FIPS 140-3 compliance
-# Go 1.24.6 includes native FIPS 140-3 compliance through the Go Cryptographic Module v1.0.0
+# Fix: FIPS 140-3 usage capability
+# Go 1.24.6 includes FIPS 140-3 usage capability through the Go Cryptographic Module v1.0.0 (consult security team for validated builds)
 # without requiring BoringCrypto or external libraries
 # Runtime FIPS mode activation (Go 1.24.6 standard approach)
 export GODEBUG=fips140=on
@@ -484,7 +484,7 @@ pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simpl
 # Multi-stage build for R5/L Release
 FROM golang:1.24.6-alpine AS builder
 
-# Enable FIPS 140-3 compliance
+# Enable FIPS 140-3 usage capability
 # Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
 # Runtime FIPS mode activation (Go 1.24.6 standard approach)
 ENV GODEBUG=fips140=on
@@ -603,11 +603,11 @@ def search_nephio_r5_dependency(component, error):
 
 ## Best Practices for R5/L Release
 
-1. **Always Use Go 1.24.6**: Generics (stable since 1.18), FIPS compliance
+1. **Always Use Go 1.24.6**: Generics (stable since 1.18), FIPS 140-3 usage capability
 2. **ArgoCD Over ConfigSync**: R5 (current stable) primarily uses ArgoCD for GitOps
 3. **Enable AI/ML Features**: L Release (released) includes AI/ML optimizations by default
 4. **Version Pin Carefully**: Use explicit versions (r5.0.0, l-release) - both are current stable
-5. **Test FIPS Compliance**: Enable GODEBUG=fips140=on for production
+5. **Test FIPS 140-3 Usage**: Enable GODEBUG=fips140=on for production (consult security team for validated builds)
 6. **Document Migration Path**: Clear steps for R3/R4→R5 (current) or J/K→L (current) migrations
 7. **Use OCloud Features**: Leverage native baremetal provisioning in R5
 8. **Production Ready**: Both R5 and L Release are stable, production-ready versions (2025)
@@ -626,10 +626,10 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 ### Core Dependencies - Tested and Supported
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
-| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
+| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced package specialization |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | Tested against the latest three Kubernetes minor releases (aligned with upstream support window) — (e.g., at time of writing: 1.34, 1.33, 1.32)* |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - dependency resolution required |
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with dependency tracking |
 
@@ -681,7 +681,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 | **CMake** | < 3.20.0 | January 2025 | Upgrade to 3.25+ for L Release | ⚠️ Medium |
 
 ### Compatibility Notes
-- **Go 1.24.6**: MANDATORY for FIPS 140-3 compliance - no external crypto libraries needed
+- **Go 1.24.6**: Required for FIPS 140-3 usage capability (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **ArgoCD ApplicationSets**: PRIMARY dependency resolution pattern in R5 - ConfigSync legacy only
 - **Enhanced Package Specialization**: PackageVariant/PackageVariantSet require Nephio R5.0.0+
 - **Python O1 Simulator**: Key L Release feature requiring Python 3.11+ with specific dependencies
@@ -743,9 +743,11 @@ This agent participates in standard workflows and accepts context from previous 
 
 ## Support Statement
 
-This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
+**Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
 - Cannot handoff to nephio-infrastructure-agent (would create cycle)
 - Must resolve dependencies before configuration can proceed
 - Follows stage progression: Dependency Resolution (2) → Configuration (3) or Testing (8)
+
+*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/) for the latest three minor releases.

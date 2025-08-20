@@ -64,7 +64,7 @@ features:
   - "Python-based O1 simulator testing framework (L Release)"
   - "YANG model validation and conformance testing"
   - "Package specialization workflow testing"
-  - "FIPS 140-3 compliance validation"
+  - "FIPS 140-3 usage validation (requires FIPS-validated crypto module/build and organizational controls)"
   - "Multi-cluster deployment testing"
   - "Performance and load testing with K6"
 platform_support:
@@ -91,7 +91,7 @@ You are a testing and validation expert specializing in O-RAN L Release complian
 - **Package Testing**: Kpt v1.0.0-beta.55 package validation
 - **Controller Testing**: Go 1.24.6 based controller testing with Ginkgo/Gomega
 - **Performance Testing**: Benchmarking with Go 1.24.6 features
-- **Security Testing**: FIPS 140-3 compliance validation
+- **Security Testing**: FIPS 140-3 usage validation (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 
 ### Testing Frameworks
 - **Robot Framework**: E2E test automation with O-RAN libraries
@@ -812,7 +812,7 @@ When invoked, I will:
        [Tags]    performance    go124    controllers
        
        # Enable Go 1.24.6 features
-       # Go 1.24.6 includes native FIPS 140-3 compliance
+       # Go 1.24.6 includes FIPS 140-3 usage capability
        Set Environment Variable    GODEBUG    fips140=on
        
        # Run Go benchmarks
@@ -1237,9 +1237,9 @@ When invoked, I will:
                            result['passed'] = False
                            result['reason'] = f"Go version {version} < 1.24.6"
                    
-                   # Check FIPS compliance (Go 1.24.6 native support)
+                   # Check FIPS 140-3 usage capability (Go 1.24.6 support)
                    if env_vars.get('GODEBUG') != 'fips140=on':
-                       result['warning'] = "FIPS 140-3 mode not enabled (set GODEBUG=fips140=on)"
+                       result['warning'] = "FIPS 140-3 mode not enabled (set GODEBUG=fips140=on). Note: FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls."
            
            return result
        
@@ -1535,7 +1535,7 @@ unit-tests-with-coverage:
   image: golang:1.24.6
   script:
     # Go 1.24.6 Feature: Native FIPS 140-3 support without external libraries
-    # Nephio R5 requires FIPS compliance for government deployments
+    # Nephio R5 supports FIPS 140-3 usage for government deployments (consult security team for validated builds)
     - export GODEBUG=fips140=on
     
     # Run tests with coverage
@@ -1927,7 +1927,7 @@ def generate_r5_l_release_test_report(test_results):
 5. **OCloud Testing**: Test baremetal provisioning end-to-end
 6. **Chaos Engineering**: Test resilience of AI/ML models under failure
 7. **Performance Baselines**: Establish baselines for L Release metrics
-8. **Security Scanning**: FIPS 140-3 compliance is mandatory
+8. **Security Scanning**: FIPS 140-3 usage capability is available (consult security team for validated builds and boundary documentation)
 9. **Multi-vendor Testing**: Validate interoperability between vendors
 10. **Continuous Testing**: Run tests on every commit with parallelization
 
@@ -1936,10 +1936,10 @@ def generate_r5_l_release_test_report(test_results):
 ### Core Dependencies - Tested and Supported
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
-| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
+| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced testing capabilities |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | Tested against the latest three Kubernetes minor releases (aligned with upstream support window) — (e.g., at time of writing: 1.34, 1.33, 1.32)* |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - workflow testing required |
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package testing and validation |
 
@@ -1961,7 +1961,7 @@ def generate_r5_l_release_test_report(test_results):
 | **Snyk** | 1.1275.0 | 1.1275.0+ | 1.1275.0 | ✅ Current | Security testing and scanning |
 | **Falco** | 0.36.0 | 0.36.0+ | 0.36.0 | ✅ Current | Runtime security monitoring and testing |
 | **OPA Gatekeeper** | 3.15.0 | 3.15.0+ | 3.15.0 | ✅ Current | Policy testing and validation |
-| **FIPS 140-3** | Go 1.24.6 | Go 1.24.6+ | Go 1.24.6 | ✅ Current | Cryptographic compliance testing |
+| **FIPS 140-3** | Go 1.24.6 | Go 1.24.6+ | Go 1.24.6 | ✅ Current | Cryptographic usage testing (consult security team for validated builds) |
 | **CIS Benchmarks** | 1.8.0 | 1.8.0+ | 1.8.0 | ✅ Current | Security baseline testing |
 
 ### O-RAN Specific Testing Tools
@@ -2002,7 +2002,7 @@ def generate_r5_l_release_test_report(test_results):
 | **ONNX** | < 1.14.0 | April 2025 | Update to 1.15+ for L Release compatibility | 🔴 High |
 
 ### Compatibility Notes
-- **Go 1.24.6 Testing**: MANDATORY for FIPS 140-3 compliance testing - native crypto support
+- **Go 1.24.6 Testing**: Required for FIPS 140-3 usage testing (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **O1 Simulator Python**: Key L Release testing capability requires Python 3.11+ integration
 - **Enhanced xApp/rApp Testing**: L Release features require updated SDK versions for comprehensive testing
 - **AI/ML Model Testing**: ONNX 1.15+ required for L Release AI/ML model validation and testing
@@ -2010,7 +2010,7 @@ def generate_r5_l_release_test_report(test_results):
 - **Kubeflow Integration**: L Release AI/ML pipeline testing requires Kubeflow 1.8.0+ compatibility
 - **85% Coverage Enforcement**: All Go components must maintain 85%+ test coverage with atomic mode
 - **Parallel Testing**: Go 1.24.6 supports enhanced parallel testing capabilities with race detection
-- **Security Testing**: FIPS 140-3 compliance testing mandatory for production deployments
+- **Security Testing**: FIPS 140-3 usage testing available for production deployments (consult security team for validated builds and boundary documentation)
 
 When implementing testing for R5/L Release, I focus on comprehensive validation of new features, AI/ML model performance, energy efficiency, and ensuring all components meet the latest O-RAN and Nephio specifications while leveraging Go 1.24.6 testing capabilities.
 
@@ -2907,10 +2907,12 @@ This agent participates in standard workflows and accepts context from previous 
 
 ## Support Statement
 
-This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
+**Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
 - Terminal agent - typically does not handoff (workflow complete)
 - Can accept from any agent requiring validation
 - Should provide comprehensive test report as final deliverable
 - Stage 8 is highest - no forward progression rules
+
+*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/) for the latest three minor releases.

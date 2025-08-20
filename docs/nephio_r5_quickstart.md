@@ -293,7 +293,7 @@ alias nephio-status='kubectl get pods -n nephio-system && kubectl get apps -n ar
 ## Environment Variables
 
 ```bash
-# Set for FIPS compliance
+# Set for FIPS 140-3 usage capability (consult security team for validated builds)
 export GODEBUG=fips140=on
 export GO_VERSION=1.24.6
 
@@ -312,4 +312,4 @@ export ARGOCD_AUTH_TOKEN=$(kubectl -n argocd get secret argocd-initial-admin-sec
 
 **Quick Help**: Run `kubectl get all -A | grep -E '(nephio|argo|metal3|oran)'` to see all Nephio R5 components at once.
 
-**Version**: Nephio R5 (2024-2025) | **Last Updated**: 2025-01-19
+**Version**: Nephio R5 (v5.0.0) | **Last Updated**: 2025-01-19

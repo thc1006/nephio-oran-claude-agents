@@ -10,13 +10,13 @@ stages:
       - Check SBOM compliance
       - Verify certificates
       - Audit RBAC policies
-      - Check FIPS compliance
+      - Check FIPS 140-3 usage capability (consult security team for validated builds)
     expected_outputs:
       - Vulnerability report
       - SBOM validation
       - Certificate status
       - Policy compliance
-      - FIPS mode verification
+      - FIPS 140-3 mode verification (usage capability only)
     
   - name: dependency-check
     agent: oran-nephio-dep-doctor-agent
@@ -54,6 +54,6 @@ completion_actions:
 
 compliance_standards:
   - O-RAN WG11 Security
-  - FIPS 140-3
+  - FIPS 140-3 (usage capability, consult security team for validated builds)
   - CIS Kubernetes Benchmark
   - NIST Cybersecurity Framework

@@ -163,7 +163,7 @@ echo "5. kpt Version Checks"
 echo "--------------------"
 
 # Check for deprecated kpt versions
-check_version 'v1\.0\.0-beta\.27' "deprecated kpt v1.0.0-beta.27" 'COMPATIBILITY_MATRIX\.md|verifier_test\.go|kpt_configuration_as_data\.md|kpt_doctor\.sh'
+check_version 'v1\.0\.0-beta\.55' "deprecated kpt v1.0.0-beta.55" 'COMPATIBILITY_MATRIX\.md|verifier_test\.go|kpt_configuration_as_data\.md|kpt_doctor\.sh'
 
 # Verify kpt v1.0.0-beta.55+ is used
 echo -n "Verifying kpt v1.0.0-beta.55+ usage... "

@@ -72,7 +72,7 @@ features:
   - "NWDAF integration for network analytics"
   - "Multi-cluster observability with ArgoCD ApplicationSets"
   - "Python-based O1 simulator monitoring (L Release - aligned to Nov 2024 YANG models)"
-  - "FIPS 140-3 compliant monitoring infrastructure"
+  - "FIPS 140-3 usage capability for monitoring infrastructure (requires FIPS-validated crypto module/build and organizational controls)"
   - "Enhanced Service Manager KPI tracking"
   - "Real-time performance optimization recommendations"
 platform_support:
@@ -97,7 +97,7 @@ You are a monitoring and analytics specialist for telecom networks, focusing on 
 - **ArgoCD Metrics**: Application sync status, drift detection, deployment metrics
 - **OCloud Monitoring**: Baremetal provisioning with Metal3 integration and cloud infrastructure metrics
 - **Package Deployment Metrics**: R5 package lifecycle with Kpt v1.0.0-beta.55
-- **Controller Performance**: Go 1.24.6 runtime metrics with FIPS compliance
+- **Controller Performance**: Go 1.24.6 runtime metrics with FIPS 140-3 usage capability
 - **GitOps Pipeline**: ArgoCD is PRIMARY GitOps tool in R5, ConfigSync legacy/secondary metrics
 - **Resource Optimization**: AI-driven resource allocation tracking
 
@@ -113,16 +113,16 @@ You are a monitoring and analytics specialist for telecom networks, focusing on 
 
 When invoked, I will:
 
-1. **Deploy Enhanced O-RAN L Release Monitoring Infrastructure (2024-2025)**
+1. **Deploy Enhanced O-RAN L Release Monitoring Infrastructure (O-RAN SC L Release - 2025-06-30)**
    ```yaml
    # Enhanced VES Collector for L Release with Service Manager integration
    apiVersion: apps/v1
    kind: Deployment
    metadata:
-     name: ves-collector-l-release-2025
+     name: ves-collector-l-release
      namespace: o-ran-smo
      labels:
-       version: l-release-2025.06
+       nephio.org/version: r5.0.0
        component: ves-enhanced
        service-manager: enabled
    spec:
@@ -378,12 +378,12 @@ When invoked, I will:
              sum(rate(nephio_package_attempted_total[1h])) * 100
    ```
 
-5. **Enhanced Grafana Dashboards for R5/L Release (2024-2025)**
+5. **Enhanced Grafana Dashboards for R5/L Release (O-RAN SC L Release - 2025-06-30)**
    ```json
    {
      "dashboard": {
-       "title": "O-RAN L Release 2024-2025 & Nephio R5 Operations",
-       "uid": "oran-l-nephio-r5-2024",
+       "title": "O-RAN SC L Release (2025-06-30) & Nephio R5 Operations",
+       "uid": "oran-l-nephio-r5",
        "version": 2,
        "description": "Enhanced monitoring with Service Manager improvements, RANPM functions, and Python-based O1 simulator integration",
        "panels": [
@@ -738,7 +738,7 @@ data:
           rate(go_gc_pause_seconds_total[5m]) /
           rate(go_gc_cycles_total[5m])
       
-      # FIPS 140-3 compliance check
+      # FIPS 140-3 usage capability check
       - record: go124:fips_compliance
         expr: |
           up{job="nephio-controllers"} * 
@@ -814,8 +814,8 @@ data:
    - ArgoCD is PRIMARY GitOps tool in R5 for all metrics
    - ConfigSync provides legacy/secondary support only for migration scenarios
 
-5. **FIPS 140-3 Compliance**
-   - Monitor Go 1.24.6 FIPS mode status
+5. **FIPS 140-3 Usage Capability**
+   - Monitor Go 1.24.6 FIPS 140-3 mode status (consult security team for validated builds)
    - Alert on non-compliant components
 
 6. **High Availability**
@@ -829,10 +829,10 @@ data:
 ### Core Dependencies - Tested and Supported
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
-| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
+| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced monitoring |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | Tested against the latest three Kubernetes minor releases (aligned with upstream support window) — (e.g., at time of writing: 1.34, 1.33, 1.32)* |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - monitoring deployment |
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with monitoring configs |
 
@@ -894,7 +894,7 @@ data:
 | **InfluxDB** | < 2.7.0 | March 2025 | Migrate to 3.0+ for SQL support | ⚠️ Medium |
 
 ### Compatibility Notes
-- **Go 1.24.6 Monitoring**: MANDATORY for FIPS 140-3 compliant monitoring operations
+- **Go 1.24.6 Monitoring**: Required for FIPS 140-3 usage in monitoring operations (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **Kubeflow Integration**: L Release AI/ML monitoring requires Kubeflow 1.8.0+ compatibility
 - **Python O1 Simulator**: Key L Release monitoring capability requires Python 3.11+ integration
 - **Native Histograms**: Prometheus 2.48+ required for advanced metrics collection
@@ -960,9 +960,11 @@ This agent participates in standard workflows and accepts context from previous 
 
 ## Support Statement
 
-This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
+**Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (infrastructure, dependency, configuration, network functions)
 - Must complete monitoring setup before data analytics or optimization
 - Follows stage progression: Monitoring (5) → Data Analytics (6) or Performance Optimization (7)
+
+*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/) for the latest three minor releases.

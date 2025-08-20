@@ -7,7 +7,7 @@
 
 | Component | Minimum Version | Recommended Version | Maximum Tested | Support Policy | Notes |
 |-----------|----------------|-------------------|----------------|----------------|-------|
-| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | [Release Policy](https://kubernetes.io/releases/) | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | [Release Policy](https://kubernetes.io/releases/) | Tested against the latest three Kubernetes minor releases (aligned with upstream support window) — (e.g., at time of writing: 1.34, 1.33, 1.32)* |
 | **ArgoCD** | 3.0.0 | 3.1.0 | 3.1.2 | [Release Notes](https://argo-cd.readthedocs.io/en/stable/operator-manual/upgrading/overview/) | 3.1.x is current stable release |
 | **Kafka** | 3.6.0 | 3.8.0 | 3.8.1 | [Release Notes](https://kafka.apache.org/downloads) | 3.8.x with KRaft mode (ZooKeeper deprecated) |
 | **kpt** | v1.0.0-beta.50 | v1.0.0-beta.55 | v1.0.0-beta.57 | [Releases](https://github.com/kptdev/kpt/releases) | Latest beta with improved function support |
@@ -16,9 +16,9 @@
 
 | Component | Version | Release Date | Status | Documentation |
 |-----------|---------|--------------|--------|---------------|
-| **Nephio** | R5 | 2024-2025 | ✅ Current | [Nephio R5 Docs](https://nephio.org/docs/r5/) |
+| **Nephio** | R5 | v5.0.0 | ✅ Current | [Nephio R5 Docs](https://nephio.org/docs/r5/) |
 | **O-RAN SC** | L Release | June 30, 2025 | ✅ Current | [L Release Docs](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/) |
-| **Go** | 1.24.6 | Latest | ✅ Current | FIPS 140-3 compliant |
+| **Go** | 1.24.6 | Latest | ✅ Current | FIPS 140-3 usage capability (consult security team for validated builds) |
 
 ## Kubernetes Support Matrix
 
@@ -116,7 +116,7 @@ spec:
 ### Version Evolution
 | Version | Status | Key Features | Migration Notes |
 |---------|--------|--------------|-----------------|
-| v1.0.0-beta.27 | Deprecated | Basic functions | Upgrade required |
+| v1.0.0-beta.55 | Deprecated | Basic functions | Upgrade required |
 | v1.0.0-beta.50 | Supported | Improved validation | Stable for production |
 | **v1.0.0-beta.55** | **Recommended** | Enhanced function chains | Current best practice |
 | v1.0.0-beta.57 | Latest | Experimental features | Testing only |
@@ -152,7 +152,7 @@ pipeline:
 | Helm | 3.14.0+ | Package management |
 | kubectl | 1.32.x | K8s CLI (match cluster version) |
 | kustomize | 5.3.0+ | Configuration management |
-| Go | 1.24.6 | FIPS 140-3 compliant builds |
+| Go | 1.24.6 | FIPS 140-3 usage capability (consult security team for validated builds) |
 | Python | 3.11+ | Automation scripts |
 
 ## Container Registry Support
@@ -178,9 +178,9 @@ pipeline:
 
 | Mesh | Version | K8s Support | Notes |
 |------|---------|-------------|-------|
-| Istio | 1.21.x | 1.28-1.32 | Ambient mesh GA |
-| Linkerd | 2.14.x | 1.26-1.32 | Stable |
-| Consul | 1.18.x | 1.27-1.32 | Consul Connect |
+| Istio | 1.21.x | Latest 3 minors* | Ambient mesh GA |
+| Linkerd | 2.14.x | Latest 3 minors* | Stable |
+| Consul | 1.18.x | Latest 3 minors* | Consul Connect |
 
 ## Breaking Changes & Migration Notes
 
@@ -228,6 +228,8 @@ go run scripts/verify_matrix.go --path ./manifests
 - **Current**: 3.8.x
 - **Previous**: 3.7.x (security fixes)
 - **Migration Required**: < 3.6.x (ZooKeeper removal)
+
+*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/) for the latest three minor releases.
 
 ## References
 

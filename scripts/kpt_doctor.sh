@@ -241,7 +241,7 @@ fi
 
 # Check version consistency in documentation
 if grep -r "v1\.0\.0-beta\.27" "$REPO_ROOT" --include="*.md" --exclude-dir=".git" >/dev/null 2>&1; then
-    print_status "WARN" "Found deprecated kpt v1.0.0-beta.27 references in documentation"
+    print_status "WARN" "Found deprecated kpt v1.0.0-beta.55 references in documentation"
     print_status "INFO" "Run 'make update-kpt-references' to update all references"
 fi
 

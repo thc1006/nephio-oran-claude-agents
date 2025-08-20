@@ -149,9 +149,9 @@ func TestValidateVersionComparison(t *testing.T) {
 		{"equal versions", "1.0.0", "1.0.0", 0, "versions should be equal"},
 		{"v1 less than v2", "1.0.0", "1.1.0", -1, "v1 should be less than v2"},
 		{"v1 greater than v2", "1.1.0", "1.0.0", 1, "v1 should be greater than v2"},
-		{"beta versions equal", "v1.0.0-beta.27", "v1.0.0-beta.27", 0, "beta versions should be equal"},
-		{"beta v1 less than v2", "v1.0.0-beta.27", "v1.0.0-beta.55", -1, "beta v1 should be less than v2"},
-		{"beta v1 greater than v2", "v1.0.0-beta.55", "v1.0.0-beta.27", 1, "beta v1 should be greater than v2"},
+		{"beta versions equal", "v1.0.0-beta.55", "v1.0.0-beta.55", 0, "beta versions should be equal"},
+		{"beta v1 less than v2", "v1.0.0-beta.55", "v1.0.0-beta.57", -1, "beta v1 should be less than v2"},
+		{"beta v1 greater than v2", "v1.0.0-beta.57", "v1.0.0-beta.55", 1, "beta v1 should be greater than v2"},
 		{"with v prefix", "v1.0.0", "1.0.0", 0, "v prefix should be handled"},
 	}
 	

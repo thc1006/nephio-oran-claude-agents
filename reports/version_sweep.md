@@ -2,11 +2,11 @@
 
 **Date**: 2025-01-19
 **Repository**: nephio-oran-claude-agents
-**Scope**: Go 1.24.6, FIPS 140-3, Kubernetes 1.32.x normalization
+**Scope**: Go 1.24.6, FIPS 140-3 usage capability, Kubernetes 1.32.x normalization
 
 ## Summary
 
-This report documents all version changes made to normalize Go, FIPS, and Kubernetes references across the repository.
+This report documents all version changes made to normalize Go, FIPS 140-3 usage capability, and Kubernetes references across the repository.
 
 ## Changes Applied
 
@@ -23,13 +23,13 @@ This report documents all version changes made to normalize Go, FIPS, and Kubern
 | `agents/oran-nephio-dep-doctor-agent.md` | 425 | `go mod tidy -compat=1.24` | `go mod tidy -compat=1.24.6` |
 | `agents/monitoring-analytics-agent.md` | 746 | `go_info{version=~"go1.24.*"}` | `go_info{version=~"go1.24.6"}` |
 
-### FIPS Configuration Updates
+### FIPS 140-3 Usage Capability Updates
 
 | File | Line | Old Value | New Value |
 |------|------|-----------|-----------|
-| `agents/oran-nephio-dep-doctor-agent.md` | 411-413 | `# Go 1.24.6 includes native FIPS 140-3 compliance through the Go Cryptographic Module` | Added: `# Optional build-time default: export GOFIPS140=v1.0.0` |
+| `agents/oran-nephio-dep-doctor-agent.md` | 411-413 | `# Go 1.24.6 includes FIPS 140-3 usage capability through the Go Cryptographic Module` | Added: `# Optional build-time default: export GOFIPS140=v1.0.0` |
 | `agents/oran-nephio-dep-doctor-agent.md` | 456 | `# Go 1.24.6 native FIPS support - no external libraries required` | `# Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required`<br>`# Optional build-time default: ENV GOFIPS140=v1.0.0` |
-| `agents/configuration-management-agent.md` | 323 | `// - Native FIPS 140-3 compliance using Go 1.24.6 built-in cryptographic module` | `// - Native FIPS 140-3 compliance using Go 1.24.6 built-in Go Cryptographic Module v1.0.0` |
+| `agents/configuration-management-agent.md` | 323 | `// - FIPS 140-3 usage capability using Go 1.24.6 built-in cryptographic module` | `// - FIPS 140-3 usage capability using Go 1.24.6 built-in Go Cryptographic Module v1.0.0` |
 | `agents/configuration-management-agent.md` | 473 | `// Enable native FIPS 140-3 mode in Go 1.24.6` | `// Enable native FIPS 140-3 mode in Go 1.24.6 via Go Cryptographic Module v1.0.0` |
 | `agents/configuration-management-agent.md` | 736-737 | `# Go 1.24.6 native FIPS support - no external libraries required` | `# Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required`<br>`# Optional build-time default: export GOFIPS140=v1.0.0` |
 
@@ -58,11 +58,12 @@ This report documents all version changes made to normalize Go, FIPS, and Kubern
 - `go mod` commands updated to use `-go=1.24.6` and `-compat=1.24.6`
 - Prometheus queries updated to match exact version
 
-### FIPS 140-3
+### FIPS 140-3 Usage Capability
 - Primary: Runtime configuration via `GODEBUG=fips140=on`
 - Secondary (optional): Build-time default via `GOFIPS140=v1.0.0`
 - Added explanatory comments about Go Cryptographic Module v1.0.0
 - Removed references to deprecated GOFIPS/boringcrypto flags (none found)
+- Note: FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls
 
 ### Kubernetes 1.32.x
 - Set `1.32.x` as safe floor version
@@ -76,6 +77,6 @@ Run `scripts/verify_versions.sh` to validate all version references are correctl
 ## Compliance
 
 - ✅ Go 1.24.6 patch stream applied consistently
-- ✅ FIPS 140-3 using Go Cryptographic Module v1.0.0
+- ✅ FIPS 140-3 usage capability using Go Cryptographic Module v1.0.0 (consult security team for validated builds)
 - ✅ Kubernetes 1.32.x with skew policy reference
 - ✅ No deprecated flags or versions remaining

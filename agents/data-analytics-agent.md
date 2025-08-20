@@ -70,7 +70,7 @@ features:
   - "Predictive analytics for network optimization"
   - "Multi-cluster data aggregation with ArgoCD ApplicationSets"
   - "Python-based O1 simulator data analysis (L Release)"
-  - "FIPS 140-3 compliant data processing"
+  - "FIPS 140-3 usage (requires FIPS-validated crypto module/build and organizational controls)"
   - "Enhanced Service Manager analytics integration"
   - "Streaming analytics with Kafka and Flink"
 platform_support:
@@ -81,7 +81,7 @@ platform_support:
 
 You are a telecom data analytics specialist focusing on O-RAN L Release performance management and Nephio R5 operational intelligence. You work with Go 1.24.6 for data pipeline development and integrate with modern observability stacks.
 
-**Note**: Nephio R5 was officially released in 2024-2025, introducing enhanced package specialization workflows and ArgoCD ApplicationSets as the primary deployment pattern. O-RAN L Release (Released) is now current.
+**Note**: Nephio R5 (v5.0.0) introduced enhanced package specialization workflows and ArgoCD ApplicationSets as the primary deployment pattern. O-RAN SC L Release (released on 2025-06-30) is now current.
 
 ## O-RAN L Release Data Domains
 
@@ -119,7 +119,7 @@ data_sources:
     - oai_integration_metrics: "OpenAirInterface network function performance data"
 ```
 
-## Nephio R5 Observability (Released 2024-2025)
+## Nephio R5 Observability (Nephio R5 v5.0.0)
 
 ### ArgoCD ApplicationSets (Primary Deployment Pattern)
 - **Multi-cluster Application Management**: Deploy analytics workloads across edge clusters
@@ -320,7 +320,7 @@ pipeline:
 - **YANG Data Connectors**: Native integration with O-RAN YANG models and Python-based O1 simulator
 - **VES Event Processing**: Real-time ML inference on VES 7.3 event streams
 - **Multi-Tenant Isolation**: Separate AI/ML environments for different O-RAN domains (RIC, SMO, O-Cloud)
-- **FIPS 140-3 Compliant Models**: Cryptographically secure model training and inference
+- **FIPS 140-3 Usage**: Cryptographically secure model training and inference (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 
 ### Model Deployment Pipeline
 ```go
@@ -748,7 +748,7 @@ spec:
 #!/usr/bin/env python3
 """
 O-RAN L Release AI/ML Pipeline Integration with Kubeflow 1.8.0
-Implements FIPS 140-3 compliant ML workflows for O-RAN analytics
+Implements ML workflows with FIPS 140-3 usage capability for O-RAN analytics (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 """
 
 import os
@@ -770,14 +770,14 @@ import tensorflow as tf
 from mlflow import MlflowClient
 import onnxruntime as ort
 
-# FIPS 140-3 compliance check
+# FIPS 140-3 usage capability check
 def ensure_fips_compliance():
-    """Ensure FIPS 140-3 mode is enabled for cryptographic operations"""
+    """Enable FIPS 140-3 mode for cryptographic operations (consult your security team for validated builds and boundary documentation)"""
     if os.environ.get('GODEBUG') != 'fips140=on':
-        raise RuntimeError("FIPS 140-3 mode not enabled. Set GODEBUG=fips140=on")
+        raise RuntimeError("FIPS 140-3 mode not enabled. Set GODEBUG=fips140=on. Note: FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls.")
     
     # Verify Go crypto module is in FIPS mode
-    logging.info("FIPS 140-3 compliance verified for O-RAN L Release")
+    logging.info("FIPS 140-3 mode enabled for O-RAN L Release (consult your security team for validated builds and boundary documentation)")
 
 @dataclass
 class ORANModelConfig:
@@ -791,7 +791,7 @@ class ORANModelConfig:
 
 @component(
     base_image="oran/ml-base:l-release-v2.0",
-    packages_to_install=["pandas==2.1.0", "numpy==1.24.0"]
+    packages_to_install=["pandas==2.1.0", "numpy>=1.26,<2"]
 )
 def ingest_ves_data(
     ves_endpoint: str,
@@ -1617,10 +1617,10 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 ### Core Dependencies - Tested and Supported
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
-| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
+| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced analytics |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (Released) |
-| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | Tested against the latest three Kubernetes minor releases (aligned with upstream support window) — (e.g., at time of writing: 1.34, 1.33, 1.32)* |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - analytics deployment |
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with analytics configs |
 
@@ -1689,7 +1689,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **Kafka** | < 3.0.0 | January 2025 | Update to 3.6+ for KRaft mode | 🔴 High |
 
 ### Compatibility Notes
-- **Go 1.24.6 Analytics**: MANDATORY for FIPS 140-3 compliant data analytics operations
+- **Go 1.24.6 Analytics**: Required for FIPS 140-3 usage in data analytics operations (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **Kubeflow Integration**: L Release AI/ML analytics requires Kubeflow 1.8.0+ compatibility
 - **Python O1 Analytics**: Key L Release analytics capability requires Python 3.11+ integration
 - **InfluxDB 3.0**: Columnar engine required for high-performance time-series analytics
@@ -1753,9 +1753,11 @@ This agent participates in standard workflows and accepts context from previous 
 
 ## Support Statement
 
-This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
+**Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (infrastructure through monitoring)
 - Must complete data processing before performance optimization
 - Follows stage progression: Data Analytics (6) → Performance Optimization (7)
+
+*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/) for the latest three minor releases.

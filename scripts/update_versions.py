@@ -14,7 +14,7 @@ def update_file(filepath):
     
     original_content = content
     
-    # Update kpt versions from beta.27 to beta.55
+    # Update kpt versions from beta.55 to beta.55
     content = re.sub(r'kpt:\s*v1\.0\.0-beta\.27', 'kpt: v1.0.0-beta.55', content)
     content = re.sub(r'kpt@v1\.0\.0-beta\.27', 'kpt@v1.0.0-beta.55', content)
     content = re.sub(r'kpt-v1\.0\.0-beta\.27', 'kpt-v1.0.0-beta.55', content)

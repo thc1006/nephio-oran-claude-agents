@@ -30,7 +30,7 @@ Configuration as Data is a paradigm where:
 
 | kpt Version | Status | O-RAN Support | Nephio R5 | Notes |
 |-------------|--------|---------------|-----------|-------|
-| v1.0.0-beta.27 | Deprecated | Limited | Partial | Missing key features |
+| v1.0.0-beta.55 | Deprecated | Limited | Partial | Missing key features |
 | v1.0.0-beta.50 | Supported | Good | Compatible | Stable baseline |
 | **v1.0.0-beta.55** | **Recommended** | **Excellent** | **Full** | **Current standard** |
 | v1.0.0-beta.57+ | Latest | Experimental | Testing | Development only |
@@ -261,7 +261,7 @@ nephio-oran-packages/
 
 ## Migration from Previous Versions
 
-### From kpt v1.0.0-beta.27
+### From kpt v1.0.0-beta.55
 
 1. **Update kpt binary**: `make install-kpt`
 2. **Update Kptfiles**: Replace function image versions

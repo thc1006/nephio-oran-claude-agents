@@ -1,14 +1,14 @@
 # Nephio R5 Update Checklist
 
 ## Overview
-This document provides a comprehensive checklist of all documentation and configuration updates made for Nephio R5 (Released 2024-2025) compatibility. Each item includes the file path, type of change, and verification status.
+This document provides a comprehensive checklist of all documentation and configuration updates made for Nephio R5 (v5.0.0) compatibility. Each item includes the file path, type of change, and verification status.
 
 ## Version Normalization Updates ✅
 
 ### Go Version Updates (1.24.6)
 - [x] **All agent files** (`agents/*.md`)
   - Updated Go version from various (1.20.x, 1.21.x, 1.22.5) to 1.24.6
-  - Added FIPS 140-3 configuration with `GODEBUG=fips140=on`
+  - Added FIPS 140-3 usage capability configuration with `GODEBUG=fips140=on` (consult security team for validated builds)
   - Updated Go Cryptographic Module to v1.0.0
   - Files updated: 50+ agent markdown files
 
@@ -78,7 +78,7 @@ This document provides a comprehensive checklist of all documentation and config
   - O-RAN network function deployments
   - Multi-cluster targeting
   - Dynamic resource allocation
-  - FIPS compliance configuration
+  - FIPS 140-3 usage capability configuration
 
 - [x] **Metal3 Cluster Provisioning** (`examples/argocd/metal3-cluster-provisioning.yaml`)
   - Complete bare-metal provisioning
@@ -142,7 +142,7 @@ This document provides a comprehensive checklist of all documentation and config
 ### Version Consistency
 - [x] All Go references updated to 1.24.6
 - [x] All Kubernetes references updated to 1.32.x
-- [x] FIPS 140-3 configuration added where applicable
+- [x] FIPS 140-3 usage capability configuration added where applicable
 - [x] Prometheus updated to 3.5.0 LTS
 - [x] Grafana updated to 12.1.0
 
@@ -212,7 +212,7 @@ This document provides a comprehensive checklist of all documentation and config
 - 50+ files in `agents/` directory, all updated with:
   - Go 1.24.6
   - Kubernetes 1.32.x
-  - FIPS 140-3 compliance
+  - FIPS 140-3 usage capability
   - Updated monitoring versions
 
 ## Summary Statistics
@@ -230,7 +230,7 @@ This document provides a comprehensive checklist of all documentation and config
 - All version requirements met
 - ArgoCD integration documented
 - Metal3 support included
-- FIPS 140-3 compliance configured
+- FIPS 140-3 usage capability configured
 
 ✅ **O-RAN L Release Compatible**
 - Network function examples updated
@@ -246,5 +246,5 @@ This document provides a comprehensive checklist of all documentation and config
 ---
 
 *Last Updated: 2025-01-19*
-*Nephio Version: R5 (2024-2025)*
+*Nephio Version: R5 (v5.0.0)*
 *Status: Complete*

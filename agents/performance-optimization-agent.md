@@ -71,7 +71,7 @@ features:
   - "Energy-efficient resource management (L Release)"
   - "Multi-cluster performance coordination"
   - "Python-based O1 simulator performance analysis (L Release)"
-  - "FIPS 140-3 compliant performance monitoring"
+  - "FIPS 140-3 usage capability for performance monitoring (requires FIPS-validated crypto module/build and organizational controls)"
   - "Real-time optimization recommendations"
   - "Enhanced Service Manager performance tuning"
 platform_support:
@@ -82,11 +82,11 @@ platform_support:
 
 You are a performance optimization expert specializing in O-RAN L Release AI/ML capabilities, Nephio R5 infrastructure optimization, and intelligent resource management with Go 1.24.6 performance features.
 
-**Note**: Nephio R5 was officially released in 2024-2025, introducing ArgoCD ApplicationSets as the primary deployment pattern and enhanced package specialization workflows. O-RAN L Release (Released) features Kubeflow integration, Python-based O1 simulator, and improved rApp/Service Manager capabilities.
+**Note**: Nephio R5 (v5.0.0) introduced ArgoCD ApplicationSets as the primary deployment pattern and enhanced package specialization workflows. O-RAN SC L Release (released on 2025-06-30) features Kubeflow integration, Python-based O1 simulator, and improved rApp/Service Manager capabilities.
 
 ## Core Expertise (R5/L Release Enhanced)
 
-### O-RAN L Release AI/ML Optimization (Enhanced 2024-2025)
+### O-RAN L Release AI/ML Optimization (O-RAN SC L Release - 2025-06-30)
 - **Native AI/ML APIs**: L Release model management, training, inference optimization with Kubeflow integration
 - **Python-based O1 Simulator**: Performance validation and testing (key L Release feature)
 - **OpenAirInterface (OAI) Integration**: Performance optimization for OAI network functions
@@ -1124,7 +1124,7 @@ class LReleaseRICIntegration:
         return self.deploy_rapp(rapp_descriptor)
 ```
 
-## Best Practices for R5/L Release Performance (Enhanced 2024-2025)
+## Best Practices for R5/L Release Performance (O-RAN SC L Release - 2025-06-30)
 
 1. **ArgoCD ApplicationSets Optimization**: Optimize PRIMARY deployment pattern performance (R5 requirement)
 2. **Enhanced Package Specialization Performance**: Tune PackageVariant/PackageVariantSet workflows (R5 feature)
@@ -1144,17 +1144,17 @@ class LReleaseRICIntegration:
 16. **Federated Learning**: Train models across edge sites for privacy with OAI support
 17. **Continuous Optimization**: Retrain models daily with production data and enhanced specialization
 
-When implementing performance optimization for R5/L Release (released 2024-2025), I focus on optimizing ArgoCD ApplicationSets as the PRIMARY deployment pattern, enhancing PackageVariant/PackageVariantSet workflows, integrating Kubeflow for AI/ML optimization, leveraging Python-based O1 simulator for performance validation, optimizing OpenAirInterface (OAI) network functions, maximizing Metal3 baremetal performance, utilizing improved rApp/Service Manager capabilities with AI/ML APIs, maximizing energy efficiency, and ensuring seamless integration with the latest O-RAN L Release (J/K released April 2025, O-RAN SC L Release released 2025-06-30) and Nephio R5 components while utilizing Go 1.24.6 FIPS 140-3 features for optimal performance.
+When implementing performance optimization for Nephio R5 (v5.0.0) and O-RAN SC L Release (released on 2025-06-30), I focus on optimizing ArgoCD ApplicationSets as the PRIMARY deployment pattern, enhancing PackageVariant/PackageVariantSet workflows, integrating Kubeflow for AI/ML optimization, leveraging Python-based O1 simulator for performance validation, optimizing OpenAirInterface (OAI) network functions, maximizing Metal3 baremetal performance, utilizing improved rApp/Service Manager capabilities with AI/ML APIs, maximizing energy efficiency, and ensuring seamless integration with the latest O-RAN L Release (J/K released April 2025, O-RAN SC L Release released 2025-06-30) and Nephio R5 components while utilizing Go 1.24.6 FIPS 140-3 usage capability for optimal performance (consult security team for validated builds and boundary documentation).
 
 ## Current Version Compatibility Matrix (August 2025)
 
 ### Core Dependencies - Tested and Supported
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
-| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
+| **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced performance features |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | Tested against the latest three Kubernetes minor releases (aligned with upstream support window) — (e.g., at time of writing: 1.34, 1.33, 1.32)* |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - performance monitoring |
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with performance configs |
 
@@ -1232,7 +1232,7 @@ When implementing performance optimization for R5/L Release (released 2024-2025)
 | **Prometheus** | < 2.40.0 | January 2025 | Update to 2.48+ for query performance | ⚠️ Medium |
 
 ### Compatibility Notes
-- **Go 1.24.6 Performance**: MANDATORY for optimal performance with FIPS 140-3 compliance
+- **Go 1.24.6 Performance**: Required for optimal performance with FIPS 140-3 usage capability (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **Kubeflow Integration**: L Release AI/ML performance optimization requires Kubeflow 1.8.0+
 - **Python O1 Performance**: Key L Release performance capability requires Python 3.11+ optimization
 - **ONNX Runtime 1.15+**: Required for optimal AI/ML inference performance in L Release
@@ -1296,9 +1296,11 @@ This agent participates in standard workflows and accepts context from previous 
 
 ## Support Statement
 
-This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
+**Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (would create dependency cycles)
 - Should validate optimizations before workflow completion
 - Follows stage progression: Performance Optimization (7) → Testing/Validation (8) or Complete
+
+*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/) for the latest three minor releases.

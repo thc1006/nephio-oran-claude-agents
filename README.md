@@ -39,8 +39,8 @@ claude code "Deploy O-Cloud infrastructure with Nephio"
 ## 🎯 Version Compatibility
 
 - **O-RAN SC**: L Release (June 30, 2025) - Current
-- **Nephio**: R5 (2024-2025)
-- **Go**: 1.24.6 with FIPS 140-3
+- **Nephio**: R5 (v5.0.0)
+- **Go**: 1.24.6 with FIPS 140-3 usage capability (consult security team for validated builds)
 - **Kubernetes**: 1.32.x
 
 ## 📦 What You Get

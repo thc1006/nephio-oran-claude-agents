@@ -2,7 +2,7 @@
 
 ## Overview
 
-Nephio R5 (Released 2024-2025) introduces significant changes to the GitOps architecture, establishing **ArgoCD as the primary GitOps tool** for workload deployments while maintaining ConfigSync for management cluster operations. This document provides comprehensive guidance on the R5 GitOps patterns, bare-metal provisioning via Metal3, and ApplicationSet-based deployments.
+Nephio R5 (v5.0.0) introduces significant changes to the GitOps architecture, establishing **ArgoCD as the primary GitOps tool** for workload deployments while maintaining ConfigSync for management cluster operations. This document provides comprehensive guidance on the R5 GitOps patterns, bare-metal provisioning via Metal3, and ApplicationSet-based deployments.
 
 ## Key R5 Changes
 

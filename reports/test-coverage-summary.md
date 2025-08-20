@@ -96,9 +96,9 @@ fi
 
 ## Technical Implementation Details
 
-### Go 1.24.6 FIPS Compliance ✅
+### Go 1.24.6 FIPS 140-3 Usage Capability ✅
 All tests implemented using:
-- **Go Version**: 1.24.6 with FIPS 140-3 support
+- **Go Version**: 1.24.6 with FIPS 140-3 usage capability (consult security team for validated builds)
 - **Test Framework**: `stretchr/testify` v1.8.4
 - **Assertions**: `assert` and `require` patterns
 - **Comparison**: `google/go-cmp` v0.6.0 for deep equality
