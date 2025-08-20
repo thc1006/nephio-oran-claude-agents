@@ -4,7 +4,7 @@ description: Use PROACTIVELY for Nephio R5 and O-RAN L Release orchestration, Kp
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: August 20, 2025
+last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -23,7 +23,7 @@ dependencies:
   python: 3.11+
   yang-tools: 2.6.1+
   kustomize: 5.0+
-  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
+  kubectl: 1.32.0-1.32.2  # Kubernetes 1.32.0-1.32.2 compatible versions
 compatibility:
   nephio: r5
   oran: l-release

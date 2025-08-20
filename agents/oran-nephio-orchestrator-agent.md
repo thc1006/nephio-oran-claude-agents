@@ -4,7 +4,7 @@ description: Advanced orchestration agent for O-RAN L Release and Nephio R5 depl
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.0.0
-last_updated: August 20, 2025
+last_updated: 2025-08-20
 dependencies:
   - go: 1.24.6
   - kubernetes: 1.32+

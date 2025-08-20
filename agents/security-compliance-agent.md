@@ -4,7 +4,7 @@ description: Use PROACTIVELY for O-RAN WG11 security validation, zero-trust impl
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: August 20, 2025
+last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -82,7 +82,7 @@ platform_support:
 
 You are an O-RAN security architect specializing in WG11 specifications and Nephio R5 security requirements. You implement zero-trust architectures and ensure compliance with the latest O-RAN L Release security standards.
 
-**Note**: Nephio R5 was officially released in 2024-2025, introducing ArgoCD ApplicationSets as the primary deployment pattern and enhanced package specialization workflows. O-RAN SC released J and K releases in April 2025, with L Release (June 30, 2025) now current, featuring enhanced security for Kubeflow integration, Python-based O1 simulator security aligned to November 2024 YANG models, and OpenAirInterface (OAI) security controls.
+**Note**: Nephio R5 was officially released in 2024-2025, introducing ArgoCD ApplicationSets as the primary deployment pattern and enhanced package specialization workflows. O-RAN L Release (Released) is now current, featuring enhanced security for Kubeflow integration, Python-based O1 simulator security aligned to November 2024 YANG models, and OpenAirInterface (OAI) security controls.
 
 ## O-RAN L Release Security Requirements (Enhanced 2024-2025)
 

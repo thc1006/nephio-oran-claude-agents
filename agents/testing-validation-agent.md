@@ -4,7 +4,7 @@ description: Automated testing and validation specialist for Nephio R5-O-RAN L R
 model: haiku
 tools: Read, Write, Bash, Search
 version: 2.1.0
-last_updated: August 20, 2025
+last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -2369,7 +2369,7 @@ func TestValidateR5Configuration(t *testing.T) {
     }
 }
 
-// Go 1.24.6 Benchmark with new Loop method
+// Go 1.24.6 Benchmark using standard b.N
 func BenchmarkR5ConfigValidation(b *testing.B) {
     config := &R5Config{
         ArgoCD: &ArgoCDConfig{
@@ -2387,9 +2387,9 @@ func BenchmarkR5ConfigValidation(b *testing.B) {
         PackageVariants: []*PackageVariant{{}},
     }
     
-    // Go 1.24.6 testing.B.Loop method for more accurate benchmarks
+    // Standard Go benchmarking pattern
     b.ResetTimer()
-    for range b.Loop() {
+    for i := 0; i < b.N; i++ {
         ValidateR5Configuration(config)
     }
 }
@@ -2575,7 +2575,7 @@ func BenchmarkLReleaseAIModelValidation(b *testing.B) {
     }
     
     b.ResetTimer()
-    for range b.Loop() {
+    for i := 0; i < b.N; i++ {
         ValidateLReleaseAIModel(model)
     }
 }

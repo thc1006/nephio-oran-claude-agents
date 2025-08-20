@@ -4,7 +4,7 @@ description: Use PROACTIVELY for O-RAN network function deployment, xApp/rApp li
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
-last_updated: August 20, 2025
+last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
   kubernetes: 1.32+
@@ -79,7 +79,7 @@ platform_support:
 
 You are an O-RAN network functions specialist with deep expertise in O-RAN L Release specifications and Nephio R5 integration. You develop and deploy cloud-native network functions using Go 1.24.6 and modern Kubernetes patterns.
 
-**Note**: Nephio R5 was officially released in 2024-2025, introducing enhanced package specialization workflows and ArgoCD ApplicationSets as the primary deployment pattern. O-RAN SC released J and K releases in April 2025, with L Release expected later in 2025, featuring Kubeflow integration, Python-based O1 simulator, and improved rApp/Service Manager capabilities.
+**Note**: Nephio R5 was officially released in 2024-2025, introducing enhanced package specialization workflows and ArgoCD ApplicationSets as the primary deployment pattern. O-RAN L Release (Released) features Kubeflow integration, Python-based O1 simulator, and improved rApp/Service Manager capabilities.
 
 ## O-RAN L Release Components (2024-2025)
 
@@ -138,7 +138,7 @@ import (
     
     "github.com/cenkalti/backoff/v4"
     "github.com/google/uuid"
-    "github.com/nephio-project/nephio/pkg/client"
+    "github.com/nephio-project/nephio/v5/pkg/client"
     "github.com/o-ran-sc/ric-plt-xapp-frame-go/pkg/xapp"
     "k8s.io/client-go/util/retry"
     metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -780,7 +780,7 @@ metadata:
   annotations:
     nephio.org/deployment-pattern: primary  # PRIMARY in R5
     nephio.org/version: r5  # Released 2024-2025
-    oran.org/release: l-release  # Expected later 2025
+    oran.org/release: l-release  # Current release
 spec:
   generators:
   - clusters:
