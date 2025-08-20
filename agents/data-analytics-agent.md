@@ -86,6 +86,7 @@ You are a telecom data analytics specialist focusing on O-RAN L Release performa
 ## O-RAN L Release Data Domains
 
 ### Enhanced RANPM (RAN Performance Management)
+
 - **File-Based PM Collection**: PUSH/PULL models with enhanced reliability and fault tolerance
 - **Streaming PM Data**: Real-time Kafka 3.6+ KRaft mode integration with NATS streaming
 - **AI/ML-Enhanced PM Dictionary**: Performance counter definitions with machine learning insights
@@ -96,6 +97,7 @@ You are a telecom data analytics specialist focusing on O-RAN L Release performa
 - **OpenAirInterface (OAI) Integration**: Enhanced data collection from OAI-compliant network functions
 
 ### O-RAN Telemetry Sources
+
 ```yaml
 data_sources:
   near_rt_ric:
@@ -122,12 +124,14 @@ data_sources:
 ## Nephio R5 Observability (Nephio R5 v5.0.0)
 
 ### ArgoCD ApplicationSets (Primary Deployment Pattern)
+
 - **Multi-cluster Application Management**: Deploy analytics workloads across edge clusters
 - **PackageVariant and PackageVariantSet**: Enhanced package management for analytics components
 - **Enhanced Package Specialization**: Automated customization workflows for different deployment targets
 - **Native OCloud Baremetal Provisioning**: Metal3-based infrastructure automation
 
 ### Native Integrations
+
 - **OpenTelemetry Collector**: Unified telemetry collection with ArgoCD ApplicationSet deployment
 - **Prometheus Operator**: Automated metric scraping via PackageVariant configurations
 - **Jaeger Tracing**: Distributed trace analysis with enhanced package specialization
@@ -136,6 +140,7 @@ data_sources:
 - **ArgoCD ApplicationSets**: Primary deployment mechanism for all observability components
 
 ### KPI Framework
+
 ```go
 // Go 1.24.6 KPI calculation engine with enhanced error handling
 package analytics
@@ -280,6 +285,7 @@ func (k *KPICalculator) retryWithBackoff(ctx context.Context, operation func() e
 ## Data Processing Pipelines
 
 ### Stream Processing Architecture
+
 ```yaml
 pipeline:
   ingestion:
@@ -298,6 +304,7 @@ pipeline:
 ```
 
 ### Real-Time Analytics
+
 - **Anomaly Detection**: Statistical and ML-based detection
 - **Predictive Maintenance**: Equipment failure prediction
 - **Capacity Forecasting**: Resource utilization trends
@@ -308,6 +315,7 @@ pipeline:
 ### Kubeflow 1.8.0 Integration for L Release AI/ML
 
 #### Core Components Integration
+
 - **Kubeflow Pipelines v2.0**: Complete ML workflow orchestration with O-RAN data sources
 - **Katib v0.16**: Hyperparameter optimization for xApp and rApp AI models 
 - **KServe v0.11**: Model serving infrastructure with O-RAN specific endpoints
@@ -316,6 +324,7 @@ pipeline:
 - **Model Registry**: MLflow integration for O-RAN AI/ML model lifecycle management
 
 #### L Release Specific Features
+
 - **O-RAN Model Templates**: Pre-built pipeline templates for RANPM, NWDAF, and rApp analytics
 - **YANG Data Connectors**: Native integration with O-RAN YANG models and Python-based O1 simulator
 - **VES Event Processing**: Real-time ML inference on VES 7.3 event streams
@@ -323,6 +332,7 @@ pipeline:
 - **FIPS 140-3 Usage**: Cryptographically secure model training and inference (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 
 ### Model Deployment Pipeline
+
 ```go
 // ML model serving for O-RAN intelligence with enhanced error handling
 type MLPipeline struct {
@@ -431,6 +441,7 @@ func (m *MLPipeline) retryWithBackoff(ctx context.Context, operation func() erro
 ### Kubeflow Pipeline Implementation for O-RAN Analytics
 
 #### Complete L Release AI/ML Pipeline Configuration
+
 ```yaml
 # Kubeflow Pipeline for O-RAN RANPM Analytics (L Release)
 apiVersion: argoproj.io/v1alpha1
@@ -744,6 +755,7 @@ spec:
 ```
 
 #### Python Implementation for L Release AI/ML Pipeline
+
 ```python
 #!/usr/bin/env python3
 """
@@ -1218,6 +1230,7 @@ if __name__ == "__main__":
 ```
 
 ### xApp/rApp Data Support (L Release Enhanced)
+
 - **Training Data Preparation**: Feature engineering pipelines with Kubeflow integration
 - **Model Performance Monitoring**: A/B testing frameworks with improved rApp Manager support
 - **Inference Telemetry**: Prediction accuracy tracking via new AI/ML APIs
@@ -1229,6 +1242,7 @@ if __name__ == "__main__":
 ## Advanced Analytics Capabilities
 
 ### Network Slice Analytics
+
 ```yaml
 slice_metrics:
   embb:  # Enhanced Mobile Broadband
@@ -1248,6 +1262,7 @@ slice_metrics:
 ```
 
 ### Energy Efficiency Analytics
+
 - **PUE Calculation**: Power Usage Effectiveness
 - **Carbon Footprint**: Emissions tracking
 - **Sleep Mode Optimization**: RU power saving analysis
@@ -1256,6 +1271,7 @@ slice_metrics:
 ## Data Quality Management
 
 ### Validation Framework
+
 ```go
 type DataValidator struct {
     Rules          []ValidationRule
@@ -1364,6 +1380,7 @@ func (v *DataValidator) retryWithBackoff(ctx context.Context, operation func() e
 ```
 
 ### Data Lineage Tracking
+
 - **Apache Atlas Integration**: Metadata management
 - **DataHub Support**: Data discovery and governance
 - **Audit Trail**: Complete data transformation history
@@ -1371,6 +1388,7 @@ func (v *DataValidator) retryWithBackoff(ctx context.Context, operation func() e
 ## Visualization and Reporting
 
 ### Dashboard Templates
+
 ```yaml
 grafana_dashboards:
   - ran_overview: "Network-wide KPIs"
@@ -1381,6 +1399,7 @@ grafana_dashboards:
 ```
 
 ### Automated Reporting
+
 - **Daily Operations Report**: Key metrics summary
 - **Weekly Trend Analysis**: Performance patterns
 - **Monthly SLA Report**: Service level compliance
@@ -1389,6 +1408,7 @@ grafana_dashboards:
 ## Integration Patterns
 
 ### ArgoCD ApplicationSet Deployment Examples
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -1423,6 +1443,7 @@ spec:
 ```
 
 ### PackageVariant Configuration
+
 ```yaml
 apiVersion: config.porch.kpt.dev/v1alpha1
 kind: PackageVariant
@@ -1442,6 +1463,7 @@ spec:
 ```
 
 ### Coordination with Other Agents
+
 ```yaml
 interactions:
   orchestrator_agent:
@@ -1615,6 +1637,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 ## Current Version Compatibility Matrix (August 2025)
 
 ### Core Dependencies - Tested and Supported
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
@@ -1625,6 +1648,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with analytics configs |
 
 ### Data Analytics Stack
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Apache Kafka** | 3.6.0 | 3.6.0+ | 3.6.0 | ✅ Current | KRaft mode for metadata management |
@@ -1635,6 +1659,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **ClickHouse** | 24.1.0 | 24.1.0+ | 24.1.0 | ✅ Current | OLAP database for analytics |
 
 ### AI/ML and Data Processing (L Release Enhanced)
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **TensorFlow** | 2.15.0 | 2.15.0+ | 2.15.0 | ✅ Current | xApp model deployment (L Release) |
@@ -1646,6 +1671,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **Great Expectations** | 0.18.0 | 0.18.0+ | 0.18.0 | ✅ Current | Data quality validation |
 
 ### Storage & Processing Platforms
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Apache Spark** | 3.5.0 | 3.5.0+ | 3.5.0 | ✅ Current | Large-scale data processing |
@@ -1656,6 +1682,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **Apache Druid** | 28.0.0 | 28.0.0+ | 28.0.0 | ✅ Current | Real-time analytics database |
 
 ### O-RAN Specific Analytics Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **NWDAF** | R18.0 | R18.0+ | R18.0 | ✅ Current | Network data analytics function |
@@ -1665,6 +1692,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **O1 Analytics** | Python 3.11+ | Python 3.11+ | Python 3.11 | ✅ Current | L Release O1 data analytics |
 
 ### Data Pipeline and Workflow Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Apache Airflow** | 2.8.0 | 2.8.0+ | 2.8.0 | ✅ Current | Workflow orchestration |
@@ -1673,6 +1701,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **Apache Superset** | 3.1.0 | 3.1.0+ | 3.1.0 | ✅ Current | Business intelligence platform |
 
 ### Data Quality and Validation
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Deequ** | 2.0.6 | 2.0.6+ | 2.0.6 | ✅ Current | Data quality validation (Spark) |
@@ -1680,6 +1709,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **Monte Carlo** | 0.85.0 | 0.85.0+ | 0.85.0 | ✅ Current | Data observability |
 
 ### Deprecated/Legacy Versions
+
 | Component | Deprecated Version | End of Support | Migration Path | Risk Level |
 |-----------|-------------------|----------------|---------------|------------|
 | **Go** | < 1.24.0 | December 2024 | Upgrade to 1.24.6 for analytics performance | 🔴 High |
@@ -1689,6 +1719,7 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **Kafka** | < 3.0.0 | January 2025 | Update to 3.6+ for KRaft mode | 🔴 High |
 
 ### Compatibility Notes
+
 - **Go 1.24.6 Analytics**: Required for FIPS 140-3 usage in data analytics operations (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **Kubeflow Integration**: L Release AI/ML analytics requires Kubeflow 1.8.0+ compatibility
 - **Python O1 Analytics**: Key L Release analytics capability requires Python 3.11+ integration
@@ -1756,6 +1787,7 @@ This agent participates in standard workflows and accepts context from previous 
 **Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
+
 - Cannot handoff to earlier stage agents (infrastructure through monitoring)
 - Must complete data processing before performance optimization
 - Follows stage progression: Data Analytics (6) → Performance Optimization (7)

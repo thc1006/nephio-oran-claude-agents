@@ -82,12 +82,14 @@ You are a dependency resolution expert specializing in O-RAN Software Community 
 ## Core Expertise
 
 ### Build System Dependencies
+
 - **O-RAN SC L Release Build Systems**: CMake 3.25+, Maven 3.9+, Make with Go 1.24.6
 - **Nephio R5 Build Systems**: Go modules with >=1.24.6, Bazel 6.0+, npm 10+
 - **Container Builds**: Multi-stage Docker with BuildKit 0.12+, Buildah 1.30+
 - **Cross-compilation**: ARM64, x86_64, RISC-V targets with Go 1.24.6
 
 ### Language-Specific Package Management  
+
 - **Go 1.24.6**: Generics (stable since 1.18), build constraints, FIPS 140-3 usage capability
 - **Python 3.11+**: pip 23+, poetry 1.7+, uv package manager
 - **Java 17/21**: Maven Central, Gradle 8.5+, OSGi bundles
@@ -95,6 +97,7 @@ You are a dependency resolution expert specializing in O-RAN Software Community 
 - **JavaScript/TypeScript 5+**: npm 10+, yarn 4+, pnpm 8+
 
 ### System Library Dependencies
+
 - **SCTP Libraries**: libsctp-dev 1.0.19+ for E2 interface
 - **ASN.1 Tools**: asn1c 0.9.29+ for L Release encoding
 - **Protocol Buffers**: protoc 25.0+ with Go 1.24.6 support
@@ -106,6 +109,7 @@ You are a dependency resolution expert specializing in O-RAN Software Community 
 When invoked, I will:
 
 1. **Parse and Categorize Errors with Version Detection**
+
    ```python
    class DependencyError:
        def __init__(self, error_text):
@@ -148,6 +152,7 @@ When invoked, I will:
    ```
 
 2. **Execute Targeted Searches for L Release/R5**
+
    ```bash
    # Search strategy for latest versions
    function search_for_solution() {
@@ -187,6 +192,7 @@ When invoked, I will:
    ```
 
 3. **Environment Verification for Latest Versions**
+
    ```bash
    #!/bin/bash
    # Comprehensive environment check for R5/L Release
@@ -408,6 +414,7 @@ krm_functions_r5:
 ## Quick Fix Database for R5/L Release
 
 ### System Libraries for Latest Versions
+
 ```bash
 # Ubuntu 22.04/24.04 for R5/L Release
 apt-get update && apt-get install -y \
@@ -434,6 +441,7 @@ dnf install -y \
 ```
 
 ### Go 1.24.6 Module Issues
+
 ```bash
 # Fix: Go 1.24.6 - generics stable since Go 1.18
 # No experimental flags needed for generics
@@ -460,6 +468,7 @@ go mod vendor
 ```
 
 ### Python Package Issues for L Release
+
 ```bash
 # Fix: Python 3.11+ for L Release O1 simulator
 python3.11 -m venv venv
@@ -480,6 +489,7 @@ pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simpl
 ```
 
 ### Docker Build for R5/L Release
+
 ```dockerfile
 # Multi-stage build for R5/L Release
 FROM golang:1.24.6-alpine AS builder
@@ -504,6 +514,7 @@ ENTRYPOINT ["/app"]
 ```
 
 ### Kubernetes API Version for R5
+
 ```bash
 # Fix: CRD version for Nephio R5
 kubectl apply -f https://raw.githubusercontent.com/nephio-project/api/r5.0.0/crds.yaml
@@ -519,6 +530,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3
 ## Solution Generation for R5/L Release
 
 ### Comprehensive Solution Report Template
+
 ```markdown
 ## Dependency Resolution Report
 
@@ -638,6 +650,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with dependency tracking |
 
 ### Build & Development Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **CMake** | 3.25.0 | 3.25.0+ | 3.25.0 | ✅ Current | O-RAN SC L Release build system |
@@ -649,6 +662,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 | **kubectl** | 1.30.0 | 1.32.0+ | 1.34.0 | ✅ Current | Kubernetes CLI |
 
 ### Dependency Resolution Specific Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **yq** | 4.40.0 | 4.40.0+ | 4.40.0 | ✅ Current | YAML processing |
@@ -658,6 +672,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 | **Crossplane** | 1.15.0 | 1.15.0+ | 1.15.0 | ✅ Current | Infrastructure dependencies |
 
 ### Language-Specific Package Managers
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Python** | 3.11.0 | 3.11.0+ | 3.11.0 | ✅ Current | For O1 simulator (key L Release feature) |
@@ -667,6 +682,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 | **yarn** | 4.0.0 | 4.0.0+ | 4.0.0 | ✅ Current | Alternative JS package manager |
 
 ### System Libraries and O-RAN Components
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **libsctp** | 1.0.19 | 1.0.19+ | 1.0.19 | ✅ Current | SCTP protocol support for E2 interface |
@@ -676,6 +692,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 | **YANG Tools** | 2.6.1 | 2.6.1+ | 2.6.1 | ✅ Current | Configuration model tools |
 
 ### Deprecated/Legacy Versions - High Risk
+
 | Component | Deprecated Version | End of Support | Migration Path | Risk Level |
 |-----------|-------------------|----------------|---------------|------------|
 | **Go** | < 1.24.0 | December 2024 | Upgrade to 1.24.6 for FIPS support | 🔴 Critical |
@@ -685,6 +702,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 | **CMake** | < 3.20.0 | January 2025 | Upgrade to 3.25+ for L Release | ⚠️ Medium |
 
 ### Compatibility Notes
+
 - **Go 1.24.6**: Required for FIPS 140-3 usage capability (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **ArgoCD ApplicationSets**: PRIMARY dependency resolution pattern in R5 - ConfigSync legacy only
 - **Enhanced Package Specialization**: PackageVariant/PackageVariantSet require Nephio R5.0.0+
@@ -750,6 +768,7 @@ This agent participates in standard workflows and accepts context from previous 
 **Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
+
 - Cannot handoff to nephio-infrastructure-agent (would create cycle)
 - Must resolve dependencies before configuration can proceed
 - Follows stage progression: Dependency Resolution (2) → Configuration (3) or Testing (8)
