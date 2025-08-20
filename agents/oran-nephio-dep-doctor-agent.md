@@ -566,6 +566,7 @@ ${verification_commands}
 ## Search Strategies for Latest Versions
 
 ### O-RAN SC L Release Search
+
 ```python
 def search_oran_l_release_dependency(component, error):
     search_queries = [
@@ -585,6 +586,7 @@ def search_oran_l_release_dependency(component, error):
 ```
 
 ### Nephio R5 Search
+
 ```python
 def search_nephio_r5_dependency(component, error):
     search_queries = [
@@ -613,6 +615,7 @@ def search_nephio_r5_dependency(component, error):
 8. **Production Ready**: Both R5 and L Release are stable, production-ready versions (2025)
 
 When you encounter a dependency issue, provide me with:
+
 - The exact error message
 - Your target versions (Nephio R5 current stable, O-RAN L Release current)
 - Your Go version (must be 1.24.6+)
@@ -624,6 +627,7 @@ I will diagnose the issue and provide R5/L Release compatible solutions with min
 ## Current Version Compatibility Matrix (August 2025)
 
 ### Core Dependencies - Tested and Supported
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |

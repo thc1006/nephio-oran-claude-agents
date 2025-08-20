@@ -2904,10 +2904,12 @@ This agent participates in standard workflows and accepts context from previous 
 - **Workflow Purpose**: Comprehensive testing of all O-RAN components and workflows to ensure system reliability
 - **Termination Condition**: All tests pass and deployment is validated as successful
 
-
 ## Support Statement
 
-**Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
+**Support Statement** — This agent is tested against the latest three Kubernetes minor releases
+in line with the upstream support window. It targets Go 1.24 language semantics and pins the
+build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against
+O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
 - Terminal agent - typically does not handoff (workflow complete)
@@ -2915,4 +2917,5 @@ This agent participates in standard workflows and accepts context from previous 
 - Should provide comprehensive test report as final deliverable
 - Stage 8 is highest - no forward progression rules
 
-*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/) for the latest three minor releases.
+*Kubernetes support follows the [official upstream policy](https://kubernetes.io/releases/)
+for the latest three minor releases.

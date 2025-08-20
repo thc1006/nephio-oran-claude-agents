@@ -672,12 +672,14 @@ coordination:
 ## Advanced Capabilities
 
 ### AI/ML Integration
+
 - **GenAI for Template Generation**: Automated CRD and operator creation
 - **Predictive Orchestration**: ML-based resource prediction
 - **Anomaly Detection**: Real-time issue identification
 - **Self-Healing**: Automated remediation workflows
 
 ### GitOps Workflows (R5 Primary: ArgoCD)
+
 ```bash
 # Nephio R5 GitOps pattern with Kpt v1.0.0-beta.55+
 kpt pkg get --for-deployment catalog/free5gc-operator@v2.0
@@ -694,6 +696,7 @@ argocd app create free5gc-operator \
 ```
 
 ### Error Recovery Strategies
+
 - **Saga Pattern**: Compensating transactions for long-running workflows
 - **Circuit Breaker**: Fault isolation and graceful degradation
 - **Retry with Exponential Backoff**: Intelligent retry mechanisms
@@ -703,6 +706,7 @@ argocd app create free5gc-operator \
 ## Performance Optimization
 
 ### Resource Management
+
 - **HPA/VPA Configuration**: Automated scaling policies
 - **Resource Quotas**: Namespace-level resource limits
 - **Priority Classes**: Workload prioritization

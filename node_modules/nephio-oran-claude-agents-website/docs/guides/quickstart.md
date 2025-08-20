@@ -15,6 +15,7 @@ Get up and running with Nephio O-RAN Claude Agents in just a few minutes! This g
 Before you begin, ensure you have the following:
 
 ### Required Software
+
 - **Kubernetes cluster** (v1.25+)
 - **kubectl** configured and connected to your cluster
 - **Nephio R5** (v5.0.0) installed
@@ -23,6 +24,7 @@ Before you begin, ensure you have the following:
 - **Git** for cloning the repository
 
 ### Resource Requirements
+
 - **CPU**: Minimum 4 cores per node
 - **Memory**: Minimum 8GB RAM per node
 - **Storage**: 50GB available storage
@@ -44,6 +46,7 @@ Run the built-in verification script to ensure your environment is ready:
 ```
 
 This script checks:
+
 - Kubernetes version compatibility
 - Nephio installation status
 - KPT version
@@ -68,6 +71,7 @@ cat config/agent_config.yaml
 ```
 
 Key configuration options:
+
 - Agent logging levels
 - Resource limits and requests
 - Security policies
@@ -110,6 +114,7 @@ kubectl get pods -n nephio-agents
 ```
 
 Expected output:
+
 ```
 NAME                                    READY   STATUS    RESTARTS   AGE
 orchestrator-agent-7b8c9d5f4-xyz12     1/1     Running   0          2m
@@ -199,16 +204,19 @@ make test-agents
 Now that you have Claude agents running, explore these topics:
 
 ### Learn More
+
 - [Agent Architecture Overview](/docs/guides/architecture)
 - [Configuration Management](/docs/guides/configuration)
 - [Monitoring and Observability](/docs/guides/monitoring)
 
 ### Deploy Additional Components
+
 - [Security and Compliance Setup](/docs/security-compliance/security-compliance-agent)
 - [Advanced Monitoring](/docs/monitoring-analytics/monitoring-analytics-agent)
 - [Network Function Management](/docs/network-functions/oran-network-functions-agent)
 
 ### Operational Tasks
+
 - [Upgrading Agents](/docs/guides/upgrade)
 - [Backup and Restore](/docs/guides/backup)
 - [Performance Tuning](/docs/guides/performance)
