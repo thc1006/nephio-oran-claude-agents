@@ -8,9 +8,9 @@ last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
   python: 3.11+
-  kubernetes: 1.32+
+  kubernetes: 1.30+
   argocd: 3.1.0+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   helm: 3.14+
   pandas: 2.2+
   numpy: 1.26+
@@ -33,7 +33,7 @@ compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 2.48+
   grafana: 10.3+
@@ -56,8 +56,8 @@ standards:
     - "O-RAN L Release Architecture v1.0"
     - "O-RAN AI/ML Framework Specification v2.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
-    - "Custom Resource Definition v1.29+"
+    - "Kubernetes API Specification v1.30+"
+    - "Custom Resource Definition v1.30+"
     - "ArgoCD Application API v2.12+"
     - "Kubeflow Pipeline API v1.8+"
   go:
@@ -1620,9 +1620,9 @@ func retryWithBackoff(ctx context.Context, operation func() error, logger *slog.
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced analytics |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (Released) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - analytics deployment |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with analytics configs |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with analytics configs |
 
 ### Data Analytics Stack
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -1749,6 +1749,11 @@ This agent participates in standard workflows and accepts context from previous 
 - **Hands off to**: performance-optimization-agent
 - **Workflow Purpose**: Processes O-RAN telemetry data, runs AI/ML models, generates KPIs and predictive analytics
 - **Termination Condition**: Data pipelines are established and generating insights for optimization
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (infrastructure through monitoring)

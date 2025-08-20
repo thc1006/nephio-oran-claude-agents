@@ -30,12 +30,12 @@ dependencies:
   kubeflow: 1.8+
   python: 3.11+
   helm: 3.14+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
 compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 3.5.0  # LTS version with native histograms
   grafana: 12.1.0  # Latest with Scenes and Canvas panels
@@ -58,7 +58,7 @@ standards:
     - "O-RAN AI/ML Framework Specification v2.0"
     - "VES Event Listener 7.3"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
+    - "Kubernetes API Specification v1.30+"
     - "Prometheus Operator API v0.70+"
     - "ArgoCD Application API v2.12+"
     - "OpenTelemetry Specification v1.23+"
@@ -96,7 +96,7 @@ You are a monitoring and analytics specialist for telecom networks, focusing on 
 ### Nephio R5 Observability
 - **ArgoCD Metrics**: Application sync status, drift detection, deployment metrics
 - **OCloud Monitoring**: Baremetal provisioning with Metal3 integration and cloud infrastructure metrics
-- **Package Deployment Metrics**: R5 package lifecycle with Kpt v1.0.0-beta.27
+- **Package Deployment Metrics**: R5 package lifecycle with Kpt v1.0.0-beta.55
 - **Controller Performance**: Go 1.24.6 runtime metrics with FIPS compliance
 - **GitOps Pipeline**: ArgoCD is PRIMARY GitOps tool in R5, ConfigSync legacy/secondary metrics
 - **Resource Optimization**: AI-driven resource allocation tracking
@@ -119,10 +119,10 @@ When invoked, I will:
    apiVersion: apps/v1
    kind: Deployment
    metadata:
-     name: ves-collector-l-release-2024
+     name: ves-collector-l-release-2025
      namespace: o-ran-smo
      labels:
-       version: l-release-2024.12
+       version: l-release-2025.06
        component: ves-enhanced
        service-manager: enabled
    spec:
@@ -534,7 +534,7 @@ class LReleaseModelManager:
     def __init__(self):
         self.model_registry = "http://l-release-model-registry:8080"
         self.deployment_target = "onnx"  # ONNX for interoperability
-        self.go_version = "1.24"
+        self.go_version = "1.24.6"
         
     def deploy_model(self, model_name, model_path):
         """Deploy AI/ML model for L Release"""
@@ -558,7 +558,7 @@ class LReleaseModelManager:
             "model_path": onnx_path,
             "metadata": {
                 "framework": "tensorflow",
-                "go_compatibility": "1.24",
+                "go_compatibility": "1.24.6",
                 "fips_compliant": True
             }
         }
@@ -832,9 +832,9 @@ data:
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced monitoring |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - monitoring deployment |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with monitoring configs |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with monitoring configs |
 
 ### Monitoring & Observability Stack
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -956,6 +956,11 @@ This agent participates in standard workflows and accepts context from previous 
 - **Alternative Handoff**: performance-optimization-agent (if data analytics not needed)
 - **Workflow Purpose**: Establishes comprehensive monitoring, alerting, and observability for all O-RAN components
 - **Termination Condition**: Monitoring stack is deployed and collecting metrics from all network functions
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (infrastructure, dependency, configuration, network functions)

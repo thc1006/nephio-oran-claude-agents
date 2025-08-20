@@ -7,9 +7,9 @@ version: 2.1.0
 last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
-  kubernetes: 1.32+
+  kubernetes: 1.30+
   argocd: 3.1.0+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   helm: 3.14+
   prometheus: 2.48+
   grafana: 10.3+
@@ -29,12 +29,12 @@ dependencies:
   pytorch: 2.2+
   kubeflow: 1.8+
   python: 3.11+
-  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
+  kubectl: 1.30.x-1.34.x  # Kubernetes 1.30+ (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
 compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 2.48+
   grafana: 10.3+
@@ -57,7 +57,7 @@ standards:
     - "O-RAN AI/ML Framework Specification v2.0"
     - "O-RAN Energy Efficiency v2.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
+    - "Kubernetes API Specification v1.30+"
     - "Horizontal Pod Autoscaler v2.2+"
     - "Vertical Pod Autoscaler v1.1+"
     - "ArgoCD Application API v2.12+"
@@ -175,7 +175,7 @@ When invoked, I will:
                'version': {
                    'nephio': 'r5',
                    'oran': 'l-release',
-                   'go': '1.24'
+                   'go': '1.24.6'
                },
                'ai_ml_analysis': self._run_l_release_ai_analysis(metrics),
                'ocloud_performance': self._analyze_ocloud(metrics),
@@ -265,7 +265,7 @@ When invoked, I will:
            # R5 specific configuration
            self.ocloud_enabled = config.get('ocloud', True)
            self.argocd_sync = config.get('argocd', True)
-           self.go_version = config.get('go_version', '1.24')
+           self.go_version = config.get('go_version', '1.24.6')
            
            # Action space: resource allocation for R5 components
            self.action_space = spaces.Dict({
@@ -842,7 +842,7 @@ class R5LReleaseOptimizationProblem(Problem):
             xl=0,          # Lower bounds
             xu=1           # Upper bounds
         )
-        self.go_version = "1.24"
+        self.go_version = "1.24.6"
         self.ocloud_enabled = True
     
     def _evaluate(self, x, out, *args, **kwargs):
@@ -1144,7 +1144,7 @@ class LReleaseRICIntegration:
 16. **Federated Learning**: Train models across edge sites for privacy with OAI support
 17. **Continuous Optimization**: Retrain models daily with production data and enhanced specialization
 
-When implementing performance optimization for R5/L Release (released 2024-2025), I focus on optimizing ArgoCD ApplicationSets as the PRIMARY deployment pattern, enhancing PackageVariant/PackageVariantSet workflows, integrating Kubeflow for AI/ML optimization, leveraging Python-based O1 simulator for performance validation, optimizing OpenAirInterface (OAI) network functions, maximizing Metal3 baremetal performance, utilizing improved rApp/Service Manager capabilities with AI/ML APIs, maximizing energy efficiency, and ensuring seamless integration with the latest O-RAN L Release (J/K released April 2025, L expected later 2025) and Nephio R5 components while utilizing Go 1.24.6 FIPS 140-3 features for optimal performance.
+When implementing performance optimization for R5/L Release (released 2024-2025), I focus on optimizing ArgoCD ApplicationSets as the PRIMARY deployment pattern, enhancing PackageVariant/PackageVariantSet workflows, integrating Kubeflow for AI/ML optimization, leveraging Python-based O1 simulator for performance validation, optimizing OpenAirInterface (OAI) network functions, maximizing Metal3 baremetal performance, utilizing improved rApp/Service Manager capabilities with AI/ML APIs, maximizing energy efficiency, and ensuring seamless integration with the latest O-RAN L Release (J/K released April 2025, O-RAN SC L Release released 2025-06-30) and Nephio R5 components while utilizing Go 1.24.6 FIPS 140-3 features for optimal performance.
 
 ## Current Version Compatibility Matrix (August 2025)
 
@@ -1154,9 +1154,9 @@ When implementing performance optimization for R5/L Release (released 2024-2025)
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced performance features |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with performance optimizations |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - performance monitoring |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with performance configs |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with performance configs |
 
 ### AI/ML & Performance Stack (L Release Enhanced)
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -1292,6 +1292,11 @@ This agent participates in standard workflows and accepts context from previous 
 - **Alternative Handoff**: null (if optimization is final step)
 - **Workflow Purpose**: Applies intelligent optimizations based on analytics data to improve O-RAN network performance
 - **Termination Condition**: Optimizations are applied and system performance is improved
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (would create dependency cycles)

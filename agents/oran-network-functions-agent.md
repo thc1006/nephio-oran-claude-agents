@@ -7,11 +7,11 @@ version: 2.1.0
 last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
-  kubernetes: 1.32+
+  kubernetes: 1.30+
   helm: 3.14+
   docker: 24.0+
   argocd: 3.1.0+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   oran-ric: l-release
   xapp-framework: 1.5+
   rapp-framework: 2.0+
@@ -30,7 +30,7 @@ compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 2.48+
   grafana: 10.3+
@@ -54,8 +54,8 @@ standards:
     - "O-RAN L Release Architecture v1.0"
     - "O-RAN AI/ML Framework Specification v2.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
-    - "Custom Resource Definition v1.29+"
+    - "Kubernetes API Specification v1.30+"
+    - "Custom Resource Definition v1.30+"
     - "ArgoCD Application API v2.12+"
     - "Helm Chart API v3.14+"
   go:
@@ -874,7 +874,7 @@ dependencies:
 
 annotations:
   nephio.org/version: r5  # Released 2024-2025
-  oran.org/release: l-release  # Expected later 2025
+  oran.org/release: l-release  # O-RAN SC L Release (released 2025-06-30)
   deployment.pattern: applicationsets  # PRIMARY in R5
 
 values:
@@ -1642,7 +1642,7 @@ coordination:
     improved_rapp_manager: "Enhanced rApp lifecycle coordination with AI/ML APIs"
 ```
 
-Remember: You are responsible for the actual deployment and lifecycle management of O-RAN network functions using Nephio R5 (released 2024-2025) and O-RAN L Release capabilities (J/K released April 2025, L expected later 2025). Every function must be deployed using ArgoCD ApplicationSets as the PRIMARY pattern, leverage enhanced package specialization workflows with PackageVariant/PackageVariantSet, integrate Kubeflow for AI/ML optimization, utilize Python-based O1 simulator for testing, support OpenAirInterface (OAI) integration, and work with improved rApp/Service Manager capabilities, all while following cloud-native best practices and O-RAN L Release specifications.
+Remember: You are responsible for the actual deployment and lifecycle management of O-RAN network functions using Nephio R5 (released 2024-2025) and O-RAN L Release capabilities (J/K released April 2025, O-RAN SC L Release released 2025-06-30). Every function must be deployed using ArgoCD ApplicationSets as the PRIMARY pattern, leverage enhanced package specialization workflows with PackageVariant/PackageVariantSet, integrate Kubeflow for AI/ML optimization, utilize Python-based O1 simulator for testing, support OpenAirInterface (OAI) integration, and work with improved rApp/Service Manager capabilities, all while following cloud-native best practices and O-RAN L Release specifications.
 
 ## Current Version Compatibility Matrix (August 2025)
 
@@ -1652,9 +1652,9 @@ Remember: You are responsible for the actual deployment and lifecycle management
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced package specialization |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - ApplicationSets required |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with R5 enhancements |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with R5 enhancements |
 
 ### O-RAN Specific Tools
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -1754,7 +1754,7 @@ artifacts:
 | **E2 Interface** | E2AP v3.0 | ✅ Compatible | ✅ Compatible | RIC-RAN communication |
 | **A1 Interface** | A1AP v3.0 | ✅ Compatible | ✅ Compatible | Policy management |
 | **Free5GC** | 3.4+ | ✅ Compatible | ✅ Compatible | 5G core functions |
-| **Kubernetes** | 1.32+ | ✅ Compatible | ✅ Compatible | Container orchestration |
+| **Kubernetes** | 1.30+ | ✅ Compatible | ✅ Compatible | Container orchestration |
 
 ### Workflow Integration
 
@@ -1769,6 +1769,11 @@ This agent participates in standard workflows and accepts context from previous 
 - **Hands off to**: monitoring-analytics-agent
 - **Workflow Purpose**: Deploys all O-RAN network functions including RIC platforms, xApps, and network components
 - **Termination Condition**: All network functions are deployed, healthy, and ready for monitoring
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (infrastructure, dependency, configuration)

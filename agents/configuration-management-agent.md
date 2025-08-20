@@ -14,8 +14,8 @@ dependencies:
   pyang: 2.6.1+
   terraform: 1.7+
   ansible: 9.2+
-  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
-  kubernetes: 1.32+
+  kubectl: 1.30.x-1.34.x  # Kubernetes 1.30+ (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
+  kubernetes: 1.30+
   python: 3.11+
   yaml: 1.2
   json-schema: draft-07
@@ -23,7 +23,7 @@ compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.32+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 3.5.0  # LTS version
   grafana: 12.1.0  # Latest stable
@@ -44,8 +44,8 @@ standards:
     - "O-RAN L Release Architecture v1.0"
     - "O-RAN AI/ML Framework Specification v2.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
-    - "Custom Resource Definition v1.29+"
+    - "Kubernetes API Specification v1.30+"
+    - "Custom Resource Definition v1.30+"
     - "ArgoCD Application API v2.12+"
   go:
     - "Go Language Specification 1.24.6"
@@ -75,7 +75,7 @@ You are a configuration management specialist for Nephio R5-O-RAN L Release auto
 ### Nephio R5 Package Management (Released 2024-2025)
 - **ArgoCD ApplicationSets Configuration**: Managing PRIMARY deployment pattern configurations (R5 requirement)
 - **Enhanced Package Specialization Workflows**: Advanced customization automation for different deployment targets (R5 feature)
-- **Kpt Package Development**: Creating and managing Kpt packages with v1.0.0-beta.27+ support
+- **Kpt Package Development**: Creating and managing Kpt packages with v1.0.0-beta.55+ support
 - **PackageVariant/PackageVariantSet**: Enhanced downstream package generation with R5 automation features
 - **KRM Functions**: Developing starlark, apply-replacements, and set-labels functions with Go 1.24.6 compatibility
 - **Kubeflow Configuration Management**: Configuration for L Release AI/ML pipeline integration
@@ -164,10 +164,10 @@ When invoked, I will:
        targetRevision: main
        path: network-functions
        plugin:
-         name: kpt-v1.0.0-beta.27
+         name: kpt-v1.0.0-beta.55
          env:
            - name: KPT_VERSION
-             value: v1.0.0-beta.27+
+             value: v1.0.0-beta.55+
      destination:
        server: https://kubernetes.default.svc
        namespace: oran
@@ -328,7 +328,7 @@ module o-ran-interfaces {
 // - O-RAN.WG1.O1-Interface.0-v16.00 (L Release O1 interface)
 // - O-RAN.WG4.MP.0-R004-v16.01 (L Release YANG models)
 // - Nephio R5 Architecture Specification v2.0
-// - Kubernetes API Specification v1.32
+// - Kubernetes API Specification v1.30+
 package main
 
 import (
@@ -760,7 +760,7 @@ function validate_package() {
 | **Kpt** | 1.0.0-beta.27+ | ✅ Compatible | ✅ Compatible | Package orchestration |
 | **ArgoCD** | 3.1.0+ | ✅ Compatible | ✅ Compatible | Primary GitOps engine |
 | **Porch** | 1.0.0+ | ✅ Compatible | ✅ Compatible | Package orchestration API |
-| **Kubernetes** | 1.32+ | ✅ Compatible | ✅ Compatible | Configuration target |
+| **Kubernetes** | 1.30+ | ✅ Compatible | ✅ Compatible | Configuration target |
 | **Kustomize** | 5.0+ | ✅ Compatible | ✅ Compatible | Configuration overlays |
 | **Helm** | 3.14+ | ✅ Compatible | ✅ Compatible | Package management |
 
@@ -813,9 +813,9 @@ When working with configurations, I prioritize compatibility with Nephio R5 and 
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced package specialization |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (Released) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - configuration deployment |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with R5 enhancements |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with R5 enhancements |
 
 ### Configuration Management Tools
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -825,7 +825,7 @@ When working with configurations, I prioritize compatibility with Nephio R5 and 
 | **Pyang** | 2.6.1 | 2.6.1+ | 2.6.1 | ✅ Current | YANG model validation with L Release extensions |
 | **Terraform** | 1.7.0 | 1.7.0+ | 1.7.0 | ✅ Current | Infrastructure as code |
 | **Ansible** | 9.2.0 | 9.2.0+ | 9.2.0 | ✅ Current | Configuration automation |
-| **kubectl** | 1.32.0 | 1.32.0+ | 1.32.0 | ✅ Current | Kubernetes configuration CLI |
+| **kubectl** | 1.30.0 | 1.32.0+ | 1.34.0 | ✅ Current | Kubernetes configuration CLI |
 
 ### Configuration Standards and Validation
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -868,7 +868,7 @@ When working with configurations, I prioritize compatibility with Nephio R5 and 
 
 ### Compatibility Notes
 - **ArgoCD Primary**: MANDATORY for R5 configuration deployment - ConfigSync legacy only for migration
-- **Enhanced Package Specialization**: PackageVariant/PackageVariantSet require Nephio R5.0.0+ and kpt v1.0.0-beta.27+
+- **Enhanced Package Specialization**: PackageVariant/PackageVariantSet require Nephio R5.0.0+ and kpt v1.0.0-beta.55+
 - **YANG Model Support**: L Release extensions require pyang 2.6.1+ and updated XSLT processors
 - **Multi-vendor Configuration**: Translation requires enhanced XSLT support and vendor-specific adapters
 - **Python O1 Simulator**: Key L Release configuration feature requires Python 3.11+ integration
@@ -928,6 +928,11 @@ This agent participates in standard workflows and accepts context from previous 
 
 **Validation Rules**:
 - Cannot handoff to earlier stage agents (infrastructure, dependency)
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
+
 - Must complete configuration before network function deployment
 - Follows stage progression: Configuration (3) → Network Functions (4)
 - **Cycle Prevention**: When accepting from performance-optimization-agent, workflow context must indicate optimization cycle completion to prevent infinite loops

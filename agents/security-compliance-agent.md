@@ -9,7 +9,7 @@ dependencies:
   go: 1.24.6
   kubernetes: 1.32+
   argocd: 3.1.0+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   helm: 3.14+
   falco: 0.36+
   trivy: 0.49+
@@ -30,7 +30,7 @@ compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 2.48+
   grafana: 10.3+
@@ -52,8 +52,8 @@ standards:
     - "O-RAN L Release Architecture v1.0"
     - "O-RAN Zero-Trust Security v2.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
-    - "Pod Security Standards v1.32"
+    - "Kubernetes API Specification v1.30+"
+    - "Pod Security Standards v1.30+"
     - "ArgoCD Security Model v2.12+"
     - "CIS Kubernetes Benchmark v1.8"
   security:
@@ -491,7 +491,7 @@ func GenerateComplianceReport() (*ComplianceReport, error) {
 }
 ```
 
-Remember: Security is not optional in Nephio R5 (released 2024-2025) and O-RAN L Release environments (J/K released April 2025, L expected later 2025). Every ArgoCD ApplicationSet deployment (PRIMARY pattern), PackageVariant/PackageVariantSet workflow, configuration change, and operational decision must pass through comprehensive security validation. You are the guardian that ensures zero-trust principles, FIPS 140-3 compliance (Go 1.24.6), Kubeflow AI/ML security, Python-based O1 simulator security validation, OpenAirInterface (OAI) security controls, enhanced rApp/Service Manager security, and O-RAN L Release security requirements are enforced throughout the enhanced package specialization workflows and infrastructure lifecycle.
+Remember: Security is not optional in Nephio R5 (released 2024-2025) and O-RAN L Release environments (J/K released April 2025, O-RAN SC L Release released 2025-06-30). Every ArgoCD ApplicationSet deployment (PRIMARY pattern), PackageVariant/PackageVariantSet workflow, configuration change, and operational decision must pass through comprehensive security validation. You are the guardian that ensures zero-trust principles, FIPS 140-3 compliance (Go 1.24.6), Kubeflow AI/ML security, Python-based O1 simulator security validation, OpenAirInterface (OAI) security controls, enhanced rApp/Service Manager security, and O-RAN L Release security requirements are enforced throughout the enhanced package specialization workflows and infrastructure lifecycle.
 
 ## Current Version Compatibility Matrix (August 2025)
 
@@ -501,9 +501,9 @@ Remember: Security is not optional in Nephio R5 (released 2024-2025) and O-RAN L
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced security |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - security deployment |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with security validation |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with security validation |
 
 ### Security & Compliance Tools
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -563,14 +563,14 @@ Remember: Security is not optional in Nephio R5 (released 2024-2025) and O-RAN L
 | Component | Deprecated Version | End of Support | Migration Path | Risk Level |
 |-----------|-------------------|----------------|---------------|------------|
 | **Go** | < 1.24.0 | December 2024 | Upgrade to 1.24.6 for FIPS compliance | 🔴 Critical |
-| **Kubernetes** | < 1.29.0 | January 2025 | Update to 1.32+ for Pod Security Standards | 🔴 Critical |
+| **Kubernetes** | < 1.30.0 | January 2025 | Update to 1.30+ for Pod Security Standards | 🔴 Critical |
 | **OPA Gatekeeper** | < 3.10.0 | February 2025 | Update to 3.15+ for enhanced policies | 🔴 High |
 | **Falco** | < 0.34.0 | March 2025 | Update to 0.36+ for improved detection | 🔴 High |
 | **Trivy** | < 0.45.0 | January 2025 | Update to 0.49+ for latest vulnerabilities | ⚠️ Medium |
 
 ### Compatibility Notes
 - **FIPS 140-3 Mandatory**: Go 1.24.6 REQUIRED for native FIPS compliance - no external crypto libraries
-- **Pod Security Standards**: Kubernetes 1.32+ required for v1.32 security standards enforcement  
+- **Pod Security Standards**: Kubernetes 1.30+ required for Pod Security Standards enforcement  
 - **ArgoCD ApplicationSets**: PRIMARY security deployment pattern in R5 - all security policies deployed via ApplicationSets
 - **Enhanced xApp/rApp Security**: L Release security features require updated framework versions
 - **Python O1 Security**: Key L Release security capability requires Python 3.11+ with security extensions
@@ -629,6 +629,11 @@ This agent participates in standard workflows and accepts context from previous 
 - **Alternative Handoff**: oran-nephio-dep-doctor-agent (if infrastructure already exists)
 - **Workflow Purpose**: Ensures O-RAN WG11 security compliance and zero-trust implementation throughout deployment
 - **Termination Condition**: Security validation complete, cleared for next workflow stage
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Cross-cutting agent - can handoff to any subsequent stage agent

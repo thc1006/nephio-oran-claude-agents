@@ -1,6 +1,8 @@
 module github.com/nephio-oran-claude-agents
 
-go 1.24.6
+go 1.24
+
+toolchain go1.24.6
 
 require (
 	github.com/cenkalti/backoff/v4 v4.3.0

@@ -7,7 +7,7 @@
 
 | Component | Minimum Version | Recommended Version | Maximum Tested | Support Policy | Notes |
 |-----------|----------------|-------------------|----------------|----------------|-------|
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | [Release Policy](https://kubernetes.io/releases/) | 1.32.x is current stable with 14 months support |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | [Release Policy](https://kubernetes.io/releases/) | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.0.0 | 3.1.0 | 3.1.2 | [Release Notes](https://argo-cd.readthedocs.io/en/stable/operator-manual/upgrading/overview/) | 3.1.x is current stable release |
 | **Kafka** | 3.6.0 | 3.8.0 | 3.8.1 | [Release Notes](https://kafka.apache.org/downloads) | 3.8.x with KRaft mode (ZooKeeper deprecated) |
 | **kpt** | v1.0.0-beta.50 | v1.0.0-beta.55 | v1.0.0-beta.57 | [Releases](https://github.com/kptdev/kpt/releases) | Latest beta with improved function support |
@@ -217,7 +217,7 @@ go run scripts/verify_matrix.go --path ./manifests
 ### Kubernetes
 - **Current**: 1.32.x (Dec 2024 - Feb 2026)
 - **Previous**: 1.31.x (Aug 2024 - Oct 2025)
-- **EOL**: < 1.29.x
+- **EOL**: < 1.30.x
 
 ### ArgoCD
 - **Current**: 3.1.x

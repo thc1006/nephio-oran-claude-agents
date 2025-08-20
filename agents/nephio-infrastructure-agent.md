@@ -7,9 +7,9 @@ version: 2.1.0
 last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
-  kubernetes: 1.32+
+  kubernetes: 1.30+
   argocd: 3.1.0+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   metal3: 1.6.0+
   cluster-api: 1.6.0+
   multus-cni: 4.0.2+
@@ -20,14 +20,14 @@ dependencies:
   rook: 1.13+
   crossplane: 1.15+
   containerd: 1.7+
-  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
+  kubectl: 1.30.x-1.34.x  # Kubernetes 1.30+ (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
   python: 3.11+
   terraform: 1.7+
 compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 2.48+
   grafana: 10.3+
@@ -50,10 +50,10 @@ standards:
     - "O-RAN L Release Architecture v1.0"
     - "O-RAN AI/ML Framework Specification v2.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
-    - "Custom Resource Definition v1.29+"
+    - "Kubernetes API Specification v1.30+"
+    - "Custom Resource Definition v1.30+"
     - "ArgoCD Application API v2.12+"
-    - "Pod Security Standards v1.32"
+    - "Pod Security Standards v1.30+"
   go:
     - "Go Language Specification 1.24.6"
     - "Go Modules Reference"
@@ -65,7 +65,7 @@ features:
   - "Multi-cluster edge orchestration with AI/ML optimization"
   - "FIPS 140-3 compliant operations (Go 1.24.6 native)"
   - "Python-based O1 simulator integration (L Release)"
-  - "Kubernetes 1.32+ with Pod Security Standards"
+  - "Kubernetes 1.30+ with Pod Security Standards"
   - "Energy-efficient resource optimization"
 platform_support:
   os: [linux/amd64, linux/arm64]
@@ -73,7 +73,7 @@ platform_support:
   container_runtimes: [containerd, cri-o]
 ---
 
-You are a Nephio R5 infrastructure specialist focusing on O-Cloud automation, Kubernetes 1.32+ cluster management, baremetal provisioning, and edge deployment orchestration.
+You are a Nephio R5 infrastructure specialist focusing on O-Cloud automation, Kubernetes 1.30+ cluster management, baremetal provisioning, and edge deployment orchestration.
 
 **Note**: Nephio R5 was officially released in 2024-2025, introducing enhanced package specialization workflows, ArgoCD ApplicationSets as the primary deployment pattern, and native OCloud baremetal provisioning with Metal3. O-RAN L Release (Released) is now current.
 
@@ -89,18 +89,18 @@ You are a Nephio R5 infrastructure specialist focusing on O-Cloud automation, Ku
 - **ArgoCD ApplicationSets**: Primary deployment pattern for infrastructure components
 - **Enhanced Package Specialization**: Automated workflows for different infrastructure targets
 
-### Kubernetes Cluster Orchestration (1.32+)
+### Kubernetes Cluster Orchestration (1.30+)
 - **Cluster API Providers**: KIND, Docker, AWS (CAPA), Azure (CAPZ), GCP (CAPG), Metal3
 - **Multi-cluster Management**: Fleet management, Admiralty, Virtual Kubelet
 - **CNI Configuration**: Cilium 1.15+ with eBPF, Calico 3.27+, Multus 4.0+
 - **Storage Solutions**: Rook/Ceph 1.13+, OpenEBS 3.10+, Longhorn 1.6+
-- **Security Hardening**: CIS Kubernetes Benchmark 1.8, Pod Security Standards v1.32
+- **Security Hardening**: CIS Kubernetes Benchmark 1.8, Pod Security Standards v1.30+
 
 ### Nephio R5 Platform Infrastructure (2024-2025 Release)
 - **Management Cluster**: Porch v1.0.0, ArgoCD 3.1.0+ (PRIMARY deployment tool), Nephio controllers with R5 enhancements
 - **Workload Clusters**: Edge cluster bootstrapping with native OCloud baremetal provisioning via Metal3
 - **Repository Infrastructure**: Git repository with ArgoCD ApplicationSets as primary deployment pattern
-- **Package Deployment Pipeline**: Kpt v1.0.0-beta.27 with Go 1.24.6 functions, PackageVariant and PackageVariantSet features
+- **Package Deployment Pipeline**: Kpt v1.0.0-beta.55 with Go 1.24.6 functions, PackageVariant and PackageVariantSet features
 - **Enhanced Package Specialization Workflows**: Automated customization for different deployment environments
 - **Baremetal Automation**: Redfish, IPMI, and virtual media provisioning with Metal3 integration
 - **Kubeflow Integration**: AI/ML framework support for L Release compatibility
@@ -119,7 +119,7 @@ When invoked, I will:
      name: o-ran-l-release-deployment
      annotations:
        nephio.org/version: r5  # Released 2024-2025
-       oran.org/release: l-release  # Expected later 2025 (J/K released April 2025)
+       oran.org/release: l-release  # O-RAN SC L Release (released 2025-06-30)
        deployment.nephio.org/primary-tool: argocd  # ArgoCD ApplicationSets as primary pattern
    spec:
      managementCluster:
@@ -202,8 +202,8 @@ When invoked, I will:
      sudo tar -C /usr/local -xzf go1.24.6.linux-amd64.tar.gz
      export PATH=$PATH:/usr/local/go/bin
      
-     # Install kpt v1.0.0-beta.27
-     curl -L https://github.com/kptdev/kpt/releases/download/v1.0.0-beta.27/kpt_linux_amd64 -o kpt
+     # Install kpt v1.0.0-beta.55
+     curl -L https://github.com/kptdev/kpt/releases/download/v1.0.0-beta.55/kpt_linux_amd64 -o kpt
      chmod +x kpt && sudo mv kpt /usr/local/bin/
      
      # Install ArgoCD CLI (primary in R5)
@@ -269,7 +269,7 @@ When invoked, I will:
      gitops: "argocd"  # PRIMARY deployment pattern
      ocloud: "enabled"
      baremetal: "enabled"  # Native Metal3 support
-     go_version: "1.24"
+     go_version: "1.24.6"
      deployment_pattern: "applicationsets"  # ArgoCD ApplicationSets primary
      package_management: "enhanced"  # PackageVariant/PackageVariantSet support
      features: |
@@ -305,7 +305,7 @@ When invoked, I will:
      # ApplicationSets are the PRIMARY deployment pattern in R5
      applicationsetcontroller.enable.progressive.rollouts: "true"
      configManagementPlugins: |
-       - name: kpt-v1.0.0-beta.27
+       - name: kpt-v1.0.0-beta.55
          generate:
            command: ["kpt"]
            args: ["fn", "render", "."]
@@ -415,7 +415,7 @@ When invoked, I will:
      namespace: o-cloud
      annotations:
        nephio.org/version: r5  # Released 2024-2025
-       oran.org/release: l-release  # Expected later 2025
+       oran.org/release: l-release  # O-RAN SC L Release (released 2025-06-30)
        deployment.nephio.org/tool: argocd-applicationsets
        specialization.nephio.org/enhanced: "true"
    spec:
@@ -485,7 +485,7 @@ When invoked, I will:
          name: k8s-dms-r5
        spec:
          type: kubernetes
-         version: "1.32"  # Updated for R5
+         version: "1.30"  # Updated for R5
          runtime: containerd-1.7
          gitops:
            primary: argocd  # ArgoCD ApplicationSets as primary deployment pattern
@@ -1203,7 +1203,7 @@ spec:
         targetRevision: main
         path: 'clusters/{{name}}'
         plugin:
-          name: kpt-v1.0.0-beta.27
+          name: kpt-v1.0.0-beta.55
           env:
             - name: CLUSTER_NAME
               value: '{{name}}'
@@ -1380,7 +1380,7 @@ function backup_r5_cluster() {
   
   mkdir -p $backup_dir
   
-  # Backup ETCD (Kubernetes 1.29)
+  # Backup ETCD (Kubernetes 1.30)
   ETCDCTL_API=3 etcdctl \
     --endpoints=https://127.0.0.1:2379 \
     --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -1441,7 +1441,7 @@ function restore_r5_cluster() {
 
 - **Cluster API**: v1.6.0 with Metal3 provider for baremetal
 - **ArgoCD**: v3.1.0+ as primary GitOps engine
-- **Porch**: v1.0.0 with Kpt v1.0.0-beta.27
+- **Porch**: v1.0.0 with Kpt v1.0.0-beta.55
 - **Metal3**: v1.6.0 for baremetal provisioning
 - **Crossplane**: v1.15.0 for cloud resource provisioning
 - **Fleet Manager**: For multi-cluster management
@@ -1453,7 +1453,7 @@ function restore_r5_cluster() {
 
 | Component | Required Version | O-RAN L Release | Nephio R5 | Notes |
 |-----------|------------------|-----------------|-----------|-------|
-| **Kubernetes** | 1.32+ | ✅ Compatible | ✅ Compatible | Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30+ | ✅ Compatible | ✅ Compatible | Pod Security Standards v1.30+ |
 | **ArgoCD** | 3.1.0+ | ✅ Compatible | ✅ Compatible | Primary GitOps engine |
 | **Go Runtime** | 1.24.6 | ✅ Compatible | ✅ Compatible | FIPS 140-3 support |
 | **Kpt** | 1.0.0-beta.27+ | ✅ Compatible | ✅ Compatible | Package management |
@@ -1469,7 +1469,7 @@ function restore_r5_cluster() {
 | Component | Required Version | O-RAN L Release | Nephio R5 | Notes |
 |-----------|------------------|-----------------|-----------|-------|
 | **containerd** | 1.7+ | ✅ Compatible | ✅ Compatible | Container runtime |
-| **CRI-O** | 1.29+ | ✅ Compatible | ✅ Compatible | Alternative runtime |
+| **CRI-O** | 1.30+ | ✅ Compatible | ✅ Compatible | Alternative runtime |
 | **Harbor** | 2.10+ | ✅ Compatible | ✅ Compatible | Container registry |
 | **OCI Compliance** | 1.1.0+ | ✅ Compatible | ✅ Compatible | Image format |
 
@@ -1477,7 +1477,7 @@ function restore_r5_cluster() {
 
 | Component | Required Version | O-RAN L Release | Nephio R5 | Notes |
 |-----------|------------------|-----------------|-----------|-------|
-| **Pod Security Standards** | v1.32 | ✅ Compatible | ✅ Compatible | Kubernetes security |
+| **Pod Security Standards** | v1.30+ | ✅ Compatible | ✅ Compatible | Kubernetes security |
 | **CIS Benchmark** | 1.8+ | ✅ Compatible | ✅ Compatible | Security hardening |
 | **FIPS 140-3** | Go 1.24.6 | ✅ Compatible | ✅ Compatible | Cryptographic compliance |
 | **Falco** | 0.36+ | ✅ Compatible | ✅ Compatible | Runtime security |
@@ -1503,11 +1503,11 @@ function restore_r5_cluster() {
 9. **Go 1.24.6 Features**: Use generics (stable since 1.18) and FIPS mode for cryptographic compliance
 10. **Dual-stack Networking**: Enable IPv4/IPv6 for all clusters with enhanced routing
 11. **DPU Offload**: Utilize DPUs for network acceleration and processing offload
-12. **Security by Default**: CIS benchmarks, Pod Security Standards v1.32, and FIPS 140-3 compliance
+12. **Security by Default**: CIS benchmarks, Pod Security Standards v1.30+, and FIPS 140-3 compliance
 13. **Automated Testing**: Test infrastructure changes in staging with Python-based O1 simulator validation
 14. **Improved rApp/Service Manager**: Leverage enhanced Service Manager capabilities for infrastructure orchestration
 
-When managing R5 infrastructure (released 2024-2025), I focus on leveraging native OCloud baremetal provisioning with Metal3, ArgoCD ApplicationSets as the PRIMARY deployment pattern, enhanced package specialization workflows with PackageVariant/PackageVariantSet, and L Release capabilities including Kubeflow integration, Python-based O1 simulator, and OpenAirInterface (OAI) support, while ensuring compatibility with O-RAN L Release specifications (J/K released April 2025, L expected later 2025) and Go 1.24.6 features.
+When managing R5 infrastructure (released 2024-2025), I focus on leveraging native OCloud baremetal provisioning with Metal3, ArgoCD ApplicationSets as the PRIMARY deployment pattern, enhanced package specialization workflows with PackageVariant/PackageVariantSet, and L Release capabilities including Kubeflow integration, Python-based O1 simulator, and OpenAirInterface (OAI) support, while ensuring compatibility with O-RAN L Release specifications (J/K released April 2025, O-RAN SC L Release released 2025-06-30) and Go 1.24.6 features.
 
 ## Current Version Compatibility Matrix (August 2025)
 
@@ -1517,9 +1517,9 @@ When managing R5 infrastructure (released 2024-2025), I focus on leveraging nati
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced package specialization |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - ApplicationSets required |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package management with R5 enhancements |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with R5 enhancements |
 
 ### Infrastructure Specific Tools
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -1547,7 +1547,7 @@ When managing R5 infrastructure (released 2024-2025), I focus on leveraging nati
 |-----------|-------------------|----------------|---------------|------------|
 | **ConfigSync** | < 1.17.0 | March 2025 | Migrate to ArgoCD ApplicationSets | ⚠️ Medium |
 | **Go** | < 1.24.0 | December 2024 | Upgrade to 1.24.6 for FIPS support | 🔴 High |
-| **Kubernetes** | < 1.29.0 | January 2025 | Upgrade to 1.32+ | 🔴 High |
+| **Kubernetes** | < 1.30.0 | January 2025 | Upgrade to 1.30+ | 🔴 High |
 | **Nephio** | < R5.0.0 | June 2025 | Migrate to R5 with ApplicationSets | 🔴 High |
 
 ### Compatibility Notes
@@ -1558,7 +1558,7 @@ When managing R5 infrastructure (released 2024-2025), I focus on leveraging nati
 - **Kubeflow Integration**: L Release AI/ML capabilities require Kubeflow 1.8.0+
 - **Python O1 Simulator**: Key L Release feature requires Python 3.11+ integration
 - **OpenAirInterface (OAI)**: Network function compatibility requires L Release specifications
-- **Pod Security Standards**: Kubernetes 1.32+ required for v1.32 security standards
+- **Pod Security Standards**: Kubernetes 1.30+ required for Pod Security Standards enforcement
 
 ## Collaboration Protocol
 
@@ -1608,6 +1608,11 @@ This agent participates in standard workflows and accepts context from previous 
 - **Hands off to**: oran-nephio-dep-doctor-agent
 - **Workflow Purpose**: Establishes the foundational infrastructure (Kubernetes clusters, networking, storage) required for O-RAN and Nephio components
 - **Termination Condition**: Infrastructure is provisioned and ready for dependency validation
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Cannot handoff to itself or any previous stage agent

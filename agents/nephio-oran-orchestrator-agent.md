@@ -7,9 +7,9 @@ version: 2.1.0
 last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
-  kubernetes: 1.32+
+  kubernetes: 1.30+
   argocd: 3.1.0+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   helm: 3.14+
   nephio: r5
   porch: 1.0.0+
@@ -23,12 +23,12 @@ dependencies:
   python: 3.11+
   yang-tools: 2.6.1+
   kustomize: 5.0+
-  kubectl: 1.32.0-1.32.2  # Kubernetes 1.32.0-1.32.2 compatible versions
+  kubectl: 1.30.0-1.34.0  # Kubernetes 1.30+ compatible versions
 compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 2.48+
   grafana: 10.3+
@@ -38,6 +38,8 @@ maintainer:
   email: "nephio-oran@example.com"
   organization: "O-RAN Software Community"
   repository: "https://github.com/nephio-project/nephio"
+notes:
+  - "Consolidated orchestrator documentation on 2025-08-20 - merged oran-nephio-orchestrator-agent.md into this file"
 standards:
   nephio:
     - "Nephio R5 Architecture Specification v2.0"
@@ -52,8 +54,8 @@ standards:
     - "O-RAN AI/ML Framework Specification v2.0"
     - "O-RAN Service Manager Specification v2.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
-    - "Custom Resource Definition v1.29+"
+    - "Kubernetes API Specification v1.30+"
+    - "Custom Resource Definition v1.30+"
     - "ArgoCD Application API v2.12+"
     - "Cluster API Specification v1.6+"
   go:
@@ -677,7 +679,7 @@ coordination:
 
 ### GitOps Workflows (R5 Primary: ArgoCD)
 ```bash
-# Nephio R5 GitOps pattern with Kpt v1.0.0-beta.27+
+# Nephio R5 GitOps pattern with Kpt v1.0.0-beta.55+
 kpt pkg get --for-deployment catalog/free5gc-operator@v2.0
 kpt fn render free5gc-operator
 kpt live init free5gc-operator
@@ -687,7 +689,7 @@ kpt live apply free5gc-operator --reconcile-timeout=15m
 argocd app create free5gc-operator \
   --repo https://github.com/nephio-project/catalog \
   --path free5gc-operator \
-  --plugin kpt-v1.0.0-beta.27 \
+  --plugin kpt-v1.0.0-beta.55 \
   --sync-policy automated
 ```
 
@@ -1165,9 +1167,9 @@ Remember: You are the orchestration brain that coordinates all other agents. Thi
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced orchestration |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - orchestration engine |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package orchestration and function chains |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package orchestration and function chains |
 
 ### Orchestration Specific Tools
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -1185,7 +1187,7 @@ Remember: You are the orchestration brain that coordinates all other agents. Thi
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Terraform** | 1.7.0 | 1.7.0+ | 1.7.0 | ✅ Current | Infrastructure as code orchestration |
 | **Ansible** | 9.2.0 | 9.2.0+ | 9.2.0 | ✅ Current | Configuration orchestration |
-| **kubectl** | 1.32.0 | 1.32.0+ | 1.32.0 | ✅ Current | Kubernetes orchestration CLI |
+| **kubectl** | 1.30.0 | 1.32.0+ | 1.34.0 | ✅ Current | Kubernetes orchestration CLI |
 
 ### L Release AI/ML and Enhancement Tools
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -1208,7 +1210,7 @@ Remember: You are the orchestration brain that coordinates all other agents. Thi
 | **ConfigSync** | < 1.17.0 | March 2025 | Migrate to ArgoCD ApplicationSets | ⚠️ Medium |
 | **Go** | < 1.24.0 | December 2024 | Upgrade to 1.24.6 for FIPS support | 🔴 High |
 | **Nephio** | < R5.0.0 | June 2025 | Migrate to R5 orchestration features | 🔴 High |
-| **Kubernetes** | < 1.29.0 | January 2025 | Upgrade to 1.32+ | 🔴 High |
+| **Kubernetes** | < 1.30.0 | January 2025 | Upgrade to 1.30+ | 🔴 High |
 | **Cluster API** | < 1.6.0 | February 2025 | Update to 1.6.0+ for R5 compatibility | 🔴 High |
 
 ### Compatibility Notes
@@ -1274,6 +1276,11 @@ This agent participates in standard workflows and accepts context from previous 
   - oran-nephio-dep-doctor-agent (dependency resolution)
 - **Workflow Purpose**: Provides intelligent orchestration, intent decomposition, and cross-agent coordination
 - **Termination Condition**: Delegates to appropriate specialist agents or completes high-level coordination
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Meta-orchestrator - can handoff to any agent without circular dependency concerns

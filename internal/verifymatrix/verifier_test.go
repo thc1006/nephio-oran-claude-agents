@@ -244,7 +244,7 @@ func TestPrintResults(t *testing.T) {
 			Line:      1,
 			Component: "kubernetes",
 			Version:   "1.28.0",
-			Issue:     "Version 1.28.0 is below minimum 1.29.0",
+			Issue:     "Version 1.28.0 is below minimum 1.30.0",
 			Severity:  "ERROR",
 		},
 		{

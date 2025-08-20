@@ -158,7 +158,42 @@ fi
 
 echo ""
 
-# 5. Summary
+# 5. Check for kpt versions
+echo "5. kpt Version Checks"
+echo "--------------------"
+
+# Check for deprecated kpt versions
+check_version 'v1\.0\.0-beta\.27' "deprecated kpt v1.0.0-beta.27" 'COMPATIBILITY_MATRIX\.md|verifier_test\.go|kpt_configuration_as_data\.md|kpt_doctor\.sh'
+
+# Verify kpt v1.0.0-beta.55+ is used
+echo -n "Verifying kpt v1.0.0-beta.55+ usage... "
+kpt_correct=$(grep -r 'v1\.0\.0-beta\.5[5-9]' "${REPO_ROOT}" \
+    --include="*.md" \
+    --include="*.yaml" \
+    --include="*.yml" \
+    --include="*.go" \
+    --include="*.sh" \
+    --exclude-dir=".git" \
+    --exclude="verify_versions.sh" | wc -l)
+
+if [ "$kpt_correct" -gt 0 ]; then
+    echo -e "${GREEN}✓ Found ${kpt_correct} correct kpt version references${NC}"
+else
+    echo -e "${YELLOW}⚠ Warning: No kpt v1.0.0-beta.55+ references found${NC}"
+fi
+
+# Check if KPT_VERSION is defined in Makefile
+echo -n "Checking Makefile KPT_VERSION definition... "
+if [ -f "${REPO_ROOT}/Makefile" ] && grep -q "KPT_VERSION.*v1\.0\.0-beta\.5[5-9]" "${REPO_ROOT}/Makefile"; then
+    echo -e "${GREEN}✓ KPT_VERSION properly defined in Makefile${NC}"
+else
+    echo -e "${RED}✗ KPT_VERSION not found or incorrect in Makefile${NC}"
+    EXIT_CODE=1
+fi
+
+echo ""
+
+# 6. Summary
 echo "========================================="
 echo "Verification Summary"
 echo "========================================="
@@ -170,6 +205,7 @@ if [ $EXIT_CODE -eq 0 ]; then
     echo "  • Go: 1.24.6 (patch stream)"
     echo "  • FIPS: GODEBUG=fips140=on (Go Cryptographic Module v1.0.0)"
     echo "  • Kubernetes: 1.32.x (safe floor with skew policy)"
+    echo "  • kpt: v1.0.0-beta.55+ (Configuration as Data with enhanced functions)"
 else
     echo -e "${RED}✗ Some version checks failed!${NC}"
     echo ""

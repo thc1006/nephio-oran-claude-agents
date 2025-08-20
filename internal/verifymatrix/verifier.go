@@ -40,9 +40,9 @@ type Config struct {
 // Version constraints from COMPATIBILITY_MATRIX.md
 var versionMatrix = map[string]VersionConstraint{
 	"kubernetes": {
-		Min:         "1.29.0",
+		Min:         "1.30.0",
 		Recommended: "1.32.0",
-		Max:         "1.32.2",
+		Max:         "1.34.0",
 		Pattern:     regexp.MustCompile(`kubernetes:\s*([0-9]+\.[0-9]+(?:\.[0-9]+)?)`),
 	},
 	"argocd": {

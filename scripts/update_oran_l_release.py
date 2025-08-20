@@ -23,13 +23,13 @@ def update_file(filepath):
     patterns = [
         # Replace "upcoming L" with current L Release
         (r'L Release expected later in 2025', 
-         'L Release (June 30, 2025) is current'),
+         'O-RAN SC L Release (released 2025-06-30)'),
         (r'L[- ]Release[- ]expected[^,\.]*(late 2025|later in 2025)', 
-         'L Release (June 30, 2025) is current'),
+         'O-RAN SC L Release (released 2025-06-30)'),
         (r'⚠️ Upcoming.*Expected late 2025, J/K released April 2025',
          '✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025)'),
         (r'J and K releases in April 2025, with L Release expected later in 2025',
-         'J and K releases in April 2025, with L Release (June 30, 2025) now current'),
+         'J and K releases in April 2025, with O-RAN SC L Release (released 2025-06-30)'),
         
         # Update O-RAN SC version references
         (r'O-RAN SC.*L-Release-Beta.*L-Release.*L-Release.*⚠️ Upcoming',

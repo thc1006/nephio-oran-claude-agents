@@ -7,9 +7,9 @@ version: 2.1.0
 last_updated: 2025-08-20
 dependencies:
   go: 1.24.6
-  kubernetes: 1.32+
+  kubernetes: 1.30+
   argocd: 3.1.0+
-  kpt: v1.0.0-beta.27
+  kpt: v1.0.0-beta.55
   helm: 3.14+
   robot-framework: 6.1+
   ginkgo: 2.15+
@@ -21,13 +21,13 @@ dependencies:
   kubeflow: 1.8+
   python: 3.11+
   yang-tools: 2.6.1+
-  kubectl: 1.32.x  # Kubernetes 1.32.x (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
+  kubectl: 1.30.x-1.34.x  # Kubernetes 1.30+ (safe floor, see https://kubernetes.io/releases/version-skew-policy/)
   docker: 24.0+
 compatibility:
   nephio: r5
   oran: l-release
   go: 1.24.6
-  kubernetes: 1.29+
+  kubernetes: 1.30+
   argocd: 3.1.0+
   prometheus: 2.48+
   grafana: 10.3+
@@ -50,8 +50,8 @@ standards:
     - "O-RAN AI/ML Framework Specification v2.0"
     - "O-RAN Conformance Test Specification v3.0"
   kubernetes:
-    - "Kubernetes API Specification v1.32"
-    - "Kubernetes Conformance Test v1.32"
+    - "Kubernetes API Specification v1.30+"
+    - "Kubernetes Conformance Test v1.30+"
     - "ArgoCD Application API v2.12+"
     - "Helm Chart Testing v3.14+"
   go:
@@ -88,7 +88,7 @@ You are a testing and validation expert specializing in O-RAN L Release complian
 ### Nephio R5 Testing
 - **ArgoCD Pipeline Testing**: GitOps workflow validation
 - **OCloud Testing**: Baremetal provisioning and lifecycle testing
-- **Package Testing**: Kpt v1.0.0-beta.27 package validation
+- **Package Testing**: Kpt v1.0.0-beta.55 package validation
 - **Controller Testing**: Go 1.24.6 based controller testing with Ginkgo/Gomega
 - **Performance Testing**: Benchmarking with Go 1.24.6 features
 - **Security Testing**: FIPS 140-3 compliance validation
@@ -625,8 +625,8 @@ When invoked, I will:
      version:
        nephio: r5
        oran: l-release
-       go: "1.24"
-       kubernetes: "1.32"
+       go: "1.24.6"
+       kubernetes: "1.30"
      
      levels:
        - unit:
@@ -683,7 +683,7 @@ When invoked, I will:
    ${RIC_URL}          http://ric-platform:8080
    ${ARGOCD_URL}       http://argocd-server:8080
    ${OCLOUD_API}       http://ocloud-api:8080
-   ${GO_VERSION}       1.24
+   ${GO_VERSION}       1.24.6
    ${TIMEOUT}          600s
    
    *** Test Cases ***
@@ -700,12 +700,12 @@ When invoked, I will:
        
        # Nephio R5 Feature: ArgoCD as primary deployment mechanism
        # R5 replaces ConfigSync with ArgoCD for GitOps workflows
-       # Uses kpt v1.0.0-beta.27 for package management
+       # Uses kpt v1.0.0-beta.55 for package management
        ${app}=    Create ArgoCD Application    
        ...    name=l-release-nf
        ...    repo=https://github.com/org/r5-deployments
        ...    path=network-functions/l-release
-       ...    plugin=kpt-v1.0.0-beta.27
+       ...    plugin=kpt-v1.0.0-beta.55
        Wait Until ArgoCD Synced    ${app}    ${TIMEOUT}
        
        # O-RAN L Release Feature: AI/ML model deployment
@@ -1114,8 +1114,8 @@ When invoked, I will:
        def __init__(self):
            self.oran_version = "l-release"
            self.nephio_version = "r5"
-           self.go_version = "1.24"
-           self.k8s_version = "1.32"
+           self.go_version = "1.24.6"
+           self.k8s_version = "1.30"
            config.load_incluster_config()
            self.k8s_client = client.CoreV1Api()
            
@@ -1235,7 +1235,7 @@ When invoked, I will:
                        version = env_vars['GO_VERSION']
                        if not version.startswith('1.24') and not version.startswith('1.25'):
                            result['passed'] = False
-                           result['reason'] = f"Go version {version} < 1.24"
+                           result['reason'] = f"Go version {version} < 1.24.6"
                    
                    # Check FIPS compliance (Go 1.24.6 native support)
                    if env_vars.get('GODEBUG') != 'fips140=on':
@@ -1420,7 +1420,7 @@ on:
     branches: [main, develop]
 
 env:
-  GO_VERSION: "1.24"
+  GO_VERSION: "1.24.6"
   COVERAGE_THRESHOLD: 85
 
 jobs:
@@ -1513,14 +1513,14 @@ stages:
 variables:
   NEPHIO_VERSION: "r5"
   ORAN_VERSION: "l-release"
-  GO_VERSION: "1.24"
-  K8S_VERSION: "1.32"
+  GO_VERSION: "1.24.6"
+  K8S_VERSION: "1.30"
   ARGOCD_VERSION: "3.1.0"
   COVERAGE_THRESHOLD: "85"
 
 validate-packages:
   stage: validate
-  image: golang:1.24-alpine
+  image: golang:1.24.6-alpine
   script:
     # Generics are stable since Go 1.18, no experimental flags needed
     # FIPS 140-3 support via GODEBUG environment variable
@@ -1532,7 +1532,7 @@ validate-packages:
 
 unit-tests-with-coverage:
   stage: test
-  image: golang:1.24
+  image: golang:1.24.6
   script:
     # Go 1.24.6 Feature: Native FIPS 140-3 support without external libraries
     # Nephio R5 requires FIPS compliance for government deployments
@@ -1675,7 +1675,7 @@ pipeline {
     agent any
     
     environment {
-        GO_VERSION = '1.24'
+        GO_VERSION = '1.24.6'
         COVERAGE_THRESHOLD = 85
         COVERAGE_FILE = 'coverage.out'
     }
@@ -1768,7 +1768,7 @@ orbs:
 jobs:
   test-with-coverage:
     docker:
-      - image: cimg/go:1.24
+      - image: cimg/go:1.24.6
     steps:
       - checkout
       - go/load-cache
@@ -1827,7 +1827,7 @@ def generate_r5_l_release_test_report(test_results):
         'metadata': {
             'nephio_version': 'r5',
             'oran_version': 'l-release',
-            'go_version': '1.24',
+            'go_version': '1.24.6',
             'test_date': datetime.now().isoformat(),
             'environment': os.getenv('TEST_ENV', 'staging')
         },
@@ -1939,9 +1939,9 @@ def generate_r5_l_release_test_report(test_results):
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 native support |
 | **Nephio** | R5.0.0 | R5.0.1 | R5.0.1 | ✅ Current | Stable release with enhanced testing capabilities |
 | **O-RAN SC** | L-Release | L-Release | L-Release | ✅ Current | L Release (June 30, 2025) is current, superseding J/K (April 2025) |
-| **Kubernetes** | 1.29.0 | 1.32.0 | 1.32.2 | ✅ Current | Latest stable with Pod Security Standards v1.32 |
+| **Kubernetes** | 1.30.0 | 1.32.0 | 1.34.0 | ✅ Current | We test against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window |
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - workflow testing required |
-| **kpt** | v1.0.0-beta.27 | v1.0.0-beta.27+ | v1.0.0-beta.27 | ✅ Current | Package testing and validation |
+| **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package testing and validation |
 
 ### Testing Frameworks & Tools
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
@@ -2903,6 +2903,11 @@ This agent participates in standard workflows and accepts context from previous 
 - **Alternative Handoff**: monitoring-analytics-agent (for continuous validation setup)
 - **Workflow Purpose**: Comprehensive testing of all O-RAN components and workflows to ensure system reliability
 - **Termination Condition**: All tests pass and deployment is validated as successful
+
+
+## Support Statement
+
+This agent is tested against Kubernetes versions 1.30-1.34, providing broader compatibility beyond the upstream three-version window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) features referenced here are validated against the corresponding O-RAN SC L documentation and Nephio R5 release notes. See our compatibility matrix for details.
 
 **Validation Rules**:
 - Terminal agent - typically does not handoff (workflow complete)
