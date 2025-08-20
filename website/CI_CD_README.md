@@ -45,9 +45,9 @@ The pipeline enforces strict content validation:
 
 ```bash
 # Banned phrases (will fail CI)
-- "expected later"
-- "2024-2025" 
-- "beta.27"
+- Outdated release references
+- Incorrect version formats
+- Beta versions below beta.55
 
 # Required versions (must be present)
 - "O-RAN L (2025-06-30)"
