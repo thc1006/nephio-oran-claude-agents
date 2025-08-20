@@ -3,6 +3,9 @@
 CLAUDE.md
 .mcp.json
 
+# Node modules
+node_modules/
+
 # Python cache
 __pycache__/
 *.py[cod]
