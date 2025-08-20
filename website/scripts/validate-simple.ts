@@ -1,0 +1,46 @@
+#!/usr/bin/env tsx
+
+import * as fs from 'fs';
+import * as path from 'path';
+
+const DOCS_DIR = path.resolve(__dirname, '../docs');
+const BANNED_IN_DOCS = [
+  /expected\s+later/gi,
+  /2024-2025/g,
+  /beta\.27/g,
+];
+
+let hasErrors = false;
+
+// Only check actual documentation files
+const checkDir = (dir: string) => {
+  const files = fs.readdirSync(dir);
+  
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    const stat = fs.statSync(fullPath);
+    
+    if (stat.isDirectory()) {
+      checkDir(fullPath);
+    } else if (file.endsWith('.md') || file.endsWith('.mdx')) {
+      const content = fs.readFileSync(fullPath, 'utf-8');
+      
+      for (const pattern of BANNED_IN_DOCS) {
+        if (pattern.test(content)) {
+          console.error(`❌ Found banned pattern in ${fullPath}`);
+          hasErrors = true;
+        }
+      }
+    }
+  }
+};
+
+console.log('🔍 Validating documentation content...');
+checkDir(DOCS_DIR);
+
+if (hasErrors) {
+  console.error('❌ Validation failed!');
+  process.exit(1);
+} else {
+  console.log('✅ All documentation validated successfully!');
+}
