@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
   CACHE_VERSION: 'v1'
 
 jobs:
@@ -460,14 +460,23 @@ jobs:
     steps:
       - name: Check CI status
         run: |
-          if [ "${{ needs.validate-content.result }}" != "success" ] || \
-             [ "${{ needs.markdown-lint.result }}" != "success" ] || \
-             [ "${{ needs.build-and-test.result }}" != "success" ] || \
-             [ "${{ needs.link-check.result }}" != "success" ] || \
-             [ "${{ needs.accessibility-check.result }}" != "success" ] || \
-             [ "${{ needs.lighthouse-ci.result }}" != "success" ] || \
-             [ "${{ needs.security-scan.result }}" != "success" ]; then
-            echo "❌ CI pipeline failed"
+          echo "Checking CI job results..."
+          echo "  validate-content: ${{ needs.validate-content.result }}"
+          echo "  markdown-lint: ${{ needs.markdown-lint.result }}"
+          echo "  build-and-test: ${{ needs.build-and-test.result }}"
+          echo "  link-check: ${{ needs.link-check.result }}"
+          echo "  accessibility-check: ${{ needs.accessibility-check.result }}"
+          echo "  lighthouse-ci: ${{ needs.lighthouse-ci.result }}"
+          echo "  security-scan: ${{ needs.security-scan.result }}"
+          
+          if [[ "${{ needs.validate-content.result }}" != "success" ]] || \
+             [[ "${{ needs.markdown-lint.result }}" != "success" ]] || \
+             [[ "${{ needs.build-and-test.result }}" != "success" ]] || \
+             [[ "${{ needs.link-check.result }}" != "success" ]] || \
+             [[ "${{ needs.accessibility-check.result }}" != "success" ]] || \
+             [[ "${{ needs.lighthouse-ci.result }}" != "success" ]] || \
+             [[ "${{ needs.security-scan.result }}" != "success" ]]; then
+            echo "❌ CI pipeline failed - one or more jobs did not succeed"
             exit 1
           else
             echo "✅ CI pipeline completed successfully"
