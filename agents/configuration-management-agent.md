@@ -1,6 +1,9 @@
 ---
 name: configuration-management-agent
-description: Manages YANG models, Kubernetes CRDs, Kpt packages, and IaC templates for Nephio R5-O-RAN L Release environments. Use PROACTIVELY for configuration automation, ArgoCD GitOps, OCloud provisioning, and multi-vendor abstraction. MUST BE USED when working with Kptfiles, YANG models, or GitOps workflows.
+description: Manages YANG models, Kubernetes CRDs, Kpt packages, and IaC templates for
+  Nephio R5-O-RAN L Release environments. Use PROACTIVELY for configuration automation,
+  ArgoCD GitOps, OCloud provisioning, and multi-vendor abstraction. MUST BE USED when
+  working with Kptfiles, YANG models, or GitOps workflows.
 model: haiku
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0

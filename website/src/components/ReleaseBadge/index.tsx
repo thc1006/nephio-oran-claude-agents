@@ -57,7 +57,7 @@ export default function ReleaseBadge({
 }: ReleaseBadgeProps): React.ReactElement {
   const config = releaseConfig[type];
   const displayVersion = version || config.defaultVersion;
-  
+
   const badgeClasses = clsx(
     'badge',
     `badge--${config.color}`,
@@ -73,7 +73,7 @@ export default function ReleaseBadge({
   return (
     <span className={badgeClasses} title={`${config.label} ${displayVersion}`}>
       {showIcon && (
-        <span className={styles.icon} role="img" aria-label={config.label}>
+        <span className={styles.icon} role='img' aria-label={config.label}>
           {config.icon}
         </span>
       )}
@@ -87,21 +87,21 @@ export default function ReleaseBadge({
 
 // Convenience components for common use cases
 export function OranBadge(props: Omit<ReleaseBadgeProps, 'type'>) {
-  return <ReleaseBadge type="oran" {...props} />;
+  return <ReleaseBadge type='oran' {...props} />;
 }
 
 export function NephioBadge(props: Omit<ReleaseBadgeProps, 'type'>) {
-  return <ReleaseBadge type="nephio" {...props} />;
+  return <ReleaseBadge type='nephio' {...props} />;
 }
 
 export function GoBadge(props: Omit<ReleaseBadgeProps, 'type'>) {
-  return <ReleaseBadge type="go" {...props} />;
+  return <ReleaseBadge type='go' {...props} />;
 }
 
 export function KptBadge(props: Omit<ReleaseBadgeProps, 'type'>) {
-  return <ReleaseBadge type="kpt" {...props} />;
+  return <ReleaseBadge type='kpt' {...props} />;
 }
 
 export function KubernetesBadge(props: Omit<ReleaseBadgeProps, 'type'>) {
-  return <ReleaseBadge type="kubernetes" {...props} />;
+  return <ReleaseBadge type='kubernetes' {...props} />;
 }

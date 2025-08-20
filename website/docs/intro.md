@@ -1,24 +1,30 @@
 ---
-title: "Introduction to Nephio O-RAN Claude Agents"
-description: "Learn about intelligent orchestration for cloud-native O-RAN deployments using Claude agents"
+title: 'Introduction to Nephio O-RAN Claude Agents'
+description:
+  'Learn about intelligent orchestration for cloud-native O-RAN deployments using Claude agents'
 sidebar_position: 1
-tags: ["introduction", "nephio", "o-ran", "claude-agents", "overview"]
-last_updated: "2025-08-20"
+tags: ['introduction', 'nephio', 'o-ran', 'claude-agents', 'overview']
+last_updated: '2025-08-20'
 ---
 
 # Nephio O-RAN Claude Agents
 
-Welcome to the **Nephio O-RAN Claude Agents** documentation! This project provides intelligent orchestration capabilities for cloud-native O-RAN deployments using Claude AI agents.
+Welcome to the **Nephio O-RAN Claude Agents** documentation! This project provides intelligent
+orchestration capabilities for cloud-native O-RAN deployments using Claude AI agents.
 
 ## What are Nephio O-RAN Claude Agents?
 
-Nephio O-RAN Claude Agents are AI-powered automation tools that help orchestrate, manage, and optimize O-RAN (Open Radio Access Network) deployments on Kubernetes using the Nephio platform. These agents leverage Claude AI to provide intelligent decision-making, automated troubleshooting, and streamlined operations for complex cloud-native telecommunications infrastructure.
+Nephio O-RAN Claude Agents are AI-powered automation tools that help orchestrate, manage, and
+optimize O-RAN (Open Radio Access Network) deployments on Kubernetes using the Nephio platform.
+These agents leverage Claude AI to provide intelligent decision-making, automated troubleshooting,
+and streamlined operations for complex cloud-native telecommunications infrastructure.
 
 ## Key Features
 
 ### 🤖 Intelligent Automation
 
-- **AI-Powered Decision Making**: Claude agents analyze system state and make intelligent operational decisions
+- **AI-Powered Decision Making**: Claude agents analyze system state and make intelligent
+  operational decisions
 - **Automated Troubleshooting**: Proactive issue detection and resolution
 - **Self-Healing Infrastructure**: Automatic recovery from common failure scenarios
 
@@ -44,7 +50,7 @@ Our agent ecosystem is organized into specialized categories:
 
 - **Nephio O-RAN Orchestrator Agent**: Central orchestration and coordination
 
-### 🏭 Infrastructure Agents  
+### 🏭 Infrastructure Agents
 
 - **Nephio Infrastructure Agent**: Infrastructure provisioning and management
 - **O-RAN Nephio Dependency Doctor Agent**: Dependency analysis and resolution
@@ -160,10 +166,13 @@ graph TB
 
 ### Getting Help
 
-- Review the [Compatibility Matrix](https://github.com/thc1006/nephio-oran-claude-agents/blob/main/COMPATIBILITY_MATRIX.md)
+- Review the
+  [Compatibility Matrix](https://github.com/thc1006/nephio-oran-claude-agents/blob/main/COMPATIBILITY_MATRIX.md)
 - Check existing [GitHub Issues](https://github.com/thc1006/nephio-oran-claude-agents/issues)
 - Join the Nephio community discussions
 
 ---
 
-Ready to get started? Explore our [agent documentation](/docs/orchestration/nephio-oran-orchestrator-agent) or check out the [quick start guide](/docs/guides/quickstart)!
+Ready to get started? Explore our
+[agent documentation](/docs/orchestration/nephio-oran-orchestrator-agent) or check out the
+[quick start guide](/docs/guides/quickstart)!

@@ -18,9 +18,9 @@ export interface CompatibilityMatrixProps {
 }
 
 const statusMap = {
-  'supported': { label: 'Supported', className: 'success' },
-  'deprecated': { label: 'Deprecated', className: 'warning' },
-  'experimental': { label: 'Experimental', className: 'info' },
+  supported: { label: 'Supported', className: 'success' },
+  deprecated: { label: 'Deprecated', className: 'warning' },
+  experimental: { label: 'Experimental', className: 'info' },
   'not-supported': { label: 'Not Supported', className: 'danger' },
 };
 
@@ -33,11 +33,13 @@ export default function CompatibilityMatrix({
   return (
     <div className={clsx('compatibility-matrix', styles.compatibilityMatrix)}>
       <h3 className={styles.title}>{title}</h3>
-      
+
       <div className={clsx('table-responsive', styles.tableContainer)}>
-        <table className={clsx('table table-striped', styles.table, {
-          [styles.compact]: compact,
-        })}>
+        <table
+          className={clsx('table table-striped', styles.table, {
+            [styles.compact]: compact,
+          })}
+        >
           <thead>
             <tr>
               <th>Component</th>
@@ -57,7 +59,7 @@ export default function CompatibilityMatrix({
                   <code>{item.version}</code>
                 </td>
                 <td className={styles.status}>
-                  <span 
+                  <span
                     className={clsx(
                       'badge',
                       `badge--${statusMap[item.status].className}`,
@@ -72,9 +74,7 @@ export default function CompatibilityMatrix({
                     {item.lastTested || 'N/A'}
                   </td>
                 )}
-                <td className={styles.notes}>
-                  {item.notes || '—'}
-                </td>
+                <td className={styles.notes}>{item.notes || '—'}</td>
               </tr>
             ))}
           </tbody>
@@ -86,7 +86,7 @@ export default function CompatibilityMatrix({
         <div className={styles.legendItems}>
           {Object.entries(statusMap).map(([key, value]) => (
             <span key={key} className={styles.legendItem}>
-              <span 
+              <span
                 className={clsx(
                   'badge',
                   `badge--${value.className}`,

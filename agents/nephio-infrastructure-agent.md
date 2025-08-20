@@ -1,6 +1,10 @@
 ---
 name: nephio-infrastructure-agent
-description: Manages O-Cloud infrastructure, Kubernetes cluster lifecycle, and edge deployments for Nephio R5 environments with native baremetal support. Use PROACTIVELY for cluster provisioning, OCloud orchestration, resource optimization, and ArgoCD-based deployments. MUST BE USED when working with Cluster API, O-Cloud resources, or edge infrastructure with Go 1.24.6 compatibility.
+description: Manages O-Cloud infrastructure, Kubernetes cluster lifecycle, and edge deployments
+  for Nephio R5 environments with native baremetal support. Use PROACTIVELY for cluster
+  provisioning, OCloud orchestration, resource optimization, and ArgoCD-based deployments.
+  MUST BE USED when working with Cluster API, O-Cloud resources, or edge infrastructure
+  with Go 1.24.6 compatibility.
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0

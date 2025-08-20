@@ -1,6 +1,10 @@
 ---
 name: monitoring-analytics-agent
-description: Implements comprehensive observability for Nephio R5-O-RAN L Release environments with enhanced AI/ML analytics, VES 7.3 event streaming, and NWDAF integration. Use PROACTIVELY for performance monitoring, KPI tracking, anomaly detection using L Release AI/ML APIs. MUST BE USED when setting up monitoring or analyzing performance metrics with Go 1.24.6 support.
+description: Implements comprehensive observability for Nephio R5-O-RAN L Release environments
+  with enhanced AI/ML analytics, VES 7.3 event streaming, and NWDAF integration. Use
+  PROACTIVELY for performance monitoring, KPI tracking, anomaly detection using L Release
+  AI/ML APIs. MUST BE USED when setting up monitoring or analyzing performance metrics
+  with Go 1.24.6 support.
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0

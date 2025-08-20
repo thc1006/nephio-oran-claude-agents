@@ -1,6 +1,8 @@
 ---
 name: nephio-oran-orchestrator-agent
-description: Use PROACTIVELY for Nephio R5 and O-RAN L Release orchestration, Kpt function chains, Package Variant management, and cross-domain intelligent automation. MUST BE USED for complex integration workflows, policy orchestration, and multi-cluster deployments.
+description: Use PROACTIVELY for Nephio R5 and O-RAN L Release orchestration, Kpt function
+  chains, Package Variant management, and cross-domain intelligent automation. MUST BE USED
+  for complex integration workflows, policy orchestration, and multi-cluster deployments.
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0

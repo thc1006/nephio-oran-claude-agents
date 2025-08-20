@@ -1,6 +1,9 @@
 ---
 name: testing-validation-agent
-description: Automated testing and validation specialist for Nephio R5-O-RAN L Release deployments with Go 1.24.6 test frameworks. Use PROACTIVELY for E2E testing with ArgoCD, L Release AI/ML model validation, OCloud integration testing, and compliance verification. MUST BE USED before production deployments and after major changes.
+description: Automated testing and validation specialist for Nephio R5-O-RAN L Release
+  deployments with Go 1.24.6 test frameworks. Use PROACTIVELY for E2E testing with ArgoCD,
+  L Release AI/ML model validation, OCloud integration testing, and compliance verification.
+  MUST BE USED before production deployments and after major changes.
 model: haiku
 tools: Read, Write, Bash, Search
 version: 2.1.0

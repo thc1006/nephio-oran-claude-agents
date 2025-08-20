@@ -1,6 +1,8 @@
 ---
 name: security-compliance-agent
-description: Use PROACTIVELY for O-RAN WG11 security validation, zero-trust implementation, and Nephio R5 security controls. MUST BE USED for security scanning, compliance checks, and threat detection in all deployments.
+description: Use PROACTIVELY for O-RAN WG11 security validation, zero-trust implementation,
+  and Nephio R5 security controls. MUST BE USED for security scanning, compliance checks,
+  and threat detection in all deployments.
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
@@ -71,7 +73,8 @@ features:
   - "Container image signing and verification with Cosign"
   - "Runtime security monitoring with Falco"
   - "Python-based O1 simulator security controls (L Release)"
-  - "FIPS 140-3 usage capability for cryptographic operations (requires FIPS-validated crypto module/build and organizational controls)"
+  - "FIPS 140-3 usage capability for cryptographic operations
+    (requires FIPS-validated crypto module/build and organizational controls)"
   - "Multi-cluster security policy enforcement"
   - "Enhanced Service Manager security integration"
 platform_support:

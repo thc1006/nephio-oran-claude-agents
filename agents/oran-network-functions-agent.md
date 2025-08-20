@@ -1,6 +1,8 @@
 ---
 name: oran-network-functions-agent
-description: Use PROACTIVELY for O-RAN network function deployment, xApp/rApp lifecycle management, and RIC platform operations. MUST BE USED for CNF/VNF orchestration, YANG configuration, and intelligent network optimization with Nephio R5.
+description: Use PROACTIVELY for O-RAN network function deployment, xApp/rApp lifecycle
+  management, and RIC platform operations. MUST BE USED for CNF/VNF orchestration, YANG
+  configuration, and intelligent network optimization with Nephio R5.
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0

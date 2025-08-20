@@ -1,14 +1,16 @@
 ---
-title: "Quick Start Guide"
-description: "Get up and running with Nephio O-RAN Claude Agents in minutes"
+title: 'Quick Start Guide'
+description: 'Get up and running with Nephio O-RAN Claude Agents in minutes'
 sidebar_position: 1
-tags: ["quickstart", "getting-started", "installation", "deployment"]
-last_updated: "2025-08-20"
+tags: ['quickstart', 'getting-started', 'installation', 'deployment']
+last_updated: '2025-08-20'
 ---
 
 # Quick Start Guide
 
-Get up and running with Nephio O-RAN Claude Agents in just a few minutes! This guide will walk you through the essential steps to deploy and start using Claude agents in your O-RAN environment.
+Get up and running with Nephio O-RAN Claude Agents in just a few minutes! This guide will
+walk you through the essential steps to deploy and start using Claude agents in your O-RAN
+environment.
 
 ## Prerequisites
 
@@ -228,7 +230,8 @@ If you encounter issues:
 1. **Check the logs**: `kubectl logs -n nephio-agents deployment/orchestrator-agent`
 2. **Review the troubleshooting guide**: [Troubleshooting](/docs/guides/troubleshooting)
 3. **Run diagnostics**: `make diagnose`
-4. **Check compatibility**: Review the [Compatibility Matrix](https://github.com/thc1006/nephio-oran-claude-agents/blob/main/COMPATIBILITY_MATRIX.md)
+4. **Check compatibility**: Review the [Compatibility Matrix](
+   https://github.com/thc1006/nephio-oran-claude-agents/blob/main/COMPATIBILITY_MATRIX.md)
 5. **Community support**: Join the [Nephio community](https://nephio.org/community/)
 
 ## Clean Up
@@ -239,8 +242,10 @@ To remove all agents and resources:
 make clean
 ```
 
-This will remove all agent deployments, services, and configurations while preserving your O-RAN workloads.
+This will remove all agent deployments, services, and configurations while preserving your
+O-RAN workloads.
 
 ---
 
-**Congratulations!** You now have Nephio O-RAN Claude Agents running in your environment. The agents are ready to help orchestrate and manage your O-RAN deployments intelligently.
+**Congratulations!** You now have Nephio O-RAN Claude Agents running in your environment.
+The agents are ready to help orchestrate and manage your O-RAN deployments intelligently.

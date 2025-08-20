@@ -1,14 +1,17 @@
 // Export all custom components for easy importing
 export { default as CompatibilityMatrix } from './CompatibilityMatrix';
-export type { CompatibilityData, CompatibilityMatrixProps } from './CompatibilityMatrix';
+export type {
+  CompatibilityData,
+  CompatibilityMatrixProps,
+} from './CompatibilityMatrix';
 
-export { 
+export {
   default as ReleaseBadge,
   OranBadge,
   NephioBadge,
   GoBadge,
   KptBadge,
-  KubernetesBadge
+  KubernetesBadge,
 } from './ReleaseBadge';
 export type { ReleaseBadgeProps, ReleaseType } from './ReleaseBadge';
 
