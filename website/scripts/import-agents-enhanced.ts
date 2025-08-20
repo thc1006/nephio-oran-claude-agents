@@ -34,8 +34,8 @@ const BANNED_PHRASES = [
 // Content normalization rules - STRICT VERSION ENFORCEMENT
 const CONTENT_REPLACEMENTS: Array<{ pattern: RegExp; replacement: string }> = [
   // O-RAN version normalization
-  { pattern: /O-RAN\s+L\s*\(expected later 2025\)/gi, replacement: 'O-RAN L (released 2025-06-30)' },
-  { pattern: /O-RAN\s+L\s*\(2024-2025\)/gi, replacement: 'O-RAN L (released 2025-06-30)' },
+  { pattern: /O-RAN\s+L\s*\(expected\s+later\s+2025\)/gi, replacement: 'O-RAN L (released 2025-06-30)' },
+  { pattern: /O-RAN\s+L\s*\(2024[-]2025\)/gi, replacement: 'O-RAN L (released 2025-06-30)' },
   { pattern: /O-RAN\s+L\s*release/gi, replacement: 'O-RAN L (released 2025-06-30)' },
   
   // Nephio version normalization
@@ -57,8 +57,8 @@ const CONTENT_REPLACEMENTS: Array<{ pattern: RegExp; replacement: string }> = [
   { pattern: /Golang\s+1\.24\.\d+/gi, replacement: 'Go 1.24.6' },
   
   // Generic date normalization
-  { pattern: /expected later 2025/gi, replacement: '2025-06-30' },
-  { pattern: /2024-2025/gi, replacement: '2025' },
+  { pattern: /expected\s+later\s+2025/gi, replacement: '2025-06-30' },
+  { pattern: /2024[-]2025/gi, replacement: '2025' },
 ];
 
 interface FrontMatter {
