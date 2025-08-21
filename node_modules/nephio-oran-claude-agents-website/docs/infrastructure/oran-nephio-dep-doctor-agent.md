@@ -567,13 +567,13 @@ ${detailed_root_cause}
 
 ### Solution for R5/L Release
 
-#### Immediate Fix
+### Immediate Fix
 ```bash
 ## R5/L Release specific fix
 ${fix_commands}
 ```
 
-#### Version Alignment
+### Version Alignment
 
 | Component | Required (R5/L) | Current | Action |
 |-----------|-----------------|---------|---------|
@@ -581,7 +581,7 @@ ${fix_commands}
 | Kpt | v1.0.0-beta.55+ | ${current} | ${action} |
 | ArgoCD | 3.1.0+ | ${current} | ${action} |
 
-#### Verification
+### Verification
 
 ```bash
 ## Verify R5/L Release compatibility
