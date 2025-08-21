@@ -198,7 +198,7 @@ go test -coverprofile=coverage.out -cpuprofile=cpu.prof ./...
 THRESHOLD=85
 COVERAGE_FILE="coverage.out"
 
-### Run tests with coverage
+## Run tests with coverage
 echo "Running tests with coverage..."
 go test -coverprofile=${COVERAGE_FILE} -covermode=atomic ./...
 
