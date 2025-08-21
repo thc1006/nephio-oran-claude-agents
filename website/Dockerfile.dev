@@ -1,7 +1,7 @@
 # Development Dockerfile for Docusaurus v3
 # Optimized for hot reload and development workflow
 
-ARG NODE_VERSION=20
+ARG NODE_VERSION=18
 FROM node:${NODE_VERSION}-alpine
 
 # Install development tools
