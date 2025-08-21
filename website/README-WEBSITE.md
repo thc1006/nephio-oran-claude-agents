@@ -79,7 +79,7 @@ npm start
 # Website runs at http://localhost:3000/nephio-oran-claude-agents/
 ```
 
-### Production Build
+## Production Build
 ```bash
 # Build for production
 npm run build
@@ -88,7 +88,7 @@ npm run build
 npm run serve
 ```
 
-### Deployment
+## Deployment
 ```bash
 # Deploy to GitHub Pages (requires GH_TOKEN)
 npm run deploy
@@ -112,7 +112,7 @@ npm run import:agents
 npx tsx scripts/validate-simple.ts
 ```
 
-### Enhanced Import (with full normalization)
+## Enhanced Import (with full normalization)
 ```bash
 npx tsx scripts/import-agents-enhanced.ts
 ```

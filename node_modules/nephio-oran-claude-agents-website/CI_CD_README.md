@@ -58,7 +58,7 @@ The pipeline enforces strict content validation:
 - "latest three minor releases" policy reference
 ```
 
-### Quality Gates
+## Quality Gates
 
 - **TypeScript**: Zero compilation errors
 - **ESLint**: No linting errors (warnings allowed)
@@ -85,7 +85,7 @@ The pipeline enforces strict content validation:
 - Custom error pages
 ```
 
-### Development Environment
+## Development Environment
 
 ```yaml
 # docker-compose.yml services:
@@ -114,7 +114,7 @@ npm run build
 npm run docker:dev
 ```
 
-### Testing Commands
+## Testing Commands
 
 ```bash
 # Full test suite
@@ -131,7 +131,7 @@ npm run lighthouse
 npm run docker:test
 ```
 
-### Validation Scripts
+## Validation Scripts
 
 ```bash
 # TypeScript validation

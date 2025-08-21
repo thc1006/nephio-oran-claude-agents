@@ -92,6 +92,8 @@ make deploy
 make all
 ```
 
+## Deploy Individual Categories
+
 ### Deploy Individual Categories (Optional)
 
 If you prefer to deploy specific agent categories:
@@ -151,6 +153,8 @@ kubectl apply -f examples/oran-cu-deployment.yaml
 kubectl logs -f -n nephio-agents deployment/orchestrator-agent
 ```
 
+## Monitor the Deployment
+
 ### Monitor the Deployment
 
 ```bash
@@ -187,6 +191,8 @@ kubectl scale deployment orchestrator-agent --replicas=2 -n nephio-agents
 # View agent logs
 kubectl logs -n nephio-agents deployment/orchestrator-agent -f
 ```
+
+## Troubleshooting
 
 ### Troubleshooting
 
