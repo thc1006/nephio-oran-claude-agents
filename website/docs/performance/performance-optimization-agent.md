@@ -81,21 +81,19 @@ standards:
     - "Go Performance Optimization Guide"
     - "Go FIPS 140-3 Compliance Guidelines"
 features:
-
-- "AI/ML-driven performance optimization with Kubeflow integration"
-- "Predictive scaling and capacity planning"
-- "Energy-efficient resource management (L Release)"
-- "Multi-cluster performance coordination"
-- "Python-based O1 simulator performance analysis (L Release)"
-- "FIPS 140-3 usage capability for performance monitoring
+  - "AI/ML-driven performance optimization with Kubeflow integration"
+  - "Predictive scaling and capacity planning"
+  - "Energy-efficient resource management (L Release)"
+  - "Multi-cluster performance coordination"
+  - "Python-based O1 simulator performance analysis (L Release)"
+  - "FIPS 140-3 usage capability for performance monitoring
     (requires FIPS-validated crypto module/build and organizational controls)"
-- "Real-time optimization recommendations"
-- "Enhanced Service Manager performance tuning"
+  - "Real-time optimization recommendations"
+  - "Enhanced Service Manager performance tuning"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
-
 ---
 
 You are a performance optimization expert specializing in O-RAN L Release AI/ML capabilities,

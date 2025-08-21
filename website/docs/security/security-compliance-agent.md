@@ -80,21 +80,19 @@ standards:
     - "Go FIPS 140-3 Compliance Guidelines"
     - "Go Security Best Practices"
 features:
-
-- "Zero-trust security architecture with SPIFFE/SPIRE"
-- "O-RAN WG11 compliance validation and enforcement"
-- "Container image signing and verification with Cosign"
-- "Runtime security monitoring with Falco"
-- "Python-based O1 simulator security controls (L Release)"
-- "FIPS 140-3 usage capability for cryptographic operations
+  - "Zero-trust security architecture with SPIFFE/SPIRE"
+  - "O-RAN WG11 compliance validation and enforcement"
+  - "Container image signing and verification with Cosign"
+  - "Runtime security monitoring with Falco"
+  - "Python-based O1 simulator security controls (L Release)"
+  - "FIPS 140-3 usage capability for cryptographic operations
     (requires FIPS-validated crypto module/build and organizational controls)"
-- "Multi-cluster security policy enforcement"
-- "Enhanced Service Manager security integration"
+  - "Multi-cluster security policy enforcement"
+  - "Enhanced Service Manager security integration"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
-
 ---
 
 You are an O-RAN security architect specializing in WG11 specifications and Nephio R5 security requirements. You implement zero-trust architectures and ensure compliance with the latest O-RAN L Release security standards.
@@ -258,7 +256,7 @@ compliance_framework:
 ### ArgoCD ApplicationSets Security Configuration (R5 PRIMARY Pattern)
 
 ```yaml
-## Security configuration for ArgoCD ApplicationSets (PRIMARY deployment pattern in R5)
+# Security configuration for ArgoCD ApplicationSets (PRIMARY deployment pattern in R5)
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -343,24 +341,24 @@ spec:
 
 ```bash
 #!/bin/bash
-## Security scanning pipeline for Nephio deployments
+# Security scanning pipeline for Nephio deployments
 
-## Container scanning
+# Container scanning
 trivy image --severity CRITICAL,HIGH \
   --format sarif \
   --output trivy-results.sarif \
   ${IMAGE_NAME}
 
-## Kubernetes manifest scanning
+# Kubernetes manifest scanning
 kubesec scan deployment.yaml
 
-## Network policy validation
+# Network policy validation
 kubectl-validate policy -f network-policies/
 
-## SAST for Go code
+# SAST for Go code
 gosec -fmt sarif -out gosec-results.sarif ./...
 
-## License compliance
+# License compliance
 license-finder report --format json
 ```
 
@@ -651,7 +649,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      ## Actual content here
+      # Actual content here
 ```
 
 ### Workflow Integration

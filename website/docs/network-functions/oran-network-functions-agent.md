@@ -1,6 +1,6 @@
 ---
-title: "O-RAN Network Functions Agent"
-description: "O-RAN network function deployment and management with Nephio R5"
+title: "Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)"
+description: "name: oran-network-functions-agent"
 sidebar_position: 7
 tags: ["claude-agent", "nephio", "o-ran", "network-functions", "kubernetes", "monitoring", "security", "network", "orchestration", "infrastructure", "testing", "configuration"]
 last_updated: "2025-08-21"
@@ -77,20 +77,18 @@ standards:
     - "Go Modules Reference"
     - "Go FIPS 140-3 Compliance Guidelines"
 features:
-
-- "xApp/rApp lifecycle management with enhanced Service Manager"
-- "RIC platform automation with Near-RT RIC and Non-RT RIC"
-- "E2 interface management with AI/ML policy enforcement"
-- "O1 interface with Python-based simulator (L Release)"
-- "ArgoCD ApplicationSet deployment (R5 primary GitOps)"
-- "FIPS 140-3 usage capability for network function operations (requires FIPS-validated crypto module/build and organizational controls)"
-- "YANG model configuration with multi-vendor support"
-- "AI/ML-driven network optimization with Kubeflow integration"
+  - "xApp/rApp lifecycle management with enhanced Service Manager"
+  - "RIC platform automation with Near-RT RIC and Non-RT RIC"
+  - "E2 interface management with AI/ML policy enforcement"
+  - "O1 interface with Python-based simulator (L Release)"
+  - "ArgoCD ApplicationSet deployment (R5 primary GitOps)"
+  - "FIPS 140-3 usage capability for network function operations (requires FIPS-validated crypto module/build and organizational controls)"
+  - "YANG model configuration with multi-vendor support"
+  - "AI/ML-driven network optimization with Kubeflow integration"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
-
 ---
 
 You are an O-RAN network functions specialist with deep expertise in O-RAN L Release specifications and Nephio R5 integration. You develop and deploy cloud-native network functions using Go 1.24.6 and modern Kubernetes patterns.
@@ -874,7 +872,7 @@ spec:
 ### Helm Chart Development
 
 ```yaml
-## NOTE: Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)
+# Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)
 apiVersion: v2
 name: oran-cu-cp
 version: 3.0.0  # R5 compatible with L Release features
@@ -900,7 +898,7 @@ annotations:
   deployment.pattern: applicationsets  # PRIMARY in R5
 
 values:
-  ## Enhanced deployment configuration (R5)
+  # Enhanced deployment configuration (R5)
   deployment:
     strategy: RollingUpdate
     replicas: 3
@@ -923,7 +921,7 @@ values:
         - name: e1-network
           vlan: 200
     
-  ## L Release enhancements
+  # L Release enhancements
   kubeflow:
     enabled: true  # AI/ML framework integration
     pipelines: true
@@ -961,7 +959,7 @@ values:
       oaiTracing: true  # OpenAirInterface tracing
 ```
 
-## YANG Configuration Management
+### YANG Configuration Management
 
 ```go
 // YANG-based configuration for O-RAN components with enhanced error handling
@@ -1286,13 +1284,13 @@ self_healing:
 
 ```bash
 #!/bin/bash
-## Deploy FlexRAN with Nephio
+# Deploy FlexRAN with Nephio
 
-## Create FlexRAN package variant
+# Create FlexRAN package variant
 kpt pkg get catalog/flexran-du@v24.03 flexran-du
 kpt fn eval flexran-du --image gcr.io/kpt-fn/set-namespace:v0.4 -- namespace=oran-du
 
-## Configure FlexRAN parameters
+# Configure FlexRAN parameters
 cat > flexran-du/setters.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
@@ -1305,12 +1303,12 @@ data:
   antenna_config: "8T8R"
 EOF
 
-## Apply specialization
+# Apply specialization
 kpt fn render flexran-du
 kpt live apply flexran-du
 ```
 
-## OpenAirInterface Integration (O-RAN SC L Release - 2025-06-30)
+### OpenAirInterface Integration (O-RAN SC L Release - 2025-06-30)
 
 ```yaml
 oai_deployment:
@@ -1777,7 +1775,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      ## Actual content here
+      # Actual content here
 ```
 
 ## Version Compatibility Matrix

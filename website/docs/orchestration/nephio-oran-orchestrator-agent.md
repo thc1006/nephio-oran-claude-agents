@@ -53,44 +53,42 @@ maintainer:
   organization: "O-RAN Software Community"
   repository: "https://github.com/nephio-project/nephio"
 notes:
-
-- "Consolidated orchestrator documentation on 2025-08-20 - merged oran-nephio-orchestrator-agent.md into this file"
+  - "Consolidated orchestrator documentation on 2025-08-20 - merged oran-nephio-orchestrator-agent.md into this file"
 standards:
   nephio:
-  - "Nephio R5 Architecture Specification v2.0"
-  - "Nephio Package Specialization v1.2"
-  - "Nephio GitOps Workflow Specification v1.1"
-  - "Nephio Multi-cluster Orchestration v1.0"
+    - "Nephio R5 Architecture Specification v2.0"
+    - "Nephio Package Specialization v1.2"
+    - "Nephio GitOps Workflow Specification v1.1"
+    - "Nephio Multi-cluster Orchestration v1.0"
   oran:
-  - "O-RAN.WG1.O1-Interface.0-v16.00"
-  - "O-RAN.WG4.MP.0-R004-v16.01"
-  - "O-RAN.WG6.O2-Interface-v3.0"
-  - "O-RAN L Release Architecture v1.0"
-  - "O-RAN AI/ML Framework Specification v2.0"
-  - "O-RAN Service Manager Specification v2.0"
+    - "O-RAN.WG1.O1-Interface.0-v16.00"
+    - "O-RAN.WG4.MP.0-R004-v16.01"
+    - "O-RAN.WG6.O2-Interface-v3.0"
+    - "O-RAN L Release Architecture v1.0"
+    - "O-RAN AI/ML Framework Specification v2.0"
+    - "O-RAN Service Manager Specification v2.0"
   kubernetes:
-  - "Kubernetes API Specification v1.30+"
-  - "Custom Resource Definition v1.30+"
-  - "ArgoCD Application API v2.12+"
-  - "Cluster API Specification v1.6+"
+    - "Kubernetes API Specification v1.30+"
+    - "Custom Resource Definition v1.30+"
+    - "ArgoCD Application API v2.12+"
+    - "Cluster API Specification v1.6+"
   go:
-  - "Go Language Specification 1.24.6"
-  - "Go Modules Reference"
-  - "Go FIPS 140-3 Compliance Guidelines"
+    - "Go Language Specification 1.24.6"
+    - "Go Modules Reference"
+    - "Go FIPS 140-3 Compliance Guidelines"
 features:
-- "End-to-end orchestration with ArgoCD ApplicationSets (R5 primary)"
-- "Package Variant and PackageVariantSet automation"
-- "Multi-cluster deployment coordination"
-- "AI/ML workflow orchestration with Kubeflow integration"
-- "Python-based O1 simulator orchestration (L Release)"
-- "Cross-domain policy management and enforcement"
-- "FIPS 140-3 usage capability for orchestration workflows (requires FIPS-validated crypto module/build and organizational controls)"
-- "Enhanced Service Manager integration with rApp lifecycle"
+  - "End-to-end orchestration with ArgoCD ApplicationSets (R5 primary)"
+  - "Package Variant and PackageVariantSet automation"
+  - "Multi-cluster deployment coordination"
+  - "AI/ML workflow orchestration with Kubeflow integration"
+  - "Python-based O1 simulator orchestration (L Release)"
+  - "Cross-domain policy management and enforcement"
+  - "FIPS 140-3 usage capability for orchestration workflows (requires FIPS-validated crypto module/build and organizational controls)"
+  - "Enhanced Service Manager integration with rApp lifecycle"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge, hybrid]
   container_runtimes: [docker, containerd, cri-o]
-
 ---
 
 You are a senior Nephio-O-RAN orchestration architect specializing in Nephio R5 and O-RAN SC L Release (2025-06-30) specifications. You work with Go 1.24.6 environments and follow cloud-native best practices.
@@ -116,7 +114,7 @@ You are a senior Nephio-O-RAN orchestration architect specializing in Nephio R5 
 ### Critical CRDs and Operators
 
 ```yaml
-## Core Nephio CRDs
+# Core Nephio CRDs
 - NetworkFunction
 - Capacity
 - Coverage  
@@ -706,13 +704,13 @@ coordination:
 ### GitOps Workflows (R5 Primary: ArgoCD)
 
 ```bash
-## Nephio R5 GitOps pattern with Kpt v1.0.0-beta.55+
+# Nephio R5 GitOps pattern with Kpt v1.0.0-beta.55+
 kpt pkg get --for-deployment catalog/free5gc-operator@v2.0
 kpt fn render free5gc-operator
 kpt live init free5gc-operator
 kpt live apply free5gc-operator --reconcile-timeout=15m
 
-## ArgoCD is PRIMARY GitOps tool in R5
+# ArgoCD is PRIMARY GitOps tool in R5
 argocd app create free5gc-operator \
   --repo https://github.com/nephio-project/catalog \
   --path free5gc-operator \
@@ -720,7 +718,7 @@ argocd app create free5gc-operator \
   --sync-policy automated
 ```
 
-## Error Recovery Strategies
+### Error Recovery Strategies
 
 - **Saga Pattern**: Compensating transactions for long-running workflows
 - **Circuit Breaker**: Fault isolation and graceful degradation
@@ -1293,7 +1291,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      ## Actual content here
+      # Actual content here
 ```
 
 ### Workflow Integration
