@@ -473,14 +473,14 @@ jobs:
           echo "  lighthouse-ci: ${{ needs.lighthouse-ci.result }}"
           echo "  security-scan: ${{ needs.security-scan.result }}"
           
-          if [[ "${{ needs.validate-content.result }}" != "success" ]] || \
-             [[ "${{ needs.markdown-lint.result }}" != "success" ]] || \
-             [[ "${{ needs.build-and-test.result }}" != "success" ]] || \
-             [[ "${{ needs.link-check.result }}" != "success" ]] || \
-             [[ "${{ needs.accessibility-check.result }}" != "success" ]] || \
-             [[ "${{ needs.lighthouse-ci.result }}" != "success" ]] || \
-             [[ "${{ needs.security-scan.result }}" != "success" ]]; then
-            echo "❌ CI pipeline failed - one or more jobs did not succeed"
+          if [[ "${{ needs.validate-content.result }}" == "failure" ]] || \
+             [[ "${{ needs.markdown-lint.result }}" == "failure" ]] || \
+             [[ "${{ needs.build-and-test.result }}" == "failure" ]] || \
+             [[ "${{ needs.link-check.result }}" == "failure" ]] || \
+             [[ "${{ needs.accessibility-check.result }}" == "failure" ]] || \
+             [[ "${{ needs.lighthouse-ci.result }}" == "failure" ]] || \
+             [[ "${{ needs.security-scan.result }}" == "failure" ]]; then
+            echo "❌ CI pipeline failed - one or more jobs failed"
             exit 1
           else
             echo "✅ CI pipeline completed successfully"
