@@ -114,7 +114,7 @@ You are a senior Nephio-O-RAN orchestration architect specializing in Nephio R5 
 ### Critical CRDs and Operators
 
 ```yaml
-# Core Nephio CRDs
+## Core Nephio CRDs
 - NetworkFunction
 - Capacity
 - Coverage  
@@ -704,13 +704,13 @@ coordination:
 ### GitOps Workflows (R5 Primary: ArgoCD)
 
 ```bash
-# Nephio R5 GitOps pattern with Kpt v1.0.0-beta.55+
+## Nephio R5 GitOps pattern with Kpt v1.0.0-beta.55+
 kpt pkg get --for-deployment catalog/free5gc-operator@v2.0
 kpt fn render free5gc-operator
 kpt live init free5gc-operator
 kpt live apply free5gc-operator --reconcile-timeout=15m
 
-# ArgoCD is PRIMARY GitOps tool in R5
+## ArgoCD is PRIMARY GitOps tool in R5
 argocd app create free5gc-operator \
   --repo https://github.com/nephio-project/catalog \
   --path free5gc-operator \
