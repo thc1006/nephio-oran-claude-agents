@@ -129,16 +129,34 @@ const config: Config = {
           ignorePatterns: ['/tags/**', '/search/**'],
           filename: 'sitemap.xml',
         },
-        // Google Analytics (placeholder)
+        // Google Analytics Configuration
+        // To enable analytics:
+        // 1. Set GOOGLE_ANALYTICS_ID in your .env.local file
+        // 2. Use format: G-XXXXXXXXXX or UA-XXXXXXXXX-X
+        // 3. Never commit actual tracking IDs to version control
         gtag: process.env.GOOGLE_ANALYTICS_ID ? {
           trackingID: process.env.GOOGLE_ANALYTICS_ID,
-          anonymizeIP: true,
+          anonymizeIP: true, // Respects user privacy by anonymizing IP addresses
         } : undefined,
       } satisfies Preset.Options,
     ],
   ],
 
   plugins: [
+    // Performance optimization plugin
+    './plugins/performance-optimizer',
+    // Security Headers Plugin
+    [
+      './plugins/docusaurus-plugin-security-headers',
+      {
+        disableCSP: false, // Set to true to disable CSP in development if needed
+        customHeaders: {
+          // Add any additional custom headers here
+          'X-DNS-Prefetch-Control': 'on',
+          'X-Permitted-Cross-Domain-Policies': 'none'
+        }
+      }
+    ],
     // PWA Plugin for offline support (optional)
     // [
     //   '@docusaurus/plugin-pwa',
@@ -276,9 +294,17 @@ const config: Config = {
     },
     // Enhanced search configuration with Algolia and fallback
     algolia: {
-      appId: process.env.ALGOLIA_APP_ID || 'BH4D9OD16A', // Placeholder app ID
-      apiKey: process.env.ALGOLIA_API_KEY || 'ac317234e6a42074175369b2f42e9754', // Public search-only API key
-      indexName: 'nephio-oran-claude-agents',
+      // IMPORTANT: These are PLACEHOLDER values for demonstration only
+      // To enable search functionality:
+      // 1. Copy .env.example to .env.local
+      // 2. Replace with your actual Algolia credentials
+      // 3. Never commit .env.local to version control
+      // 
+      // Get free DocSearch at: https://docsearch.algolia.com/
+      // Or create your own at: https://www.algolia.com/
+      appId: process.env.ALGOLIA_APP_ID || 'PLACEHOLDER_APP_ID', // PLACEHOLDER - Replace via environment variable
+      apiKey: process.env.ALGOLIA_API_KEY || 'PLACEHOLDER_SEARCH_API_KEY', // PLACEHOLDER - Must be search-only API key
+      indexName: process.env.ALGOLIA_INDEX_NAME || 'nephio-oran-claude-agents',
       contextualSearch: true,
       externalUrlRegex: 'external\\.com|domain\\.com',
       replaceSearchResultPathname: {

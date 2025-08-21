@@ -1,0 +1,14 @@
+{
+  "name": "docusaurus-plugin-security-headers",
+  "version": "1.0.0",
+  "description": "Security headers plugin for Docusaurus websites",
+  "main": "index.js",
+  "keywords": [
+    "docusaurus",
+    "plugin",
+    "security",
+    "headers",
+    "csp"
+  ],
+  "license": "MIT"
+}
