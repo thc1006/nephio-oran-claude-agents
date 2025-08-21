@@ -17,6 +17,11 @@ on:
       - 'docs/**'
   workflow_dispatch:
 
+# Cancel in-progress runs of the same workflow
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   NODE_VERSION: '20'
   CACHE_VERSION: 'v1'
