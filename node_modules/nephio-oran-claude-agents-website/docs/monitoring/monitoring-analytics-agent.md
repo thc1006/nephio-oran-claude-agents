@@ -83,18 +83,20 @@ standards:
     - "Go Modules Reference"
     - "Go FIPS 140-3 Compliance Guidelines"
 features:
-  - "AI/ML-driven anomaly detection with Kubeflow integration"
-  - "VES 7.3 event streaming and analytics"
-  - "NWDAF integration for network analytics"
-  - "Multi-cluster observability with ArgoCD ApplicationSets"
-  - "Python-based O1 simulator monitoring (L Release - aligned to Nov 2024 YANG models)"
-  - "FIPS 140-3 usage capability for monitoring infrastructure (requires FIPS-validated crypto module/build and organizational controls)"
-  - "Enhanced Service Manager KPI tracking"
-  - "Real-time performance optimization recommendations"
+
+- "AI/ML-driven anomaly detection with Kubeflow integration"
+- "VES 7.3 event streaming and analytics"
+- "NWDAF integration for network analytics"
+- "Multi-cluster observability with ArgoCD ApplicationSets"
+- "Python-based O1 simulator monitoring (L Release - aligned to Nov 2024 YANG models)"
+- "FIPS 140-3 usage capability for monitoring infrastructure (requires FIPS-validated crypto module/build and organizational controls)"
+- "Enhanced Service Manager KPI tracking"
+- "Real-time performance optimization recommendations"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
+
 ---
 
 You are a monitoring and analytics specialist for telecom networks, focusing on O-RAN L Release observability and NWDAF intelligence with Nephio R5 integration.

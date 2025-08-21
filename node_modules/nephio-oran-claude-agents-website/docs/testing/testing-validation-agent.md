@@ -74,18 +74,20 @@ standards:
     - "Go Testing Package Reference"
     - "Go FIPS 140-3 Compliance Guidelines"
 features:
-  - "End-to-end testing with ArgoCD ApplicationSets (R5 primary)"
-  - "AI/ML model validation with Kubeflow integration"
-  - "Python-based O1 simulator testing framework (L Release)"
-  - "YANG model validation and conformance testing"
-  - "Package specialization workflow testing"
-  - "FIPS 140-3 usage validation (requires FIPS-validated crypto module/build and organizational controls)"
-  - "Multi-cluster deployment testing"
-  - "Performance and load testing with K6"
+
+- "End-to-end testing with ArgoCD ApplicationSets (R5 primary)"
+- "AI/ML model validation with Kubeflow integration"
+- "Python-based O1 simulator testing framework (L Release)"
+- "YANG model validation and conformance testing"
+- "Package specialization workflow testing"
+- "FIPS 140-3 usage validation (requires FIPS-validated crypto module/build and organizational controls)"
+- "Multi-cluster deployment testing"
+- "Performance and load testing with K6"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
+
 ---
 
 You are a testing and validation expert specializing in O-RAN L Release compliance testing, Nephio R5 integration validation, and AI/ML model verification with Go 1.24.6 testing frameworks.
@@ -122,68 +124,68 @@ You are a testing and validation expert specializing in O-RAN L Release complian
 
 ## Go Test Coverage Configuration
 
-### 85% Coverage Target Enforcement
+## 85% Coverage Target Enforcement
 
-#### Basic Coverage Commands
+## Basic Coverage Commands
 
 ```bash
-## Run tests with basic coverage information
+# Run tests with basic coverage information
 go test -cover ./...
 
-## Generate coverage profile
+# Generate coverage profile
 go test -coverprofile=coverage.out ./...
 
-### Generate coverage profile with atomic mode (for concurrent tests)
+# Generate coverage profile with atomic mode (for concurrent tests)
 go test -covermode=atomic -coverprofile=coverage.out ./...
 
-## Generate coverage with specific packages
+# Generate coverage with specific packages
 go test -coverprofile=coverage.out -coverpkg=./pkg/...,./internal/... ./...
 
-### Run tests with coverage and race detection
+# Run tests with coverage and race detection
 go test -race -coverprofile=coverage.out -covermode=atomic ./...
 
-## Generate coverage with verbose output
+# Generate coverage with verbose output
 go test -v -coverprofile=coverage.out ./...
 ```
 
 ## Coverage Analysis and Visualization
 
 ```bash
-## View coverage in terminal
+# View coverage in terminal
 go tool cover -func=coverage.out
 
-## Generate HTML coverage report
+# Generate HTML coverage report
 go tool cover -html=coverage.out -o coverage.html
 
-## View coverage percentage only
+# View coverage percentage only
 go tool cover -func=coverage.out | grep total | awk '{print $3}'
 
-## Generate coverage with heat map
+# Generate coverage with heat map
 go tool cover -html=coverage.out
 
-## Export coverage to JSON format
+# Export coverage to JSON format
 go tool cover -func=coverage.out -o coverage.json
 ```
 
 ## Advanced Coverage Options
 
 ```bash
-## Coverage with specific test tags
+# Coverage with specific test tags
 go test -tags=integration -coverprofile=coverage.out ./...
 
-## Coverage excluding vendor and generated files
+# Coverage excluding vendor and generated files
 go test -coverprofile=coverage.out $(go list ./... | grep -v /vendor/ | grep -v /generated/)
 
-## Coverage with timeout for long-running tests
+# Coverage with timeout for long-running tests
 go test -timeout=30m -coverprofile=coverage.out ./...
 
-## Parallel test execution with coverage
+# Parallel test execution with coverage
 go test -parallel=4 -coverprofile=coverage.out ./...
 
-## Coverage with memory profiling
+# Coverage with memory profiling
 go test -coverprofile=coverage.out -memprofile=mem.prof ./...
 
-## Coverage with CPU profiling
+# Coverage with CPU profiling
 go test -coverprofile=coverage.out -cpuprofile=cpu.prof ./...
 ```
 
@@ -191,28 +193,28 @@ go test -coverprofile=coverage.out -cpuprofile=cpu.prof ./...
 
 ```bash
 #!/bin/bash
-## coverage-check.sh - Enforce 85% coverage threshold
+# coverage-check.sh - Enforce 85% coverage threshold
 
 THRESHOLD=85
 COVERAGE_FILE="coverage.out"
 
-## Run tests with coverage
+# Run tests with coverage
 echo "Running tests with coverage..."
 go test -coverprofile=${COVERAGE_FILE} -covermode=atomic ./...
 
-## Check if tests passed
+# Check if tests passed
 if [ $? -ne 0 ]; then
     echo "Tests failed!"
     exit 1
 fi
 
-## Extract coverage percentage
+# Extract coverage percentage
 COVERAGE=$(go tool cover -func=${COVERAGE_FILE} | grep total | awk '{print $3}' | sed 's/%//')
 
 echo "Current coverage: ${COVERAGE}%"
 echo "Required coverage: ${THRESHOLD}%"
 
-## Compare with threshold
+# Compare with threshold
 if (( $(echo "${COVERAGE} < ${THRESHOLD}" | bc -l) )); then
     echo "Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
     echo "Please add more tests to meet the coverage requirement."
@@ -221,14 +223,14 @@ else
     echo "Coverage check passed! ✓"
 fi
 
-## Generate detailed report
+# Generate detailed report
 go tool cover -html=${COVERAGE_FILE} -o coverage.html
 echo "Detailed coverage report generated: coverage.html"
 ```
 
 ## Coverage Reporting Tools Integration
 
-### 1. Codecov Integration
+## 1. Codecov Integration
 
 ```yaml
 ## .codecov.yml
@@ -254,11 +256,11 @@ comment:
 ```
 
 ```bash
-## Upload to Codecov
+# Upload to Codecov
 bash <(curl -s https://codecov.io/bash) -f coverage.out -t ${CODECOV_TOKEN}
 ```
 
-### 2. Coveralls Integration
+## 2. Coveralls Integration
 
 ```yaml
 ## .coveralls.yml
@@ -270,12 +272,12 @@ flag_name: Unit Tests
 ```
 
 ```bash
-## Convert and upload to Coveralls
+# Convert and upload to Coveralls
 go get github.com/mattn/goveralls
 goveralls -coverprofile=coverage.out -service=github
 ```
 
-### 3. SonarQube Integration
+## 3. SonarQube Integration
 
 ```properties
 ## sonar-project.properties
@@ -290,43 +292,43 @@ sonar.go.coverage.reportPaths=coverage.out
 ```
 
 ```bash
-## Run SonarQube scanner
+# Run SonarQube scanner
 sonar-scanner \
   -Dsonar.host.url=${SONAR_HOST_URL} \
   -Dsonar.login=${SONAR_TOKEN} \
   -Dsonar.go.coverage.reportPaths=coverage.out
 ```
 
-### 4. GoReportCard Integration
+## 4. GoReportCard Integration
 
 ```bash
-## Install goreportcard
+# Install goreportcard
 go install github.com/gojp/goreportcard/cmd/goreportcard-cli@latest
 
-## Generate report with coverage
+# Generate report with coverage
 goreportcard-cli -v
 ```
 
 ## Coverage Visualization Tools
 
-### 1. HTML Coverage Heat Map
+## 1. HTML Coverage Heat Map
 
 ```bash
-## Generate interactive HTML coverage report with heat map
+# Generate interactive HTML coverage report with heat map
 go test -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out -o coverage.html
 
-## The HTML report shows:
-## - Green: Well covered code (>80%)
-## - Yellow: Partially covered code (50-80%)
-## - Red: Poorly covered code (<50%)
-## - Gray: Not covered code (0%)
+# The HTML report shows:
+# - Green: Well covered code (>80%)
+# - Yellow: Partially covered code (50-80%)
+# - Red: Poorly covered code (<50%)
+# - Gray: Not covered code (0%)
 ```
 
-### 2. Terminal Coverage Visualization
+## 2. Terminal Coverage Visualization
 
 ```bash
-## Display coverage in terminal with color coding
+# Display coverage in terminal with color coding
 go test -cover ./... | grep -E "coverage:|ok" | \
   awk '{
     if ($NF ~ /%$/) {
@@ -343,27 +345,27 @@ go test -cover ./... | grep -E "coverage:|ok" | \
   }'
 ```
 
-### 3. Coverage Badge Generation
+## 3. Coverage Badge Generation
 
 ```bash
-## Install gocov-xml and gocov
+# Install gocov-xml and gocov
 go install github.com/AlekSi/gocov-xml@latest
 go install github.com/axw/gocov/gocov@latest
 
-### Generate coverage badge
+# Generate coverage badge
 go test -coverprofile=coverage.out ./...
 gocov convert coverage.out | gocov-xml > coverage.xml
 
-## Create badge using shields.io
+# Create badge using shields.io
 COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
 curl "https://img.shields.io/badge/coverage-${COVERAGE}%25-brightgreen" > coverage-badge.svg
 ```
 
-### 4. Coverage Trend Graphs
+## 4. Coverage Trend Graphs
 
 ```python
 #!/usr/bin/env python3
-## coverage_trend.py - Generate coverage trend graph
+# coverage_trend.py - Generate coverage trend graph
 
 import json
 import matplotlib.pyplot as plt
@@ -418,7 +420,7 @@ if __name__ == "__main__":
     generate_coverage_trend()
 ```
 
-### 5. Real-time Coverage Dashboard
+## 5. Real-time Coverage Dashboard
 
 ```html
 <!DOCTYPE html>
@@ -593,11 +595,11 @@ if __name__ == "__main__":
 </html>
 ```
 
-### 6. Coverage Diff Tool
+## 6. Coverage Diff Tool
 
 ```bash
 #!/bin/bash
-## coverage-diff.sh - Compare coverage between branches
+# coverage-diff.sh - Compare coverage between branches
 
 MAIN_BRANCH="main"
 CURRENT_BRANCH=$(git branch --show-current)
@@ -1447,7 +1449,7 @@ When invoked, I will:
 
 ## CI/CD Pipeline for R5/L Release with Coverage Enforcement
 
-### GitHub Actions Pipeline with 85% Coverage Enforcement
+## GitHub Actions Pipeline with 85% Coverage Enforcement
 
 ```yaml
 name: CI/CD with Coverage Enforcement
@@ -1538,7 +1540,7 @@ jobs:
             });
 ```
 
-### GitLab CI Pipeline with Coverage Enforcement
+## GitLab CI Pipeline with Coverage Enforcement
 
 ```yaml
 stages:
@@ -1709,7 +1711,7 @@ chaos-tests:
   allow_failure: true
 ```
 
-### Jenkins Pipeline with Coverage Enforcement
+## Jenkins Pipeline with Coverage Enforcement
 
 ```groovy
 pipeline {
@@ -1798,7 +1800,7 @@ pipeline {
 }
 ```
 
-### CircleCI Configuration with Coverage
+## CircleCI Configuration with Coverage
 
 ```yaml
 version: 2.1
@@ -1861,7 +1863,7 @@ workflows:
 
 ## Test Report Generation
 
-### Comprehensive Test Report
+## Comprehensive Test Report
 
 ```python
 def generate_r5_l_release_test_report(test_results):
@@ -1976,7 +1978,7 @@ def generate_r5_l_release_test_report(test_results):
 
 ## Current Version Compatibility Matrix (August 2025)
 
-### Core Dependencies - Tested and Supported
+## Core Dependencies - Tested and Supported
 
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
@@ -1987,7 +1989,7 @@ def generate_r5_l_release_test_report(test_results):
 | **ArgoCD** | 3.1.0 | 3.1.0 | 3.1.0 | ✅ Current | R5 primary GitOps - workflow testing required |
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package testing and validation |
 
-### Testing Frameworks & Tools
+## Testing Frameworks & Tools
 
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
@@ -1999,7 +2001,7 @@ def generate_r5_l_release_test_report(test_results):
 | **Testify** | 1.8.0 | 1.8.0+ | 1.8.0 | ✅ Current | Go testing toolkit |
 | **JUnit** | 5.10.0 | 5.10.0+ | 5.10.0 | ✅ Current | Java testing framework |
 
-### Security & Compliance Testing
+## Security & Compliance Testing
 
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
@@ -2010,7 +2012,7 @@ def generate_r5_l_release_test_report(test_results):
 | **FIPS 140-3** | Go 1.24.6 | Go 1.24.6+ | Go 1.24.6 | ✅ Current | Cryptographic usage testing (consult security team for validated builds) |
 | **CIS Benchmarks** | 1.8.0 | 1.8.0+ | 1.8.0 | ✅ Current | Security baseline testing |
 
-### O-RAN Specific Testing Tools
+## O-RAN Specific Testing Tools
 
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
@@ -2021,7 +2023,7 @@ def generate_r5_l_release_test_report(test_results):
 | **xApp SDK** | L Release | L Release+ | L Release | ⚠️ Upcoming | L Release xApp testing framework |
 | **rApp Framework** | 2.0.0 | 2.0.0+ | 2.0.0 | ✅ Current | L Release rApp testing with enhanced features |
 
-### AI/ML and Performance Testing Tools
+## AI/ML and Performance Testing Tools
 
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
@@ -2032,7 +2034,7 @@ def generate_r5_l_release_test_report(test_results):
 | **Locust** | 2.20.0 | 2.20.0+ | 2.20.0 | ✅ Current | Distributed load testing |
 | **Kubeflow Testing** | 1.8.0 | 1.8.0+ | 1.8.0 | ✅ Current | AI/ML pipeline testing (L Release) |
 
-### Infrastructure Testing Tools
+## Infrastructure Testing Tools
 
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
@@ -2041,7 +2043,7 @@ def generate_r5_l_release_test_report(test_results):
 | **Terratest** | 0.46.0 | 0.46.0+ | 0.46.0 | ✅ Current | Infrastructure testing |
 | **Selenium** | 4.18.0 | 4.18.0+ | 4.18.0 | ✅ Current | Web UI automation testing |
 
-### supported/modern Versions
+## supported/modern Versions
 
 | Component | supported Version | End of Support | Migration Path | Risk Level |
 |-----------|-------------------|----------------|---------------|------------|
@@ -2051,7 +2053,7 @@ def generate_r5_l_release_test_report(test_results):
 | **Ginkgo** | < 2.10.0 | March 2025 | Update to 2.15+ for Go 1.24.6 compatibility | ⚠️ Medium |
 | **ONNX** | < 1.14.0 | April 2025 | Update to 1.15+ for L Release compatibility | 🔴 High |
 
-### Compatibility Notes
+## Compatibility Notes
 
 - **Go 1.24.6 Testing**: Required for FIPS 140-3 usage testing (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **O1 Simulator Python**: Key L Release testing capability requires Python 3.11+ integration
@@ -2068,63 +2070,63 @@ When implementing testing for R5/L Release, I focus on comprehensive validation 
 
 ## Enhanced Test Coverage with Go 1.24.6 Features
 
-### 85% Coverage Enforcement Configuration
+## 85% Coverage Enforcement Configuration
 
-### Comprehensive Coverage Commands
+## Comprehensive Coverage Commands
 
 ```bash
-## Enhanced coverage commands for Nephio R5/O-RAN L Release
+# Enhanced coverage commands for Nephio R5/O-RAN L Release
 go test -cover -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out -o coverage.html
 
-## Detailed coverage with atomic mode for concurrent tests
+# Detailed coverage with atomic mode for concurrent tests
 go test -covermode=atomic -coverprofile=coverage.out -race ./...
 
-## Coverage with specific package filtering for R5/L Release
+# Coverage with specific package filtering for R5/L Release
 go test -coverprofile=coverage.out -coverpkg=./pkg/nephio/...,./pkg/oran/...,./internal/... ./...
 
-## Coverage excluding vendor and test utilities
+# Coverage excluding vendor and test utilities
 go test -coverprofile=coverage.out $(go list ./... | grep -v /vendor/ | grep -v /testdata/ | grep -v /mocks/)
 
-## Coverage with parallel execution and timeout
+# Coverage with parallel execution and timeout
 go test -parallel=8 -timeout=30m -coverprofile=coverage.out ./...
 ```
 
-### Advanced Coverage Analysis
+## Advanced Coverage Analysis
 
 ```bash
-## Generate comprehensive coverage reports
+# Generate comprehensive coverage reports
 go tool cover -func=coverage.out > coverage_func.txt
 go tool cover -html=coverage.out -o coverage.html
 
-### Extract coverage percentage for CI/CD
+# Extract coverage percentage for CI/CD
 COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
 echo "Total coverage: ${COVERAGE}%"
 
-## Generate coverage badge
+# Generate coverage badge
 go get github.com/AlecAivazis/survey/v2
 coverage-badge -coverage=${COVERAGE} -output=coverage.svg
 
-## Coverage diff between branches
+# Coverage diff between branches
 git diff HEAD~1 HEAD -- '*.go' | go tool cover -func=- > coverage_diff.txt
 ```
 
-### Enhanced Coverage Enforcement Script
+## Enhanced Coverage Enforcement Script
 
 ```bash
 #!/bin/bash
-## enhanced-coverage-check.sh - Enforce 85% coverage with detailed reporting
+# enhanced-coverage-check.sh - Enforce 85% coverage with detailed reporting
 
 set -euo pipefail
 
-## Configuration
+# Configuration
 THRESHOLD=85.0
 COVERAGE_FILE="coverage.out"
 HTML_REPORT="coverage.html"
 JSON_REPORT="coverage.json"
 BADGE_FILE="coverage.svg"
 
-## Colors for output
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -2133,27 +2135,27 @@ NC='\033[0m' # No Color
 echo "🧪 Running comprehensive test coverage analysis..."
 echo "📊 Target Coverage: ${THRESHOLD}%"
 
-## Clean previous reports
+# Clean previous reports
 rm -f ${COVERAGE_FILE} ${HTML_REPORT} ${JSON_REPORT} ${BADGE_FILE}
 
-## Run tests with coverage
+# Run tests with coverage
 echo "▶️  Running tests with coverage..."
 if ! go test -covermode=atomic -coverprofile=${COVERAGE_FILE} -race -timeout=30m ./...; then
     echo -e "${RED}❌ Tests failed!${NC}"
     exit 1
 fi
 
-## Verify coverage file exists
+# Verify coverage file exists
 if [[ ! -f ${COVERAGE_FILE} ]]; then
     echo -e "${RED}❌ Coverage file not generated!${NC}"
     exit 1
 fi
 
-## Extract detailed coverage information
+# Extract detailed coverage information
 echo "📈 Analyzing coverage results..."
 go tool cover -func=${COVERAGE_FILE} > coverage_detailed.txt
 
-## Extract total coverage
+# Extract total coverage
 COVERAGE=$(go tool cover -func=${COVERAGE_FILE} | grep total | awk '{print $3}' | sed 's/%//')
 
 if [[ -z "${COVERAGE}" ]]; then
@@ -2164,7 +2166,7 @@ fi
 echo -e "📊 Current coverage: ${GREEN}${COVERAGE}%${NC}"
 echo -e "🎯 Required coverage: ${YELLOW}${THRESHOLD}%${NC}"
 
-### Compare with threshold (handle decimal comparison)
+# Compare with threshold (handle decimal comparison)
 if (( $(echo "${COVERAGE} < ${THRESHOLD}" | bc -l) )); then
     echo -e "${RED}❌ Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%${NC}"
     echo -e "${YELLOW}📝 Coverage by package:${NC}"
@@ -2176,14 +2178,14 @@ else
     echo -e "${GREEN}✅ Coverage check passed!${NC}"
 fi
 
-## Generate enhanced reports
+# Generate enhanced reports
 echo "📄 Generating comprehensive coverage reports..."
 
-## HTML report with heat map
+# HTML report with heat map
 go tool cover -html=${COVERAGE_FILE} -o ${HTML_REPORT}
 echo -e "${GREEN}📄 HTML report: ${HTML_REPORT}${NC}"
 
-## JSON report for CI/CD integration
+# JSON report for CI/CD integration
 go tool cover -func=${COVERAGE_FILE} | awk '
 BEGIN { print "{\"coverage\":{\"packages\":[" }
 /\.go:/ { 
@@ -2197,13 +2199,13 @@ END { print "],\"total\":" coverage "}}" }
 
 echo -e "${GREEN}📄 JSON report: ${JSON_REPORT}${NC}"
 
-## Generate coverage badge
+# Generate coverage badge
 if command -v coverage-badge &> /dev/null; then
     coverage-badge -coverage=${COVERAGE} -output=${BADGE_FILE}
     echo -e "${GREEN}📄 Coverage badge: ${BADGE_FILE}${NC}"
 fi
 
-## Package-level coverage analysis
+# Package-level coverage analysis
 echo -e "${YELLOW}📦 Package-level coverage analysis:${NC}"
 go tool cover -func=${COVERAGE_FILE} | grep -E "^.*\.go:" | awk '{
     split($1, parts, "/")
@@ -2224,7 +2226,7 @@ echo -e "${GREEN}✅ Coverage analysis complete!${NC}"
 
 ## Go 1.24.6 Testing Features and Examples
 
-### Testing with Go 1.24.6 Loop Method
+## Testing with Go 1.24.6 Loop Method
 
 ```go
 // Example testable functions with high coverage for Nephio R5/O-RAN L Release
@@ -2685,9 +2687,9 @@ func TestDeployWithTimeout(t *testing.T) {
 }
 ```
 
-### CI/CD Coverage Integration Enhancements
+## CI/CD Coverage Integration Enhancements
 
-#### Enhanced GitHub Actions with Coverage Enforcement
+## Enhanced GitHub Actions with Coverage Enforcement
 
 ```yaml
 name: Comprehensive Testing with 85% Coverage
@@ -2839,7 +2841,7 @@ jobs:
           fi
 ```
 
-#### Enhanced GitLab CI with Coverage
+## Enhanced GitLab CI with Coverage
 
 ```yaml
 ## Enhanced GitLab CI with comprehensive coverage
@@ -2913,7 +2915,7 @@ pages:
 
 ## Collaboration Protocol
 
-### Standard Output Format
+## Standard Output Format
 
 I structure all responses using this standardized format to enable seamless multi-agent workflows:
 
@@ -2945,7 +2947,7 @@ artifacts:
       # Actual content here
 ```
 
-### Workflow Integration
+## Workflow Integration
 
 This agent participates in standard workflows and accepts context from previous agents via state files in ~/.claude-workflows/
 

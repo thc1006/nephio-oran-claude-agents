@@ -77,18 +77,20 @@ standards:
     - "Go Modules Reference"
     - "Go FIPS 140-3 Compliance Guidelines"
 features:
-  - "Real-time RANPM data processing with O-RAN L Release APIs"
-  - "AI/ML pipeline integration with Kubeflow"
-  - "Predictive analytics for network optimization"
-  - "Multi-cluster data aggregation with ArgoCD ApplicationSets"
-  - "Python-based O1 simulator data analysis (L Release)"
-  - "FIPS 140-3 usage (requires FIPS-validated crypto module/build and organizational controls)"
-  - "Enhanced Service Manager analytics integration"
-  - "Streaming analytics with Kafka and Flink"
+
+- "Real-time RANPM data processing with O-RAN L Release APIs"
+- "AI/ML pipeline integration with Kubeflow"
+- "Predictive analytics for network optimization"
+- "Multi-cluster data aggregation with ArgoCD ApplicationSets"
+- "Python-based O1 simulator data analysis (L Release)"
+- "FIPS 140-3 usage (requires FIPS-validated crypto module/build and organizational controls)"
+- "Enhanced Service Manager analytics integration"
+- "Streaming analytics with Kafka and Flink"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
+
 ---
 
 You are a telecom data analytics specialist focusing on O-RAN L Release performance management and Nephio R5 operational intelligence. You work with Go 1.24.6 for data pipeline development and integrate with modern observability stacks.
@@ -455,7 +457,7 @@ func (m *MLPipeline) retryWithBackoff(ctx context.Context, operation func() erro
 #### Complete L Release AI/ML Pipeline Configuration
 
 ```yaml
-# Kubeflow Pipeline for O-RAN RANPM Analytics (L Release)
+## Kubeflow Pipeline for O-RAN RANPM Analytics (L Release)
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
@@ -694,7 +696,7 @@ spec:
         path: /tmp/model
 
 ---
-# Kubeflow Training Job for Distributed Learning
+## Kubeflow Training Job for Distributed Learning
 apiVersion: kubeflow.org/v1
 kind: TFJob
 metadata:
@@ -782,19 +784,19 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Any
 from datetime import datetime, timezone
 
-# Kubeflow SDK v2.0 imports
+## Kubeflow SDK v2.0 imports
 from kfp import Client, dsl
 from kfp.dsl import component, pipeline, Input, Output, Dataset, Model, Metrics
 from kfp.kubernetes import use_secret_as_env, use_secret_as_volume
 
-# O-RAN L Release specific imports  
+## O-RAN L Release specific imports  
 import pandas as pd
 import numpy as np
 import tensorflow as tf
 from mlflow import MlflowClient
 import onnxruntime as ort
 
-# FIPS 140-3 usage capability check
+## FIPS 140-3 usage capability check
 def ensure_fips_compliance():
     """Enable FIPS 140-3 mode for cryptographic operations (consult your security team for validated builds and boundary documentation)"""
     if os.environ.get('GODEBUG') != 'fips140=on':
@@ -1087,7 +1089,7 @@ def oran_ml_pipeline(
         features_task.set_env_variable('GODEBUG', 'fips140=on')
         train_task.set_env_variable('GODEBUG', 'fips140=on')
 
-# Pipeline execution and management
+## Pipeline execution and management
 class ORANMLPipelineManager:
     """Manages O-RAN L Release ML pipelines with Kubeflow 1.8.0"""
     
@@ -1188,7 +1190,7 @@ class ORANMLPipelineManager:
             "status": "deployed"
         }
 
-# Example usage
+## Example usage
 async def main():
     """Example O-RAN L Release AI/ML pipeline execution"""
     ensure_fips_compliance()

@@ -67,18 +67,20 @@ standards:
     - "Go Modules Reference"
     - "Go FIPS 140-3 Compliance Guidelines"
 features:
-  - "YANG model validation and transformation"
-  - "Kpt package specialization with PackageVariant/PackageVariantSet"
-  - "ArgoCD ApplicationSet automation (R5 primary GitOps)"
-  - "OCloud baremetal provisioning with Metal3 integration"
-  - "Multi-vendor configuration abstraction"
-  - "FIPS 140-3 usage capability (requires FIPS-validated crypto module/build and organizational controls)"
-  - "Python-based O1 simulator integration (L Release)"
-  - "Enhanced Service Manager integration"
+
+- "YANG model validation and transformation"
+- "Kpt package specialization with PackageVariant/PackageVariantSet"
+- "ArgoCD ApplicationSet automation (R5 primary GitOps)"
+- "OCloud baremetal provisioning with Metal3 integration"
+- "Multi-vendor configuration abstraction"
+- "FIPS 140-3 usage capability (requires FIPS-validated crypto module/build and organizational controls)"
+- "Python-based O1 simulator integration (L Release)"
+- "Enhanced Service Manager integration"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise]
   container_runtimes: [docker, containerd, cri-o]
+
 ---
 
 You are a configuration management specialist for Nephio R5-O-RAN L Release automation, focusing on declarative configuration and package lifecycle management.

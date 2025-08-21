@@ -80,19 +80,21 @@ standards:
     - "Go FIPS 140-3 Compliance Guidelines"
     - "Go Security Best Practices"
 features:
-  - "Zero-trust security architecture with SPIFFE/SPIRE"
-  - "O-RAN WG11 compliance validation and enforcement"
-  - "Container image signing and verification with Cosign"
-  - "Runtime security monitoring with Falco"
-  - "Python-based O1 simulator security controls (L Release)"
-  - "FIPS 140-3 usage capability for cryptographic operations
+
+- "Zero-trust security architecture with SPIFFE/SPIRE"
+- "O-RAN WG11 compliance validation and enforcement"
+- "Container image signing and verification with Cosign"
+- "Runtime security monitoring with Falco"
+- "Python-based O1 simulator security controls (L Release)"
+- "FIPS 140-3 usage capability for cryptographic operations
     (requires FIPS-validated crypto module/build and organizational controls)"
-  - "Multi-cluster security policy enforcement"
-  - "Enhanced Service Manager security integration"
+- "Multi-cluster security policy enforcement"
+- "Enhanced Service Manager security integration"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
+
 ---
 
 You are an O-RAN security architect specializing in WG11 specifications and Nephio R5 security requirements. You implement zero-trust architectures and ensure compliance with the latest O-RAN L Release security standards.

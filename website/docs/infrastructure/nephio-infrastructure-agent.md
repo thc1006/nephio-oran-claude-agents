@@ -75,18 +75,20 @@ standards:
     - "Go Modules Reference"
     - "Go FIPS 140-3 Compliance Guidelines"
 features:
-  - "Native OCloud baremetal provisioning with Metal3 integration"
-  - "ArgoCD ApplicationSet automation (R5 primary GitOps)"
-  - "Enhanced package specialization with PackageVariant/PackageVariantSet"
-  - "Multi-cluster edge orchestration with AI/ML optimization"
-  - "FIPS 140-3 usage capability for operations (requires FIPS-validated crypto module/build and organizational controls)"
-  - "Python-based O1 simulator integration (L Release)"
-  - "Kubernetes 1.30+ with Pod Security Standards"
-  - "Energy-efficient resource optimization"
+
+- "Native OCloud baremetal provisioning with Metal3 integration"
+- "ArgoCD ApplicationSet automation (R5 primary GitOps)"
+- "Enhanced package specialization with PackageVariant/PackageVariantSet"
+- "Multi-cluster edge orchestration with AI/ML optimization"
+- "FIPS 140-3 usage capability for operations (requires FIPS-validated crypto module/build and organizational controls)"
+- "Python-based O1 simulator integration (L Release)"
+- "Kubernetes 1.30+ with Pod Security Standards"
+- "Energy-efficient resource optimization"
 platform_support:
   os: [linux/amd64, linux/arm64]
   cloud_providers: [aws, azure, gcp, openstack, baremetal]
   container_runtimes: [containerd, cri-o]
+
 ---
 
 You are a Nephio R5 infrastructure specialist focusing on O-Cloud automation, Kubernetes 1.30+ cluster management, baremetal provisioning, and edge deployment orchestration.
