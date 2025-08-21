@@ -129,19 +129,19 @@ You are a testing and validation expert specializing in O-RAN L Release complian
 ## Basic Coverage Commands
 
 ```bash
-# Run tests with basic coverage information
+## Run tests with basic coverage information
 go test -cover ./...
 
-# Generate coverage profile
+## Generate coverage profile
 go test -coverprofile=coverage.out ./...
 
-# Generate coverage profile with atomic mode (for concurrent tests)
+## Generate coverage profile with atomic mode (for concurrent tests)
 go test -covermode=atomic -coverprofile=coverage.out ./...
 
-# Generate coverage with specific packages
+## Generate coverage with specific packages
 go test -coverprofile=coverage.out -coverpkg=./pkg/...,./internal/... ./...
 
-# Run tests with coverage and race detection
+### Run tests with coverage and race detection
 go test -race -coverprofile=coverage.out -covermode=atomic ./...
 
 # Generate coverage with verbose output
@@ -154,38 +154,38 @@ go test -v -coverprofile=coverage.out ./...
 # View coverage in terminal
 go tool cover -func=coverage.out
 
-# Generate HTML coverage report
+## Generate HTML coverage report
 go tool cover -html=coverage.out -o coverage.html
 
-# View coverage percentage only
+## View coverage percentage only
 go tool cover -func=coverage.out | grep total | awk '{print $3}'
 
-# Generate coverage with heat map
+## Generate coverage with heat map
 go tool cover -html=coverage.out
 
-# Export coverage to JSON format
+## Export coverage to JSON format
 go tool cover -func=coverage.out -o coverage.json
 ```
 
 ## Advanced Coverage Options
 
 ```bash
-# Coverage with specific test tags
+## Coverage with specific test tags
 go test -tags=integration -coverprofile=coverage.out ./...
 
-# Coverage excluding vendor and generated files
+## Coverage excluding vendor and generated files
 go test -coverprofile=coverage.out $(go list ./... | grep -v /vendor/ | grep -v /generated/)
 
-# Coverage with timeout for long-running tests
+## Coverage with timeout for long-running tests
 go test -timeout=30m -coverprofile=coverage.out ./...
 
-# Parallel test execution with coverage
+## Parallel test execution with coverage
 go test -parallel=4 -coverprofile=coverage.out ./...
 
-# Coverage with memory profiling
+## Coverage with memory profiling
 go test -coverprofile=coverage.out -memprofile=mem.prof ./...
 
-# Coverage with CPU profiling
+## Coverage with CPU profiling
 go test -coverprofile=coverage.out -cpuprofile=cpu.prof ./...
 ```
 
@@ -198,23 +198,23 @@ go test -coverprofile=coverage.out -cpuprofile=cpu.prof ./...
 THRESHOLD=85
 COVERAGE_FILE="coverage.out"
 
-# Run tests with coverage
+### Run tests with coverage
 echo "Running tests with coverage..."
 go test -coverprofile=${COVERAGE_FILE} -covermode=atomic ./...
 
-# Check if tests passed
+## Check if tests passed
 if [ $? -ne 0 ]; then
     echo "Tests failed!"
     exit 1
 fi
 
-# Extract coverage percentage
+## Extract coverage percentage
 COVERAGE=$(go tool cover -func=${COVERAGE_FILE} | grep total | awk '{print $3}' | sed 's/%//')
 
 echo "Current coverage: ${COVERAGE}%"
 echo "Required coverage: ${THRESHOLD}%"
 
-# Compare with threshold
+## Compare with threshold
 if (( $(echo "${COVERAGE} < ${THRESHOLD}" | bc -l) )); then
     echo "Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
     echo "Please add more tests to meet the coverage requirement."
@@ -223,7 +223,7 @@ else
     echo "Coverage check passed! ✓"
 fi
 
-# Generate detailed report
+## Generate detailed report
 go tool cover -html=${COVERAGE_FILE} -o coverage.html
 echo "Detailed coverage report generated: coverage.html"
 ```
@@ -256,7 +256,7 @@ comment:
 ```
 
 ```bash
-# Upload to Codecov
+## Upload to Codecov
 bash <(curl -s https://codecov.io/bash) -f coverage.out -t ${CODECOV_TOKEN}
 ```
 
@@ -272,7 +272,7 @@ flag_name: Unit Tests
 ```
 
 ```bash
-# Convert and upload to Coveralls
+## Convert and upload to Coveralls
 go get github.com/mattn/goveralls
 goveralls -coverprofile=coverage.out -service=github
 ```
@@ -292,7 +292,7 @@ sonar.go.coverage.reportPaths=coverage.out
 ```
 
 ```bash
-# Run SonarQube scanner
+## Run SonarQube scanner
 sonar-scanner \
   -Dsonar.host.url=${SONAR_HOST_URL} \
   -Dsonar.login=${SONAR_TOKEN} \
@@ -302,10 +302,10 @@ sonar-scanner \
 ## 4. GoReportCard Integration
 
 ```bash
-# Install goreportcard
+## Install goreportcard
 go install github.com/gojp/goreportcard/cmd/goreportcard-cli@latest
 
-# Generate report with coverage
+## Generate report with coverage
 goreportcard-cli -v
 ```
 
@@ -314,11 +314,11 @@ goreportcard-cli -v
 ## 1. HTML Coverage Heat Map
 
 ```bash
-# Generate interactive HTML coverage report with heat map
+## Generate interactive HTML coverage report with heat map
 go test -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out -o coverage.html
 
-# The HTML report shows:
+## The HTML report shows:
 # - Green: Well covered code (>80%)
 # - Yellow: Partially covered code (50-80%)
 # - Red: Poorly covered code (<50%)
@@ -328,7 +328,7 @@ go tool cover -html=coverage.out -o coverage.html
 ## 2. Terminal Coverage Visualization
 
 ```bash
-# Display coverage in terminal with color coding
+## Display coverage in terminal with color coding
 go test -cover ./... | grep -E "coverage:|ok" | \
   awk '{
     if ($NF ~ /%$/) {
@@ -348,15 +348,15 @@ go test -cover ./... | grep -E "coverage:|ok" | \
 ## 3. Coverage Badge Generation
 
 ```bash
-# Install gocov-xml and gocov
+## Install gocov-xml and gocov
 go install github.com/AlekSi/gocov-xml@latest
 go install github.com/axw/gocov/gocov@latest
 
-# Generate coverage badge
+### Generate coverage badge
 go test -coverprofile=coverage.out ./...
 gocov convert coverage.out | gocov-xml > coverage.xml
 
-# Create badge using shields.io
+## Create badge using shields.io
 COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
 curl "https://img.shields.io/badge/coverage-${COVERAGE}%25-brightgreen" > coverage-badge.svg
 ```
@@ -375,18 +375,18 @@ from datetime import datetime
 def generate_coverage_trend(history_file='coverage_history.json'):
     """Generate coverage trend visualization"""
     
-    # Load historical data
+    ## Load historical data
     with open(history_file, 'r') as f:
         history = json.load(f)
     
-    # Convert to DataFrame
+    ## Convert to DataFrame
     df = pd.DataFrame(history)
     df['date'] = pd.to_datetime(df['date'])
     
-    # Create visualization
+    ## Create visualization
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
     
-    # Coverage trend line
+    ## Coverage trend line
     ax1.plot(df['date'], df['coverage'], marker='o', linewidth=2, color='#2ecc71')
     ax1.axhline(y=85, color='r', linestyle='--', label='85% Target')
     ax1.fill_between(df['date'], df['coverage'], 85, 
@@ -400,7 +400,7 @@ def generate_coverage_trend(history_file='coverage_history.json'):
     ax1.legend()
     ax1.grid(True, alpha=0.3)
     
-    # Package-level coverage heatmap
+    ## Package-level coverage heatmap
     if 'packages' in df.columns[0]:
         packages_df = pd.DataFrame(df['packages'].tolist())
         im = ax2.imshow(packages_df.T, aspect='auto', cmap='RdYlGn', vmin=0, vmax=100)
@@ -670,7 +670,7 @@ When invoked, I will:
              - go: ["testing", "testify", "gomock"]
              - python: ["pytest", "unittest", "mock"]
            go_features:
-             # Generics stable since Go 1.18, no special flags needed
+             ## Generics stable since Go 1.18, no special flags needed
              - generics: true
              - fips_compliance: true
        
@@ -728,15 +728,15 @@ When invoked, I will:
        [Tags]    e2e    critical    l-release    r5
        [Setup]    Verify Go Version    ${GO_VERSION}
        
-       # Nephio R5 Feature: OCloud infrastructure initialization with baremetal support
-       # R5 introduced native baremetal provisioning via Metal3 integration
+       ## Nephio R5 Feature: OCloud infrastructure initialization with baremetal support
+       ## R5 introduced native baremetal provisioning via Metal3 integration
        Create Namespace    ${NAMESPACE}
        ${ocloud_status}=    Initialize OCloud    baremetal=true
        Should Be Equal    ${ocloud_status}    READY
        
-       # Nephio R5 Feature: ArgoCD as primary deployment mechanism
-       # R5 replaces ConfigSync with ArgoCD for GitOps workflows
-       # Uses kpt v1.0.0-beta.55 for package management
+       ## Nephio R5 Feature: ArgoCD as primary deployment mechanism
+       ## R5 replaces ConfigSync with ArgoCD for GitOps workflows
+       ## Uses kpt v1.0.0-beta.55 for package management
        ${app}=    Create ArgoCD Application    
        ...    name=l-release-nf
        ...    repo=https://github.com/org/r5-deployments
@@ -744,29 +744,29 @@ When invoked, I will:
        ...    plugin=kpt-v1.0.0-beta.55
        Wait Until ArgoCD Synced    ${app}    ${TIMEOUT}
        
-       # O-RAN L Release Feature: AI/ML model deployment
-       # L Release introduces native AI/ML support with ONNX runtime
-       # Supports traffic prediction, anomaly detection, and energy optimization
+       ## O-RAN L Release Feature: AI/ML model deployment
+       ## L Release introduces native AI/ML support with ONNX runtime
+       ## Supports traffic prediction, anomaly detection, and energy optimization
        ${model_status}=    Deploy AI ML Models
        ...    models=traffic_predictor,anomaly_detector,energy_optimizer
        ...    runtime=onnx
        ...    version=l-release-v1.0
        Should Be Equal    ${model_status}    DEPLOYED
        
-       # O-RAN L Release Feature: E2 interface v3.0 with AI/ML support
-       # E2AP v3.0 introduces AI/ML-aware service models for intelligent RAN control
+       ## O-RAN L Release Feature: E2 interface v3.0 with AI/ML support
+       ## E2AP v3.0 introduces AI/ML-aware service models for intelligent RAN control
        ${e2_status}=    Check E2 Connection    ${RIC_URL}
        ...    version=e2ap-v3.0
        ...    ai_ml_enabled=true    # L Release specific: AI/ML service models
        Should Be Equal    ${e2_status}    CONNECTED
        
-       # O-RAN L Release Feature: VES 7.3 with AI/ML domain events
-       # VES 7.3 adds new event domains for AI/ML model lifecycle and inference metrics
+       ## O-RAN L Release Feature: VES 7.3 with AI/ML domain events
+       ## VES 7.3 adds new event domains for AI/ML model lifecycle and inference metrics
        ${ves_events}=    Validate VES Events    version=7.3
        Should Be True    ${ves_events.count} > 0
        Should Contain    ${ves_events.domains}    ai_ml    # L Release: AI/ML event domain
        
-       # O-RAN L Release Performance Targets:
+       ## O-RAN L Release Performance Targets:
        # - Throughput: >100 Gbps (increased from 50 Gbps in K Release)
        # - Latency: <5ms (reduced from 10ms target)
        # - Energy Efficiency: >0.5 Gbps/Watt (new L Release metric)
@@ -785,19 +785,19 @@ When invoked, I will:
        [Documentation]    Test L Release AI/ML features
        [Tags]    ai_ml    l-release    integration
        
-       # Deploy AI/ML inference server
+       ## Deploy AI/ML inference server
        ${inference_server}=    Deploy Triton Server
        ...    version=2.42.0
        ...    models=${L_RELEASE_MODELS}
        Wait Until Deployment Ready    triton-server    ${NAMESPACE}
        
-       # Test model loading
+       ## Test model loading
        ${models}=    List Loaded Models    ${inference_server}
        Should Contain    ${models}    traffic_predictor_onnx
        Should Contain    ${models}    anomaly_detector_trt
        Should Contain    ${models}    energy_optimizer_tf
        
-       # Test inference performance
+       ## Test inference performance
        ${perf_results}=    Run AI Inference Benchmark
        ...    model=traffic_predictor
        ...    batch_size=32
@@ -807,7 +807,7 @@ When invoked, I will:
        Should Be True    ${perf_results.throughput_fps} > 1000
        Should Be True    ${perf_results.p99_latency_ms} < 50
        
-       # Test federated learning
+       ## Test federated learning
        ${fl_result}=    Test Federated Learning
        ...    sites=3
        ...    rounds=10
@@ -819,25 +819,25 @@ When invoked, I will:
        [Documentation]    Test R5 baremetal provisioning
        [Tags]    ocloud    baremetal    r5
        
-       # Register baremetal hosts
+       ## Register baremetal hosts
        ${hosts}=    Register Baremetal Hosts
        ...    count=3
        ...    bmc_type=redfish
        Should Be Equal    ${hosts.registered}    3
        
-       # Provision cluster via Metal3
+       ## Provision cluster via Metal3
        ${cluster}=    Provision Baremetal Cluster
        ...    name=test-edge-cluster
        ...    nodes=${hosts}
        ...    os=ubuntu-22.04
        Wait Until Cluster Ready    ${cluster}    timeout=30m
        
-       # Verify OCloud integration
+       ## Verify OCloud integration
        ${ocloud_status}=    Get OCloud Status    ${cluster}
        Should Be Equal    ${ocloud_status.state}    ACTIVE
        Should Be True    ${ocloud_status.nodes_ready} == 3
        
-       # Test power management
+       ## Test power management
        ${power_test}=    Test Power Management
        ...    cluster=${cluster}
        ...    action=sleep_wake_cycle
@@ -847,22 +847,22 @@ When invoked, I will:
        [Documentation]    Benchmark Go 1.24.6 controllers
        [Tags]    performance    go124    controllers
        
-       # Enable Go 1.24.6 features
-       # Go 1.24.6 includes FIPS 140-3 usage capability
+       ## Enable Go 1.24.6 features
+       ## Go 1.24.6 includes FIPS 140-3 usage capability
        Set Environment Variable    GODEBUG    fips140=on
        
-       # Run Go benchmarks
+       ## Run Go benchmarks
        ${bench_results}=    Run Go Benchmarks
        ...    package=./controllers/...
        ...    bench=.
        ...    time=30s
        ...    cpu=4
        
-       # Verify performance improvements
+       ## Verify performance improvements
        Should Contain    ${bench_results}    BenchmarkReconcile
        Should Contain    ${bench_results}    BenchmarkGenericAlias
        
-       # Check memory efficiency with generics
+       ## Check memory efficiency with generics
        ${mem_stats}=    Get Memory Stats    ${bench_results}
        Should Be True    ${mem_stats.allocs_per_op} < 1000
        Should Be True    ${mem_stats.bytes_per_op} < 10000
@@ -1059,7 +1059,7 @@ When invoked, I will:
 4. **Chaos Testing for R5/L Release**
 
    ```yaml
-   # Litmus Chaos for R5/L Release Testing
+   ## Litmus Chaos for R5/L Release Testing
    apiVersion: litmuschaos.io/v1alpha1
    kind: ChaosEngine
    metadata:
@@ -1076,7 +1076,7 @@ When invoked, I will:
        appkind: deployment
      chaosServiceAccount: litmus-admin
      experiments:
-       # Test AI/ML model resilience
+       ## Test AI/ML model resilience
        - name: ai-model-failure
          spec:
            components:
@@ -1090,7 +1090,7 @@ When invoked, I will:
                - name: DURATION
                  value: '300'
        
-       # Test energy optimization under stress
+       ## Test energy optimization under stress
        - name: power-constraint-test
          spec:
            components:
@@ -1102,7 +1102,7 @@ When invoked, I will:
                - name: MONITOR_EFFICIENCY
                  value: 'true'
        
-       # Test OCloud baremetal resilience
+       ## Test OCloud baremetal resilience
        - name: baremetal-node-failure
          spec:
            components:
@@ -1114,7 +1114,7 @@ When invoked, I will:
                - name: RECOVERY_TIME
                  value: '120'
        
-       # Test ArgoCD sync resilience
+       ## Test ArgoCD sync resilience
        - name: gitops-disruption
          spec:
            components:
@@ -1126,7 +1126,7 @@ When invoked, I will:
                - name: DURATION
                  value: '180'
        
-       # Test DPU failure
+       ## Test DPU failure
        - name: dpu-failure
          spec:
            components:
@@ -1168,7 +1168,7 @@ When invoked, I will:
                'score': 100
            }
            
-           # Check L Release specific features
+           ## Check L Release specific features
            l_release_checks = {
                'ai_ml_apis': self._check_ai_ml_apis(deployment),
                'energy_efficiency': self._check_energy_efficiency(deployment),
@@ -1206,7 +1206,7 @@ When invoked, I will:
                    result['reason'] = f"Missing required AI/ML API: {api}"
                    break
            
-           # Check ONNX support
+           ## Check ONNX support
            onnx_test = self._test_onnx_inference(deployment)
            if not onnx_test['success']:
                result['warning'] = "ONNX inference sub-optimal"
@@ -1238,7 +1238,7 @@ When invoked, I will:
                'checks': {}
            }
            
-           # R5 specific checks
+           ## R5 specific checks
            r5_checks = {
                'argocd_primary': self._check_argocd_deployment(deployment),
                'ocloud_enabled': self._check_ocloud_integration(deployment),
@@ -1259,7 +1259,7 @@ When invoked, I will:
            """Check Go 1.24.6 compatibility"""
            result = {'passed': True}
            
-           # Check Go version in pods
+           ## Check Go version in pods
            pods = self.k8s_client.list_namespaced_pod(
                namespace=deployment['namespace'],
                label_selector=f"app={deployment['name']}"
@@ -1267,7 +1267,7 @@ When invoked, I will:
            
            for pod in pods.items:
                for container in pod.spec.containers:
-                   # Check environment variables
+                   ## Check environment variables
                    env_vars = {e.name: e.value for e in container.env or []}
                    
                    if 'GO_VERSION' in env_vars:
@@ -1276,7 +1276,7 @@ When invoked, I will:
                            result['passed'] = False
                            result['reason'] = f"Go version {version} < 1.24.6"
                    
-                   # Check FIPS 140-3 usage capability (Go 1.24.6 support)
+                   ## Check FIPS 140-3 usage capability (Go 1.24.6 support)
                    if env_vars.get('GODEBUG') != 'fips140=on':
                        result['warning'] = "FIPS 140-3 mode not enabled (set GODEBUG=fips140=on). Note: FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls."
            
@@ -1328,7 +1328,7 @@ When invoked, I will:
                freq='1min'
            )
            
-           # Generate correlated metrics
+           ## Generate correlated metrics
            base_load = np.sin(np.linspace(0, 4*np.pi, len(timestamps))) * 50 + 100
            
            metrics = pd.DataFrame({
@@ -1339,19 +1339,19 @@ When invoked, I will:
                'prb_usage_ul': np.random.beta(2, 5, len(timestamps)) * 100,
                'active_ues': np.random.poisson(100, len(timestamps)),
                
-               # L Release specific metrics
+               ## L Release specific metrics
                'ai_inference_latency_ms': np.random.gamma(3, 10, len(timestamps)),
                'ai_model_accuracy': 0.95 + np.random.normal(0, 0.02, len(timestamps)),
                'energy_consumption_watts': base_load * 20 + np.random.normal(0, 50, len(timestamps)),
                'energy_efficiency_gbps_per_watt': base_load / (base_load * 20) + np.random.normal(0, 0.01, len(timestamps)),
                'carbon_intensity_gco2_kwh': 400 + np.random.normal(0, 50, len(timestamps)),
                
-               # R5 specific metrics
+               ## R5 specific metrics
                'ocloud_utilization': np.random.beta(3, 2, len(timestamps)),
                'argocd_sync_status': np.random.choice([1, 0], len(timestamps), p=[0.98, 0.02]),
                'baremetal_nodes_ready': np.random.choice([3, 2, 1], len(timestamps), p=[0.95, 0.04, 0.01]),
                
-               # Network slice metrics
+               ## Network slice metrics
                'slice_1_throughput': base_load * 0.4 + np.random.normal(0, 5, len(timestamps)),
                'slice_2_throughput': base_load * 0.3 + np.random.normal(0, 5, len(timestamps)),
                'slice_3_throughput': base_load * 0.3 + np.random.normal(0, 5, len(timestamps)),
@@ -1375,7 +1375,7 @@ When invoked, I will:
            duration = 3600  # 1 hour in seconds
            timestamps = np.arange(duration)
            
-           # Combine multiple patterns
+           ## Combine multiple patterns
            steady = np.ones(duration) * 1000  # 1000 req/s baseline
            burst = np.zeros(duration)
            burst[500:600] = 5000  # Burst at 500s
@@ -1431,7 +1431,7 @@ When invoked, I will:
                }
                topology['sites'].append(site)
            
-           # Generate connections
+           ## Generate connections
            for i in range(num_sites):
                for j in range(i+1, num_sites):
                    if random.random() > 0.3:  # 70% chance of connection
@@ -1564,8 +1564,8 @@ validate-packages:
   stage: validate
   image: golang:1.24.6-alpine
   script:
-    # Generics are stable since Go 1.18, no experimental flags needed
-    # FIPS 140-3 support via GODEBUG environment variable
+    ## Generics are stable since Go 1.18, no experimental flags needed
+    ## FIPS 140-3 support via GODEBUG environment variable
     - export GODEBUG=fips140=on
     - kpt fn eval . --image gcr.io/kpt-fn/kubeval:v0.4.0
     - kpt fn eval . --image gcr.io/kpt-fn/gatekeeper:v0.3.0
@@ -1576,15 +1576,15 @@ unit-tests-with-coverage:
   stage: test
   image: golang:1.24.6
   script:
-    # Go 1.24.6 Feature: Native FIPS 140-3 support without external libraries
-    # Nephio R5 supports FIPS 140-3 usage for government deployments (consult security team for validated builds)
+    ## Go 1.24.6 Feature: Native FIPS 140-3 support without external libraries
+    ## Nephio R5 supports FIPS 140-3 usage for government deployments (consult security team for validated builds)
     - export GODEBUG=fips140=on
     
-    ## Run tests with coverage
-    # Go 1.24.6 Feature: Improved test caching and parallel execution
+    ### Run tests with coverage
+    ## Go 1.24.6 Feature: Improved test caching and parallel execution
     - go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
     
-    # Check coverage threshold
+    ## Check coverage threshold
     - |
       COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
       echo "Current coverage: ${COVERAGE}%"
@@ -1594,12 +1594,12 @@ unit-tests-with-coverage:
         exit 1
       fi
     
-    # Generate reports
+    ## Generate reports
     - go tool cover -html=coverage.out -o coverage.html
     - go tool cover -func=coverage.out > coverage.txt
     - go test -bench=. -benchmem ./... > benchmark.txt
     
-    # Convert to Cobertura format for GitLab
+    ## Convert to Cobertura format for GitLab
     - go install github.com/t-yuki/gocover-cobertura@latest
     - gocover-cobertura < coverage.out > coverage.xml
   coverage: '/total:\s+\(statements\)\s+(\d+\.\d+)%/'
@@ -1665,7 +1665,7 @@ fips-compliance-check:
   stage: security
   image: golang:1.24.6
   script:
-    # Go 1.24.6 native FIPS 140-3 support - no external libraries required
+    ## Go 1.24.6 native FIPS 140-3 support - no external libraries required
     - export GODEBUG=fips140=on
     - go test ./...
     - scripts/verify_fips_compliance.sh
@@ -1906,7 +1906,7 @@ def generate_r5_l_release_test_report(test_results):
         'recommendations': generate_test_recommendations(test_results)
     }
     
-    # Generate HTML report
+    ## Generate HTML report
     html_template = """
     <!DOCTYPE html>
     <html>
@@ -2075,39 +2075,39 @@ When implementing testing for R5/L Release, I focus on comprehensive validation 
 ## Comprehensive Coverage Commands
 
 ```bash
-# Enhanced coverage commands for Nephio R5/O-RAN L Release
+## Enhanced coverage commands for Nephio R5/O-RAN L Release
 go test -cover -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out -o coverage.html
 
-# Detailed coverage with atomic mode for concurrent tests
+## Detailed coverage with atomic mode for concurrent tests
 go test -covermode=atomic -coverprofile=coverage.out -race ./...
 
-# Coverage with specific package filtering for R5/L Release
+## Coverage with specific package filtering for R5/L Release
 go test -coverprofile=coverage.out -coverpkg=./pkg/nephio/...,./pkg/oran/...,./internal/... ./...
 
-# Coverage excluding vendor and test utilities
+## Coverage excluding vendor and test utilities
 go test -coverprofile=coverage.out $(go list ./... | grep -v /vendor/ | grep -v /testdata/ | grep -v /mocks/)
 
-# Coverage with parallel execution and timeout
+## Coverage with parallel execution and timeout
 go test -parallel=8 -timeout=30m -coverprofile=coverage.out ./...
 ```
 
 ## Advanced Coverage Analysis
 
 ```bash
-# Generate comprehensive coverage reports
+## Generate comprehensive coverage reports
 go tool cover -func=coverage.out > coverage_func.txt
 go tool cover -html=coverage.out -o coverage.html
 
-# Extract coverage percentage for CI/CD
+## Extract coverage percentage for CI/CD
 COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
 echo "Total coverage: ${COVERAGE}%"
 
-# Generate coverage badge
+## Generate coverage badge
 go get github.com/AlecAivazis/survey/v2
 coverage-badge -coverage=${COVERAGE} -output=coverage.svg
 
-# Coverage diff between branches
+## Coverage diff between branches
 git diff HEAD~1 HEAD -- '*.go' | go tool cover -func=- > coverage_diff.txt
 ```
 
@@ -2119,14 +2119,14 @@ git diff HEAD~1 HEAD -- '*.go' | go tool cover -func=- > coverage_diff.txt
 
 set -euo pipefail
 
-# Configuration
+## Configuration
 THRESHOLD=85.0
 COVERAGE_FILE="coverage.out"
 HTML_REPORT="coverage.html"
 JSON_REPORT="coverage.json"
 BADGE_FILE="coverage.svg"
 
-# Colors for output
+## Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -2135,27 +2135,27 @@ NC='\033[0m' # No Color
 echo "🧪 Running comprehensive test coverage analysis..."
 echo "📊 Target Coverage: ${THRESHOLD}%"
 
-# Clean previous reports
+## Clean previous reports
 rm -f ${COVERAGE_FILE} ${HTML_REPORT} ${JSON_REPORT} ${BADGE_FILE}
 
-# Run tests with coverage
+## Run tests with coverage
 echo "▶️  Running tests with coverage..."
 if ! go test -covermode=atomic -coverprofile=${COVERAGE_FILE} -race -timeout=30m ./...; then
     echo -e "${RED}❌ Tests failed!${NC}"
     exit 1
 fi
 
-# Verify coverage file exists
+## Verify coverage file exists
 if [[ ! -f ${COVERAGE_FILE} ]]; then
     echo -e "${RED}❌ Coverage file not generated!${NC}"
     exit 1
 fi
 
-# Extract detailed coverage information
+## Extract detailed coverage information
 echo "📈 Analyzing coverage results..."
 go tool cover -func=${COVERAGE_FILE} > coverage_detailed.txt
 
-# Extract total coverage
+## Extract total coverage
 COVERAGE=$(go tool cover -func=${COVERAGE_FILE} | grep total | awk '{print $3}' | sed 's/%//')
 
 if [[ -z "${COVERAGE}" ]]; then
@@ -2166,7 +2166,7 @@ fi
 echo -e "📊 Current coverage: ${GREEN}${COVERAGE}%${NC}"
 echo -e "🎯 Required coverage: ${YELLOW}${THRESHOLD}%${NC}"
 
-# Compare with threshold (handle decimal comparison)
+## Compare with threshold (handle decimal comparison)
 if (( $(echo "${COVERAGE} < ${THRESHOLD}" | bc -l) )); then
     echo -e "${RED}❌ Coverage ${COVERAGE}% is below threshold ${THRESHOLD}%${NC}"
     echo -e "${YELLOW}📝 Coverage by package:${NC}"
@@ -2178,14 +2178,14 @@ else
     echo -e "${GREEN}✅ Coverage check passed!${NC}"
 fi
 
-# Generate enhanced reports
+## Generate enhanced reports
 echo "📄 Generating comprehensive coverage reports..."
 
-# HTML report with heat map
+## HTML report with heat map
 go tool cover -html=${COVERAGE_FILE} -o ${HTML_REPORT}
 echo -e "${GREEN}📄 HTML report: ${HTML_REPORT}${NC}"
 
-# JSON report for CI/CD integration
+## JSON report for CI/CD integration
 go tool cover -func=${COVERAGE_FILE} | awk '
 BEGIN { print "{\"coverage\":{\"packages\":[" }
 /\.go:/ { 
@@ -2199,13 +2199,13 @@ END { print "],\"total\":" coverage "}}" }
 
 echo -e "${GREEN}📄 JSON report: ${JSON_REPORT}${NC}"
 
-# Generate coverage badge
+## Generate coverage badge
 if command -v coverage-badge &> /dev/null; then
     coverage-badge -coverage=${COVERAGE} -output=${BADGE_FILE}
     echo -e "${GREEN}📄 Coverage badge: ${BADGE_FILE}${NC}"
 fi
 
-# Package-level coverage analysis
+## Package-level coverage analysis
 echo -e "${YELLOW}📦 Package-level coverage analysis:${NC}"
 go tool cover -func=${COVERAGE_FILE} | grep -E "^.*\.go:" | awk '{
     split($1, parts, "/")
@@ -2739,20 +2739,20 @@ jobs:
 
       - name: Run enhanced coverage tests
         run: |
-          # Install coverage tools
+          ## Install coverage tools
           go install github.com/axw/gocov/gocov@latest
           go install github.com/AlecAivazis/survey/v2@latest
           
-          # Run tests with enhanced coverage
+          ## Run tests with enhanced coverage
           ./scripts/enhanced-coverage-check.sh
 
       - name: Generate coverage reports
         run: |
-          # Convert to different formats
+          ## Convert to different formats
           gocov convert coverage.out | gocov-xml > coverage.xml
           gocov convert coverage.out | gocov-html > coverage_detailed.html
           
-          # Extract coverage for badge
+          ## Extract coverage for badge
           COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//')
           echo "COVERAGE=${COVERAGE}" >> $GITHUB_ENV
 
@@ -2768,10 +2768,10 @@ jobs:
       - name: Update coverage badge
         if: matrix.test-type == 'unit' && github.ref == 'refs/heads/main'
         run: |
-          # Generate dynamic coverage badge
+          ## Generate dynamic coverage badge
           curl -s "https://img.shields.io/badge/coverage-${COVERAGE}%-brightgreen" > coverage.svg
           
-          # Commit badge if it changed
+          ## Commit badge if it changed
           if ! git diff --quiet coverage.svg; then
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
@@ -2817,11 +2817,11 @@ jobs:
 
       - name: Compare coverage with main branch
         run: |
-          # Get current coverage
+          ## Get current coverage
           go test -coverprofile=coverage_current.out ./...
           CURRENT_COVERAGE=$(go tool cover -func=coverage_current.out | grep total | awk '{print $3}' | sed 's/%//')
           
-          # Get main branch coverage
+          ## Get main branch coverage
           git checkout origin/main
           go test -coverprofile=coverage_main.out ./...
           MAIN_COVERAGE=$(go tool cover -func=coverage_main.out | grep total | awk '{print $3}' | sed 's/%//')
@@ -2833,7 +2833,7 @@ jobs:
           echo "Main branch coverage: ${MAIN_COVERAGE}%"
           echo "Coverage difference: ${COVERAGE_DIFF}%"
           
-          # Comment on PR if coverage decreased significantly
+          ## Comment on PR if coverage decreased significantly
           if (( $(echo "${COVERAGE_DIFF} < -2" | bc -l) )); then
             echo "::warning::Coverage decreased by ${COVERAGE_DIFF}% compared to main branch"
           elif (( $(echo "${COVERAGE_DIFF} > 2" | bc -l) )); then
@@ -2944,7 +2944,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      # Actual content here
+      ## Actual content here
 ```
 
 ## Workflow Integration

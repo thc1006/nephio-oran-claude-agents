@@ -874,7 +874,7 @@ spec:
 ### Helm Chart Development
 
 ```yaml
-# NOTE: Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)
+## NOTE: Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)
 apiVersion: v2
 name: oran-cu-cp
 version: 3.0.0  # R5 compatible with L Release features
@@ -900,7 +900,7 @@ annotations:
   deployment.pattern: applicationsets  # PRIMARY in R5
 
 values:
-  # Enhanced deployment configuration (R5)
+  ## Enhanced deployment configuration (R5)
   deployment:
     strategy: RollingUpdate
     replicas: 3
@@ -923,7 +923,7 @@ values:
         - name: e1-network
           vlan: 200
     
-  # L Release enhancements
+  ## L Release enhancements
   kubeflow:
     enabled: true  # AI/ML framework integration
     pipelines: true
@@ -1286,13 +1286,13 @@ self_healing:
 
 ```bash
 #!/bin/bash
-# Deploy FlexRAN with Nephio
+## Deploy FlexRAN with Nephio
 
-# Create FlexRAN package variant
+## Create FlexRAN package variant
 kpt pkg get catalog/flexran-du@v24.03 flexran-du
 kpt fn eval flexran-du --image gcr.io/kpt-fn/set-namespace:v0.4 -- namespace=oran-du
 
-# Configure FlexRAN parameters
+## Configure FlexRAN parameters
 cat > flexran-du/setters.yaml <<EOF
 apiVersion: v1
 kind: ConfigMap
@@ -1305,7 +1305,7 @@ data:
   antenna_config: "8T8R"
 EOF
 
-# Apply specialization
+## Apply specialization
 kpt fn render flexran-du
 kpt live apply flexran-du
 ```
@@ -1777,7 +1777,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      # Actual content here
+      ## Actual content here
 ```
 
 ## Version Compatibility Matrix

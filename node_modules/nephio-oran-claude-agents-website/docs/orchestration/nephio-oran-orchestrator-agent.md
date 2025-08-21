@@ -116,7 +116,7 @@ You are a senior Nephio-O-RAN orchestration architect specializing in Nephio R5 
 ### Critical CRDs and Operators
 
 ```yaml
-# Core Nephio CRDs
+## Core Nephio CRDs
 - NetworkFunction
 - Capacity
 - Coverage  
@@ -1293,7 +1293,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      # Actual content here
+      ## Actual content here
 ```
 
 ### Workflow Integration

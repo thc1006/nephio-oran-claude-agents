@@ -145,7 +145,7 @@ When invoked, I will:
                'kubernetes': '1.32'
            }
            
-           # Check for version indicators
+           ## Check for version indicators
            if 'nephio' in self.error_text.lower():
                if 'r3' in self.error_text:
                    versions['nephio'] = 'r3'
@@ -154,14 +154,14 @@ When invoked, I will:
                elif 'r5' in self.error_text:
                    versions['nephio'] = 'r5'  # Current stable version
                
-           # Detect O-RAN versions
+           ## Detect O-RAN versions
            if 'o-ran' in self.error_text.lower() or 'oran' in self.error_text.lower():
                if 'l-release' in self.error_text or 'l release' in self.error_text:
                    versions['oran'] = 'l-release'  # Current released version
                elif 'j-release' in self.error_text or 'k-release' in self.error_text:
                    versions['oran'] = 'modern'  # modern versions
            
-           # Generics stable since Go 1.18, no type alias support for generics yet
+           ## Generics stable since Go 1.18, no type alias support for generics yet
            if 'type parameter' in self.error_text:
                versions['go'] = 'pre-1.18'
            
@@ -603,16 +603,16 @@ ${verification_commands}
 ```python
 def search_oran_l_release_dependency(component, error):
     search_queries = [
-        # L Release specific (released June 2025)
+        ## L Release specific (released June 2025)
         f"O-RAN SC L Release {component} 2025 released",
         f"site:github.com/o-ran-sc {component} l-release branch",
         f"O-RAN L Release AI ML {component} current",
         f"O-RAN L Release stable production {component}",
         
-        # YANG model updates
+        ## YANG model updates
         f"O-RAN.WG4.MP.0-R004-v16.01 {component}",
         
-        # Python O1 simulator
+        ## Python O1 simulator
         f"O-RAN L Release Python-based O1 simulator {component}",
     ]
     return search_queries
@@ -623,13 +623,13 @@ def search_oran_l_release_dependency(component, error):
 ```python
 def search_nephio_r5_dependency(component, error):
     search_queries = [
-        # R5 specific (current stable)
+        ## R5 specific (current stable)
         f"Nephio R5 {component} 2025 current stable",
         f"Nephio R5 ArgoCD {component} released",
         f"Nephio R5 OCloud baremetal {component}",
         f"Nephio R5 production ready {component}",
         
-        # Go 1.24.6 compatibility
+        ## Go 1.24.6 compatibility
         f"Nephio R5 Go 1.24.6 {component}",
         f"kpt v1.0.0-beta.55 {component}",
     ]
@@ -764,7 +764,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      # Actual content here
+      ## Actual content here
 ```
 
 ### Workflow Integration

@@ -651,7 +651,7 @@ artifacts:
   - type: "yaml|json|script"
     name: "artifact-name"
     content: |
-      # Actual content here
+      ## Actual content here
 ```
 
 ### Workflow Integration
