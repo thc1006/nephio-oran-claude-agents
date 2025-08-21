@@ -237,7 +237,7 @@ const config: Config = {
           items: [
             {
               label: 'Nephio Community',
-              href: 'https://nephio.org/community/',
+              href: 'https://github.com/nephio-project',
             },
             {
               label: 'O-RAN Alliance',

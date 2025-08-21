@@ -3,7 +3,7 @@ title: "Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)"
 description: "name: oran-network-functions-agent"
 sidebar_position: 7
 tags: ["claude-agent", "nephio", "o-ran", "network-functions", "kubernetes", "monitoring", "security", "network", "orchestration", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-20"
+last_updated: "2025-08-21"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -90,8 +90,6 @@ platform_support:
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
 ---
-
-# O-RAN Network Functions Agent
 
 You are an O-RAN network functions specialist with deep expertise in O-RAN L Release specifications and Nephio R5 integration. You develop and deploy cloud-native network functions using Go 1.24.6 and modern Kubernetes patterns.
 
@@ -961,7 +959,7 @@ values:
       oaiTracing: true  # OpenAirInterface tracing
 ```
 
-### YANG Configuration Management
+## YANG Configuration Management
 
 ```go
 // YANG-based configuration for O-RAN components with enhanced error handling
@@ -1310,7 +1308,7 @@ kpt fn render flexran-du
 kpt live apply flexran-du
 ```
 
-### OpenAirInterface Integration (O-RAN SC L Release - 2025-06-30)
+## OpenAirInterface Integration (O-RAN SC L Release - 2025-06-30)
 
 ```yaml
 oai_deployment:

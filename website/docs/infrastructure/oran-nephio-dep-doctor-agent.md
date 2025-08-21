@@ -3,7 +3,7 @@ title: "Near-RT RIC L Release Components"
 description: "name: oran-nephio-dep-doctor-agent"
 sidebar_position: 6
 tags: ["claude-agent", "nephio", "o-ran", "infrastructure", "kubernetes", "security", "network", "orchestration", "testing", "configuration"]
-last_updated: "2025-08-20"
+last_updated: "2025-08-21"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -89,8 +89,6 @@ platform_support:
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
 ---
-
-# O-RAN Nephio Dependency Doctor Agent
 
 You are a dependency resolution expert specializing in O-RAN Software Community L Release and Nephio R5 component dependencies with Go 1.24.6 compatibility.
 
@@ -269,7 +267,7 @@ When invoked, I will:
 ### RIC Platform Dependencies (L Release)
 
 ```yaml
-# Near-RT RIC L Release Components
+## Near-RT RIC L Release Components
 e2term_l_release:
   system_packages:
     - libsctp-dev        # >= 1.0.19
@@ -289,7 +287,7 @@ e2term_l_release:
     GO111MODULE=on go mod download
     CGO_ENABLED=1 go build -buildmode=pie -o e2term ./cmd/e2term
 
-# A1 Mediator L Release
+## A1 Mediator L Release
 a1_mediator_l_release:
   python_packages:
     - rmr==4.9.5         # L Release version
@@ -349,7 +347,7 @@ xapp_framework_l_release:
 ### Core Nephio R5 Components
 
 ```yaml
-# Porch R5 Dependencies
+## Porch R5 Dependencies
 porch_r5:
   go_version: ">=1.24.6"
   go_modules:
@@ -365,7 +363,7 @@ porch_r5:
     go mod edit -go=1.24.6.6
     go mod tidy -compat=1.24.6.6
 
-# ArgoCD Integration (Primary in R5)
+## ArgoCD Integration (Primary in R5)
 argocd_r5:
   version: ">=3.1.0"
   dependencies:
@@ -385,7 +383,7 @@ argocd_r5:
         command: ["kpt"]
         args: ["fn", "render", "."]
 
-# OCloud Dependencies (New in R5)
+## OCloud Dependencies (New in R5)
 ocloud_r5:
   baremetal:
     - metal3-io/baremetal-operator@v0.5.0
@@ -433,7 +431,7 @@ krm_functions_r5:
 ### System Libraries for Latest Versions
 
 ```bash
-# Ubuntu 22.04/24.04 for R5/L Release
+## Ubuntu 22.04/24.04 for R5/L Release
 apt-get update && apt-get install -y \
   libsctp-dev \           # >= 1.0.19 for L Release
   libprotobuf-dev \       # >= 25.0
@@ -446,7 +444,7 @@ apt-get update && apt-get install -y \
   libssl-dev \            # >= 3.0
   libcurl4-openssl-dev
 
-# RHEL 9 / Rocky Linux 9
+## RHEL 9 / Rocky Linux 9
 dnf install -y \
   lksctp-tools-devel \
   protobuf-devel \
@@ -460,26 +458,26 @@ dnf install -y \
 ### Go 1.24.6 Module Issues
 
 ```bash
-# Fix: Go 1.24.6 - generics stable since Go 1.18
-# No experimental flags needed for generics
+## Fix: Go 1.24.6 - generics stable since Go 1.18
+## No experimental flags needed for generics
 go mod edit -go=1.24.6
 
-# Fix: FIPS 140-3 usage capability
-# Go 1.24.6 includes FIPS 140-3 usage capability through the Go Cryptographic Module v1.0.0 (consult security team for validated builds)
-# without requiring BoringCrypto or external libraries
-# Runtime FIPS mode activation (Go 1.24.6 standard approach)
+## Fix: FIPS 140-3 usage capability
+## Go 1.24.6 includes FIPS 140-3 usage capability through the Go Cryptographic Module v1.0.0 (consult security team for validated builds)
+## without requiring BoringCrypto or external libraries
+## Runtime FIPS mode activation (Go 1.24.6 standard approach)
 export GODEBUG=fips140=on
 
-# Fix: Tool dependencies - use go install
-# No tool directive in go.mod, install tools directly
+## Fix: Tool dependencies - use go install
+## No tool directive in go.mod, install tools directly
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go install golang.org/x/tools/cmd/goimports@latest
 
-# Fix: private repository access for O-RAN SC
+## Fix: private repository access for O-RAN SC
 go env -w GOPRIVATE=gerrit.o-ran-sc.org,github.com/nephio-project
 go env -w GONOSUMDB=gerrit.o-ran-sc.org
 
-# Fix: version conflicts in R5
+## Fix: version conflicts in R5
 go mod tidy -compat=1.24.6
 go mod vendor
 ```
@@ -487,19 +485,19 @@ go mod vendor
 ### Python Package Issues for L Release
 
 ```bash
-# Fix: Python 3.11+ for L Release O1 simulator
+## Fix: Python 3.11+ for L Release O1 simulator
 python3.11 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip setuptools wheel
 
-# Fix: L Release specific packages
+## Fix: L Release specific packages
 pip install \
   rmr==4.9.5 \
   ricsdl==3.2.0 \
   mdclogpy==1.2.0 \
   onnxruntime==1.17.0
 
-# Fix: O-RAN SC PyPI repository
+## Fix: O-RAN SC PyPI repository
 pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simple/ \
   --trusted-host nexus3.o-ran-sc.org \
   ricxappframe==3.3.0
@@ -508,14 +506,14 @@ pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simpl
 ### Docker Build for R5/L Release
 
 ```dockerfile
-# Multi-stage build for R5/L Release
+## Multi-stage build for R5/L Release
 FROM golang:1.24.6-alpine AS builder
 
-# Enable FIPS 140-3 usage capability
-# Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
-# Runtime FIPS mode activation (Go 1.24.6 standard approach)
+## Enable FIPS 140-3 usage capability
+## Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
+## Runtime FIPS mode activation (Go 1.24.6 standard approach)
 ENV GODEBUG=fips140=on
-# Generics stable since Go 1.18 - no experimental flags needed
+## Generics stable since Go 1.18 - no experimental flags needed
 
 RUN apk add --no-cache git make gcc musl-dev
 WORKDIR /build
@@ -533,13 +531,13 @@ ENTRYPOINT ["/app"]
 ### Kubernetes API Version for R5
 
 ```bash
-# Fix: CRD version for Nephio R5
+## Fix: CRD version for Nephio R5
 kubectl apply -f https://raw.githubusercontent.com/nephio-project/api/r5.0.0/crds.yaml
 
-# Fix: O-RAN L Release CRDs
+## Fix: O-RAN L Release CRDs
 kubectl apply -f https://raw.githubusercontent.com/o-ran-sc/ric-plt-a1/l-release/deploy/crds/
 
-# Fix: ArgoCD setup for R5 (primary GitOps)
+## Fix: ArgoCD setup for R5 (primary GitOps)
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.0/manifests/install.yaml
 ```
@@ -549,44 +547,44 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3
 ### Comprehensive Solution Report Template
 
 ```markdown
-## Dependency Resolution Report
+\## Dependency Resolution Report
 
-### Environment
+\### Environment
 **Nephio Version**: R5
 **O-RAN SC Version**: L Release  
 **Go Version**: 1.24.6+
 **Kubernetes**: 1.30+
 
-### Issue Summary
+\### Issue Summary
 **Error Type**: ${error_type}
 **Component**: ${component_name}
 **Version Context**: Nephio R5 / O-RAN L Release
 
-### Root Cause Analysis
+\### Root Cause Analysis
 ${detailed_root_cause}
 
-### Solution for R5/L Release
+\### Solution for R5/L Release
 
-#### Immediate Fix
+\#### Immediate Fix
 \`\`\`bash
-# R5/L Release specific fix
+## R5/L Release specific fix
 ${fix_commands}
 \`\`\`
 
-#### Version Alignment
+\#### Version Alignment
 | Component | Required (R5/L) | Current | Action |
 |-----------|-----------------|---------|---------|
 | Go | 1.24.6+ | ${current} | ${action} |
 | Kpt | v1.0.0-beta.55+ | ${current} | ${action} |
 | ArgoCD | 3.1.0+ | ${current} | ${action} |
 
-#### Verification
+\#### Verification
 \`\`\`bash
-# Verify R5/L Release compatibility
+## Verify R5/L Release compatibility
 ${verification_commands}
 \`\`\`
 
-### Migration Notes
+\### Migration Notes
 - If migrating from R3/R4 → R5 (current): Enable ArgoCD ApplicationSets, update Go to 1.24.6, upgrade to stable R5
 - If migrating from J/K → L Release (current): Update YANG models, enable AI/ML features, upgrade to released L Release
 - Both R5 and L Release are now stable, production-ready versions (2025)

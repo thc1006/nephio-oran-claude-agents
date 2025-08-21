@@ -238,7 +238,7 @@ If you encounter issues:
 3. **Run diagnostics**: `make diagnose`
 4. **Check compatibility**: Review the [Compatibility Matrix](
    https://github.com/thc1006/nephio-oran-claude-agents/blob/main/COMPATIBILITY_MATRIX.md)
-5. **Community support**: Join the [Nephio community](https://nephio.org/community/)
+5. **Community support**: Join the [Nephio community](https://github.com/nephio-project)
 
 ## Clean Up
 

@@ -155,7 +155,7 @@ graph TB
 ### Community Resources
 
 - [GitHub Repository](https://github.com/thc1006/nephio-oran-claude-agents)
-- [Nephio Community](https://nephio.org/community/)
+- [Nephio Community](https://github.com/nephio-project)
 - [O-RAN Alliance](https://www.o-ran.org/)
 
 ### Getting Help

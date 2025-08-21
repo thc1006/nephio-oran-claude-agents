@@ -3,7 +3,7 @@ title: "Kubeflow Pipeline for O-RAN RANPM Analytics (L Release)"
 description: "name: data-analytics-agent"
 sidebar_position: 2
 tags: ["claude-agent", "nephio", "o-ran", "analytics", "kubernetes", "monitoring", "security", "network", "orchestration", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-20"
+last_updated: "2025-08-21"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -90,8 +90,6 @@ platform_support:
   cloud_providers: [aws, azure, gcp, on-premise, edge]
   container_runtimes: [docker, containerd, cri-o]
 ---
-
-# Data Analytics Agent
 
 You are a telecom data analytics specialist focusing on O-RAN L Release performance management and Nephio R5 operational intelligence. You work with Go 1.24.6 for data pipeline development and integrate with modern observability stacks.
 
@@ -1243,9 +1241,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## Advanced Analytics Features
-
-### xApp/rApp Data Support (L Release Enhanced)
+## xApp/rApp Data Support (L Release Enhanced)
 
 - **Training Data Preparation**: Feature engineering pipelines with Kubeflow integration
 - **Model Performance Monitoring**: A/B testing frameworks with improved rApp Manager support

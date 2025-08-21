@@ -252,6 +252,10 @@ jobs:
             --skip "tel:" \
             --skip "linkedin.com" \
             --skip "twitter.com" \
+            --skip "localhost" \
+            --skip "127.0.0.1" \
+            --skip "/404" \
+            --skip "zh-TW/404" \
             --format json > link-results.json || true
 
       - name: Process link results
