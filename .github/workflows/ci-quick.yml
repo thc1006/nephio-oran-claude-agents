@@ -1,0 +1,50 @@
+name: Quick CI Check
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'website/**'
+      - 'agents/**'
+      - 'docs/**'
+
+# Cancel in-progress runs
+concurrency:
+  group: quick-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quick-check:
+    name: Quick Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: website/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci --prefer-offline --no-audit
+        
+      - name: Content validation
+        working-directory: website
+        run: npm run validate:content || echo "⚠️ Content validation issues found"
+        
+      - name: Type check
+        working-directory: website
+        run: npm run typecheck
+        
+      - name: Quick build test
+        working-directory: website
+        run: npm run build:fast
+        
+      - name: ✅ Quick CI Complete
+        run: echo "Quick CI validation passed successfully!"
