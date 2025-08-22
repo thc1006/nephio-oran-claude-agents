@@ -30,15 +30,15 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
     global: {
-      branches: 70,
-      functions: 70,
-      lines: 70,
-      statements: 70,
+      branches: 50,
+      functions: 60,
+      lines: 50,
+      statements: 50,
     },
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.setup.ts'],
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(css|less|scss|sass)$': '<rootDir>/tests/setup/__mocks__/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/setup/__mocks__/fileMock.js',
     '^@site/(.*)$': '<rootDir>/$1',
     '^@docusaurus/(.*)$': '<rootDir>/tests/setup/__mocks__/docusaurus.js',

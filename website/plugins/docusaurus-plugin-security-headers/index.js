@@ -14,6 +14,7 @@
 
 module.exports = function securityHeadersPlugin(context, options) {
   const isDevelopment = process.env.NODE_ENV === 'development';
+  const isTestEnvironment = process.env.NODE_ENV === 'test' || process.env.DISABLE_CSP_FOR_TESTS === 'true';
 
   // Default security headers configuration
   const defaultHeaders = {
@@ -54,7 +55,8 @@ module.exports = function securityHeadersPlugin(context, options) {
     'script-src': [
       "'self'",
       // Required for Docusaurus
-      isDevelopment ? "'unsafe-inline'" : "'nonce-{{nonce}}'",
+      (isDevelopment || isTestEnvironment) ? "'unsafe-inline'" : "'nonce-{{nonce}}'",
+      (isDevelopment || isTestEnvironment) ? "'unsafe-eval'" : '',
       // Specific allowlisted domains only (NO WILDCARDS)
       'https://www.google-analytics.com',
       'https://www.googletagmanager.com',
@@ -62,11 +64,11 @@ module.exports = function securityHeadersPlugin(context, options) {
       'https://cdn.jsdelivr.net', // For Algolia DocSearch
       'https://*.algolia.net',
       'https://*.algolianet.com',
-    ],
+    ].filter(Boolean),
     'style-src': [
       "'self'",
       // Required for Docusaurus theming
-      isDevelopment ? "'unsafe-inline'" : "'nonce-{{nonce}}'",
+      (isDevelopment || isTestEnvironment) ? "'unsafe-inline'" : "'nonce-{{nonce}}'",
       // Specific font providers only
       'https://fonts.googleapis.com',
     ],
@@ -97,8 +99,8 @@ module.exports = function securityHeadersPlugin(context, options) {
       'https://*.algolia.net',
       'https://*.algolianet.com',
       // WebSocket for hot reload in development
-      isDevelopment ? 'ws://localhost:*' : '',
-      isDevelopment ? 'http://localhost:*' : '',
+      (isDevelopment || isTestEnvironment) ? 'ws://localhost:*' : '',
+      (isDevelopment || isTestEnvironment) ? 'http://localhost:*' : '',
     ].filter(Boolean),
     'frame-src': ["'none'"],
     'frame-ancestors': ["'none'"],

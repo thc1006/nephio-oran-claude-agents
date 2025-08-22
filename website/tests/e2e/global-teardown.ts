@@ -20,7 +20,7 @@ async function globalTeardown(config: FullConfig) {
     const summary = {
       timestamp: new Date().toISOString(),
       environment: {
-        baseURL: config.webServer?.url || process.env.BASE_URL || 'http://localhost:3000',
+        baseURL: config.webServer?.url || process.env.BASE_URL || 'http://localhost:3000/nephio-oran-claude-agents',
         nodeVersion: process.version,
         platform: process.platform,
         ci: !!process.env.CI,

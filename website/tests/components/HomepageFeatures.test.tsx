@@ -57,13 +57,15 @@ describe('HomepageFeatures', () => {
   });
 
   it('has proper container structure', () => {
-    const section = screen.getByRole('region');
-    expect(section).toHaveClass('features');
+    const { container } = render(<HomepageFeatures />);
     
-    const container = section.querySelector('.container');
-    expect(container).toBeInTheDocument();
+    const section = container.querySelector('section');
+    expect(section).toBeInTheDocument();
     
-    const row = container?.querySelector('.row');
+    const containerElement = section?.querySelector('.container');
+    expect(containerElement).toBeInTheDocument();
+    
+    const row = containerElement?.querySelector('.row');
     expect(row).toBeInTheDocument();
   });
 

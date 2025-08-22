@@ -37,7 +37,7 @@ export default defineConfig({
 
   /* Global test settings */
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.BASE_URL || 'http://localhost:3000/nephio-oran-claude-agents',
 
     /* Collect trace only on failure to save space */
     trace: 'retain-on-failure',
@@ -113,11 +113,12 @@ export default defineConfig({
   /* Web server configuration */
   webServer: {
     command: process.env.CI ? 'npm run serve' : 'npm run start:fast',
-    url: process.env.BASE_URL || 'http://localhost:3000',
+    url: process.env.BASE_URL || 'http://localhost:3000/nephio-oran-claude-agents',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
     env: {
-      NODE_ENV: 'test',
+      NODE_ENV: 'development', // Use development to ensure unsafe-inline is allowed
+      DISABLE_CSP_FOR_TESTS: 'true',
     },
   },
 

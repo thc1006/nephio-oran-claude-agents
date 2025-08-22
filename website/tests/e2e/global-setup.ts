@@ -26,7 +26,7 @@ async function globalSetup(config: FullConfig) {
     }
     
     // Get the base URL from config or environment
-    const baseURL = config.webServer?.url || process.env.BASE_URL || 'http://localhost:3000';
+    const baseURL = config.webServer?.url || process.env.BASE_URL || 'http://localhost:3000/nephio-oran-claude-agents';
     
     console.log(`📡 Checking if application is available at ${baseURL}`);
     
