@@ -93,3 +93,18 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# Test and coverage artifacts
+coverage.out
+*.coverage
+test_dag.dot
+test_dag_report.md
+
+# Website build artifacts
+website/build/
+website/node_modules/
+
+# Editor swap files
+*.swp
+*.swo
+*~
