@@ -93,3 +93,14 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# Generated test/coverage files
+coverage.out
+*.out
+test_dag.dot
+*.dot
+
+# Docusaurus build output
+website/build/
+website/.docusaurus/
+website/.cache-loader/
