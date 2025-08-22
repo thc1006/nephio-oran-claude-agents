@@ -6,27 +6,27 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './routing-and-locale.spec.ts',
-  testMatch: '**/routing-and-locale.spec.ts',
-  
+  testDir: '.',
+  testMatch: 'routing-and-locale.spec.ts',
+
   /* Timeout settings optimized for routing tests */
   timeout: 30000,
   expect: {
     timeout: 10000,
   },
-  
+
   /* Run tests in parallel for faster execution */
   fullyParallel: true,
-  
+
   /* Fail fast in CI */
   forbidOnly: !!process.env.CI,
-  
+
   /* Retry strategy */
   retries: process.env.CI ? 2 : 1,
-  
+
   /* Worker configuration */
   workers: process.env.CI ? 2 : undefined,
-  
+
   /* Reporter configuration for CI/CD */
   reporter: [
     ['html', { open: 'never' }],
@@ -34,74 +34,74 @@ export default defineConfig({
     ['junit', { outputFile: 'test-results/routing-test-results.xml' }],
     ...(process.env.CI ? [['github'] as const] : []),
   ],
-  
+
   /* Global test settings */
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3000',
-    
+
     /* Collect trace only on failure to save space */
     trace: 'retain-on-failure',
-    
+
     /* Screenshots on failure */
     screenshot: 'only-on-failure',
-    
+
     /* No video recording for routing tests to save space */
     video: 'retain-on-failure',
-    
+
     /* Navigation timeout */
     navigationTimeout: 15000,
-    
+
     /* Action timeout */
     actionTimeout: 10000,
-    
+
     /* Ignore HTTPS errors in test environment */
     ignoreHTTPSErrors: true,
-    
+
     /* User agent for testing */
     userAgent: 'Nephio-E2E-Tests/1.0',
-    
+
     /* Locale for testing */
     locale: 'en-US',
-    
+
     /* Extra HTTP headers */
     extraHTTPHeaders: {
       'X-Test-Environment': 'e2e',
     },
   },
-  
+
   /* Test projects for different scenarios */
   projects: [
     {
       name: 'routing-chrome',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         channel: 'chrome',
       },
     },
-    
+
     {
       name: 'routing-firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-    
+
     {
       name: 'routing-safari',
       use: { ...devices['Desktop Safari'] },
       // Only run Safari tests in macOS environments
       testIgnore: process.platform !== 'darwin' ? '**/*' : undefined,
     },
-    
+
     {
       name: 'routing-mobile',
-      use: { 
+      use: {
         ...devices['Pixel 5'],
         // Test mobile-specific routing behavior
       },
     },
-    
+
     {
       name: 'routing-edge',
-      use: { 
+      use: {
         ...devices['Desktop Edge'],
         channel: 'msedge',
       },
@@ -109,7 +109,7 @@ export default defineConfig({
       testIgnore: process.platform !== 'win32' ? '**/*' : undefined,
     },
   ],
-  
+
   /* Web server configuration */
   webServer: {
     command: process.env.CI ? 'npm run serve' : 'npm run start:fast',
@@ -120,14 +120,14 @@ export default defineConfig({
       NODE_ENV: 'test',
     },
   },
-  
+
   /* Global setup and teardown */
   globalSetup: './global-setup.ts',
   globalTeardown: './global-teardown.ts',
-  
+
   /* Output directory */
   outputDir: 'test-results/routing-tests',
-  
+
   /* Test metadata */
   metadata: {
     testSuite: 'Routing and Locale Tests',
