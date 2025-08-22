@@ -1,0 +1,10 @@
+{
+  "label": "Agents",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "Agent Documentation",
+    "description": "Comprehensive documentation for all 10 specialized Nephio O-RAN Claude Agents",
+    "keywords": ["agents", "documentation", "api", "capabilities", "configuration"]
+  }
+}

@@ -18,77 +18,98 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Orchestration',
-      collapsed: true,
+      label: 'Architecture',
+      collapsed: false,
       items: [
-        'orchestration/nephio-oran-orchestrator-agent',
+        'architecture/overview',
       ],
     },
     {
       type: 'category',
-      label: 'Infrastructure',
-      collapsed: true,
+      label: 'Agents',
+      collapsed: false,
       items: [
-        'infrastructure/nephio-infrastructure-agent',
-        'infrastructure/oran-nephio-dep-doctor-agent',
+        'agents/orchestrator-agent',
+        'agents/comparison-matrix',
+        {
+          type: 'category',
+          label: 'Infrastructure & Platform',
+          collapsed: true,
+          items: [
+            'infrastructure/nephio-infrastructure-agent',
+            'infrastructure/oran-nephio-dep-doctor-agent',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Network Functions',
+          collapsed: true,
+          items: [
+            'network-functions/oran-network-functions-agent',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Configuration & Management',
+          collapsed: true,
+          items: [
+            'config-management/configuration-management-agent',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Operations & Monitoring',
+          collapsed: true,
+          items: [
+            'monitoring/monitoring-analytics-agent',
+            'analytics/data-analytics-agent',
+            'performance/performance-optimization-agent',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Security & Testing',
+          collapsed: true,
+          items: [
+            'security/security-compliance-agent',
+            'testing/testing-validation-agent',
+          ],
+        },
       ],
     },
     {
       type: 'category',
-      label: 'Monitoring',
+      label: 'Integration',
       collapsed: true,
       items: [
-        'monitoring/monitoring-analytics-agent',
+        'integration/deployment-workflows',
       ],
     },
     {
       type: 'category',
-      label: 'Security',
+      label: 'API Reference',
       collapsed: true,
       items: [
-        'security/security-compliance-agent',
+        'api-reference/overview',
       ],
     },
     {
       type: 'category',
-      label: 'Performance',
+      label: 'Examples',
       collapsed: true,
       items: [
-        'performance/performance-optimization-agent',
+        'examples/enterprise-5g-deployment',
       ],
     },
-    {
-      type: 'category',
-      label: 'Testing',
-      collapsed: true,
-      items: [
-        'testing/testing-validation-agent',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Data & Analytics',
-      collapsed: true,
-      items: [
-        'analytics/data-analytics-agent',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Network Functions',
-      collapsed: true,
-      items: [
-        'network-functions/oran-network-functions-agent',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Configuration Management',
-      collapsed: true,
-      items: [
-        'config-management/configuration-management-agent',
-      ],
-    },
+    // Future: Troubleshooting section will be added when content is available
+    // {
+    //   type: 'category',
+    //   label: 'Troubleshooting',
+    //   collapsed: true,
+    //   items: [
+    //     // Will be populated with troubleshooting guides
+    //   ],
+    // },
   ],
 };
 
