@@ -619,12 +619,12 @@ claude-agent testing-validation-agent "test equipment connectivity 1000 devices"
 echo "=== Manufacturing 5G Network Validation ==="
 
 # Test 1: URLLC Latency Requirements
-echo "Testing URLLC latency requirements (<1ms)..."
+echo "Testing URLLC latency requirements (&lt;1ms)..."
 LATENCY=$(kubectl exec -n manufacturing test-pod -- ping -c 100 urllc-gateway.manufacturing | \
   grep "min/avg/max" | awk -F'/' '{print $5}')
 
 if (( $(echo "$LATENCY < 1" | bc -l) )); then
-  echo "✓ URLLC latency: ${LATENCY}ms (requirement: <1ms)"
+  echo "✓ URLLC latency: ${LATENCY}ms (requirement: &lt;1ms)"
 else
   echo "✗ URLLC latency: ${LATENCY}ms exceeds requirement"
   exit 1
@@ -654,12 +654,12 @@ else
 fi
 
 # Test 4: AI/ML Inference Performance
-echo "Testing AI/ML inference latency (target: <10ms P99)..."
+echo "Testing AI/ML inference latency (target: &lt;10ms P99)..."
 AI_LATENCY=$(kubectl logs -n manufacturing predictive-maintenance-model --tail=1000 | \
   grep "inference_latency_p99" | tail -1 | awk '{print $3}')
 
 if (( $(echo "$AI_LATENCY < 10" | bc -l) )); then
-  echo "✓ AI/ML inference P99: ${AI_LATENCY}ms (requirement: <10ms)"
+  echo "✓ AI/ML inference P99: ${AI_LATENCY}ms (requirement: &lt;10ms)"
 else
   echo "✗ AI/ML inference P99: ${AI_LATENCY}ms exceeds requirement"
 fi
@@ -716,12 +716,12 @@ EOF
 
 | Metric | Requirement | Achieved | Status |
 |--------|-------------|----------|---------|
-| URLLC Latency (P99) | <1ms | 0.8ms | ✅ |
+| URLLC Latency (P99) | &lt;1ms | 0.8ms | ✅ |
 | Network Reliability | 99.99% | 99.997% | ✅ |
 | Energy Efficiency | >0.6 Gbps/W | 0.73 Gbps/W | ✅ |
 | Device Connectivity | 1000 devices | 1000 devices | ✅ |
-| AI/ML Inference (P99) | <10ms | 7.2ms | ✅ |
-| Deployment Time | <4 hours | 2.5 hours | ✅ |
+| AI/ML Inference (P99) | &lt;10ms | 7.2ms | ✅ |
+| Deployment Time | &lt;4 hours | 2.5 hours | ✅ |
 
 ### Resource Utilization
 

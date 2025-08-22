@@ -283,7 +283,7 @@ claude-agent performance-optimization-agent "deploy_optimized_ai_models"
 **Optimizes:**
 - Resource allocation and HPA policies
 - Energy efficiency targeting >0.5 Gbps/W
-- AI/ML inference optimization (<50ms P99)
+- AI/ML inference optimization (&lt;50ms P99)
 - Network slice performance tuning
 - Cross-cluster load balancing
 
@@ -445,7 +445,7 @@ graph TB
 Specialized workflow for ultra-low latency manufacturing environments.
 
 ### Requirements
-- **Latency**: <1ms for critical control loops
+- **Latency**: &lt;1ms for critical control loops
 - **Reliability**: 99.999% uptime
 - **Security**: OT/IT convergence with strict isolation
 - **Integration**: Existing MES/ERP systems
@@ -553,7 +553,7 @@ graph TB
 Accelerated deployment for O-RAN research environments with rapid prototyping capabilities.
 
 ### Research Environment Features
-- **Rapid Deployment**: <15 minutes to full stack
+- **Rapid Deployment**: &lt;15 minutes to full stack
 - **Flexibility**: Easy component swapping and testing
 - **Observability**: Comprehensive data collection
 - **Experimentation**: A/B testing and chaos engineering
