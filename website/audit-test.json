@@ -1,0 +1,175 @@
+# npm audit report
+
+cookie  <0.7.0
+cookie accepts cookie name, path, and domain with out of bounds characters - https://github.com/advisories/GHSA-pxg6-pf52-xh8x
+fix available via `npm audit fix --force`
+Will install @lhci/cli@0.1.0, which is a breaking change
+node_modules/@sentry/node/node_modules/cookie
+  @sentry/node  4.0.0-beta.0 - 7.74.2-alpha.1
+  Depends on vulnerable versions of cookie
+  node_modules/@sentry/node
+    lighthouse  9.4.0-dev.20220216 - 12.2.1
+    Depends on vulnerable versions of @sentry/node
+    Depends on vulnerable versions of puppeteer-core
+    node_modules/lighthouse
+      @lhci/cli  *
+      Depends on vulnerable versions of @lhci/utils
+      Depends on vulnerable versions of inquirer
+      Depends on vulnerable versions of lighthouse
+      Depends on vulnerable versions of tmp
+      node_modules/@lhci/cli
+      @lhci/utils  0.11.0 - 0.14.0
+      Depends on vulnerable versions of lighthouse
+      node_modules/@lhci/utils
+
+on-headers  <1.1.0
+on-headers is vulnerable to http response header manipulation - https://github.com/advisories/GHSA-76c9-3jph-rj3q
+fix available via `npm audit fix --force`
+Will install serve@10.0.2, which is a breaking change
+node_modules/serve/node_modules/on-headers
+  compression  1.0.3 - 1.8.0
+  Depends on vulnerable versions of on-headers
+  node_modules/serve/node_modules/compression
+    serve  >=10.1.0
+    Depends on vulnerable versions of compression
+    node_modules/serve
+
+tar-fs  2.0.0 - 2.1.2 || 3.0.0 - 3.0.8
+Severity: high
+tar-fs Vulnerable to Link Following and Path Traversal via Extracting a Crafted tar File - https://github.com/advisories/GHSA-pq67-2wwv-3xjx
+tar-fs Vulnerable to Link Following and Path Traversal via Extracting a Crafted tar File - https://github.com/advisories/GHSA-pq67-2wwv-3xjx
+tar-fs can extract outside the specified dir with a specific tarball - https://github.com/advisories/GHSA-8cj5-5rvv-wf4v
+tar-fs can extract outside the specified dir with a specific tarball - https://github.com/advisories/GHSA-8cj5-5rvv-wf4v
+fix available via `npm audit fix --force`
+Will install @lhci/cli@0.1.0, which is a breaking change
+node_modules/puppeteer-core/node_modules/tar-fs
+node_modules/tar-fs
+  @puppeteer/browsers  <=2.2.3
+  Depends on vulnerable versions of tar-fs
+  Depends on vulnerable versions of tar-fs
+  node_modules/@puppeteer/browsers
+  node_modules/puppeteer-core/node_modules/@puppeteer/browsers
+    puppeteer  18.2.0 - 22.13.0
+    Depends on vulnerable versions of @puppeteer/browsers
+    Depends on vulnerable versions of puppeteer-core
+    node_modules/puppeteer
+    puppeteer-core  10.0.0 - 22.13.0
+    Depends on vulnerable versions of @puppeteer/browsers
+    Depends on vulnerable versions of @puppeteer/browsers
+    Depends on vulnerable versions of tar-fs
+    Depends on vulnerable versions of ws
+    node_modules/puppeteer-core
+    node_modules/puppeteer/node_modules/puppeteer-core
+
+tmp  <=0.2.3
+tmp allows arbitrary temporary file / directory write via symbolic link `dir` parameter - https://github.com/advisories/GHSA-52f5-9888-hmc6
+fix available via `npm audit fix --force`
+Will install @lhci/cli@0.1.0, which is a breaking change
+node_modules/external-editor/node_modules/tmp
+node_modules/tmp
+  external-editor  >=1.1.1
+  Depends on vulnerable versions of tmp
+  node_modules/external-editor
+    inquirer  3.0.0 - 8.2.6 || 9.0.0 - 9.3.7
+    Depends on vulnerable versions of external-editor
+    node_modules/inquirer
+
+webpack-dev-server  <=5.2.0
+Severity: moderate
+webpack-dev-server users' source code may be stolen when they access a malicious web site with non-Chromium based browser - https://github.com/advisories/GHSA-9jgg-88mc-972h
+webpack-dev-server users' source code may be stolen when they access a malicious web site - https://github.com/advisories/GHSA-4v9v-hfq4-rm2v
+No fix available
+node_modules/webpack-dev-server
+  @docusaurus/core  *
+  Depends on vulnerable versions of webpack-dev-server
+  node_modules/@docusaurus/core
+    @docusaurus/plugin-content-blog  *
+    Depends on vulnerable versions of @docusaurus/core
+    Depends on vulnerable versions of @docusaurus/plugin-content-docs
+    Depends on vulnerable versions of @docusaurus/theme-common
+    node_modules/@docusaurus/plugin-content-blog
+    @docusaurus/plugin-content-docs  *
+    Depends on vulnerable versions of @docusaurus/core
+    Depends on vulnerable versions of @docusaurus/theme-common
+    node_modules/@docusaurus/plugin-content-docs
+      @docusaurus/theme-common  *
+      Depends on vulnerable versions of @docusaurus/plugin-content-docs
+      node_modules/@docusaurus/theme-common
+    @docusaurus/plugin-content-pages  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-content-pages
+    @docusaurus/plugin-css-cascade-layers  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-css-cascade-layers
+      @docusaurus/preset-classic  *
+      Depends on vulnerable versions of @docusaurus/core
+      Depends on vulnerable versions of @docusaurus/plugin-content-blog
+      Depends on vulnerable versions of @docusaurus/plugin-content-docs
+      Depends on vulnerable versions of @docusaurus/plugin-content-pages
+      Depends on vulnerable versions of @docusaurus/plugin-css-cascade-layers
+      Depends on vulnerable versions of @docusaurus/plugin-debug
+      Depends on vulnerable versions of @docusaurus/plugin-google-analytics
+      Depends on vulnerable versions of @docusaurus/plugin-google-gtag
+      Depends on vulnerable versions of @docusaurus/plugin-google-tag-manager
+      Depends on vulnerable versions of @docusaurus/plugin-sitemap
+      Depends on vulnerable versions of @docusaurus/plugin-svgr
+      Depends on vulnerable versions of @docusaurus/theme-classic
+      Depends on vulnerable versions of @docusaurus/theme-common
+      Depends on vulnerable versions of @docusaurus/theme-search-algolia
+      node_modules/@docusaurus/preset-classic
+    @docusaurus/plugin-debug  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-debug
+    @docusaurus/plugin-google-analytics  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-google-analytics
+    @docusaurus/plugin-google-gtag  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-google-gtag
+    @docusaurus/plugin-google-tag-manager  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-google-tag-manager
+    @docusaurus/plugin-ideal-image  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-ideal-image
+    @docusaurus/plugin-pwa  *
+    Depends on vulnerable versions of @docusaurus/core
+    Depends on vulnerable versions of @docusaurus/theme-common
+    node_modules/@docusaurus/plugin-pwa
+    @docusaurus/plugin-sitemap  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-sitemap
+    @docusaurus/plugin-svgr  *
+    Depends on vulnerable versions of @docusaurus/core
+    node_modules/@docusaurus/plugin-svgr
+    @docusaurus/theme-classic  *
+    Depends on vulnerable versions of @docusaurus/core
+    Depends on vulnerable versions of @docusaurus/plugin-content-blog
+    Depends on vulnerable versions of @docusaurus/plugin-content-docs
+    Depends on vulnerable versions of @docusaurus/plugin-content-pages
+    Depends on vulnerable versions of @docusaurus/theme-common
+    node_modules/@docusaurus/theme-classic
+    @docusaurus/theme-search-algolia  *
+    Depends on vulnerable versions of @docusaurus/core
+    Depends on vulnerable versions of @docusaurus/plugin-content-docs
+    Depends on vulnerable versions of @docusaurus/theme-common
+    node_modules/@docusaurus/theme-search-algolia
+
+ws  8.0.0 - 8.17.0
+Severity: high
+ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q
+fix available via `npm audit fix --force`
+Will install @lhci/cli@0.1.0, which is a breaking change
+node_modules/puppeteer-core/node_modules/ws
+node_modules/puppeteer/node_modules/ws
+
+34 vulnerabilities (10 low, 18 moderate, 6 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues possible (including breaking changes), run:
+  npm audit fix --force
+
+Some issues need review, and may require choosing
+a different dependency.

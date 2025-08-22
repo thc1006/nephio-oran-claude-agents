@@ -1,0 +1,25 @@
+{
+  "name": "nephio-oran-claude-agents",
+  "version": "1.0.0",
+  "description": "Nephio O-RAN Claude Code Agents - AI-powered automation for telecommunications",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thc1006/nephio-oran-claude-agents"
+  },
+  "scripts": {
+    "website:start": "cd website && npm start",
+    "website:build": "cd website && npm run build",
+    "website:test": "cd website && npm test"
+  },
+  "keywords": [
+    "nephio",
+    "o-ran",
+    "claude",
+    "ai",
+    "automation",
+    "telecommunications"
+  ],
+  "author": "thc1006",
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,199 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import CompatibilityMatrix, { 
+  CompatibilityData, 
+  CompatibilityMatrixProps 
+} from '../../src/components/CompatibilityMatrix';
+
+const mockData: CompatibilityData[] = [
+  {
+    component: 'nephio',
+    version: 'v2.0.0',
+    status: 'supported',
+    notes: 'Latest stable release',
+    lastTested: '2025-08-20',
+  },
+  {
+    component: 'kubernetes',
+    version: 'v1.28.0',
+    status: 'supported',
+    notes: 'Recommended version',
+    lastTested: '2025-08-19',
+  },
+  {
+    component: 'istio',
+    version: 'v1.19.0',
+    status: 'experimental',
+    notes: 'Testing in progress',
+    lastTested: '2025-08-18',
+  },
+  {
+    component: 'old-component',
+    version: 'v1.0.0',
+    status: 'deprecated',
+    notes: 'Will be removed in next release',
+    lastTested: '2025-07-01',
+  },
+  {
+    component: 'unsupported-component',
+    version: 'v0.5.0',
+    status: 'not-supported',
+    notes: 'Not compatible',
+  },
+];
+
+describe('CompatibilityMatrix', () => {
+  const defaultProps: CompatibilityMatrixProps = {
+    data: mockData,
+  };
+
+  it('renders with default title', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    expect(screen.getByText('Compatibility Matrix')).toBeInTheDocument();
+  });
+
+  it('renders with custom title', () => {
+    const customTitle = 'Custom Compatibility Matrix';
+    render(<CompatibilityMatrix {...defaultProps} title={customTitle} />);
+    expect(screen.getByText(customTitle)).toBeInTheDocument();
+  });
+
+  it('renders table headers correctly', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    
+    expect(screen.getByText('Component')).toBeInTheDocument();
+    expect(screen.getByText('Version')).toBeInTheDocument();
+    expect(screen.getByText('Status')).toBeInTheDocument();
+    expect(screen.getByText('Last Tested')).toBeInTheDocument();
+    expect(screen.getByText('Notes')).toBeInTheDocument();
+  });
+
+  it('hides Last Tested column when showLastTested is false', () => {
+    render(<CompatibilityMatrix {...defaultProps} showLastTested={false} />);
+    
+    expect(screen.queryByText('Last Tested')).not.toBeInTheDocument();
+  });
+
+  it('renders all data rows correctly', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    
+    // Check that all components are rendered
+    mockData.forEach(item => {
+      expect(screen.getByText(item.component)).toBeInTheDocument();
+      expect(screen.getByText(item.version)).toBeInTheDocument();
+      if (item.notes) {
+        expect(screen.getByText(item.notes)).toBeInTheDocument();
+      }
+      if (item.lastTested) {
+        expect(screen.getByText(item.lastTested)).toBeInTheDocument();
+      }
+    });
+  });
+
+  it('renders status badges with correct classes', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    
+    expect(screen.getByText('Supported')).toHaveClass('badge--success');
+    expect(screen.getByText('Experimental')).toHaveClass('badge--info');
+    expect(screen.getByText('Deprecated')).toHaveClass('badge--warning');
+    expect(screen.getByText('Not Supported')).toHaveClass('badge--danger');
+  });
+
+  it('renders component names and versions in code elements', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    
+    const componentCodes = screen.getAllByText('nephio')[0];
+    expect(componentCodes.tagName).toBe('CODE');
+    
+    const versionCodes = screen.getAllByText('v2.0.0')[0];
+    expect(versionCodes.tagName).toBe('CODE');
+  });
+
+  it('shows N/A for missing lastTested values', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    
+    // The unsupported-component doesn't have lastTested, should show N/A
+    const naTd = screen.getByText('N/A');
+    expect(naTd).toBeInTheDocument();
+  });
+
+  it('shows em dash for missing notes', () => {
+    const dataWithoutNotes: CompatibilityData[] = [
+      {
+        component: 'test-component',
+        version: 'v1.0.0',
+        status: 'supported',
+      }
+    ];
+    
+    render(<CompatibilityMatrix data={dataWithoutNotes} />);
+    expect(screen.getByText('—')).toBeInTheDocument();
+  });
+
+  it('renders status legend', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    
+    expect(screen.getByText('Status Legend:')).toBeInTheDocument();
+    
+    // Check that all status types are in the legend
+    const legendBadges = screen.getAllByText(/Supported|Deprecated|Experimental|Not Supported/);
+    expect(legendBadges.length).toBeGreaterThanOrEqual(8); // 4 in table + 4 in legend
+  });
+
+  it('applies compact class when compact prop is true', () => {
+    const { container } = render(<CompatibilityMatrix {...defaultProps} compact />);
+    
+    const table = container.querySelector('.table');
+    expect(table).toHaveClass('compact');
+  });
+
+  it('has responsive table container', () => {
+    const { container } = render(<CompatibilityMatrix {...defaultProps} />);
+    
+    const tableContainer = container.querySelector('.table-responsive');
+    expect(tableContainer).toBeInTheDocument();
+  });
+
+  it('has proper accessibility attributes', () => {
+    render(<CompatibilityMatrix {...defaultProps} />);
+    
+    const table = screen.getByRole('table');
+    expect(table).toBeInTheDocument();
+    
+    const columnHeaders = screen.getAllByRole('columnheader');
+    expect(columnHeaders.length).toBeGreaterThan(0);
+    
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBe(mockData.length + 1); // +1 for header row
+  });
+
+  it('handles empty data gracefully', () => {
+    render(<CompatibilityMatrix data={[]} />);
+    
+    // Should still render headers and structure
+    expect(screen.getByText('Component')).toBeInTheDocument();
+    expect(screen.getByText('Status Legend:')).toBeInTheDocument();
+    
+    // Should have only header row
+    const rows = screen.getAllByRole('row');
+    expect(rows).toHaveLength(1);
+  });
+
+  describe('Status mapping', () => {
+    it('correctly maps all status types', () => {
+      const allStatusData: CompatibilityData[] = [
+        { component: 'comp1', version: 'v1', status: 'supported' },
+        { component: 'comp2', version: 'v1', status: 'deprecated' },
+        { component: 'comp3', version: 'v1', status: 'experimental' },
+        { component: 'comp4', version: 'v1', status: 'not-supported' },
+      ];
+      
+      render(<CompatibilityMatrix data={allStatusData} />);
+      
+      expect(screen.getByText('Supported')).toBeInTheDocument();
+      expect(screen.getByText('Deprecated')).toBeInTheDocument();
+      expect(screen.getByText('Experimental')).toBeInTheDocument();
+      expect(screen.getByText('Not Supported')).toBeInTheDocument();
+    });
+  });
+});

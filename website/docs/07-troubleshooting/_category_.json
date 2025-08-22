@@ -1,0 +1,15 @@
+{
+  "label": "Troubleshooting",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "title": "Troubleshooting and Support",
+    "description": "Find solutions to common problems, debugging techniques, and frequently asked questions.",
+    "keywords": ["troubleshooting", "debugging", "faq", "support", "issues"]
+  },
+  "customProps": {
+    "icon": "🔧",
+    "audience": "operators",
+    "searchBoost": 2
+  }
+}

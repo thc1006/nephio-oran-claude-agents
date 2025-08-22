@@ -1,0 +1,57 @@
+const path = require('path');
+
+module.exports = {
+  testEnvironment: 'jsdom',
+  roots: ['<rootDir>/src', '<rootDir>/tests'],
+  testMatch: [
+    '**/__tests__/**/*.+(ts|tsx|js)',
+    '**/*.(test|spec).+(ts|tsx|js)',
+  ],
+  transform: {
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      tsconfig: 'tsconfig.json',
+    }],
+  },
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/pages/index.tsx', // Skip main page for now as it requires complex setup
+  ],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70,
+    },
+  },
+  setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.setup.ts'],
+  moduleNameMapping: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/setup/__mocks__/fileMock.js',
+    '^@site/(.*)$': '<rootDir>/$1',
+    '^@docusaurus/(.*)$': '<rootDir>/node_modules/@docusaurus/$1',
+    '^@theme/(.*)$': '<rootDir>/node_modules/@docusaurus/theme-classic/src/theme/$1',
+  },
+  testEnvironmentOptions: {
+    url: 'http://localhost:3000',
+  },
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+  ],
+  // Handle Docusaurus-specific modules
+  transformIgnorePatterns: [
+    'node_modules/(?!(prism-react-renderer|@docusaurus|clsx)/)',
+  ],
+  preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
+  },
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+};

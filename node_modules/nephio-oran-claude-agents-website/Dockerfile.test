@@ -1,0 +1,51 @@
+# Test Dockerfile for Docusaurus v3
+# Includes testing tools and CI dependencies
+
+FROM node:18-alpine
+
+# Install testing dependencies
+RUN apk add --no-cache \
+    git \
+    curl \
+    bash \
+    chromium \
+    chromium-chromedriver \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S docusaurus -u 1001 -G nodejs
+
+# Set working directory
+WORKDIR /app
+
+# Set Chrome path for Puppeteer
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies including test tools
+RUN npm ci && \
+    npm install -g \
+        @lhci/cli \
+        linkinator \
+        @axe-core/cli \
+        markdownlint-cli && \
+    npm cache clean --force
+
+# Change ownership
+RUN chown -R docusaurus:nodejs node_modules
+
+# Switch to non-root user
+USER docusaurus
+
+# Copy source code
+COPY --chown=docusaurus:nodejs . .
+
+# Create test results directory
+RUN mkdir -p test-results
+
+# Default command
+CMD ["npm", "run", "test"]

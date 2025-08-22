@@ -1,0 +1,402 @@
+# O-RAN WG11 RBAC Security Implementation for Nephio R5
+# Zero-Trust RBAC with Principle of Least Privilege
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oran-system
+  labels:
+    nephio.org/version: r5
+    oran.org/release: l-release
+    security.nephio.org/rbac-hardened: "true"
+---
+# O-RAN Network Function Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: oran-network-function-sa
+  namespace: oran-system
+  annotations:
+    security.nephio.org/principle: "least-privilege"
+    oran.org/function-type: "network-function"
+    nephio.org/rbac-version: "r5"
+automountServiceAccountToken: true
+---
+# O-RAN Controller Service Account (Enhanced for R5)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: oran-controller-sa
+  namespace: oran-system
+  annotations:
+    security.nephio.org/controller-type: "oran-l-release"
+    nephio.org/package-specialization: "enabled"
+automountServiceAccountToken: true
+---
+# Monitoring Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: monitoring-sa
+  namespace: monitoring
+  annotations:
+    security.nephio.org/monitoring-scope: "cluster-wide"
+    oran.org/telemetry-access: "metrics-only"
+automountServiceAccountToken: true
+---
+# ArgoCD Deployment Service Account (R5 Primary Pattern)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argocd-deployment-sa
+  namespace: argocd
+  annotations:
+    nephio.org/deployment-pattern: "primary"
+    security.nephio.org/gitops-permissions: "restricted"
+automountServiceAccountToken: true
+---
+# Security Scanning Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: security-scanner-sa
+  namespace: security-system
+  annotations:
+    security.nephio.org/scanner-type: "falco-trivy"
+    oran.org/security-scope: "runtime-analysis"
+automountServiceAccountToken: true
+---
+# Website Deployment Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: website-sa
+  namespace: website
+  annotations:
+    security.nephio.org/web-isolation: "strict"
+    oran.org/documentation-access: "read-only"
+automountServiceAccountToken: false  # No K8s API access needed
+---
+# O-RAN Network Function Role (Namespace-scoped)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: oran-network-function-role
+  namespace: oran-system
+  annotations:
+    security.nephio.org/permission-scope: "namespace-restricted"
+    oran.org/interface-access: "e2,a1,o1"
+rules:
+# ConfigMaps for O-RAN configuration (read-only)
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+  resourceNames: ["oran-du-config", "oran-cu-config", "oran-ric-config"]
+
+# Secrets for certificates and credentials (minimal access)
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+  resourceNames: ["oran-tls-certs", "oran-api-keys"]
+
+# Pod status for health checks
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+  resourceNames: []
+
+# Events for debugging (read-only)
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "list", "watch"]
+
+# Services for O-RAN interface discovery
+- apiGroups: [""]
+  resources: ["services", "endpoints"]
+  verbs: ["get", "list", "watch"]
+---
+# O-RAN Controller Role (Enhanced for R5 Features)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: oran-controller-role
+  namespace: oran-system
+  annotations:
+    nephio.org/specialization-access: "packagevariant"
+    security.nephio.org/controller-permissions: "restricted"
+rules:
+# O-RAN Custom Resources management
+- apiGroups: ["oran.nephio.io", "config.nephio.io"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+# PackageVariant management (R5 enhanced feature)
+- apiGroups: ["config.porch.kpt.dev"]
+  resources: ["packagevariants", "packagevariantsets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# ConfigMaps for controller configuration
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+# Secrets for PKI and authentication
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+# Events for status reporting
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+
+# Services and Deployments for O-RAN functions
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+# Monitoring Role (Cluster-wide metrics access)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: monitoring-cluster-role
+  annotations:
+    security.nephio.org/monitoring-scope: "metrics-only"
+    oran.org/telemetry-compliance: "wg11-approved"
+rules:
+# Node metrics
+- apiGroups: [""]
+  resources: ["nodes", "nodes/metrics", "nodes/stats", "nodes/proxy"]
+  verbs: ["get", "list", "watch"]
+
+# Pod and container metrics
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "pods/status"]
+  verbs: ["get", "list", "watch"]
+
+# Service metrics
+- apiGroups: [""]
+  resources: ["services", "endpoints"]
+  verbs: ["get", "list", "watch"]
+
+# Custom metrics from O-RAN components
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["*"]
+  verbs: ["get", "list"]
+
+# Performance metrics
+- apiGroups: ["custom.metrics.k8s.io"]
+  resources: ["*"]
+  verbs: ["get", "list"]
+
+# Network policies (read-only for compliance monitoring)
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch"]
+---
+# ArgoCD Deployment Role (R5 Primary GitOps Pattern)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argocd-deployment-role
+  annotations:
+    nephio.org/deployment-pattern: "primary"
+    security.nephio.org/gitops-scope: "controlled"
+rules:
+# ApplicationSets management (R5 primary pattern)
+- apiGroups: ["argoproj.io"]
+  resources: ["applications", "applicationsets", "appprojects"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Kubernetes resources for deployment
+- apiGroups: [""]
+  resources: ["configmaps", "secrets", "services", "serviceaccounts"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# RBAC resources (limited to specific namespaces)
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Network policies for security
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Custom Resource Definitions (read-only)
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["get", "list", "watch"]
+
+# Namespaces (limited operations)
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list", "watch", "create", "patch"]
+---
+# Security Scanner Role (Runtime Security Analysis)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: security-scanner-role
+  annotations:
+    security.nephio.org/scanner-access: "runtime-analysis"
+    falco.security.io/policy-scope: "cluster-wide"
+rules:
+# Pod inspection for runtime security
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "pods/exec", "pods/status"]
+  verbs: ["get", "list", "watch"]
+
+# Node access for host-level security
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+
+# Deployments and DaemonSets analysis
+- apiGroups: ["apps"]
+  resources: ["deployments", "daemonsets", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+
+# Security policies analysis
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch"]
+
+- apiGroups: ["policy"]
+  resources: ["podsecuritypolicies"]
+  verbs: ["get", "list", "watch"]
+
+# Events for security incident correlation
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "list", "watch", "create"]
+
+# Custom security resources
+- apiGroups: ["security.falco.org", "security.trivy.org"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+# Role Bindings
+---
+# Bind O-RAN Network Function SA to Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: oran-network-function-binding
+  namespace: oran-system
+  annotations:
+    security.nephio.org/binding-type: "least-privilege"
+subjects:
+- kind: ServiceAccount
+  name: oran-network-function-sa
+  namespace: oran-system
+roleRef:
+  kind: Role
+  name: oran-network-function-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Bind O-RAN Controller SA to Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: oran-controller-binding
+  namespace: oran-system
+  annotations:
+    nephio.org/controller-access: "r5-enhanced"
+subjects:
+- kind: ServiceAccount
+  name: oran-controller-sa
+  namespace: oran-system
+roleRef:
+  kind: Role
+  name: oran-controller-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Bind Monitoring SA to ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: monitoring-cluster-binding
+  annotations:
+    security.nephio.org/monitoring-access: "cluster-wide"
+subjects:
+- kind: ServiceAccount
+  name: monitoring-sa
+  namespace: monitoring
+roleRef:
+  kind: ClusterRole
+  name: monitoring-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Bind ArgoCD Deployment SA to ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argocd-deployment-binding
+  annotations:
+    nephio.org/gitops-access: "primary-pattern"
+subjects:
+- kind: ServiceAccount
+  name: argocd-deployment-sa
+  namespace: argocd
+roleRef:
+  kind: ClusterRole
+  name: argocd-deployment-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Bind Security Scanner SA to ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: security-scanner-binding
+  annotations:
+    security.nephio.org/scanner-binding: "runtime-security"
+subjects:
+- kind: ServiceAccount
+  name: security-scanner-sa
+  namespace: security-system
+roleRef:
+  kind: ClusterRole
+  name: security-scanner-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Pod Security Standards for O-RAN Components
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oran-system
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+    security.nephio.org/pod-security: "hardened"
+    oran.org/security-level: "high"
+---
+# Pod Security Standards for Monitoring
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+    security.nephio.org/monitoring-security: "enabled"
+---
+# Pod Security Standards for ArgoCD
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+    nephio.org/gitops-security: "hardened"
