@@ -6,6 +6,11 @@
     "jsx": "react-jsx",
     "target": "es2015",
     "lib": ["dom", "es2015"],
-    "downlevelIteration": true
-  }
+    "downlevelIteration": true,
+    "types": ["jest", "@testing-library/jest-dom", "node"]
+  },
+  "include": [
+    "src/**/*",
+    "tests/**/*"
+  ]
 }
