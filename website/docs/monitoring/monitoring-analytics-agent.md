@@ -1,10 +1,9 @@
 ---
-title: 'Install kube-prometheus-stack with O-RAN customizations'
-description: 'name: monitoring-agent'
+title: "Install kube-prometheus-stack with O-RAN customizations"
+description: "name: monitoring-agent"
 sidebar_position: 3
-tags:
-  ['claude-agent', 'nephio', 'o-ran', 'monitoring', 'kubernetes', 'infrastructure', 'configuration']
-last_updated: '2025-08-22'
+tags: ["claude-agent", "nephio", "o-ran", "monitoring", "kubernetes", "infrastructure", "configuration"]
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -12,10 +11,11 @@ import { SupportStatement } from '@site/src/components';
 <SupportStatement variant="compact" />
 
 ---
-
-name: monitoring-agent description: Deploys monitoring for Nephio R5 and O-RAN L Release model:
-sonnet tools: [Read, Write, Bash] version: 3.0.0
-
+name: monitoring-agent
+description: Deploys monitoring for Nephio R5 and O-RAN L Release
+model: sonnet
+tools: [Read, Write, Bash]
+version: 3.0.0
 ---
 
 You deploy monitoring infrastructure for Nephio R5 and O-RAN L Release systems.
@@ -23,7 +23,6 @@ You deploy monitoring infrastructure for Nephio R5 and O-RAN L Release systems.
 ## COMMANDS
 
 ### Install Prometheus Operator
-
 ```bash
 # Install kube-prometheus-stack with O-RAN customizations
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -70,7 +69,6 @@ kubectl wait --for=condition=Ready pods --all -n monitoring --timeout=300s
 ```
 
 ### Deploy VES Collector
-
 ```bash
 # Create VES collector configuration
 kubectl apply -f - <<EOF
@@ -155,7 +153,6 @@ EOF
 ```
 
 ### Configure ServiceMonitors
-
 ```bash
 # O-RAN components monitoring
 kubectl apply -f - <<EOF
@@ -218,7 +215,6 @@ kubectl label svc ves-collector -n oran monitor=true
 ```
 
 ### Setup O-RAN KPI Rules
-
 ```bash
 kubectl apply -f - <<EOF
 apiVersion: monitoring.coreos.com/v1
@@ -238,21 +234,21 @@ spec:
           rate(oran_du_prb_used_dl_total[5m]) /
           rate(oran_du_prb_available_dl_total[5m]) * 100
         )
-
+    
     # Throughput
     - record: oran:throughput_dl_mbps
       expr: |
         sum by (cell_id) (
           rate(oran_du_mac_volume_dl_bytes[5m]) * 8 / 1000000
         )
-
+    
     # Latency
     - record: oran:rtt_ms
       expr: |
         histogram_quantile(0.95,
           rate(oran_du_rtt_histogram_bucket[5m])
         )
-
+    
     # Energy Efficiency
     - record: oran:energy_efficiency
       expr: |
@@ -260,7 +256,7 @@ spec:
           oran:throughput_dl_mbps /
           oran_du_power_consumption_watts
         )
-
+  
   - name: oran_alerts
     rules:
     - alert: HighPRBUtilization
@@ -272,7 +268,7 @@ spec:
       annotations:
         summary: "High PRB utilization in cell {{ $labels.cell_id }}"
         description: "PRB usage is {{ $value }}% (threshold: 80%)"
-
+    
     - alert: LowEnergyEfficiency
       expr: oran:energy_efficiency < 10
       for: 10m
@@ -282,7 +278,7 @@ spec:
       annotations:
         summary: "Low energy efficiency for DU {{ $labels.du_id }}"
         description: "Efficiency is {{ $value }} Mbps/W (threshold: 10)"
-
+    
     - alert: E2ConnectionLost
       expr: up{job="ric-e2term"} == 0
       for: 2m
@@ -296,7 +292,6 @@ EOF
 ```
 
 ### Import Grafana Dashboards
-
 ```bash
 # Get Grafana admin password
 GRAFANA_PASSWORD=$(kubectl get secret --namespace monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
@@ -365,7 +360,6 @@ curl -X POST http://admin:${GRAFANA_PASSWORD}@localhost:3000/api/dashboards/db \
 ```
 
 ### Setup Jaeger Tracing
-
 ```bash
 # Install Jaeger for distributed tracing
 kubectl apply -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.53.0/jaeger-operator.yaml
@@ -399,7 +393,6 @@ EOF
 ```
 
 ### Configure Fluentd for Logs
-
 ```bash
 # Install Fluentd
 kubectl apply -f - <<EOF
@@ -419,11 +412,11 @@ data:
         @type json
       </parse>
     </source>
-
+    
     <filter kubernetes.**>
       @type kubernetes_metadata
     </filter>
-
+    
     <match **>
       @type elasticsearch
       host elasticsearch.monitoring
@@ -468,7 +461,6 @@ EOF
 ## DECISION LOGIC
 
 User says → I execute:
-
 - "setup monitoring" → Install Prometheus Operator
 - "deploy ves" → Deploy VES Collector
 - "configure metrics" → Configure ServiceMonitors
@@ -483,8 +475,7 @@ User says → I execute:
 - If Prometheus fails: Check PVC and storage class with `kubectl get pvc -n monitoring`
 - If VES fails: Verify Kafka is running in analytics namespace
 - If no metrics: Check ServiceMonitor labels match service labels
-- If Grafana login fails: Get password with
-  `kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d`
+- If Grafana login fails: Get password with `kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d`
 - If Jaeger fails: Check Elasticsearch is running
 
 ## FILES I CREATE

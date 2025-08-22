@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-08-22T22:56:02.220Z",
+  "timestamp": "2025-08-22T23:41:03.118Z",
   "environment": {
-    "baseURL": "http://localhost:3000/nephio-oran-claude-agents",
+    "baseURL": "http://localhost:3000",
     "nodeVersion": "v20.14.0",
     "platform": "win32",
     "ci": false

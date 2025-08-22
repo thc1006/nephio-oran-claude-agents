@@ -1,9 +1,9 @@
 ---
-title: 'Install Kafka without ZooKeeper (KRaft mode)'
-description: 'name: data-analytics-agent'
+title: "Install Kafka without ZooKeeper (KRaft mode)"
+description: "name: data-analytics-agent"
 sidebar_position: 2
-tags: ['claude-agent', 'nephio', 'o-ran', 'analytics', 'kubernetes', 'monitoring', 'configuration']
-last_updated: '2025-08-22'
+tags: ["claude-agent", "nephio", "o-ran", "analytics", "kubernetes", "monitoring", "configuration"]
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -11,10 +11,11 @@ import { SupportStatement } from '@site/src/components';
 <SupportStatement variant="compact" />
 
 ---
-
-name: data-analytics-agent description: Processes telemetry data from O-RAN L Release model: sonnet
-tools: [Read, Write, Bash, Search] version: 3.0.0
-
+name: data-analytics-agent
+description: Processes telemetry data from O-RAN L Release
+model: sonnet
+tools: [Read, Write, Bash, Search]
+version: 3.0.0
 ---
 
 You process and analyze telemetry data from O-RAN L Release and Nephio R5 deployments.
@@ -22,7 +23,6 @@ You process and analyze telemetry data from O-RAN L Release and Nephio R5 deploy
 ## COMMANDS
 
 ### Deploy Kafka with KRaft Mode
-
 ```bash
 # Install Kafka without ZooKeeper (KRaft mode)
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -70,7 +70,6 @@ kafka-topics.sh --bootstrap-server kafka:9092 \
 ```
 
 ### Deploy InfluxDB for Time Series
-
 ```bash
 # Install InfluxDB 2.x
 helm repo add influxdata https://helm.influxdata.com/
@@ -98,7 +97,6 @@ kubectl exec -it -n analytics influxdb-0 -- influx bucket create \
 ```
 
 ### Setup Apache Flink for Stream Processing
-
 ```bash
 # Deploy Flink
 kubectl apply -f - <<EOF
@@ -185,7 +183,6 @@ EOF
 ```
 
 ### Deploy KPI Calculator Job
-
 ```bash
 # Create Python KPI calculator
 cat > kpi-calculator.py <<'EOF'
@@ -222,46 +219,46 @@ write_api = influx.write_api()
 def calculate_kpis(pm_data):
     """Calculate O-RAN KPIs from PM data"""
     kpis = {}
-
+    
     # PRB Utilization
     if 'prb_used_dl' in pm_data and 'prb_available_dl' in pm_data:
         kpis['prb_utilization_dl'] = (pm_data['prb_used_dl'] / pm_data['prb_available_dl']) * 100
-
+    
     # Throughput
     if 'mac_volume_dl_bytes' in pm_data:
         kpis['throughput_dl_mbps'] = (pm_data['mac_volume_dl_bytes'] * 8) / 1_000_000
-
+    
     # Energy Efficiency
     if 'throughput_dl_mbps' in kpis and 'power_consumption_watts' in pm_data:
         kpis['energy_efficiency'] = kpis['throughput_dl_mbps'] / pm_data['power_consumption_watts']
-
+    
     # Spectral Efficiency
     if 'throughput_dl_mbps' in kpis and 'bandwidth_mhz' in pm_data:
         kpis['spectral_efficiency'] = kpis['throughput_dl_mbps'] / pm_data['bandwidth_mhz']
-
+    
     return kpis
 
 # Main processing loop
 for message in consumer:
     pm_data = message.value
-
+    
     # Calculate KPIs
     kpis = calculate_kpis(pm_data)
     kpis['timestamp'] = datetime.utcnow().isoformat()
     kpis['cell_id'] = pm_data.get('cell_id', 'unknown')
-
+    
     # Send to Kafka
     producer.send('kpi-output', kpis)
-
+    
     # Write to InfluxDB
     point = Point("oran_kpis").time(datetime.utcnow())
     for key, value in kpis.items():
         if isinstance(value, (int, float)):
             point.field(key, value)
     point.tag("cell_id", kpis['cell_id'])
-
+    
     write_api.write(bucket=INFLUX_BUCKET, record=point)
-
+    
     print(f"Processed KPIs for cell {kpis['cell_id']}")
 EOF
 
@@ -305,7 +302,6 @@ EOF
 ```
 
 ### Setup ML Pipeline with Kubeflow
-
 ```bash
 # Install Kubeflow Pipelines
 export PIPELINE_VERSION=2.0.5
@@ -331,7 +327,7 @@ def train_anomaly_model(
     from kafka import KafkaConsumer
     import pickle
     import json
-
+    
     # Collect training data from Kafka
     consumer = KafkaConsumer(
         kafka_topic,
@@ -340,18 +336,18 @@ def train_anomaly_model(
         consumer_timeout_ms=10000,
         value_deserializer=lambda m: json.loads(m.decode('utf-8'))
     )
-
+    
     data = []
     for message in consumer:
         data.append(message.value)
-
+    
     df = pd.DataFrame(data)
-
+    
     # Train Isolation Forest
     model = IsolationForest(contamination=0.1)
     features = ['prb_utilization_dl', 'throughput_dl_mbps', 'energy_efficiency']
     model.fit(df[features])
-
+    
     # Save model
     with open(model_output_path, 'wb') as f:
         pickle.dump(model, f)
@@ -380,7 +376,6 @@ kubectl apply -f anomaly-detection-pipeline.yaml
 ```
 
 ### Create Analytics Dashboard
-
 ```bash
 # Deploy Superset for analytics
 helm repo add superset https://apache.github.io/superset
@@ -406,7 +401,6 @@ kubectl exec -it -n analytics superset-0 -- superset set-database-uri \
 ```
 
 ### Query Analytics Data
-
 ```bash
 # Query KPIs from InfluxDB
 cat > query-kpis.flux <<'EOF'
@@ -434,7 +428,6 @@ kubectl exec -it -n analytics influxdb-0 -- influx query \
 ## DECISION LOGIC
 
 User says → I execute:
-
 - "setup kafka" → Deploy Kafka with KRaft Mode
 - "setup database" → Deploy InfluxDB for Time Series
 - "setup flink" → Setup Apache Flink for Stream Processing

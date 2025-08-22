@@ -1,0 +1,1113 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\playwright.config.ts",
+    "rootDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/playwright-report.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/playwright-junit.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Microsoft Edge",
+        "name": "Microsoft Edge",
+        "testDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Google Chrome",
+        "name": "Google Chrome",
+        "testDir": "C:/Users/tingy/Desktop/新增資料夾3/nephio-oran-claude-agents/website/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 6,
+    "webServer": {
+      "command": "npm run serve",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "NODE_ENV": "development",
+        "DISABLE_CSP_FOR_TESTS": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "routing-and-locale.spec.ts",
+      "file": "routing-and-locale.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Nephio O-RAN Website Routing and Locale E2E Tests",
+          "file": "routing-and-locale.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Basic Routing",
+              "file": "routing-and-locale.spec.ts",
+              "line": 17,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should load homepage successfully",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 2379,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:50.378Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-03796c530ccd1c24c2dd",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 18,
+                  "column": 9
+                },
+                {
+                  "title": "should redirect /docs/ to /docs/intro",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 3278,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:50.367Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-6c686caf9572e95ada86",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 50,
+                  "column": 9
+                },
+                {
+                  "title": "should redirect /docs to /docs/intro",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 3343,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:50.357Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-2769d0834c7160fd9a14",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 62,
+                  "column": 9
+                },
+                {
+                  "title": "should handle deep documentation links",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 2664,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:50.432Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-3e1bfceafcd452eb2ccd",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 74,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Locale Functionality",
+              "file": "routing-and-locale.spec.ts",
+              "line": 102,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should load English version by default",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 3164,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:50.416Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-9b9e0b8fe373dee8524b",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 103,
+                  "column": 9
+                },
+                {
+                  "title": "should load Traditional Chinese version",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 5,
+                          "status": "passed",
+                          "duration": 3311,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:50.440Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-e2e0bd69262161926b56",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 118,
+                  "column": 9
+                },
+                {
+                  "title": "should handle /zh-TW/docs/ navigation to Chinese docs",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 6826,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "Redirect went to English docs, navigating to Chinese version\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:53.090Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-30602a92475748d126a8",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 133,
+                  "column": 9
+                },
+                {
+                  "title": "should handle locale switching",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 1441,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:53.679Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-52e858473193e8fcdbb4",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 174,
+                  "column": 9
+                },
+                {
+                  "title": "should prevent double locale paths",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 2173,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:53.949Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-059367cd7eb4f70ca0bd",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 196,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Navigation and Links",
+              "file": "routing-and-locale.spec.ts",
+              "line": 218,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should navigate through main documentation sections",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 2904,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:53.981Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-48fbb2159058312a84dc",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 219,
+                  "column": 9
+                },
+                {
+                  "title": "should handle external links correctly",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 1280,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:54.039Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-f99751c1af4d4138a459",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 243,
+                  "column": 9
+                },
+                {
+                  "title": "should maintain navigation state across page changes",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 5,
+                          "status": "passed",
+                          "duration": 2526,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:54.261Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-a08883a84057cf4176fd",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 261,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "404 and Error Handling",
+              "file": "routing-and-locale.spec.ts",
+              "line": 279,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should show 404 page for invalid routes",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 2048,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:55.195Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-abe993203f64275db4e4",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 280,
+                  "column": 9
+                },
+                {
+                  "title": "should handle malformed URLs gracefully",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "failed",
+                          "duration": 1300,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"onload=\"\u001b[39m\nReceived string:        \u001b[31m\"http://localhost:3000/nephio-oran-claude-agents/docs/intro%22\u001b[7monload=\u001b[27m%22alert(1)%22\"\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"onload=\"\u001b[39m\nReceived string:        \u001b[31m\"http://localhost:3000/nephio-oran-claude-agents/docs/intro%22\u001b[7monload=\u001b[27m%22alert(1)%22\"\u001b[39m\n    at C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts:314:32",
+                            "location": {
+                              "file": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts",
+                              "column": 32,
+                              "line": 314
+                            },
+                            "snippet": "\u001b[0m \u001b[90m 312 |\u001b[39m         \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n \u001b[90m 313 |\u001b[39m         expect(currentUrl)\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoContain(\u001b[32m'<script>'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 314 |\u001b[39m         expect(currentUrl)\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoContain(\u001b[32m'onload='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 315 |\u001b[39m         \n \u001b[90m 316 |\u001b[39m         \u001b[90m// Page should still be functional\u001b[39m\n \u001b[90m 317 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts",
+                                "column": 32,
+                                "line": 314
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"onload=\"\u001b[39m\nReceived string:        \u001b[31m\"http://localhost:3000/nephio-oran-claude-agents/docs/intro%22\u001b[7monload=\u001b[27m%22alert(1)%22\"\u001b[39m\n\n  312 |         const currentUrl = page.url();\n  313 |         expect(currentUrl).not.toContain('<script>');\n> 314 |         expect(currentUrl).not.toContain('onload=');\n      |                                ^\n  315 |         \n  316 |         // Page should still be functional\n  317 |         await expect(page.locator('body')).toBeVisible();\n    at C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts:314:32"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:55.406Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\test-results\\routing-and-locale-Nephio--c2d03-e-malformed-URLs-gracefully-chromium\\test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\test-results\\routing-and-locale-Nephio--c2d03-e-malformed-URLs-gracefully-chromium\\video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\test-results\\routing-and-locale-Nephio--c2d03-e-malformed-URLs-gracefully-chromium\\error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts",
+                            "column": 32,
+                            "line": 314
+                          }
+                        },
+                        {
+                          "workerIndex": 6,
+                          "parallelIndex": 2,
+                          "status": "failed",
+                          "duration": 1512,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"onload=\"\u001b[39m\nReceived string:        \u001b[31m\"http://localhost:3000/nephio-oran-claude-agents/docs/intro%22\u001b[7monload=\u001b[27m%22alert(1)%22\"\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"onload=\"\u001b[39m\nReceived string:        \u001b[31m\"http://localhost:3000/nephio-oran-claude-agents/docs/intro%22\u001b[7monload=\u001b[27m%22alert(1)%22\"\u001b[39m\n    at C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts:314:32",
+                            "location": {
+                              "file": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts",
+                              "column": 32,
+                              "line": 314
+                            },
+                            "snippet": "\u001b[0m \u001b[90m 312 |\u001b[39m         \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\n \u001b[90m 313 |\u001b[39m         expect(currentUrl)\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoContain(\u001b[32m'<script>'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 314 |\u001b[39m         expect(currentUrl)\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoContain(\u001b[32m'onload='\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 315 |\u001b[39m         \n \u001b[90m 316 |\u001b[39m         \u001b[90m// Page should still be functional\u001b[39m\n \u001b[90m 317 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\u001b[0m"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts",
+                                "column": 32,
+                                "line": 314
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"onload=\"\u001b[39m\nReceived string:        \u001b[31m\"http://localhost:3000/nephio-oran-claude-agents/docs/intro%22\u001b[7monload=\u001b[27m%22alert(1)%22\"\u001b[39m\n\n  312 |         const currentUrl = page.url();\n  313 |         expect(currentUrl).not.toContain('<script>');\n> 314 |         expect(currentUrl).not.toContain('onload=');\n      |                                ^\n  315 |         \n  316 |         // Page should still be functional\n  317 |         await expect(page.locator('body')).toBeVisible();\n    at C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts:314:32"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 1,
+                          "startTime": "2025-08-22T23:41:01.049Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\test-results\\routing-and-locale-Nephio--c2d03-e-malformed-URLs-gracefully-chromium-retry1\\test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\test-results\\routing-and-locale-Nephio--c2d03-e-malformed-URLs-gracefully-chromium-retry1\\video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\test-results\\routing-and-locale-Nephio--c2d03-e-malformed-URLs-gracefully-chromium-retry1\\error-context.md"
+                            },
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\test-results\\routing-and-locale-Nephio--c2d03-e-malformed-URLs-gracefully-chromium-retry1\\trace.zip"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "C:\\Users\\tingy\\Desktop\\新增資料夾3\\nephio-oran-claude-agents\\website\\tests\\e2e\\routing-and-locale.spec.ts",
+                            "column": 32,
+                            "line": 314
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-ca24d50c7098b5741879",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 299,
+                  "column": 9
+                },
+                {
+                  "title": "should recover from network errors",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 2614,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:56.187Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-7e616cd5135b18a244bc",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 321,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Accessibility",
+              "file": "routing-and-locale.spec.ts",
+              "line": 339,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should have proper heading hierarchy",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 5,
+                          "status": "passed",
+                          "duration": 1763,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:56.848Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-511630721ba5af2650f6",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 340,
+                  "column": 9
+                },
+                {
+                  "title": "should be keyboard navigable",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 1755,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:57.016Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-1f7a9de735a33090d51a",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 355,
+                  "column": 9
+                },
+                {
+                  "title": "should have proper ARIA landmarks",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 2582,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:57.395Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-4eac8607e956f4b55650",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 374,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Performance",
+              "file": "routing-and-locale.spec.ts",
+              "line": 393,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should load pages within acceptable time",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 5,
+                          "status": "passed",
+                          "duration": 2203,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:58.699Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-0e6e1393240ec6cb98f4",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 394,
+                  "column": 9
+                },
+                {
+                  "title": "should handle concurrent navigation",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 2184,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:58.868Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-95e043a0ee7e0ea23c3b",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 409,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Search Functionality",
+              "file": "routing-and-locale.spec.ts",
+              "line": 424,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should have search feature available",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 1635,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:58.871Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-2f4312e181949090c760",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 425,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Mobile Responsiveness",
+              "file": "routing-and-locale.spec.ts",
+              "line": 454,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should be responsive on mobile devices",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 60000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1545,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-08-22T23:40:59.997Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "47ca65009a305755294b-b8b9ee2a17a0344da6c2",
+                  "file": "routing-and-locale.spec.ts",
+                  "line": 455,
+                  "column": 9
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-08-22T23:40:47.564Z",
+    "duration": 15560.023,
+    "expected": 21,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
