@@ -179,11 +179,37 @@ class ContentValidator {
     }
     
     // Check for proper heading structure
-    const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+    const headingRegex = /^(#{1,6})\s+(.+)$/;
     const headings: Array<{level: number, text: string, line: number}> = [];
     const lines = content.split('\n');
+    let inCodeBlock = false;
+    let inYamlFrontmatter = false;
     
     lines.forEach((line, index) => {
+      // Check for YAML frontmatter
+      if (index === 0 && line === '---') {
+        inYamlFrontmatter = true;
+        return;
+      }
+      if (inYamlFrontmatter && line === '---') {
+        inYamlFrontmatter = false;
+        return;
+      }
+      if (inYamlFrontmatter) {
+        return;
+      }
+      
+      // Check for code blocks
+      if (line.startsWith('```')) {
+        inCodeBlock = !inCodeBlock;
+        return;
+      }
+      
+      // Skip lines inside code blocks
+      if (inCodeBlock) {
+        return;
+      }
+      
       const match = headingRegex.exec(line);
       if (match) {
         headings.push({
@@ -192,7 +218,6 @@ class ContentValidator {
           line: index + 1
         });
       }
-      headingRegex.lastIndex = 0;
     });
     
     // Check for skipped heading levels
