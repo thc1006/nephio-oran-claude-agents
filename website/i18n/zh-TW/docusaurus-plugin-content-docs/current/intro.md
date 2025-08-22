@@ -102,16 +102,16 @@ graph TB
 
 | 代理 | 用途 | AI 模型 | 主要功能 |
 |-------|---------|-------|-----------|
-| [**編排代理**](./orchestration/nephio-oran-orchestrator-agent.md) | 主要協調器 | Claude Opus | 多叢集部署、工作流管理、套件變體編排 |
-| [**基礎設施代理**](./infrastructure/nephio-infrastructure-agent.md) | 基礎設施佈建 | Claude Sonnet | Kind/Metal3 叢集、Nephio R5 元件、ArgoCD、儲存 |
-| [**組態管理代理**](./config-management/configuration-management-agent.md) | 組態部署 | Claude Haiku | Porch 套件、YANG 模型、網路連線、kpt 功能 |
-| **網路功能代理** | O-RAN 網路功能 | Claude Haiku | Near-RT RIC、SMO、xApps、rApps、CU/DU/RU 部署 |
-| [**監控分析代理**](./monitoring/monitoring-analytics-agent.md) | 可觀測性堆疊 | Claude Sonnet | Prometheus、Grafana、VES 收集器、Jaeger 追蹤 |
-| [**資料分析代理**](./analytics/data-analytics-agent.md) | 資料處理 | Claude Sonnet | Kafka 串流、InfluxDB、Flink 處理、ML 流水線 |
-| [**安全合規代理**](./security/security-compliance-agent.md) | 安全驗證 | Claude Sonnet | WG11 合規、FIPS 模式、容器掃描、零信任架構 |
-| [**效能最佳化代理**](./performance/performance-optimization-agent.md) | 效能調整 | Claude Opus | SMO 最佳化、節能効果、AI/ML 加速 |
-| [**測試驗證代理**](./testing/testing-validation-agent.md) | 端對端測試 | Claude Haiku | 介面測試、混沌工程、負載測試、Go 程式碼覆蓋率 |
-| [**依賴檢查代理**](./infrastructure/oran-nephio-dep-doctor-agent.md) | 依賴解決 | Claude Sonnet | Go 模組、Python 套件、系統函式庫、容器修復 |
+| [**編排代理**](./agents/orchestrator/nephio-oran-orchestrator-agent) | 主要協調器 | Claude Opus | 多叢集部署、工作流管理、套件變體編排 |
+| [**基礎設施代理**](./agents/infrastructure/nephio-infrastructure-agent) | 基礎設施佈建 | Claude Sonnet | Kind/Metal3 叢集、Nephio R5 元件、ArgoCD、儲存 |
+| [**組態管理代理**](./agents/config-management/configuration-management-agent) | 組態部署 | Claude Haiku | Porch 套件、YANG 模型、網路連線、kpt 功能 |
+| [**網路功能代理**](./agents/infrastructure/nephio-infrastructure-agent) | O-RAN 網路功能 | Claude Haiku | Near-RT RIC、SMO、xApps、rApps、CU/DU/RU 部署 |
+| [**監控分析代理**](./agents/monitoring/monitoring-analytics-agent) | 可觀測性堆疊 | Claude Sonnet | Prometheus、Grafana、VES 收集器、Jaeger 追蹤 |
+| [**資料分析代理**](./agents/data-analytics/data-analytics-agent) | 資料處理 | Claude Sonnet | Kafka 串流、InfluxDB、Flink 處理、ML 流水線 |
+| [**安全合規代理**](./agents/infrastructure/nephio-infrastructure-agent) | 安全驗證 | Claude Sonnet | WG11 合規、FIPS 模式、容器掃描、零信任架構 |
+| [**效能最佳化代理**](./agents/infrastructure/nephio-infrastructure-agent) | 效能調整 | Claude Opus | SMO 最佳化、節能効果、AI/ML 加速 |
+| [**測試驗證代理**](./agents/testing/oran-nephio-dep-doctor-agent) | 端對端測試 | Claude Haiku | 介面測試、混沌工程、負載測試、Go 程式碼覆蓋率 |
+| [**依賴檢查代理**](./agents/testing/oran-nephio-dep-doctor-agent) | 依賴解決 | Claude Sonnet | Go 模組、Python 套件、系統函式庫、容器修復 |
 
 ## 🎯 使用情境
 
@@ -251,7 +251,7 @@ claude-agent testing-validation-agent "quick validation"
 - 效能最佳化
 - 安全強化
 
-請參考我們的 [貢獻指南](./CONTRIBUTING.md) 了解如何開始。
+請參考我們的貢獻指南了解如何開始。
 
 ### 開發路線圖
 我們的開發計劃包括：

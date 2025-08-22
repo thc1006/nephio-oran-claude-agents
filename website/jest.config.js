@@ -8,6 +8,12 @@ module.exports = {
     '**/__tests__/**/*.+(ts|tsx|js)',
     '**/*.(test|spec).+(ts|tsx|js)',
   ],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/tests/e2e/',
+    '<rootDir>/build/',
+    '<rootDir>/.docusaurus/',
+  ],
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
       tsconfig: 'tsconfig.json',
@@ -31,12 +37,12 @@ module.exports = {
     },
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.setup.ts'],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/setup/__mocks__/fileMock.js',
     '^@site/(.*)$': '<rootDir>/$1',
-    '^@docusaurus/(.*)$': '<rootDir>/node_modules/@docusaurus/$1',
-    '^@theme/(.*)$': '<rootDir>/node_modules/@docusaurus/theme-classic/src/theme/$1',
+    '^@docusaurus/(.*)$': '<rootDir>/tests/setup/__mocks__/docusaurus.js',
+    '^@theme/(.*)$': '<rootDir>/tests/setup/__mocks__/docusaurus.js',
   },
   testEnvironmentOptions: {
     url: 'http://localhost:3000',
@@ -51,9 +57,4 @@ module.exports = {
   ],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
 };

@@ -144,7 +144,11 @@
     "pa11y": "^8.0.0",
     "artillery": "^2.0.21",
     "@axe-core/playwright": "^4.10.2",
-    "msw": "^2.6.5"
+    "msw": "^2.6.5",
+    "ts-jest": "^29.2.5",
+    "babel-jest": "^29.7.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest-watch-typeahead": "^2.2.2"
   },
   "browserslist": {
     "production": [
