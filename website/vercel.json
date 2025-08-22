@@ -1,4 +1,26 @@
 {
+  "redirects": [
+    {
+      "source": "/docs",
+      "destination": "/docs/intro",
+      "permanent": true
+    },
+    {
+      "source": "/docs/",
+      "destination": "/docs/intro",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/docs",
+      "destination": "/zh-TW/docs/intro",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/docs/",
+      "destination": "/zh-TW/docs/intro",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

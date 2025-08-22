@@ -90,6 +90,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           editUrl:
             'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
+          routeBasePath: 'docs',
           // Versioning support
           includeCurrentVersion: true,
           lastVersion: 'current',
