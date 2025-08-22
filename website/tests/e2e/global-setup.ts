@@ -9,8 +9,21 @@ async function globalSetup(config: FullConfig) {
   console.log('🚀 Setting up E2E test environment...');
   
   try {
-    const browser = await chromium.launch();
-    const page = await browser.newPage();
+    // Skip browser launch if Playwright browsers are not installed (CI environment)
+    let browser;
+    let page;
+    
+    try {
+      browser = await chromium.launch();
+      page = await browser.newPage();
+    } catch (error: any) {
+      if (error.message?.includes("Executable doesn't exist") || error.message?.includes("playwright install")) {
+        console.log('⚠️  Playwright browsers not installed. Skipping browser-based setup.');
+        console.log('   Run "npx playwright install" to install browsers for full testing.');
+        return; // Skip the rest of setup gracefully
+      }
+      throw error; // Re-throw other errors
+    }
     
     // Get the base URL from config or environment
     const baseURL = config.webServer?.url || process.env.BASE_URL || 'http://localhost:3000';

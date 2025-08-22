@@ -978,6 +978,7 @@ kubectl get pods
       expect(screen.getByTestId('enhanced-content')).toBeInTheDocument();
     });
   });
+  });
 
   describe('CI/CD Integration', () => {
     it('should pass lighthouse accessibility audit simulation', () => {
