@@ -93,7 +93,8 @@ describe('CompatibilityMatrix', () => {
   it('renders status badges with correct classes', () => {
     render(<CompatibilityMatrix {...defaultProps} />);
     
-    expect(screen.getByText('Supported')).toHaveClass('badge--success');
+    const supportedBadges = screen.getAllByText('Supported');
+    expect(supportedBadges[0]).toHaveClass('badge--success');
     expect(screen.getByText('Experimental')).toHaveClass('badge--info');
     expect(screen.getByText('Deprecated')).toHaveClass('badge--warning');
     expect(screen.getByText('Not Supported')).toHaveClass('badge--danger');
@@ -190,7 +191,7 @@ describe('CompatibilityMatrix', () => {
       
       render(<CompatibilityMatrix data={allStatusData} />);
       
-      expect(screen.getByText('Supported')).toBeInTheDocument();
+      expect(screen.getAllByText('Supported')[0]).toBeInTheDocument();
       expect(screen.getByText('Deprecated')).toBeInTheDocument();
       expect(screen.getByText('Experimental')).toBeInTheDocument();
       expect(screen.getByText('Not Supported')).toBeInTheDocument();

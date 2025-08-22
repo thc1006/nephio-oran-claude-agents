@@ -7,11 +7,14 @@ tags: ['getting-started', 'introduction', 'setup', 'quickstart']
 
 # Getting Started with Nephio O-RAN Claude Agents
 
-Welcome to the Nephio O-RAN Claude Agents! This comprehensive guide will help you get started with deploying and managing intelligent agents for O-RAN network functions using Nephio and Claude AI.
+Welcome to the Nephio O-RAN Claude Agents! This comprehensive guide will help you get started with
+deploying and managing intelligent agents for O-RAN network functions using Nephio and Claude AI.
 
 ## Overview
 
-Nephio O-RAN Claude Agents provide intelligent automation and orchestration for Open Radio Access Network (O-RAN) deployments. These agents leverage Claude AI to make smart decisions about deployment, configuration, and management of O-RAN components.
+Nephio O-RAN Claude Agents provide intelligent automation and orchestration for Open Radio Access Network
+(O-RAN) deployments. These agents leverage Claude AI to make smart decisions about deployment,
+configuration, and management of O-RAN components.
 
 ## What You'll Learn
 
