@@ -1,0 +1,743 @@
+# xApps Deployment - Based on oran-network-functions-agent.md
+# Implements xApp Framework 1.5+ with O-RAN L Release features
+
+---
+# Traffic Steering xApp
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-steering-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: traffic-steering-xapp
+    app.kubernetes.io/version: "2.0.0"
+    app.kubernetes.io/component: xapp
+    app.kubernetes.io/part-of: ric-platform
+    oran.org/xapp-type: traffic-steering
+    xapp.oran.org/framework: "1.5+"
+    security.oran.org/scanned: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: traffic-steering-xapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: traffic-steering-xapp
+        app.kubernetes.io/version: "2.0.0"
+        app.kubernetes.io/component: xapp
+        app.kubernetes.io/part-of: ric-platform
+        oran.org/xapp-type: traffic-steering
+    spec:
+      serviceAccountName: ric-platform
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: traffic-steering-xapp
+        image: nexus3.o-ran-sc.org:10002/o-ran-sc/ric-app-ts:2.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 4560
+          name: rmr
+          protocol: TCP
+        env:
+        - name: RMR_PORT
+          value: "4560"
+        - name: HTTP_PORT
+          value: "8080"
+        - name: XAPP_NAME
+          value: "traffic-steering-xapp"
+        - name: XAPP_FRAMEWORK_VERSION
+          value: "1.5+"
+        - name: GODEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: fips-config
+              key: GODEBUG
+        - name: AI_ML_ENABLED
+          value: "true"
+        - name: E2_INTERFACE_VERSION
+          value: "3.0"
+        - name: A1_INTERFACE_VERSION
+          value: "2.0"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+        livenessProbe:
+          httpGet:
+            path: /ric/v1/health/alive
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ric/v1/health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: var-run
+          mountPath: /var/run
+        - name: xapp-config
+          mountPath: /etc/xapp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: var-run
+        emptyDir: {}
+      - name: xapp-config
+        configMap:
+          name: traffic-steering-config
+
+---
+# QoS Prediction xApp
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qos-prediction-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: qos-prediction-xapp
+    app.kubernetes.io/version: "1.5.0"
+    app.kubernetes.io/component: xapp
+    app.kubernetes.io/part-of: ric-platform
+    oran.org/xapp-type: qos-prediction
+    xapp.oran.org/framework: "1.5+"
+    security.oran.org/scanned: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qos-prediction-xapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qos-prediction-xapp
+        app.kubernetes.io/version: "1.5.0"
+        app.kubernetes.io/component: xapp
+        app.kubernetes.io/part-of: ric-platform
+        oran.org/xapp-type: qos-prediction
+    spec:
+      serviceAccountName: ric-platform
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: qos-prediction-xapp
+        image: nexus3.o-ran-sc.org:10002/o-ran-sc/ric-app-qp:1.5.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 4561
+          name: rmr
+          protocol: TCP
+        env:
+        - name: RMR_PORT
+          value: "4561"
+        - name: HTTP_PORT
+          value: "8080"
+        - name: XAPP_NAME
+          value: "qos-prediction-xapp"
+        - name: XAPP_FRAMEWORK_VERSION
+          value: "1.5+"
+        - name: GODEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: fips-config
+              key: GODEBUG
+        - name: AI_ML_ENABLED
+          value: "true"
+        - name: ML_MODEL_ENDPOINT
+          value: "http://kubeflow-ml-service:8080/v1/models/qos-prediction"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+        livenessProbe:
+          httpGet:
+            path: /ric/v1/health/alive
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ric/v1/health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: var-run
+          mountPath: /var/run
+        - name: xapp-config
+          mountPath: /etc/xapp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: var-run
+        emptyDir: {}
+      - name: xapp-config
+        configMap:
+          name: qos-prediction-config
+
+---
+# Anomaly Detection xApp (AI/ML Enhanced)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anomaly-detection-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: anomaly-detection-xapp
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: xapp
+    app.kubernetes.io/part-of: ric-platform
+    oran.org/xapp-type: anomaly-detection
+    xapp.oran.org/framework: "1.5+"
+    xapp.oran.org/ai-ml: "enabled"
+    security.oran.org/scanned: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: anomaly-detection-xapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: anomaly-detection-xapp
+        app.kubernetes.io/version: "1.0.0"
+        app.kubernetes.io/component: xapp
+        app.kubernetes.io/part-of: ric-platform
+        oran.org/xapp-type: anomaly-detection
+    spec:
+      serviceAccountName: ric-platform
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: anomaly-detection-xapp
+        image: nexus3.o-ran-sc.org:10002/o-ran-sc/ric-app-ad:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 4562
+          name: rmr
+          protocol: TCP
+        env:
+        - name: RMR_PORT
+          value: "4562"
+        - name: HTTP_PORT
+          value: "8080"
+        - name: XAPP_NAME
+          value: "anomaly-detection-xapp"
+        - name: XAPP_FRAMEWORK_VERSION
+          value: "1.5+"
+        - name: GODEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: fips-config
+              key: GODEBUG
+        - name: AI_ML_ENABLED
+          value: "true"
+        - name: KUBEFLOW_PIPELINE_ENDPOINT
+          value: "http://kubeflow-pipeline-service:8080"
+        - name: PYTHON_O1_SIMULATOR
+          value: "enabled"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            memory: "1.5Gi"
+            cpu: "750m"
+          limits:
+            memory: "3Gi"
+            cpu: "1.5"
+        livenessProbe:
+          httpGet:
+            path: /ric/v1/health/alive
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ric/v1/health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: var-run
+          mountPath: /var/run
+        - name: xapp-config
+          mountPath: /etc/xapp
+        - name: ml-models
+          mountPath: /opt/models
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: var-run
+        emptyDir: {}
+      - name: xapp-config
+        configMap:
+          name: anomaly-detection-config
+      - name: ml-models
+        persistentVolumeClaim:
+          claimName: ml-models-pvc
+
+---
+# KPI Monitoring xApp
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kpi-monitoring-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: kpi-monitoring-xapp
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: xapp
+    app.kubernetes.io/part-of: ric-platform
+    oran.org/xapp-type: kpi-monitoring
+    xapp.oran.org/framework: "1.5+"
+    security.oran.org/scanned: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kpi-monitoring-xapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kpi-monitoring-xapp
+        app.kubernetes.io/version: "1.0.0"
+        app.kubernetes.io/component: xapp
+        app.kubernetes.io/part-of: ric-platform
+        oran.org/xapp-type: kpi-monitoring
+    spec:
+      serviceAccountName: ric-platform
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: kpi-monitoring-xapp
+        image: nexus3.o-ran-sc.org:10002/o-ran-sc/ric-app-kpimon:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 4563
+          name: rmr
+          protocol: TCP
+        env:
+        - name: RMR_PORT
+          value: "4563"
+        - name: HTTP_PORT
+          value: "8080"
+        - name: XAPP_NAME
+          value: "kpi-monitoring-xapp"
+        - name: XAPP_FRAMEWORK_VERSION
+          value: "1.5+"
+        - name: GODEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: fips-config
+              key: GODEBUG
+        - name: VES_COLLECTOR_ENDPOINT
+          value: "http://ves-collector:8080/eventListener/v7"
+        - name: PROMETHEUS_ENDPOINT
+          value: "http://prometheus:9090"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /ric/v1/health/alive
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ric/v1/health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: var-run
+          mountPath: /var/run
+        - name: xapp-config
+          mountPath: /etc/xapp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: var-run
+        emptyDir: {}
+      - name: xapp-config
+        configMap:
+          name: kpi-monitoring-config
+
+---
+# Services for xApps
+
+# Traffic Steering xApp Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: traffic-steering-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: traffic-steering-xapp
+    oran.org/xapp-type: traffic-steering
+spec:
+  selector:
+    app.kubernetes.io/name: traffic-steering-xapp
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: rmr
+    port: 4560
+    targetPort: 4560
+    protocol: TCP
+
+---
+# QoS Prediction xApp Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: qos-prediction-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: qos-prediction-xapp
+    oran.org/xapp-type: qos-prediction
+spec:
+  selector:
+    app.kubernetes.io/name: qos-prediction-xapp
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: rmr
+    port: 4561
+    targetPort: 4561
+    protocol: TCP
+
+---
+# Anomaly Detection xApp Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: anomaly-detection-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: anomaly-detection-xapp
+    oran.org/xapp-type: anomaly-detection
+spec:
+  selector:
+    app.kubernetes.io/name: anomaly-detection-xapp
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: rmr
+    port: 4562
+    targetPort: 4562
+    protocol: TCP
+
+---
+# KPI Monitoring xApp Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: kpi-monitoring-xapp
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: kpi-monitoring-xapp
+    oran.org/xapp-type: kpi-monitoring
+spec:
+  selector:
+    app.kubernetes.io/name: kpi-monitoring-xapp
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: rmr
+    port: 4563
+    targetPort: 4563
+    protocol: TCP
+
+---
+# ConfigMaps for xApp configurations
+
+# Traffic Steering xApp Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traffic-steering-config
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: traffic-steering-xapp
+data:
+  config.json: |
+    {
+      "xapp_name": "traffic-steering-xapp",
+      "version": "2.0.0",
+      "containers": [
+        {
+          "name": "traffic-steering-xapp",
+          "image": {
+            "registry": "nexus3.o-ran-sc.org:10002",
+            "name": "o-ran-sc/ric-app-ts",
+            "tag": "2.0.0"
+          }
+        }
+      ],
+      "messaging": {
+        "ports": [
+          {
+            "name": "rmr-data",
+            "container": "traffic-steering-xapp",
+            "port": 4560,
+            "description": "RMR data port for traffic steering"
+          }
+        ]
+      },
+      "rmr": {
+        "protPort": "tcp:4560",
+        "maxSize": 8192,
+        "numWorkers": 1,
+        "policies": [1, 2]
+      }
+    }
+
+---
+# QoS Prediction xApp Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qos-prediction-config
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: qos-prediction-xapp
+data:
+  config.json: |
+    {
+      "xapp_name": "qos-prediction-xapp",
+      "version": "1.5.0",
+      "containers": [
+        {
+          "name": "qos-prediction-xapp",
+          "image": {
+            "registry": "nexus3.o-ran-sc.org:10002",
+            "name": "o-ran-sc/ric-app-qp",
+            "tag": "1.5.0"
+          }
+        }
+      ],
+      "messaging": {
+        "ports": [
+          {
+            "name": "rmr-data",
+            "container": "qos-prediction-xapp",
+            "port": 4561,
+            "description": "RMR data port for QoS prediction"
+          }
+        ]
+      },
+      "rmr": {
+        "protPort": "tcp:4561",
+        "maxSize": 8192,
+        "numWorkers": 1,
+        "policies": [3, 4]
+      },
+      "ai_ml": {
+        "enabled": true,
+        "model_endpoint": "http://kubeflow-ml-service:8080/v1/models/qos-prediction",
+        "features": ["throughput", "latency", "packet_loss", "ue_count"]
+      }
+    }
+
+---
+# Anomaly Detection xApp Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anomaly-detection-config
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: anomaly-detection-xapp
+data:
+  config.json: |
+    {
+      "xapp_name": "anomaly-detection-xapp",
+      "version": "1.0.0",
+      "containers": [
+        {
+          "name": "anomaly-detection-xapp",
+          "image": {
+            "registry": "nexus3.o-ran-sc.org:10002",
+            "name": "o-ran-sc/ric-app-ad",
+            "tag": "1.0.0"
+          }
+        }
+      ],
+      "messaging": {
+        "ports": [
+          {
+            "name": "rmr-data",
+            "container": "anomaly-detection-xapp",
+            "port": 4562,
+            "description": "RMR data port for anomaly detection"
+          }
+        ]
+      },
+      "rmr": {
+        "protPort": "tcp:4562",
+        "maxSize": 8192,
+        "numWorkers": 2,
+        "policies": [5, 6]
+      },
+      "ai_ml": {
+        "enabled": true,
+        "kubeflow_pipeline": "http://kubeflow-pipeline-service:8080",
+        "python_o1_simulator": "enabled",
+        "models": [
+          {
+            "name": "isolation_forest",
+            "type": "anomaly_detection",
+            "path": "/opt/models/isolation_forest.pkl"
+          }
+        ]
+      }
+    }
+
+---
+# KPI Monitoring xApp Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kpi-monitoring-config
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: kpi-monitoring-xapp
+data:
+  config.json: |
+    {
+      "xapp_name": "kpi-monitoring-xapp",
+      "version": "1.0.0",
+      "containers": [
+        {
+          "name": "kpi-monitoring-xapp",
+          "image": {
+            "registry": "nexus3.o-ran-sc.org:10002",
+            "name": "o-ran-sc/ric-app-kpimon",
+            "tag": "1.0.0"
+          }
+        }
+      ],
+      "messaging": {
+        "ports": [
+          {
+            "name": "rmr-data",
+            "container": "kpi-monitoring-xapp",
+            "port": 4563,
+            "description": "RMR data port for KPI monitoring"
+          }
+        ]
+      },
+      "rmr": {
+        "protPort": "tcp:4563",
+        "maxSize": 8192,
+        "numWorkers": 1,
+        "policies": [7, 8]
+      },
+      "monitoring": {
+        "ves_collector": "http://ves-collector:8080/eventListener/v7",
+        "prometheus": "http://prometheus:9090",
+        "kpis": [
+          "prb_usage_dl",
+          "prb_usage_ul", 
+          "active_ue_count",
+          "packet_loss_rate",
+          "throughput_mbps",
+          "latency_ms"
+        ]
+      }
+    }
+
+---
+# PersistentVolumeClaim for ML Models
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ml-models-pvc
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/component: storage
+    oran.org/ai-ml: enabled
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast-ssd

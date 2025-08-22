@@ -1,0 +1,377 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oran-du
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+    version: v1.0.0
+    nephio.org/deployment-pattern: primary
+    nephio.org/version: r5
+    security.nephio.org/validation: required
+  annotations:
+    nephio.org/deployment-type: network-function
+    security.nephio.org/l-release-compliant: "true"
+    deployment.kubernetes.io/revision: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oran-du
+  template:
+    metadata:
+      labels:
+        app: oran-du
+        component: distributed-unit
+        version: v1.0.0
+        sidecar.istio.io/inject: "true"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9091"
+        prometheus.io/path: "/metrics"
+        traffic.sidecar.istio.io/includeInboundPorts: "38473,9091"
+        sidecar.istio.io/proxyCPU: "100m"
+        sidecar.istio.io/proxyMemory: "128Mi"
+    spec:
+      serviceAccountName: oran-du-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: oran-du
+        image: oran/du:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: f1-client
+          containerPort: 38473
+          protocol: TCP
+        - name: metrics
+          containerPort: 9091
+          protocol: TCP
+        env:
+        - name: DU_CONFIG_PATH
+          value: "/config/du-config.json"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: JAEGER_AGENT_HOST
+          value: "jaeger-agent.istio-system.svc.cluster.local"
+        - name: JAEGER_AGENT_PORT
+          value: "6831"
+        resources:
+          requests:
+            cpu: "300m"
+            memory: "512Mi"
+          limits:
+            cpu: "1500m"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9091
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9091
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        - name: certs
+          mountPath: /certs
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+      volumes:
+      - name: config
+        configMap:
+          name: oran-du-config
+          defaultMode: 0644
+      - name: certs
+        secret:
+          secretName: oran-du-certs
+          defaultMode: 0400
+      - name: tmp
+        emptyDir:
+          sizeLimit: "100Mi"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: oran-du
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      terminationGracePeriodSeconds: 60
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oran-du-service
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9091"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: f1-client
+    port: 38473
+    targetPort: 38473
+    protocol: TCP
+  - name: metrics
+    port: 9091
+    targetPort: 9091
+    protocol: TCP
+  selector:
+    app: oran-du
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: oran-du-sa
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+  annotations:
+    nephio.org/service-account: "network-function"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oran-du-config
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+data:
+  du-config.json: |
+    {
+      "id": "du-001",
+      "name": "O-RAN-DU-001",
+      "f1_interface": {
+        "cu_endpoint": "oran-cu-service:38472",
+        "port": 38473,
+        "version": "16.4.0",
+        "heartbeat_interval": 30,
+        "retry_attempts": 3
+      },
+      "mac_scheduler": {
+        "algorithm": "proportional_fair",
+        "max_ues": 100,
+        "tti_interval": 1,
+        "qos_support": true,
+        "harq_enabled": true,
+        "srs_enabled": true,
+        "csi_enabled": true
+      },
+      "rlc_processor": {
+        "mode": "AM",
+        "max_buffer_size": 10240,
+        "reordering_timer": 35,
+        "poll_timer": 45,
+        "status_prohibit_timer": 0
+      },
+      "phy_layer": {
+        "numerology": 1,
+        "bandwidth": 20,
+        "subcarrier_spacing": 30,
+        "cyclic_prefix": "normal",
+        "mimo": {
+          "layers": 2,
+          "antennas": 4,
+          "precoding": true,
+          "diversity": true
+        },
+        "beamforming": {
+          "enabled": true,
+          "beam_count": 8,
+          "beam_width": 45.0,
+          "tracking": true
+        }
+      },
+      "cell_config": {
+        "cell_id": "001",
+        "pci": 1,
+        "tac": "0001",
+        "plmn_id": "00101",
+        "frequency": 3500,
+        "bandwidth": 20,
+        "tx_power": 43.0,
+        "coverage_area": 1.0
+      },
+      "metrics": {
+        "enabled": true,
+        "port": 9091,
+        "endpoint": "/metrics",
+        "interval": 30
+      },
+      "security": {
+        "tls_enabled": true,
+        "cert_path": "/certs/du-cert.pem",
+        "key_path": "/certs/du-key.pem",
+        "ca_cert_path": "/certs/ca-cert.pem",
+        "mutual_tls": true
+      },
+      "service_mesh": {
+        "istio_enabled": true,
+        "tracing_enabled": true,
+        "metrics_enabled": true
+      }
+    }
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: oran-du-vs
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+spec:
+  hosts:
+  - oran-du-service
+  http:
+  - match:
+    - headers:
+        content-type:
+          exact: application/json
+    route:
+    - destination:
+        host: oran-du-service
+        port:
+          number: 38473
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+  - route:
+    - destination:
+        host: oran-du-service
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: oran-du-dr
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+spec:
+  host: oran-du-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      tcp:
+        maxConnections: 50
+        connectTimeout: 30s
+      http:
+        http1MaxPendingRequests: 25
+        maxRequestsPerConnection: 5
+        maxRetries: 3
+    circuitBreaker:
+      consecutiveGatewayErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 30
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: oran-du-pa
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+spec:
+  selector:
+    matchLabels:
+      app: oran-du
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: oran-du-authz
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+spec:
+  selector:
+    matchLabels:
+      app: oran-du
+  rules:
+  - from:
+    - source:
+        namespaces: ["oran-network-functions", "istio-system", "monitoring"]
+  - to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/metrics", "/health"]
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oran-du-certs
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    component: distributed-unit
+type: kubernetes.io/tls
+data:
+  # Base64 encoded certificate and key (placeholder)
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCi4uLgotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCi4uLgotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0t
+  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCi4uLgotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t

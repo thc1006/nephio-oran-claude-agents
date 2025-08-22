@@ -1,0 +1,283 @@
+# O-Cloud Controller Deployment
+# Nephio R5 / O-RAN L Release compatible
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ocloud-system
+  labels:
+    ocloud.oran.io/managed: "true"
+    nephio.org/version: "r5"
+    oran.org/release: "l-release"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ocloud-controller
+  namespace: ocloud-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ocloud-controller
+rules:
+- apiGroups: [""]
+  resources: ["namespaces", "configmaps", "secrets", "services", "pods"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["ocloud.oran.io"]
+  resources: ["oclouds", "resourcepools"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["ocloud.oran.io"]
+  resources: ["oclouds/status", "resourcepools/status"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: [""]
+  resources: ["resourcequotas", "limitranges"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["nodes", "pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ocloud-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ocloud-controller
+subjects:
+- kind: ServiceAccount
+  name: ocloud-controller
+  namespace: ocloud-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocloud-controller-config
+  namespace: ocloud-system
+data:
+  config.yaml: |
+    controller:
+      reconcileInterval: 5m
+      metricsPort: 8080
+      healthPort: 8081
+      logLevel: info
+    o2Interface:
+      enabled: true
+      port: 8090
+      version: "1.0"
+      authEnabled: false
+    smo:
+      endpoint: "http://smo-stub.ocloud-system.svc.cluster.local:8091"
+      authType: "bearer"
+      pollInterval: 30s
+    telemetry:
+      enabled: true
+      exportInterval: 60s
+      prometheus:
+        enabled: true
+        port: 9090
+    resourceManager:
+      defaultQuota:
+        cpu: "100"
+        memory: "200Gi"
+        storage: "1Ti"
+      optimizationInterval: 10m
+    features:
+      aimlIntegration: true
+      autoScaling: true
+      costOptimization: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocloud-controller
+  namespace: ocloud-system
+  labels:
+    app: ocloud-controller
+    component: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ocloud-controller
+  template:
+    metadata:
+      labels:
+        app: ocloud-controller
+        component: controller
+        version: "l-release"
+    spec:
+      serviceAccountName: ocloud-controller
+      containers:
+      - name: controller
+        image: ocloud/controller:l-release
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: LOG_LEVEL
+          value: "info"
+        - name: METRICS_ADDR
+          value: ":8080"
+        - name: HEALTH_ADDR
+          value: ":8081"
+        - name: O2_INTERFACE_PORT
+          value: "8090"
+        ports:
+        - name: metrics
+          containerPort: 8080
+          protocol: TCP
+        - name: health
+          containerPort: 8081
+          protocol: TCP
+        - name: o2-api
+          containerPort: 8090
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: health
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        volumeMounts:
+        - name: config
+          mountPath: /etc/ocloud
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: ocloud-controller-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ocloud-controller
+  namespace: ocloud-system
+  labels:
+    app: ocloud-controller
+spec:
+  type: ClusterIP
+  selector:
+    app: ocloud-controller
+  ports:
+  - name: metrics
+    port: 8080
+    targetPort: metrics
+  - name: health
+    port: 8081
+    targetPort: health
+  - name: o2-api
+    port: 8090
+    targetPort: o2-api
+---
+# SMO Stub Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smo-stub
+  namespace: ocloud-system
+  labels:
+    app: smo-stub
+    component: smo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smo-stub
+  template:
+    metadata:
+      labels:
+        app: smo-stub
+        component: smo
+    spec:
+      containers:
+      - name: smo
+        image: ocloud/smo-stub:l-release
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PORT
+          value: "8091"
+        - name: LOG_LEVEL
+          value: "debug"
+        ports:
+        - name: http
+          containerPort: 8091
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smo-stub
+  namespace: ocloud-system
+  labels:
+    app: smo-stub
+spec:
+  type: ClusterIP
+  selector:
+    app: smo-stub
+  ports:
+  - name: http
+    port: 8091
+    targetPort: http
+---
+# O2 Interface Service (LoadBalancer for external access)
+apiVersion: v1
+kind: Service
+metadata:
+  name: o2-interface
+  namespace: ocloud-system
+  labels:
+    app: ocloud-controller
+    interface: o2
+  annotations:
+    service.beta.kubernetes.io/load-balancer-source-ranges: "0.0.0.0/0"
+spec:
+  type: LoadBalancer
+  selector:
+    app: ocloud-controller
+  ports:
+  - name: o2-api
+    port: 80
+    targetPort: 8090
+    protocol: TCP

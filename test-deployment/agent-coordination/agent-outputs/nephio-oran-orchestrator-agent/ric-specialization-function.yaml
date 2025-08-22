@@ -1,0 +1,22 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: near-rt-ric-specialization
+spec:
+  info:
+    title: Near-RT RIC Platform Specialization
+    description: Kpt function to specialize RIC platform for specific deployments
+  pipeline:
+    mutators:
+    - image: gcr.io/kpt-fn/set-namespace:v0.4.1
+      configMap:
+        namespace: near-rt-ric
+    - image: nephio.io/functions/ric-specializer:v1.0.0
+      configMap:
+        ric-type: near-rt
+        e2-interface-version: "3.0"
+        a1-interface-version: "2.0"
+        xapp-framework-version: "1.5"
+    validators:
+    - image: gcr.io/kpt-fn/kubeval:v0.3.0
+    - image: nephio.io/functions/oran-validator:v1.0.0

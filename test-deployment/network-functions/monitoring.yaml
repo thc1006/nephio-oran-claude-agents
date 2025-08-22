@@ -1,0 +1,304 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: oran-cu-monitor
+  namespace: oran-network-functions
+  labels:
+    app: oran-cu
+    monitoring: enabled
+spec:
+  selector:
+    matchLabels:
+      app: oran-cu
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - oran-network-functions
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: oran-du-monitor
+  namespace: oran-network-functions
+  labels:
+    app: oran-du
+    monitoring: enabled
+spec:
+  selector:
+    matchLabels:
+      app: oran-du
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - oran-network-functions
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: oran-ru-monitor
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    monitoring: enabled
+spec:
+  selector:
+    matchLabels:
+      app: oran-ru
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - oran-network-functions
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: oran-nf-alerts
+  namespace: oran-network-functions
+  labels:
+    monitoring: enabled
+spec:
+  groups:
+  - name: oran.network.functions
+    rules:
+    - alert: ORANCUDown
+      expr: up{job="oran-cu-service"} == 0
+      for: 30s
+      labels:
+        severity: critical
+        component: central-unit
+      annotations:
+        summary: "O-RAN Central Unit is down"
+        description: "O-RAN CU {{ $labels.instance }} has been down for more than 30 seconds."
+    
+    - alert: ORANDUDown
+      expr: up{job="oran-du-service"} == 0
+      for: 30s
+      labels:
+        severity: critical
+        component: distributed-unit
+      annotations:
+        summary: "O-RAN Distributed Unit is down"
+        description: "O-RAN DU {{ $labels.instance }} has been down for more than 30 seconds."
+    
+    - alert: ORANRUDown
+      expr: up{job="oran-ru-service"} == 0
+      for: 30s
+      labels:
+        severity: critical
+        component: radio-unit
+      annotations:
+        summary: "O-RAN Radio Unit is down"
+        description: "O-RAN RU {{ $labels.instance }} has been down for more than 30 seconds."
+    
+    - alert: F1ConnectionLost
+      expr: f1_active_connections == 0
+      for: 60s
+      labels:
+        severity: warning
+        interface: f1
+      annotations:
+        summary: "F1 interface connection lost"
+        description: "No active F1 connections for more than 60 seconds."
+    
+    - alert: E1ConnectionLost
+      expr: e1_active_connections == 0
+      for: 60s
+      labels:
+        severity: warning
+        interface: e1
+      annotations:
+        summary: "E1 interface connection lost"
+        description: "No active E1 connections for more than 60 seconds."
+    
+    - alert: NGAPConnectionLost
+      expr: ngap_active_connections == 0
+      for: 60s
+      labels:
+        severity: warning
+        interface: ngap
+      annotations:
+        summary: "NGAP interface connection lost"
+        description: "No active NGAP connections for more than 60 seconds."
+    
+    - alert: HighRFTemperature
+      expr: rf_temperature > 75
+      for: 5m
+      labels:
+        severity: warning
+        component: rf
+      annotations:
+        summary: "RF temperature is high"
+        description: "RF temperature {{ $value }}°C is above threshold for {{ $labels.instance }}."
+    
+    - alert: BeamformingFailed
+      expr: rate(beam_updates_performed[5m]) == 0
+      for: 5m
+      labels:
+        severity: warning
+        component: beamforming
+      annotations:
+        summary: "Beamforming updates have stopped"
+        description: "No beamforming updates in the last 5 minutes for {{ $labels.instance }}."
+    
+    - alert: SyncAccuracyDegraded
+      expr: abs(sync_accuracy_ns) > 200
+      for: 2m
+      labels:
+        severity: warning
+        component: synchronization
+      annotations:
+        summary: "Synchronization accuracy degraded"
+        description: "Sync accuracy {{ $value }}ns is outside acceptable range for {{ $labels.instance }}."
+    
+    - alert: HighPacketLoss
+      expr: rate(ofh_messages_lost[5m]) / rate(ofh_messages_processed[5m]) > 0.01
+      for: 2m
+      labels:
+        severity: warning
+        component: fronthaul
+      annotations:
+        summary: "High packet loss on fronthaul"
+        description: "Fronthaul packet loss rate {{ $value | humanizePercentage }} exceeds 1% for {{ $labels.instance }}."
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-oran-nf
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  oran-network-functions.json: |
+    {
+      "dashboard": {
+        "id": null,
+        "title": "O-RAN Network Functions",
+        "tags": ["oran", "5g", "network-functions"],
+        "style": "dark",
+        "timezone": "browser",
+        "panels": [
+          {
+            "id": 1,
+            "title": "Network Function Status",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "up{job=~\"oran-.*-service\"}",
+                "legendFormat": "{{ job }}"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "steps": [
+                    {"color": "red", "value": 0},
+                    {"color": "green", "value": 1}
+                  ]
+                }
+              }
+            },
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+          },
+          {
+            "id": 2,
+            "title": "F1 Interface Connections",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "f1_active_connections",
+                "legendFormat": "Active F1 Connections"
+              }
+            ],
+            "yAxes": [
+              {"label": "Connections", "min": 0}
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+          },
+          {
+            "id": 3,
+            "title": "RF Parameters",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rf_tx_power",
+                "legendFormat": "TX Power (dBm)"
+              },
+              {
+                "expr": "rf_temperature",
+                "legendFormat": "Temperature (°C)"
+              }
+            ],
+            "yAxes": [
+              {"label": "Value"}
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+          },
+          {
+            "id": 4,
+            "title": "Beamforming Status",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "beamforming_beams",
+                "legendFormat": "Active Beams"
+              },
+              {
+                "expr": "rate(beam_updates_performed[5m])",
+                "legendFormat": "Beam Updates/min"
+              }
+            ],
+            "yAxes": [
+              {"label": "Count/Rate", "min": 0}
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+          },
+          {
+            "id": 5,
+            "title": "Message Processing Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(f1ap_messages_total[5m])",
+                "legendFormat": "F1AP Messages/s"
+              },
+              {
+                "expr": "rate(e1ap_messages_total[5m])",
+                "legendFormat": "E1AP Messages/s"
+              },
+              {
+                "expr": "rate(ngap_messages_total[5m])",
+                "legendFormat": "NGAP Messages/s"
+              },
+              {
+                "expr": "rate(ofh_messages_processed[5m])",
+                "legendFormat": "OFH Messages/s"
+              }
+            ],
+            "yAxes": [
+              {"label": "Messages/sec", "min": 0}
+            ],
+            "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16}
+          }
+        ],
+        "time": {
+          "from": "now-1h",
+          "to": "now"
+        },
+        "refresh": "30s"
+      }
+    }

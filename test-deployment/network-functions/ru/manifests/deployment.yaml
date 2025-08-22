@@ -1,0 +1,425 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oran-ru
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+    version: v1.0.0
+    nephio.org/deployment-pattern: primary
+    nephio.org/version: r5
+    security.nephio.org/validation: required
+  annotations:
+    nephio.org/deployment-type: network-function
+    security.nephio.org/l-release-compliant: "true"
+    deployment.kubernetes.io/revision: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oran-ru
+  template:
+    metadata:
+      labels:
+        app: oran-ru
+        component: radio-unit
+        version: v1.0.0
+        sidecar.istio.io/inject: "true"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9092"
+        prometheus.io/path: "/metrics"
+        traffic.sidecar.istio.io/includeInboundPorts: "7777,7778,7779,7780,9092"
+        sidecar.istio.io/proxyCPU: "100m"
+        sidecar.istio.io/proxyMemory: "128Mi"
+    spec:
+      serviceAccountName: oran-ru-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: oran-ru
+        image: oran/ru:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: ofh-cplane
+          containerPort: 7777
+          protocol: TCP
+        - name: ofh-uplane
+          containerPort: 7778
+          protocol: TCP
+        - name: ofh-splane
+          containerPort: 7779
+          protocol: TCP
+        - name: ofh-mplane
+          containerPort: 7780
+          protocol: TCP
+        - name: metrics
+          containerPort: 9092
+          protocol: TCP
+        env:
+        - name: RU_CONFIG_PATH
+          value: "/config/ru-config.json"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: JAEGER_AGENT_HOST
+          value: "jaeger-agent.istio-system.svc.cluster.local"
+        - name: JAEGER_AGENT_PORT
+          value: "6831"
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2000m"
+            memory: "4Gi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9092
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9092
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        - name: certs
+          mountPath: /certs
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+      volumes:
+      - name: config
+        configMap:
+          name: oran-ru-config
+          defaultMode: 0644
+      - name: certs
+        secret:
+          secretName: oran-ru-certs
+          defaultMode: 0400
+      - name: tmp
+        emptyDir:
+          sizeLimit: "100Mi"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: oran-ru
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      terminationGracePeriodSeconds: 60
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oran-ru-service
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9092"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: ofh-cplane
+    port: 7777
+    targetPort: 7777
+    protocol: TCP
+  - name: ofh-uplane
+    port: 7778
+    targetPort: 7778
+    protocol: TCP
+  - name: ofh-splane
+    port: 7779
+    targetPort: 7779
+    protocol: TCP
+  - name: ofh-mplane
+    port: 7780
+    targetPort: 7780
+    protocol: TCP
+  - name: metrics
+    port: 9092
+    targetPort: 9092
+    protocol: TCP
+  selector:
+    app: oran-ru
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: oran-ru-sa
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+  annotations:
+    nephio.org/service-account: "network-function"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oran-ru-config
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+data:
+  ru-config.json: |
+    {
+      "id": "ru-001",
+      "name": "O-RAN-RU-001",
+      "open_fronthaul": {
+        "du_endpoint": "oran-du-service:38474",
+        "port": 7777,
+        "cplane_port": 7777,
+        "uplane_port": 7778,
+        "splane_port": 7779,
+        "mplane_port": 7780,
+        "version": "7.1.0",
+        "compression_type": "BFP",
+        "compression_ratio": 9.0,
+        "vlans": {
+          "cplane_vlan": 100,
+          "uplane_vlan": 101,
+          "splane_vlan": 102,
+          "mplane_vlan": 103
+        }
+      },
+      "beamforming_ctrl": {
+        "enabled": true,
+        "type": "digital",
+        "beam_count": 8,
+        "beam_width": 30.0,
+        "scan_range": {
+          "azimuth_min": -60.0,
+          "azimuth_max": 60.0,
+          "elevation_min": -30.0,
+          "elevation_max": 30.0
+        },
+        "weight_calculation": "adaptive",
+        "update_interval": 100
+      },
+      "rf_parameters": {
+        "center_frequency": 3500000000,
+        "bandwidth": 20000000,
+        "tx_power": 43.0,
+        "rx_gain": 15.0,
+        "noise_floor": -174.0,
+        "linearity_range": {
+          "ip3": 30.0,
+          "p1db": 27.0,
+          "acpr": -45.0,
+          "evm": 3.0
+        },
+        "temperature_compensation": true,
+        "agc_enabled": true,
+        "filters": {
+          "anti_aliasing": true,
+          "image_reject": true,
+          "channel_select": true,
+          "dc_block": true,
+          "bandwidth": 22000000
+        }
+      },
+      "antenna_array": {
+        "elements": 64,
+        "polarization": "dual",
+        "element_spacing": 0.5,
+        "array_geometry": "planar",
+        "tilt_angle": 0.0,
+        "azimuth_angle": 0.0
+      },
+      "calibration_ctrl": {
+        "enabled": true,
+        "type": "runtime",
+        "interval": 3600,
+        "temperature": true,
+        "frequency": true,
+        "amplitude": true,
+        "phase": true,
+        "iq_imbalance": true,
+        "dc_offset": true
+      },
+      "synchronization": {
+        "source": "ptp",
+        "accuracy": 100.0,
+        "ptp_domain": 24,
+        "ptp_profile": "G.8275.1",
+        "gps_enabled": true,
+        "holdover_time": 300
+      },
+      "metrics": {
+        "enabled": true,
+        "port": 9092,
+        "endpoint": "/metrics",
+        "interval": 30
+      },
+      "security": {
+        "tls_enabled": true,
+        "cert_path": "/certs/ru-cert.pem",
+        "key_path": "/certs/ru-key.pem",
+        "ca_cert_path": "/certs/ca-cert.pem",
+        "mutual_tls": true
+      },
+      "service_mesh": {
+        "istio_enabled": true,
+        "tracing_enabled": true,
+        "metrics_enabled": true
+      }
+    }
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: oran-ru-vs
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+spec:
+  hosts:
+  - oran-ru-service
+  http:
+  - match:
+    - headers:
+        ofh-plane:
+          regex: "cplane|uplane|splane|mplane"
+    route:
+    - destination:
+        host: oran-ru-service
+    timeout: 5s
+    retries:
+      attempts: 2
+      perTryTimeout: 2s
+  - route:
+    - destination:
+        host: oran-ru-service
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: oran-ru-dr
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+spec:
+  host: oran-ru-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      tcp:
+        maxConnections: 200
+        connectTimeout: 10s
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 20
+        maxRetries: 2
+    circuitBreaker:
+      consecutiveGatewayErrors: 3
+      interval: 15s
+      baseEjectionTime: 15s
+      maxEjectionPercent: 30
+      minHealthPercent: 50
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: oran-ru-pa
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+spec:
+  selector:
+    matchLabels:
+      app: oran-ru
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: oran-ru-authz
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+spec:
+  selector:
+    matchLabels:
+      app: oran-ru
+  rules:
+  - from:
+    - source:
+        namespaces: ["oran-network-functions", "istio-system", "monitoring"]
+  - to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/cplane/*", "/uplane/*", "/splane/*", "/mplane/*", "/metrics", "/health"]
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oran-ru-certs
+  namespace: oran-network-functions
+  labels:
+    app: oran-ru
+    component: radio-unit
+type: kubernetes.io/tls
+data:
+  # Base64 encoded certificate and key (placeholder)
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCi4uLgotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCi4uLgotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0t
+  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCi4uLgotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t

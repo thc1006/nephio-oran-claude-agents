@@ -1,0 +1,316 @@
+# Prometheus Configuration for O-Cloud Monitoring
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: ocloud-system
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 30s
+      evaluation_interval: 30s
+      external_labels:
+        cluster: 'ocloud-test'
+        environment: 'test'
+        ocloud_version: 'l-release'
+
+    # Alerting configuration
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - alertmanager:9093
+
+    # Rule files
+    rule_files:
+      - '/etc/prometheus/rules/*.yml'
+
+    # Scrape configurations
+    scrape_configs:
+    # O-Cloud Controller metrics
+    - job_name: 'ocloud-controller'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - ocloud-system
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: ocloud-controller
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: pod
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+
+    # O2 Interface metrics
+    - job_name: 'o2-interface'
+      static_configs:
+      - targets: ['ocloud-controller.ocloud-system.svc.cluster.local:8090']
+      metrics_path: '/o2ims/v1/metrics'
+
+    # SMO metrics
+    - job_name: 'smo-stub'
+      kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+          - ocloud-system
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: smo-stub
+
+    # Resource pool metrics
+    - job_name: 'resource-pools'
+      kubernetes_sd_configs:
+      - role: node
+      relabel_configs:
+      - source_labels: [__address__]
+        regex: '(.*):10250'
+        replacement: '${1}:9100'
+        target_label: __address__
+      - source_labels: [__meta_kubernetes_node_name]
+        target_label: node
+      - source_labels: [__meta_kubernetes_node_label_node_role_kubernetes_io_edge]
+        target_label: node_type
+        regex: 'true'
+        replacement: 'edge'
+      - source_labels: [__meta_kubernetes_node_label_node_role_kubernetes_io_compute]
+        target_label: node_type
+        regex: 'true'
+        replacement: 'compute'
+
+    # Kubernetes metrics
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+      - role: endpoints
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+
+    # Node exporter for hardware metrics
+    - job_name: 'node-exporter'
+      kubernetes_sd_configs:
+      - role: pod
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+---
+# Prometheus Alert Rules
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: ocloud-system
+data:
+  ocloud-alerts.yml: |
+    groups:
+    - name: ocloud_alerts
+      interval: 30s
+      rules:
+      # Resource Pool Alerts
+      - alert: ResourcePoolHighCPUUtilization
+        expr: ocloud_resource_pool_cpu_utilization_percentage > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: resource-pool
+        annotations:
+          summary: "High CPU utilization in resource pool {{ $labels.pool_name }}"
+          description: "CPU utilization is {{ $value }}% in pool {{ $labels.pool_name }}"
+
+      - alert: ResourcePoolCriticalCPUUtilization
+        expr: ocloud_resource_pool_cpu_utilization_percentage > 95
+        for: 2m
+        labels:
+          severity: critical
+          component: resource-pool
+        annotations:
+          summary: "Critical CPU utilization in resource pool {{ $labels.pool_name }}"
+          description: "CPU utilization is {{ $value }}% in pool {{ $labels.pool_name }}"
+
+      - alert: ResourcePoolHighMemoryUtilization
+        expr: ocloud_resource_pool_memory_utilization_percentage > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: resource-pool
+        annotations:
+          summary: "High memory utilization in resource pool {{ $labels.pool_name }}"
+          description: "Memory utilization is {{ $value }}% in pool {{ $labels.pool_name }}"
+
+      # O2 Interface Alerts
+      - alert: O2InterfaceDown
+        expr: up{job="o2-interface"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: o2-interface
+        annotations:
+          summary: "O2 Interface is down"
+          description: "O2 Interface has been down for more than 1 minute"
+
+      - alert: O2InterfaceHighLatency
+        expr: ocloud_o2_interface_request_duration_seconds{quantile="0.99"} > 1
+        for: 5m
+        labels:
+          severity: warning
+          component: o2-interface
+        annotations:
+          summary: "High latency on O2 Interface"
+          description: "99th percentile latency is {{ $value }}s"
+
+      # SMO Connection Alerts
+      - alert: SMOConnectionLost
+        expr: ocloud_smo_connection_status == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: smo
+        annotations:
+          summary: "SMO connection lost"
+          description: "Connection to SMO has been lost for more than 2 minutes"
+
+      # Controller Alerts
+      - alert: OCloudControllerDown
+        expr: up{job="ocloud-controller"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: controller
+        annotations:
+          summary: "O-Cloud Controller is down"
+          description: "O-Cloud Controller has been down for more than 1 minute"
+
+      - alert: OCloudReconciliationFailed
+        expr: rate(ocloud_controller_reconciliation_errors_total[5m]) > 0.1
+        for: 10m
+        labels:
+          severity: warning
+          component: controller
+        annotations:
+          summary: "High reconciliation error rate"
+          description: "Reconciliation error rate is {{ $value }} errors/sec"
+
+      # Resource Inventory Alerts
+      - alert: LowAvailableCPU
+        expr: ocloud_inventory_available_cpu < 100
+        for: 10m
+        labels:
+          severity: warning
+          component: inventory
+        annotations:
+          summary: "Low available CPU in O-Cloud"
+          description: "Only {{ $value }} CPU cores available in O-Cloud"
+
+      - alert: LowAvailableMemory
+        expr: ocloud_inventory_available_memory_bytes < 100e9
+        for: 10m
+        labels:
+          severity: warning
+          component: inventory
+        annotations:
+          summary: "Low available memory in O-Cloud"
+          description: "Only {{ $value | humanize }}B memory available in O-Cloud"
+---
+# Grafana Dashboard ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-ocloud
+  namespace: ocloud-system
+  labels:
+    grafana_dashboard: "1"
+data:
+  ocloud-dashboard.json: |
+    {
+      "dashboard": {
+        "title": "O-Cloud Infrastructure Dashboard",
+        "tags": ["ocloud", "oran", "nephio"],
+        "timezone": "browser",
+        "panels": [
+          {
+            "title": "Resource Pool Utilization",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "ocloud_resource_pool_cpu_utilization_percentage",
+                "legendFormat": "CPU - {{ pool_name }}"
+              },
+              {
+                "expr": "ocloud_resource_pool_memory_utilization_percentage",
+                "legendFormat": "Memory - {{ pool_name }}"
+              }
+            ]
+          },
+          {
+            "title": "O2 Interface Requests",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(ocloud_o2_interface_requests_total[5m])",
+                "legendFormat": "{{ method }} {{ endpoint }}"
+              }
+            ]
+          },
+          {
+            "title": "Resource Inventory",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "ocloud_inventory_total_cpu",
+                "legendFormat": "Total CPU"
+              },
+              {
+                "expr": "ocloud_inventory_available_cpu",
+                "legendFormat": "Available CPU"
+              },
+              {
+                "expr": "ocloud_inventory_total_memory_bytes",
+                "legendFormat": "Total Memory"
+              },
+              {
+                "expr": "ocloud_inventory_available_memory_bytes",
+                "legendFormat": "Available Memory"
+              }
+            ]
+          },
+          {
+            "title": "SMO Status",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "ocloud_smo_connection_status",
+                "legendFormat": "Connection Status"
+              }
+            ]
+          },
+          {
+            "title": "Active Alarms",
+            "type": "table",
+            "targets": [
+              {
+                "expr": "ocloud_alarms_active",
+                "format": "table"
+              }
+            ]
+          }
+        ]
+      }
+    }

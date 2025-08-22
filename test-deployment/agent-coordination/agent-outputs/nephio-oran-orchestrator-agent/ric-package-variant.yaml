@@ -1,0 +1,23 @@
+apiVersion: config.porch.kpt.dev/v1alpha1
+kind: PackageVariant
+metadata:
+  name: near-rt-ric-cluster01
+  namespace: default
+spec:
+  upstream:
+    package: ric-platform-base
+    revision: v1.0.0
+    repo: nephio-packages
+  downstream:
+    package: ric-platform-cluster01
+    repo: cluster01-packages
+  injectors:
+  - name: ric-config
+    image: nephio.io/functions/ric-injector:v1.0.0
+    configMap:
+      cluster-name: cluster01
+      ric-deployment-type: near-rt
+      xapp-count: "5"
+      resource-requirements:
+        memory: "8Gi"
+        cpu: "4000m"

@@ -1,0 +1,305 @@
+# O-RAN L Release & Nephio R5 Agent Collection v2.0
+
+## Overview
+Complete agent collection for O-RAN L Release (June 30, 2025) and Nephio R5 development with full SMO, Porch, and WG11 compliance support using Go 1.24.6.
+
+## Critical Requirements
+- **O-RAN**: L Release (current as of June 30, 2025)
+- **Nephio**: R5 (v5.0.0)
+- **Go**: 1.24.6
+- **Kubernetes**: 1.30+
+
+## Available Agents
+
+### 1. performance-optimization-agent (v2.0.0)
+**Purpose**: Optimize performance with SMO and Porch integration  
+**New Features**:
+- Full SMO performance monitoring
+- Porch package optimization
+- E2 subscription with RAN functions
+- O-Cloud energy profiles
+- Advanced HPA with custom metrics
+
+**Key Commands**:
+```bash
+full_performance_check        # Complete analysis with SMO
+check_smo_performance        # SMO and Non-RT RIC metrics
+check_porch_performance      # Porch package management
+optimize_package_deployment  # Optimize via Porch
+optimize_ocloud_energy       # Energy efficiency optimization
+deploy_optimized_ai_models   # Kubeflow model deployment
+quick_optimize <namespace>   # Quick optimization workflow
+```
+
+### 2. security-compliance-agent (v2.0.0)
+**Purpose**: Enforce WG11 security and compliance  
+**New Features**:
+- Complete WG11 compliance validation
+- SMO security integration
+- Porch package security
+- FIPS 140-3 enforcement
+- Zero-trust network policies
+
+**Key Commands**:
+```bash
+full_security_audit          # Complete security audit
+check_wg11_compliance        # O-RAN WG11 validation
+apply_wg11_policies          # Apply security policies
+check_smo_security           # SMO security status
+secure_porch_packages        # Secure package management
+enforce_fips_mode            # Enable FIPS 140-3
+scan_all_containers          # Container vulnerability scan
+quick_security_fix <ns>      # Quick security remediation
+```
+
+### 3. testing-validation-agent (v2.0.0)
+**Purpose**: Comprehensive E2E testing and validation  
+**New Features**:
+- Complete E2/A1/O1/O2 interface testing
+- SMO integration testing
+- Porch package testing
+- PackageVariantSet validation
+- AI/ML performance testing
+
+**Key Commands**:
+```bash
+run_complete_test_suite      # Full E2E test suite
+quick_validation             # Quick health check
+test_e2_interface            # E2 with RAN functions
+test_a1_interface            # A1 policy testing
+test_o1_interface            # O1 YANG validation
+test_o2_interface            # O2 O-Cloud testing
+test_smo_integration         # SMO stack testing
+test_porch_packages          # Porch management testing
+test_ai_ml_performance       # AI/ML latency testing
+test_energy_efficiency       # Energy efficiency validation
+generate_test_report         # Comprehensive report
+```
+
+## Standard Deployment Workflow
+
+```bash
+# 1. Initial Security Setup
+security-compliance-agent: check_wg11_compliance
+security-compliance-agent: apply_wg11_policies
+security-compliance-agent: enforce_fips_mode
+
+# 2. Deploy O-RAN Components via Nephio R5
+## Create Porch repository
+kubectl apply -f - <<EOF
+apiVersion: porch.kpt.dev/v1alpha1
+kind: Repository
+metadata:
+  name: oran-packages
+  namespace: nephio-system
+spec:
+  type: git
+  content: Package
+  deployment: true
+  git:
+    repo: https://github.com/your-org/oran-packages
+    branch: main
+EOF
+
+## Deploy via PackageVariantSet
+kubectl apply -f - <<EOF
+apiVersion: config.porch.kpt.dev/v1alpha2
+kind: PackageVariantSet
+metadata:
+  name: oran-deployment
+  namespace: nephio-system
+spec:
+  upstream:
+    package: oran-complete
+    repo: oran-packages
+    revision: v2.0.0
+  targets:
+  - objectSelector:
+      kind: WorkloadCluster
+    template:
+      downstream:
+        packageExpr: "oran-\${cluster.name}"
+        repoExpr: "deployments"
+EOF
+
+# 3. Setup SMO (Non-RT RIC)
+kubectl create namespace nonrtric
+kubectl apply -f smo-components.yaml
+
+# 4. Validate Deployment
+testing-validation-agent: quick_validation
+testing-validation-agent: test_e2_interface
+testing-validation-agent: test_smo_integration
+
+# 5. Optimize Performance
+performance-optimization-agent: full_performance_check
+performance-optimization-agent: optimize_ocloud_energy
+performance-optimization-agent: deploy_optimized_ai_models
+
+# 6. Security Hardening
+security-compliance-agent: full_security_audit
+security-compliance-agent: scan_all_containers
+security-compliance-agent: quick_security_fix oran
+
+# 7. Complete Testing
+testing-validation-agent: run_complete_test_suite
+testing-validation-agent: generate_test_report
+```
+
+## Key Integration Points
+
+### SMO (Service Management and Orchestration)
+```bash
+# Components in nonrtric namespace:
+- Policy Management Service
+- rApp Manager
+- Information Coordination Service (ICS)
+- A1 Mediator
+- Non-RT RIC Control Panel
+```
+
+### Porch (Nephio R5 Package Management)
+```bash
+# Components in porch-system namespace:
+- Porch API Server
+- Package Orchestration Controller
+- Function Runner
+```
+
+### O-RAN Interfaces
+```bash
+E2: Near-RT RIC connection (port 36421)
+A1: Policy interface (port 9001)
+O1: NETCONF/YANG management (port 830)
+O2: O-Cloud interface (port 8080)
+```
+
+## Critical Configuration
+
+### Enable FIPS 140-3 (Go 1.24.6)
+```bash
+# For all deployments
+kubectl set env deployment --all GODEBUG=fips140=on --all-namespaces
+```
+
+### Set Energy Efficiency Target (L Release)
+```yaml
+apiVersion: ocloud.nephio.org/v1alpha1
+kind: EnergyProfile
+metadata:
+  name: l-release-target
+spec:
+  targetEfficiency: 0.6  # Gbps/W (L Release: >0.5)
+```
+
+### Configure AI/ML Inference (L Release)
+```yaml
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: oran-ai-model
+spec:
+  predictor:
+    model:
+      modelFormat:
+        name: onnx
+      runtime: kserve-onnxruntime
+    scaleTarget: 50  # ms latency target (L Release: <50ms)
+```
+
+## Troubleshooting Guide
+
+### Issue: E2 Connection Failed
+```bash
+# Check E2 Term
+kubectl get pods -n oran | grep e2term
+kubectl logs -n oran deployment/e2term
+
+# Verify RAN functions
+kubectl get ranfunctions.e2.o-ran.org -A
+
+# Test connection
+testing-validation-agent: test_e2_interface
+```
+
+### Issue: Porch Package Not Publishing
+```bash
+# Check Porch status
+kubectl get pods -n porch-system
+kubectl logs -n porch-system deployment/porch-server
+
+# List package revisions
+kubectl get packagerevisions -n nephio-system
+
+# Approve package
+kubectl approve packagerevision <package-name> -n nephio-system
+```
+
+### Issue: Energy Efficiency Below Target
+```bash
+# Check current efficiency
+performance-optimization-agent: test_energy_efficiency
+
+# Apply optimization
+performance-optimization-agent: optimize_ocloud_energy
+
+# Monitor improvement
+kubectl exec -n monitoring prometheus-0 -- \
+  promtool query instant 'sum(rate(network_transmit_bytes_total[5m])*8/1e9) / sum(node_power_watts)'
+```
+
+### Issue: Security Non-Compliance
+```bash
+# Run audit
+security-compliance-agent: full_security_audit
+
+# Apply fixes
+security-compliance-agent: apply_wg11_policies
+security-compliance-agent: quick_security_fix oran
+
+# Verify compliance
+security-compliance-agent: check_wg11_compliance
+```
+
+## Environment Variables
+```bash
+export GODEBUG=fips140=on              # Enable FIPS mode
+export ORAN_VERSION="L-Release"        # O-RAN version
+export NEPHIO_VERSION="R5"             # Nephio version
+export GO_VERSION="1.24.6"             # Go version
+export COVERAGE_THRESHOLD=85           # Test coverage requirement
+export SMO_ENABLED=true                # Enable SMO integration
+export PORCH_ENABLED=true              # Enable Porch
+```
+
+## Quick Health Check
+```bash
+# One-liner health check
+for ns in oran nonrtric nephio-system porch-system ocloud-system; do \
+  echo "=== $ns ===" && \
+  kubectl get pods -n $ns --no-headers | grep -v Running || echo "✓ All healthy"; \
+done
+```
+
+## Support Resources
+- O-RAN SC Documentation: https://docs.o-ran-sc.org
+- Nephio Documentation: https://nephio.org/docs
+- Go 1.24.6 Release Notes: https://go.dev/doc/go1.24
+
+## Version Compatibility
+| Component | Version | Status |
+|-----------|---------|--------|
+| O-RAN SC | L Release (2025-06-30) | Current |
+| Nephio | R5 (v5.0.0) | Current |
+| Go | 1.24.6 | Current |
+| Kubernetes | 1.30+ | Supported |
+| Kubeflow | 1.8+ | Required for AI/ML |
+| Python | 3.11+ | Required for O1 simulator |
+
+## Notes
+- All agents are Claude Code compatible
+- SMO integration is mandatory for L Release
+- Porch is the primary package manager in R5
+- FIPS 140-3 mode available via Go 1.24.6
+- Energy efficiency >0.5 Gbps/W is required
+- AI/ML inference <50ms is required

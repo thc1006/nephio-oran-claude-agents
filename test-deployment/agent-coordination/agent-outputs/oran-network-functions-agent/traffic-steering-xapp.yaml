@@ -1,0 +1,21 @@
+apiVersion: ric.o-ran-sc.org/v1
+kind: Xapp
+metadata:
+  name: traffic-steering
+  namespace: near-rt-ric
+spec:
+  name: traffic-steering
+  version: "1.0.0"
+  image: o-ran-sc/ric-app-ts:1.0.0
+  messaging:
+    ports:
+    - name: rmr-data
+      port: 4560
+      description: "RMR data port"
+  config:
+    traffic-steering-config.json: |
+      {
+        "algorithm": "proportional_fair",
+        "threshold": 0.8,
+        "measurement_interval": 1000
+      }

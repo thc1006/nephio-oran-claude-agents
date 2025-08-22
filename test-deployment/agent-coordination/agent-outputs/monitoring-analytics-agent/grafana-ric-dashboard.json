@@ -1,0 +1,38 @@
+{
+  "dashboard": {
+    "title": "O-RAN Near-RT RIC Platform",
+    "tags": ["o-ran", "ric", "nephio"],
+    "panels": [
+      {
+        "title": "E2 Connections",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "ric_e2_connections_total",
+            "legendFormat": "E2 Connections"
+          }
+        ]
+      },
+      {
+        "title": "xApp Status",
+        "type": "table", 
+        "targets": [
+          {
+            "expr": "ric_xapp_status",
+            "format": "table"
+          }
+        ]
+      },
+      {
+        "title": "RIC Resource Utilization",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(container_cpu_usage_seconds_total{namespace=\"near-rt-ric\"}[5m])",
+            "legendFormat": "{{pod}} CPU"
+          }
+        ]
+      }
+    ]
+  }
+}

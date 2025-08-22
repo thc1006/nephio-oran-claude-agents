@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: near-rt-ric-platform
+  namespace: argocd-system
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          oran-ric-cluster: "true"
+  template:
+    metadata:
+      name: 'ric-platform-{{name}}'
+    spec:
+      project: nephio-oran
+      source:
+        repoURL: https://github.com/nephio-project/nephio
+        targetRevision: r5
+        path: packages/ric-platform
+        kustomize:
+          namePrefix: '{{name}}-'
+      destination:
+        server: '{{server}}'
+        namespace: near-rt-ric
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        - PrunePropagationPolicy=foreground

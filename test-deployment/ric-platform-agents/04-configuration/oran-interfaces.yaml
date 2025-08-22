@@ -1,0 +1,826 @@
+# O-RAN Interfaces Configuration - Based on configuration-management-agent.md
+# Implements E2, A1, O1, O2 interfaces with YANG models and security
+
+---
+# E2 Interface Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: e2-interface-config
+  namespace: ric-platform
+  labels:
+    oran.org/interface: e2
+    oran.org/version: "3.0"
+    nephio.org/version: r5
+data:
+  e2ap.conf: |
+    # E2AP v3.0 Configuration
+    e2ap:
+      version: "3.0"
+      port: 36422
+      protocol: SCTP
+      security:
+        tls_enabled: true
+        mutual_auth: true
+        cert_path: "/etc/certs/e2"
+      
+      service_models:
+        - name: "KPM"
+          oid: "1.3.6.1.4.1.53148.1.1.2.2"
+          version: "2.0"
+          functions:
+            - "E2SM-KPM"
+            - "E2SM-RC"
+        
+        - name: "RC"
+          oid: "1.3.6.1.4.1.53148.1.1.2.3"
+          version: "1.0"
+          functions:
+            - "E2SM-RC-PRE"
+      
+      message_types:
+        - type: "E2_SETUP_REQUEST"
+          id: 1
+        - type: "E2_SETUP_RESPONSE"  
+          id: 2
+        - type: "RIC_INDICATION"
+          id: 12010
+        - type: "RIC_CONTROL_REQUEST"
+          id: 12011
+        - type: "RIC_SUBSCRIPTION_REQUEST"
+          id: 12020
+      
+      ai_ml_support:
+        enabled: true
+        policy_enforcement: true
+        enhanced_service_models: true
+
+  e2mgr.yaml: |
+    # E2 Manager Configuration
+    http:
+      port: 8080
+    rmr:
+      port: 3800
+      maxMsgSize: 65536
+    logging:
+      logLevel: info
+    nodeConfiguration:
+      retryTimer: 30
+      connectionAttempts: 3
+    globalRicId:
+      ricId: "AACCE"
+      mcc: "001"
+      mnc: "01"
+
+---
+# A1 Interface Configuration  
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: a1-interface-config
+  namespace: ric-platform
+  labels:
+    oran.org/interface: a1
+    oran.org/version: "2.0"
+    nephio.org/version: r5
+data:
+  a1mediator.yaml: |
+    # A1 Mediator Configuration
+    server:
+      host: "0.0.0.0"
+      port: 10000
+      
+    logging:
+      level: "INFO"
+      
+    rmr:
+      port: 3802
+      maxSize: 65536
+      
+    policy_types:
+      - policy_type_id: 1
+        name: "QoS Policy"
+        description: "Quality of Service control policy"
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+              "priority": {"type": "integer", "minimum": 1, "maximum": 256},
+              "qci": {"type": "integer", "minimum": 1, "maximum": 9},
+              "arp": {"type": "integer", "minimum": 1, "maximum": 15},
+              "bitrate": {
+                "type": "object",
+                "properties": {
+                  "guaranteed": {"type": "integer", "minimum": 0},
+                  "maximum": {"type": "integer", "minimum": 0}
+                }
+              }
+            },
+            "required": ["priority", "qci"]
+          }
+      
+      - policy_type_id: 2
+        name: "Traffic Steering Policy"
+        description: "Traffic steering and load balancing policy"
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object", 
+            "properties": {
+              "cell_list": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "preference": {
+                "type": "string",
+                "enum": ["SHALL", "PREFER", "AVOID", "FORBID"]
+              },
+              "load_threshold": {"type": "number", "minimum": 0, "maximum": 100}
+            },
+            "required": ["cell_list", "preference"]
+          }
+      
+      - policy_type_id: 3
+        name: "AI/ML Model Policy"
+        description: "AI/ML model deployment and configuration policy"
+        schema: |
+          {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+              "model_name": {"type": "string"},
+              "model_version": {"type": "string"},
+              "deployment_target": {"type": "string"},
+              "inference_endpoint": {"type": "string"},
+              "parameters": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "required": ["model_name", "model_version"]
+          }
+    
+    ai_ml:
+      enabled: true
+      policy_enforcement: true
+      kubeflow_integration: true
+
+---
+# O1 Interface Configuration (NETCONF/YANG)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: o1-interface-config
+  namespace: ric-platform
+  labels:
+    oran.org/interface: o1
+    oran.org/version: "1.5"
+    nephio.org/version: r5
+data:
+  netconf.conf: |
+    # NETCONF Server Configuration
+    netconf:
+      port: 830
+      ssh:
+        enabled: true
+        port: 830
+        host_key: "/etc/ssh/ssh_host_rsa_key"
+      tls:
+        enabled: true
+        port: 6513
+        cert: "/etc/certs/o1/server.crt"
+        key: "/etc/certs/o1/server.key"
+        ca: "/etc/certs/o1/ca.crt"
+      
+      capabilities:
+        - "urn:ietf:params:netconf:base:1.0"
+        - "urn:ietf:params:netconf:base:1.1"
+        - "urn:ietf:params:netconf:capability:writable-running:1.0"
+        - "urn:ietf:params:netconf:capability:candidate:1.0"
+        - "urn:ietf:params:netconf:capability:startup:1.0"
+        - "urn:ietf:params:netconf:capability:rollback-on-error:1.0"
+        - "urn:o-ran:hardware:1.0"
+        - "urn:o-ran:interfaces:1.0"
+        - "urn:o-ran:fm:1.0"
+        - "urn:o-ran:pm:1.0"
+        - "urn:o-ran:software-management:1.0"
+      
+      yang_modules:
+        - name: "o-ran-hardware"
+          namespace: "urn:o-ran:hardware:1.0"
+          revision: "2022-08-15"
+        - name: "o-ran-interfaces"
+          namespace: "urn:o-ran:interfaces:1.0"
+          revision: "2022-08-15"
+        - name: "o-ran-fm"
+          namespace: "urn:o-ran:fm:1.0"
+          revision: "2022-08-15"
+        - name: "o-ran-pm"
+          namespace: "urn:o-ran:pm:1.0"
+          revision: "2022-08-15"
+      
+      python_o1_simulator:
+        enabled: true  # Key L Release feature
+        port: 8081
+        yang_models_path: "/opt/yang"
+        simulation_data: "/opt/simulation"
+
+  yang-models.xml: |
+    <!-- O-RAN YANG Models Configuration -->
+    <yang-models xmlns="urn:o-ran:yang-models:1.0">
+      <model>
+        <name>o-ran-hardware</name>
+        <namespace>urn:o-ran:hardware:1.0</namespace>
+        <revision>2022-08-15</revision>
+        <location>/opt/yang/o-ran-hardware@2022-08-15.yang</location>
+      </model>
+      <model>
+        <name>o-ran-interfaces</name>
+        <namespace>urn:o-ran:interfaces:1.0</namespace>
+        <revision>2022-08-15</revision>
+        <location>/opt/yang/o-ran-interfaces@2022-08-15.yang</location>
+      </model>
+      <model>
+        <name>o-ran-fm</name>
+        <namespace>urn:o-ran:fm:1.0</namespace>
+        <revision>2022-08-15</revision>
+        <location>/opt/yang/o-ran-fm@2022-08-15.yang</location>
+      </model>
+    </yang-models>
+
+---
+# O2 Interface Configuration (Cloud Infrastructure Management)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: o2-interface-config
+  namespace: ric-platform
+  labels:
+    oran.org/interface: o2
+    oran.org/version: "1.0"
+    nephio.org/version: r5
+data:
+  o2ims.yaml: |
+    # O2 IMS Configuration
+    server:
+      host: "0.0.0.0"
+      port: 8080
+      
+    api:
+      version: "1.0.0"
+      base_url: "/o2ims-infrastructureInventory/v1"
+      
+    authentication:
+      enabled: true
+      method: "oauth2"
+      token_endpoint: "https://keycloak:8080/auth/realms/o2/protocol/openid-connect/token"
+      
+    authorization:
+      enabled: true
+      rbac:
+        enabled: true
+        
+    resource_types:
+      - name: "compute"
+        description: "Compute resources"
+        properties:
+          - "cpu_cores"
+          - "memory_gb"
+          - "storage_gb"
+      - name: "network"
+        description: "Network resources"  
+        properties:
+          - "bandwidth_mbps"
+          - "latency_ms"
+          - "interfaces"
+      - name: "acceleration"
+        description: "Hardware acceleration"
+        properties:
+          - "gpu_count"
+          - "fpga_count"
+          - "sr_iov_vfs"
+    
+    nephio_integration:
+      enabled: true
+      version: "r5"
+      ocloud_support: true
+      metal3_integration: true
+
+---
+# NETCONF Server Deployment for O1 Interface
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netconf-server
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: netconf-server
+    app.kubernetes.io/version: "1.5.0"
+    app.kubernetes.io/component: o1-interface
+    app.kubernetes.io/part-of: ric-platform
+    oran.org/interface: o1
+    security.oran.org/scanned: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: netconf-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: netconf-server
+        app.kubernetes.io/version: "1.5.0"
+        app.kubernetes.io/component: o1-interface
+        app.kubernetes.io/part-of: ric-platform
+        oran.org/interface: o1
+    spec:
+      serviceAccountName: ric-platform
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: netconf-server
+        image: nexus3.o-ran-sc.org:10002/o-ran-sc/smo-o1-netconf-server:1.5.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 830
+          name: netconf-ssh
+          protocol: TCP
+        - containerPort: 6513
+          name: netconf-tls
+          protocol: TCP
+        - containerPort: 8081
+          name: python-o1-sim
+          protocol: TCP
+        env:
+        - name: NETCONF_SSH_PORT
+          value: "830"
+        - name: NETCONF_TLS_PORT  
+          value: "6513"
+        - name: PYTHON_O1_SIMULATOR_PORT
+          value: "8081"
+        - name: GODEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: fips-config
+              key: GODEBUG
+        - name: YANG_MODELS_PATH
+          value: "/opt/yang"
+        - name: PYTHON_O1_SIMULATOR_ENABLED
+          value: "true"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          tcpSocket:
+            port: 830
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 830
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: netconf-config
+          mountPath: /etc/netconf
+        - name: yang-models
+          mountPath: /opt/yang
+        - name: tls-certs
+          mountPath: /etc/certs/o1
+        - name: ssh-keys
+          mountPath: /etc/ssh
+        - name: tmp
+          mountPath: /tmp
+        - name: var-run
+          mountPath: /var/run
+        - name: python-o1-sim
+          mountPath: /opt/simulation
+      volumes:
+      - name: netconf-config
+        configMap:
+          name: o1-interface-config
+      - name: yang-models
+        configMap:
+          name: yang-models-config
+      - name: tls-certs
+        secret:
+          secretName: o1-interface-tls
+      - name: ssh-keys
+        secret:
+          secretName: netconf-ssh-keys
+      - name: tmp
+        emptyDir: {}
+      - name: var-run
+        emptyDir: {}
+      - name: python-o1-sim
+        configMap:
+          name: python-o1-simulator-config
+
+---
+# O2 IMS Server Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: o2ims-server
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: o2ims-server
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: o2-interface
+    app.kubernetes.io/part-of: ric-platform
+    oran.org/interface: o2
+    security.oran.org/scanned: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: o2ims-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: o2ims-server
+        app.kubernetes.io/version: "1.0.0"
+        app.kubernetes.io/component: o2-interface
+        app.kubernetes.io/part-of: ric-platform
+        oran.org/interface: o2
+    spec:
+      serviceAccountName: ric-platform
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: o2ims-server
+        image: nexus3.o-ran-sc.org:10002/o-ran-sc/pti-o2imsdms:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        - name: O2IMS_PORT
+          value: "8080"
+        - name: GODEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: fips-config
+              key: GODEBUG
+        - name: NEPHIO_INTEGRATION_ENABLED
+          value: "true"
+        - name: OCLOUD_SUPPORT_ENABLED
+          value: "true"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /o2ims-infrastructureInventory/v1/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /o2ims-infrastructureInventory/v1/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: o2ims-config
+          mountPath: /etc/o2ims
+        - name: tmp
+          mountPath: /tmp
+        - name: var-run
+          mountPath: /var/run
+      volumes:
+      - name: o2ims-config
+        configMap:
+          name: o2-interface-config
+      - name: tmp
+        emptyDir: {}
+      - name: var-run
+        emptyDir: {}
+
+---
+# Services for Interface Components
+
+# NETCONF Server Service (O1)
+apiVersion: v1
+kind: Service
+metadata:
+  name: netconf-server
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: netconf-server
+    oran.org/interface: o1
+spec:
+  selector:
+    app.kubernetes.io/name: netconf-server
+  ports:
+  - name: netconf-ssh
+    port: 830
+    targetPort: 830
+    protocol: TCP
+  - name: netconf-tls
+    port: 6513
+    targetPort: 6513
+    protocol: TCP
+  - name: python-o1-sim
+    port: 8081
+    targetPort: 8081
+    protocol: TCP
+
+---
+# O2 IMS Server Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: o2ims-server
+  namespace: ric-platform
+  labels:
+    app.kubernetes.io/name: o2ims-server
+    oran.org/interface: o2
+spec:
+  selector:
+    app.kubernetes.io/name: o2ims-server
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+
+---
+# YANG Models ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yang-models-config
+  namespace: ric-platform
+  labels:
+    oran.org/component: yang-models
+data:
+  o-ran-hardware.yang: |
+    module o-ran-hardware {
+      yang-version 1.1;
+      namespace "urn:o-ran:hardware:1.0";
+      prefix "o-ran-hw";
+      
+      import ietf-hardware {
+        prefix hw;
+      }
+      
+      organization "O-RAN Alliance";
+      
+      description
+        "This module defines the YANG definitions for manageable O-RAN hardware.";
+      
+      revision "2022-08-15" {
+        description "Initial revision";
+      }
+      
+      augment "/hw:hardware/hw:component" {
+        when "derived-from-or-self(hw:class, 'o-ran-hw:O-RAN-RADIO')";
+        description "O-RAN specific hardware components";
+        
+        leaf vendor-name {
+          type string;
+          description "Name of the hardware vendor";
+        }
+        
+        leaf product-code {
+          type string;
+          description "Product code/model number";
+        }
+      }
+    }
+
+  o-ran-interfaces.yang: |
+    module o-ran-interfaces {
+      yang-version 1.1;
+      namespace "urn:o-ran:interfaces:1.0";
+      prefix "o-ran-int";
+      
+      import ietf-interfaces {
+        prefix if;
+      }
+      
+      organization "O-RAN Alliance";
+      
+      description
+        "This module defines the YANG definitions for O-RAN interfaces.";
+      
+      revision "2022-08-15" {
+        description "Initial revision";
+      }
+      
+      augment "/if:interfaces/if:interface" {
+        when "if:type = 'o-ran-int:fronthaul'";
+        description "O-RAN fronthaul interface configuration";
+        
+        container fronthaul {
+          description "Fronthaul interface configuration";
+          
+          leaf interface-type {
+            type enumeration {
+              enum "CPRI" {
+                description "Common Public Radio Interface";
+              }
+              enum "eCPRI" {
+                description "enhanced CPRI";
+              }
+              enum "O-RAN-FH" {
+                description "O-RAN Fronthaul";
+              }
+            }
+            description "Type of fronthaul interface";
+          }
+        }
+      }
+    }
+
+---
+# Python O1 Simulator Configuration (Key L Release Feature)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: python-o1-simulator-config
+  namespace: ric-platform
+  labels:
+    oran.org/component: python-o1-simulator
+    oran.org/release: l-release
+data:
+  simulator.py: |
+    #!/usr/bin/env python3
+    """
+    O-RAN O1 Interface Python Simulator
+    Key L Release Feature - Python-based O1 simulator integration
+    """
+    
+    import asyncio
+    import json
+    import logging
+    from datetime import datetime
+    from typing import Dict, Any
+    
+    import aiohttp
+    from aiohttp import web
+    
+    
+    class O1Simulator:
+        """Python-based O1 interface simulator for L Release"""
+        
+        def __init__(self):
+            self.logger = logging.getLogger(__name__)
+            self.simulation_data = {}
+            self.yang_models = {}
+            
+        async def start_simulator(self):
+            """Start the O1 simulator"""
+            app = web.Application()
+            app.router.add_get('/health', self.health_check)
+            app.router.add_get('/yang-models', self.get_yang_models)
+            app.router.add_post('/simulate', self.simulate_operation)
+            app.router.add_get('/metrics', self.get_metrics)
+            
+            runner = web.AppRunner(app)
+            await runner.setup()
+            site = web.TCPSite(runner, '0.0.0.0', 8081)
+            await site.start()
+            
+            self.logger.info("O1 Python Simulator started on port 8081")
+            
+        async def health_check(self, request):
+            """Health check endpoint"""
+            return web.json_response({
+                'status': 'healthy',
+                'simulator': 'o1-python-simulator',
+                'version': 'l-release-1.0',
+                'timestamp': datetime.utcnow().isoformat()
+            })
+            
+        async def get_yang_models(self, request):
+            """Get available YANG models"""
+            models = {
+                'o-ran-hardware': {
+                    'namespace': 'urn:o-ran:hardware:1.0',
+                    'revision': '2022-08-15',
+                    'capabilities': ['hardware-inventory', 'component-status']
+                },
+                'o-ran-interfaces': {
+                    'namespace': 'urn:o-ran:interfaces:1.0', 
+                    'revision': '2022-08-15',
+                    'capabilities': ['interface-config', 'fronthaul-management']
+                },
+                'o-ran-fm': {
+                    'namespace': 'urn:o-ran:fm:1.0',
+                    'revision': '2022-08-15',
+                    'capabilities': ['fault-management', 'alarm-handling']
+                }
+            }
+            return web.json_response(models)
+            
+        async def simulate_operation(self, request):
+            """Simulate O1 operations"""
+            data = await request.json()
+            operation = data.get('operation')
+            
+            if operation == 'netconf-get':
+                return await self.simulate_netconf_get(data)
+            elif operation == 'netconf-edit-config':
+                return await self.simulate_netconf_edit_config(data)
+            else:
+                return web.json_response({
+                    'error': f'Unknown operation: {operation}'
+                }, status=400)
+                
+        async def simulate_netconf_get(self, data):
+            """Simulate NETCONF get operation"""
+            filter_xpath = data.get('filter', '/')
+            
+            # Simulate hardware data
+            hardware_data = {
+                'hardware': {
+                    'component': [
+                        {
+                            'name': 'o-ru-001',
+                            'class': 'o-ran-hw:O-RAN-RADIO',
+                            'vendor-name': 'Example Vendor',
+                            'product-code': 'ORU-7250',
+                            'serial-num': 'SN123456789',
+                            'admin-state': 'unlocked',
+                            'oper-state': 'enabled'
+                        }
+                    ]
+                }
+            }
+            
+            return web.json_response({
+                'rpc-reply': hardware_data,
+                'message-id': data.get('message-id', '1'),
+                'timestamp': datetime.utcnow().isoformat()
+            })
+            
+        async def simulate_netconf_edit_config(self, data):
+            """Simulate NETCONF edit-config operation"""
+            config = data.get('config', {})
+            
+            # Simulate configuration update
+            result = {
+                'rpc-reply': {
+                    'ok': True
+                },
+                'message-id': data.get('message-id', '1'),
+                'timestamp': datetime.utcnow().isoformat()
+            }
+            
+            return web.json_response(result)
+            
+        async def get_metrics(self, request):
+            """Get simulator metrics"""
+            metrics = {
+                'requests_processed': 100,
+                'yang_models_loaded': 3,
+                'simulation_uptime': '1h 30m',
+                'l_release_features': {
+                    'python_simulator': 'enabled',
+                    'yang_model_validation': 'active',
+                    'netconf_operations': 'supported'
+                }
+            }
+            return web.json_response(metrics)
+    
+    
+    if __name__ == '__main__':
+        logging.basicConfig(level=logging.INFO)
+        simulator = O1Simulator()
+        asyncio.run(simulator.start_simulator())
+
+  requirements.txt: |
+    aiohttp==3.8.5
+    aiofiles==23.1.0
+    pyyaml==6.0.1
+    lxml==4.9.3

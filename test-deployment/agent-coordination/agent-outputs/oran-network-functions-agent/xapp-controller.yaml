@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment  
+metadata:
+  name: xapp-controller
+  namespace: near-rt-ric
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xapp-controller
+  template:
+    metadata:
+      labels:
+        app: xapp-controller  
+    spec:
+      serviceAccountName: xapp-controller
+      containers:
+      - name: controller
+        image: o-ran-sc/ric-plt-xapp-frame:1.5.0
+        command:
+        - /manager
+        env:
+        - name: XAPP_NAMESPACE
+          value: near-rt-ric
+        - name: ENABLE_WEBHOOKS
+          value: "true"
