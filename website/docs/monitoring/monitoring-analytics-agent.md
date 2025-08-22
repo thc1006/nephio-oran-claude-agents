@@ -3,7 +3,7 @@ title: "Untitled Agent"
 description: "name: monitoring-analytics-agent"
 sidebar_position: 3
 tags: ["claude-agent", "nephio", "o-ran", "monitoring", "kubernetes", "security", "network", "orchestration", "infrastructure", "configuration"]
-last_updated: "2025-08-21"
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';

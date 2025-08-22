@@ -3,7 +3,7 @@ title: "Kubeflow Pipeline for O-RAN RANPM Analytics (L Release)"
 description: "name: data-analytics-agent"
 sidebar_position: 2
 tags: ["claude-agent", "nephio", "o-ran", "analytics", "kubernetes", "monitoring", "security", "network", "orchestration", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-21"
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -766,7 +766,7 @@ spec:
                 cpu: "8"
 ```
 
-## Python Implementation for L Release AI/ML Pipeline
+#### Python Implementation for L Release AI/ML Pipeline
 
 ```python
 #!/usr/bin/env python3
@@ -1241,7 +1241,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## xApp/rApp Data Support (L Release Enhanced)
+### xApp/rApp Data Support (L Release Enhanced)
 
 - **Training Data Preparation**: Feature engineering pipelines with Kubeflow integration
 - **Model Performance Monitoring**: A/B testing frameworks with improved rApp Manager support

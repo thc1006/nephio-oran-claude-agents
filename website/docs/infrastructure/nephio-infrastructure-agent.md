@@ -3,7 +3,7 @@ title: "R5 Disaster Recovery Script"
 description: "name: nephio-infrastructure-agent"
 sidebar_position: 4
 tags: ["claude-agent", "nephio", "o-ran", "infrastructure", "kubernetes", "monitoring", "security", "network", "orchestration", "testing", "configuration"]
-last_updated: "2025-08-21"
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';

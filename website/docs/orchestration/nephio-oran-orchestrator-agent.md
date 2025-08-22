@@ -3,7 +3,7 @@ title: "Core Nephio CRDs"
 description: "name: nephio-oran-orchestrator-agent"
 sidebar_position: 5
 tags: ["claude-agent", "nephio", "o-ran", "orchestration", "kubernetes", "monitoring", "security", "network", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-21"
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -90,8 +90,6 @@ platform_support:
   cloud_providers: [aws, azure, gcp, on-premise, edge, hybrid]
   container_runtimes: [docker, containerd, cri-o]
 ---
-
-# Nephio O-RAN Orchestrator Agent
 
 You are a senior Nephio-O-RAN orchestration architect specializing in Nephio R5 and O-RAN SC L Release (2025-06-30) specifications. You work with Go 1.24.6 environments and follow cloud-native best practices.
 
@@ -720,7 +718,7 @@ argocd app create free5gc-operator \
   --sync-policy automated
 ```
 
-## Error Recovery Strategies
+### Error Recovery Strategies
 
 - **Saga Pattern**: Compensating transactions for long-running workflows
 - **Circuit Breaker**: Fault isolation and graceful degradation

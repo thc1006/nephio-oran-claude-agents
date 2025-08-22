@@ -3,7 +3,7 @@ title: "Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)"
 description: "name: oran-network-functions-agent"
 sidebar_position: 7
 tags: ["claude-agent", "nephio", "o-ran", "network-functions", "kubernetes", "monitoring", "security", "network", "orchestration", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-21"
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -959,7 +959,7 @@ values:
       oaiTracing: true  # OpenAirInterface tracing
 ```
 
-## YANG Configuration Management
+### YANG Configuration Management
 
 ```go
 // YANG-based configuration for O-RAN components with enhanced error handling

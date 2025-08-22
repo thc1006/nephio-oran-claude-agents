@@ -3,7 +3,7 @@ title: "Untitled Agent"
 description: "name: performance-optimization-agent"
 sidebar_position: 8
 tags: ["claude-agent", "nephio", "o-ran", "performance", "kubernetes", "monitoring", "security", "network", "orchestration", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-21"
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';

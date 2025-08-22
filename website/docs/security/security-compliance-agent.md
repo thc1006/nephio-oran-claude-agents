@@ -3,7 +3,7 @@ title: "Security configuration for ArgoCD ApplicationSets (PRIMARY deployment pa
 description: "name: security-compliance-agent"
 sidebar_position: 9
 tags: ["claude-agent", "nephio", "o-ran", "security", "kubernetes", "monitoring", "network", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-21"
+last_updated: "2025-08-22"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -307,7 +307,7 @@ spec:
         - Validate=true  # Enhanced validation for R5
 ```
 
-## PackageVariant Security Validation (R5 Enhanced Features)
+### PackageVariant Security Validation (R5 Enhanced Features)
 
 ```yaml
 apiVersion: config.porch.kpt.dev/v1alpha1
