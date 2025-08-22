@@ -10,10 +10,10 @@ slug: /architecture/
 
 ## 架構概述
 
-如需詳細的系統架構資訊，請參閱[架構概述](./overview.md)。
+如需詳細的系統架構資訊，請參閱架構概述。
 
 ## 快速連結
 
-- [系統設計](./overview.md#system-design)
-- [元件互動](./overview.md#component-interactions)
-- [整合模式](./overview.md#integration-patterns)
+- 系統設計
+- 元件互動
+- 整合模式

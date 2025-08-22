@@ -29,27 +29,27 @@ Nephio O-RAN Claude Agents 代表了網路功能編排的革命性方法，結�
 #### 🎼 編排代理程式
 - **主要角色**：高層工作流程協調
 - **關鍵功能**：部署規劃、資源分配、相依性管理
-- **範例**：[Nephio O-RAN 編排代理程式](../orchestration/nephio-oran-orchestrator-agent.md)
+- **範例**：Nephio O-RAN 編排代理程式
 
 #### 🏗️ 基礎架構代理程式
 - **主要角色**：叢集和基礎架構管理
 - **關鍵功能**：節點佈建、網路配置、資源監控
-- **範例**：[基礎架構代理程式](../infrastructure/nephio-infrastructure-agent.md)、[部署診斷代理程式](../infrastructure/oran-nephio-dep-doctor-agent.md)
+- **範例**：基礎架構代理程式、部署診斷代理程式
 
 #### 📊 分析和監控代理程式
 - **主要角色**：資料收集、分析和可觀測性
 - **關鍵功能**：效能監控、異常偵測、容量規劃
-- **範例**：[資料分析代理程式](../analytics/data-analytics-agent.md)、[監控代理程式](../monitoring/monitoring-analytics-agent.md)
+- **範例**：資料分析代理程式、監控代理程式
 
 #### ⚙️ 配置管理代理程式
 - **主要角色**：配置生命週期管理
 - **關鍵功能**：配置驗證、偏移偵測、合規檢查
-- **範例**：[配置管理代理程式](../config-management/configuration-management-agent.md)
+- **範例**：配置管理代理程式
 
 #### 🛡️ 安全性和合規性代理程式
 - **主要角色**：安全姿態管理
 - **關鍵功能**：政策執行、漏洞掃描、合規報告
-- **範例**：[安全合規代理程式](../security/security-compliance-agent.md)
+- **範例**：安全合規代理程式
 
 ## 架構原則
 
@@ -247,15 +247,15 @@ spec:
 
 ### 深入主題
 
-1. **[代理程式架構](../architecture/index.md)** - 詳細技術架構
-2. **[整合模式](../integration/index.md)** - 代理程式如何與現有系統整合
-3. **[API 參考](../04-api-reference/index.md)** - 完整的 API 文件
+1. **代理程式架構** - 詳細技術架構
+2. **整合模式** - 代理程式如何與現有系統整合
+3. **API 參考** - 完整的 API 文件
 
 ### 實際應用
 
-1. **[範例](../examples/index.md)** - 真實世界的部署場景
-2. **[疑難排解](../07-troubleshooting/index.md)** - 常見問題和解決方案
-3. **[代理程式指南](../agents/index.md)** - 個別代理程式文件
+1. **範例** - 真實世界的部署場景
+2. **疑難排解** - 常見問題和解決方案
+3. **代理程式指南** - 個別代理程式文件
 
 ## 社群和貢獻
 

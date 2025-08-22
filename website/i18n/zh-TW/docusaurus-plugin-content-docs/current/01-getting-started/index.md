@@ -37,21 +37,21 @@ Nephio O-RAN Claude Agents 為開放無線存取網路 (O-RAN) 部署提供智�
 
 ### 重要的第一步
 
-1. **[快速入門指南](../guides/quickstart.md)** - 30 分鐘內啟動並執行
-2. **[架構概述](../architecture/index.md)** - 了解系統設計
-3. **[代理程式配置](../agents/index.md)** - 了解可用的代理程式
+1. **快速入門指南** - 30 分鐘內啟動並執行
+2. **架構概述** - 了解系統設計
+3. **代理程式配置** - 了解可用的代理程式
 
 ### 核心概念
 
-- **[O-RAN 整合](../02-concepts/)** - 代理程式如何與 O-RAN 協作
-- **[Nephio 整合](../integration/index.md)** - Nephio 特定功能
-- **[AI 決策制定](../02-concepts/)** - Claude AI 如何驅動代理程式
+- **O-RAN 整合** - 代理程式如何與 O-RAN 協作
+- **Nephio 整合** - Nephio 特定功能
+- **AI 決策制定** - Claude AI 如何驅動代理程式
 
 ### 常見任務
 
-- **[部署網路功能](../network-functions/oran-network-functions-agent.md)**
-- **[配置監控](../monitoring/monitoring-analytics-agent.md)**
-- **[設定安全性](../security/security-compliance-agent.md)**
+- **部署網路功能**
+- **配置監控**
+- **設定安全性**
 
 ## 先決條件
 
@@ -86,33 +86,33 @@ make install && make deploy
 
 ### 選項 2：逐步安裝
 
-遵循詳細的[快速入門指南](../guides/quickstart.md)進行全面的設定說明。
+遵循詳細的快速入門指南進行全面的設定說明。
 
 ### 選項 3：自訂安裝
 
-對於進階使用者，請參閱 [API 參考](../04-api-reference/index.md) 以獲得詳細的配置選項。
+對於進階使用者，請參閱 API 參考以獲得詳細的配置選項。
 
 ## 下一步
 
 一旦您查看了先決條件：
 
-1. **從這裡開始**：[快速入門指南](../guides/quickstart.md) - 30 分鐘內完成設定
-2. **學習概念**：[架構概述](../architecture/index.md) - 了解系統
-3. **探索代理程式**：[代理程式文件](../agents/index.md) - 發現可用的代理程式
-4. **配置安全性**：[安全指南](../security/security-compliance-agent.md) - 保護您的部署
+1. **從這裡開始**：快速入門指南 - 30 分鐘內完成設定
+2. **學習概念**：架構概述 - 了解系統
+3. **探索代理程式**：代理程式文件 - 發現可用的代理程式
+4. **配置安全性**：安全指南 - 保護您的部署
 
 ## 獲得協助
 
 需要協助嗎？我們在這裡為您提供支援：
 
 - **文件**：瀏覽我們的全面指南
-- **疑難排解**：查看[疑難排解指南](../07-troubleshooting/index.md)
+- **疑難排解**：查看疑難排解指南
 - **社群**：加入 [GitHub 討論](https://github.com/thc1006/nephio-oran-claude-agents/discussions)
 - **問題回報**：在 [GitHub Issues](https://github.com/thc1006/nephio-oran-claude-agents/issues) 上回報錯誤
 
 ## 接下來呢？
 
-準備好開始了嗎？從我們的[快速入門指南](../guides/quickstart.md)開始，在 30 分鐘內運行您的第一個 Claude 代理程式！
+準備好開始了嗎？從我們的快速入門指南開始，在 30 分鐘內運行您的第一個 Claude 代理程式！
 
 ---
 
