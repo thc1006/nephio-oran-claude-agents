@@ -307,7 +307,7 @@ spec:
         - Validate=true  # Enhanced validation for R5
 ```
 
-### PackageVariant Security Validation (R5 Enhanced Features)
+## PackageVariant Security Validation (R5 Enhanced Features)
 
 ```yaml
 apiVersion: config.porch.kpt.dev/v1alpha1

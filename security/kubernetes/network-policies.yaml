@@ -1,0 +1,380 @@
+# O-RAN WG11 Network Security Policies for Zero-Trust Implementation
+# Nephio R5 Compatible - Implements default-deny with selective allow
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oran-security
+  labels:
+    nephio.org/version: r5
+    oran.org/release: l-release
+    security.nephio.org/zero-trust: enabled
+---
+# Default Deny All Network Policy (Zero-Trust Foundation)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: default
+  annotations:
+    security.nephio.org/policy-type: "zero-trust-foundation"
+    oran.org/wg11-compliance: "required"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+# O-RAN Network Functions Isolation Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: oran-nf-isolation
+  namespace: oran-system
+  annotations:
+    security.nephio.org/isolation-level: "strict"
+    oran.org/interface-protection: "e2,a1,o1,o2"
+spec:
+  podSelector:
+    matchLabels:
+      oran.org/component: network-function
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # Allow ingress only from monitoring and management
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8080  # Metrics endpoint
+    - protocol: TCP
+      port: 9090  # Health check
+  
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: argocd
+    ports:
+    - protocol: TCP
+      port: 443   # HTTPS management
+  
+  # Allow egress for O-RAN interfaces with encryption
+  egress:
+  # E2 Interface (Near-RT RIC to O-DU/O-CU)
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/interface: e2
+    ports:
+    - protocol: TCP
+      port: 36421  # E2AP over SCTP/TCP
+    - protocol: TCP
+      port: 36422  # E2 Setup (secured)
+  
+  # A1 Interface (Non-RT RIC to Near-RT RIC)
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/interface: a1
+    ports:
+    - protocol: TCP
+      port: 443    # HTTPS for A1 REST API
+  
+  # O1 Interface (SMO to O-RAN Components)
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/interface: o1
+    ports:
+    - protocol: TCP
+      port: 830    # NETCONF over SSH
+    - protocol: TCP
+      port: 443    # HTTPS for REST O1
+  
+  # DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+---
+# ArgoCD Security Policy (R5 Primary GitOps)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: argocd-security
+  namespace: argocd
+  annotations:
+    nephio.org/deployment-pattern: "primary"
+    security.nephio.org/gitops-security: "enabled"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: argocd
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Allow ingress from ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8080  # ArgoCD Server
+    - protocol: TCP
+      port: 8083  # ArgoCD Metrics
+  
+  # Allow internal ArgoCD communication
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: argocd
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 8082
+    - protocol: TCP
+      port: 6379  # Redis
+  
+  egress:
+  # Git repositories (HTTPS only)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 22   # SSH Git
+  
+  # Kubernetes API server
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+    - protocol: TCP
+      port: 443
+  
+  # DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+---
+# Monitoring Security Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: monitoring-security
+  namespace: monitoring
+  annotations:
+    security.nephio.org/monitoring-isolation: "strict"
+    oran.org/security-telemetry: "enabled"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Allow Prometheus scraping from within monitoring namespace
+  - from:
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9090  # Prometheus
+    - protocol: TCP
+      port: 3000  # Grafana
+    - protocol: TCP
+      port: 9093  # Alertmanager
+  
+  # Allow external access to Grafana dashboard (secured)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 3000
+  
+  egress:
+  # Allow scraping metrics from all namespaces
+  - to:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 8080  # Application metrics
+    - protocol: TCP
+      port: 9090  # Prometheus metrics
+    - protocol: TCP
+      port: 9100  # Node exporter
+  
+  # Alert webhook endpoints
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  
+  # DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+---
+# SPIFFE/SPIRE Security Policy (Zero-Trust Identity)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: spire-security
+  namespace: spire-system
+  annotations:
+    security.nephio.org/zero-trust-identity: "enabled"
+    spiffe.io/trust-domain: "oran.nephio.io"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # SPIRE Server API
+  - from:
+    - podSelector:
+        matchLabels:
+          app: spire-agent
+    ports:
+    - protocol: TCP
+      port: 8081  # SPIRE Server API
+  
+  # Health checks
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8080
+  
+  egress:
+  # Allow SPIRE agents to communicate with server
+  - to:
+    - podSelector:
+        matchLabels:
+          app: spire-server
+    ports:
+    - protocol: TCP
+      port: 8081
+  
+  # Kubernetes API for workload attestation
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+  
+  # DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+---
+# Website Security Policy (Docusaurus)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: website-security
+  namespace: website
+  annotations:
+    security.nephio.org/web-security: "hardened"
+    oran.org/documentation-protection: "enabled"
+spec:
+  podSelector:
+    matchLabels:
+      app: nephio-oran-website
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Allow HTTPS traffic from ingress
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 3000  # Docusaurus dev server
+    - protocol: TCP
+      port: 80    # HTTP (redirects to HTTPS)
+  
+  egress:
+  # External CDN and analytics (specific domains only)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    # Only allow specific domains via DNS policy
+  
+  # No egress to internal services (isolation)
+  # DNS only
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+---
+# Security Scanning Policy (Falco, Trivy)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: security-scanning
+  namespace: security-system
+  annotations:
+    security.nephio.org/runtime-protection: "enabled"
+    falco.security.io/policy: "strict"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Monitoring access to security metrics
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8765  # Falco gRPC API
+    - protocol: TCP
+      port: 2801  # Falco HTTP metrics
+  
+  egress:
+  # Access to all namespaces for scanning
+  - to:
+    - namespaceSelector: {}
+  
+  # External vulnerability databases
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  
+  # Kubernetes API for runtime analysis
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+  
+  # DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
