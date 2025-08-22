@@ -2,14 +2,15 @@
 
 ## Overview
 
-This document provides guidance for monitoring and maintaining the Content Security Policy (CSP) implemented for the Nephio O-RAN Claude Agents documentation website.
+This document provides guidance for monitoring and maintaining the Content Security Policy (CSP)
+implemented for the Nephio O-RAN Claude Agents documentation website.
 
 ## Current CSP Configuration
 
 The website implements a comprehensive CSP with the following directives:
 
 ```
-Content-Security-Policy: 
+Content-Security-Policy:
   default-src 'self';
   script-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://*.algolia.net https://*.algolianet.com;
   style-src 'self' https://fonts.googleapis.com;
@@ -35,13 +36,13 @@ Monitor CSP violations in real-time:
 
 ```javascript
 // Add to browser console for monitoring
-window.addEventListener('securitypolicyviolation', (e) => {
+window.addEventListener('securitypolicyviolation', e => {
   console.error('CSP Violation:', {
     violatedDirective: e.violatedDirective,
     blockedURI: e.blockedURI,
     sourceFile: e.sourceFile,
     lineNumber: e.lineNumber,
-    columnNumber: e.columnNumber
+    columnNumber: e.columnNumber,
   });
 });
 ```
@@ -82,19 +83,19 @@ Set up a CSP violation reporting endpoint:
 export default function handler(req, res) {
   if (req.method === 'POST') {
     const violation = req.body;
-    
+
     // Log violation for monitoring
     console.error('CSP Violation Report:', {
       documentURI: violation['document-uri'],
       violatedDirective: violation['violated-directive'],
       blockedURI: violation['blocked-uri'],
       sourceFile: violation['source-file'],
-      lineNumber: violation['line-number']
+      lineNumber: violation['line-number'],
     });
-    
+
     // Send to monitoring service (e.g., Sentry, DataDog)
     // monitoringService.reportCSPViolation(violation);
-    
+
     res.status(204).end();
   } else {
     res.status(405).end();
@@ -110,13 +111,13 @@ When adding new third-party services, follow these steps:
 
 Determine which CSP directives the service needs:
 
-| Service Type | Required Directives | Example |
-|-------------|-------------------|---------|
-| Analytics | `script-src`, `connect-src` | Google Analytics |
-| CDN Assets | `img-src`, `style-src`, `script-src` | jsdelivr.net |
-| API Integration | `connect-src` | GitHub API |
-| Embedded Content | `frame-src` | YouTube embeds |
-| Fonts | `font-src`, `style-src` | Google Fonts |
+| Service Type     | Required Directives                  | Example          |
+| ---------------- | ------------------------------------ | ---------------- |
+| Analytics        | `script-src`, `connect-src`          | Google Analytics |
+| CDN Assets       | `img-src`, `style-src`, `script-src` | jsdelivr.net     |
+| API Integration  | `connect-src`                        | GitHub API       |
+| Embedded Content | `frame-src`                          | YouTube embeds   |
+| Fonts            | `font-src`, `style-src`              | Google Fonts     |
 
 ### 2. Update CSP Configuration
 
@@ -159,7 +160,7 @@ Edit the CSP in the appropriate configuration file:
    ```bash
    # Run local development server
    npm run start
-   
+
    # Check browser console for CSP violations
    # Open Developer Tools > Console
    ```
@@ -170,7 +171,7 @@ Edit the CSP in the appropriate configuration file:
    # Deploy to staging
    npm run build
    npm run serve
-   
+
    # Test with curl
    curl -I http://localhost:3000 | grep -i "content-security"
    ```

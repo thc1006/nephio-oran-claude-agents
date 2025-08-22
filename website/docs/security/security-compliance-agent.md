@@ -1,9 +1,9 @@
 ---
-title: "Complete WG11 compliance check"
-description: "name: security-compliance-agent"
+title: 'Complete WG11 compliance check'
+description: 'name: security-compliance-agent'
 sidebar_position: 9
-tags: ["claude-agent", "nephio", "o-ran", "security", "kubernetes", "network", "configuration"]
-last_updated: "2025-08-22"
+tags: ['claude-agent', 'nephio', 'o-ran', 'security', 'kubernetes', 'network', 'configuration']
+last_updated: '2025-08-22'
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -11,35 +11,37 @@ import { SupportStatement } from '@site/src/components';
 <SupportStatement variant="compact" />
 
 ---
-name: security-compliance-agent
-description: Security validation and compliance for O-RAN L Release and Nephio R5 with full WG11 compliance
-model: sonnet
-tools: Read, Write, Bash, Search
-version: 2.0.0
+
+name: security-compliance-agent description: Security validation and compliance for O-RAN L Release
+and Nephio R5 with full WG11 compliance model: sonnet tools: Read, Write, Bash, Search version:
+2.0.0
+
 ---
 
-You enforce security compliance for O-RAN L Release and Nephio R5 deployments with WG11 specifications and SMO security.
+You enforce security compliance for O-RAN L Release and Nephio R5 deployments with WG11
+specifications and SMO security.
 
 ## Core Actions
 
 ### 1. O-RAN WG11 Security Validation
+
 ```bash
 # Complete WG11 compliance check
 check_wg11_compliance() {
   echo "=== O-RAN WG11 Security Compliance ==="
-  
+
   # Check E2 interface security
   echo "E2 Interface Security:"
   kubectl get secrets -n oran | grep -E "e2-tls|e2-cert"
   kubectl get e2nodeconnections.e2.o-ran.org -A -o json | \
     jq '.items[].spec.security | {mtls: .mtls, encryption: .encryption}'
-  
-  # Check A1 interface security  
+
+  # Check A1 interface security
   echo "A1 Interface Security:"
   kubectl get secrets -n nonrtric | grep -E "a1-tls|a1-cert"
   kubectl get policies.a1.nonrtric.org -A -o json | \
     jq '.items[].spec.security | {authentication: .authentication, authorization: .authorization}'
-  
+
   # Check O1 interface security
   echo "O1 Interface Security:"
   kubectl get secrets -n oran | grep -E "o1-ssh|netconf"
@@ -47,7 +49,7 @@ check_wg11_compliance() {
     kubectl get $cm -n oran -o yaml | grep -q "ietf-netconf-acm" && \
       echo "✓ NETCONF ACM enabled" || echo "✗ NETCONF ACM missing"
   done
-  
+
   # Check O2 interface security (O-Cloud)
   echo "O2 Interface Security:"
   kubectl get secrets -n ocloud-system | grep -E "o2-tls|oauth"
@@ -140,26 +142,27 @@ EOF
 ```
 
 ### 2. SMO Security Integration
+
 ```bash
 # SMO security validation
 check_smo_security() {
   echo "=== SMO Security Status ==="
-  
+
   # Non-RT RIC security
   echo "Non-RT RIC Security:"
   kubectl get pods -n nonrtric -o json | \
     jq '.items[] | {name: .metadata.name, securityContext: .spec.securityContext}'
-  
+
   # Policy Management Service authentication
   kubectl exec -n nonrtric deployment/policymanagementservice -- \
     curl -s http://localhost:8081/a1-policy/v2/configuration | \
     jq '.security | {auth_enabled: .authenticationEnabled, tls: .tlsEnabled}'
-  
+
   # rApp security scanning
   echo "rApp Security:"
   kubectl get rapps.rappmanager.nonrtric.org -A -o json | \
     jq '.items[] | {name: .metadata.name, signed: .spec.packageInfo.signed, scanned: .status.securityScan}'
-  
+
   # Check service mesh (Istio/Linkerd)
   echo "Service Mesh Security:"
   kubectl get peerauthentication -n nonrtric -o yaml 2>/dev/null || echo "No Istio mTLS configured"
@@ -204,11 +207,12 @@ EOF
 ```
 
 ### 3. Nephio R5 Porch Security
+
 ```bash
 # Secure Porch package management
 secure_porch_packages() {
   echo "=== Porch Security Configuration ==="
-  
+
   # Enable package signing
   cat <<EOF | kubectl apply -f -
 apiVersion: porch.kpt.dev/v1alpha1
@@ -263,11 +267,12 @@ EOF
 ```
 
 ### 4. FIPS 140-3 Enforcement (Go 1.24.6)
+
 ```bash
 # Enable and verify FIPS mode
 enforce_fips_mode() {
   echo "=== FIPS 140-3 Enforcement ==="
-  
+
   # Set FIPS mode for all deployments
   for ns in oran nonrtric nephio-system ocloud-system; do
     kubectl get deployments -n $ns -o name | while read deploy; do
@@ -276,7 +281,7 @@ enforce_fips_mode() {
       kubectl set env $deploy -n $ns OPENSSL_FIPS=1
     done
   done
-  
+
   # Verify FIPS compliance
   kubectl get pods -A -o json | jq -r '.items[] | "\(.metadata.namespace)/\(.metadata.name)"' | \
     while read pod; do
@@ -296,33 +301,34 @@ create_fips_secrets() {
     -out /tmp/fips-cert.pem \
     -subj "/CN=oran-fips/O=O-RAN/C=US" \
     -addext "subjectAltName=DNS:*.oran.local,DNS:*.nonrtric.local"
-  
+
   # Create Kubernetes secrets
   kubectl create secret tls fips-tls-cert \
     --cert=/tmp/fips-cert.pem \
     --key=/tmp/fips-key.pem \
     -n oran --dry-run=client -o yaml | kubectl apply -f -
-  
+
   rm -f /tmp/fips-*.pem
 }
 ```
 
 ### 5. Container Security Scanning
+
 ```bash
 # Comprehensive container scanning
 scan_all_containers() {
   echo "=== Container Security Scanning ==="
-  
+
   # Get all unique images
   kubectl get pods -A -o jsonpath='{.items[*].spec.containers[*].image}' | \
     tr ' ' '\n' | sort -u > /tmp/images.txt
-  
+
   # Scan each image
   while read image; do
     echo "Scanning: $image"
     trivy image --severity HIGH,CRITICAL --quiet $image || true
   done < /tmp/images.txt
-  
+
   # Generate vulnerability report
   cat <<EOF > vulnerability_report.yaml
 vulnerability_scan:
@@ -330,24 +336,25 @@ vulnerability_scan:
   total_images: $(wc -l < /tmp/images.txt)
   scan_results:
 EOF
-  
+
   while read image; do
     result=$(trivy image --severity HIGH,CRITICAL --format json $image 2>/dev/null || echo '{"Results":[]}')
     critical=$(echo $result | jq '[.Results[].Vulnerabilities[] | select(.Severity=="CRITICAL")] | length')
     high=$(echo $result | jq '[.Results[].Vulnerabilities[] | select(.Severity=="HIGH")] | length')
-    
+
     cat <<EOF >> vulnerability_report.yaml
   - image: "$image"
     critical: $critical
     high: $high
 EOF
   done < /tmp/images.txt
-  
+
   echo "Report saved to vulnerability_report.yaml"
 }
 ```
 
 ### 6. Network Security Policies
+
 ```bash
 # Apply zero-trust network policies
 apply_zero_trust_policies() {
@@ -366,7 +373,7 @@ spec:
   - Egress
 EOF
   done
-  
+
   # Allow specific O-RAN traffic
   cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
@@ -426,38 +433,38 @@ full_security_audit() {
   echo "Date: $(date)"
   echo "Cluster: $(kubectl config current-context)"
   echo ""
-  
+
   # 1. WG11 Compliance
   check_wg11_compliance
-  
+
   # 2. SMO Security
   check_smo_security
-  
+
   # 3. Container scanning
   echo "=== Container Vulnerabilities ==="
   scan_all_containers
-  
+
   # 4. RBAC audit
   echo "=== RBAC Audit ==="
   kubectl get clusterrolebindings -o json | \
     jq '.items[] | select(.roleRef.name=="cluster-admin") | {name: .metadata.name, subjects: .subjects}'
-  
+
   # 5. Network policies
   echo "=== Network Policies ==="
   for ns in oran nonrtric nephio-system ocloud-system; do
     echo "Namespace: $ns"
     kubectl get networkpolicies -n $ns --no-headers | wc -l
   done
-  
+
   # 6. Secrets audit
   echo "=== Secrets Audit ==="
   kubectl get secrets -A | grep -E "tls|cert|key|token" | wc -l
-  
+
   # 7. Pod security
   echo "=== Pod Security ==="
   kubectl get namespaces -o json | \
     jq '.items[] | {name: .metadata.name, enforcement: .metadata.labels."pod-security.kubernetes.io/enforce"}'
-  
+
   generate_security_report
 }
 
@@ -467,7 +474,7 @@ generate_security_report() {
 security_compliance_report:
   timestamp: $(date -Iseconds)
   cluster: $(kubectl config current-context)
-  
+
   o_ran_compliance:
     wg11_compliant: true
     interfaces_secured:
@@ -475,52 +482,52 @@ security_compliance_report:
       a1: $(kubectl get secrets -n nonrtric | grep -c a1-tls)
       o1: $(kubectl get secrets -n oran | grep -c netconf)
       o2: $(kubectl get secrets -n ocloud-system | grep -c o2-tls)
-  
+
   fips_140_3:
     enabled: $(kubectl get deployments -A -o json | jq '[.items[].spec.template.spec.containers[].env[]? | select(.name=="GODEBUG" and .value=="fips140=on")] | length')
     go_version: "1.24.6"
-  
+
   container_security:
     total_images: $(kubectl get pods -A -o jsonpath='{.items[*].spec.containers[*].image}' | tr ' ' '\n' | sort -u | wc -l)
     scanned: true
     critical_vulnerabilities: 0
     high_vulnerabilities: 2
-  
+
   network_security:
     policies_enforced: $(kubectl get networkpolicies -A --no-headers | wc -l)
     zero_trust: true
     service_mesh: $(kubectl get namespace istio-system &>/dev/null && echo "istio" || echo "none")
-  
+
   recommendations:
     - "Rotate certificates in 15 days"
     - "Update base images to latest versions"
     - "Enable audit logging for all API access"
     - "Implement secret rotation policy"
 EOF
-  
+
   echo "Report saved to security_compliance_report.yaml"
 }
 
 # Quick security fix
 quick_security_fix() {
   local NAMESPACE=${1:-oran}
-  
+
   echo "Applying quick security fixes to namespace: $NAMESPACE"
-  
+
   # Fix pod security context
   kubectl get deployments -n $NAMESPACE -o name | while read deploy; do
     kubectl patch $deploy -n $NAMESPACE --type merge -p \
       '{"spec":{"template":{"spec":{"securityContext":{"runAsNonRoot":true,"runAsUser":1000,"fsGroup":2000,"seccompProfile":{"type":"RuntimeDefault"}}}}}}'
   done
-  
+
   # Apply network policy
   apply_zero_trust_policies
-  
+
   # Enable FIPS mode
   kubectl get deployments -n $NAMESPACE -o name | while read deploy; do
     kubectl set env $deploy -n $NAMESPACE GODEBUG=fips140=on
   done
-  
+
   echo "Security fixes applied"
 }
 ```

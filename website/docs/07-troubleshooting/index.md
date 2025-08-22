@@ -9,7 +9,7 @@ This section provides troubleshooting guides and solutions for common issues.
 - Check Node.js version (requires 18+)
 - Ensure all dependencies are installed with `npm install`
 
-### Deployment Issues  
+### Deployment Issues
 
 - Verify Kubernetes cluster connectivity
 - Check resource quotas and limits

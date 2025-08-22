@@ -6,7 +6,8 @@ slug: /agents/
 
 # Claude Agents
 
-Welcome to the Claude Agents documentation section. This section contains detailed information about all available agents in the Nephio O-RAN ecosystem.
+Welcome to the Claude Agents documentation section. This section contains detailed information about
+all available agents in the Nephio O-RAN ecosystem.
 
 ## Available Agents
 
@@ -27,7 +28,8 @@ Welcome to the Claude Agents documentation section. This section contains detail
 
 ## Agent Comparison
 
-For a detailed comparison of agent capabilities, see the [Agent Comparison Matrix](./comparison-matrix.md).
+For a detailed comparison of agent capabilities, see the
+[Agent Comparison Matrix](./comparison-matrix.md).
 
 ## Additional Resources
 

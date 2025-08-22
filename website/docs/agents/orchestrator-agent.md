@@ -8,16 +8,18 @@ tags: [orchestrator, agent, claude-opus, coordination, workflow]
 
 # Nephio O-RAN Orchestrator Agent
 
-The **Nephio O-RAN Orchestrator Agent** serves as the master coordinator for complex Nephio R5 and O-RAN L Release deployments. This agent orchestrates multi-agent workflows, manages package variants across clusters, and ensures end-to-end deployment consistency.
+The **Nephio O-RAN Orchestrator Agent** serves as the master coordinator for complex Nephio R5 and
+O-RAN L Release deployments. This agent orchestrates multi-agent workflows, manages package variants
+across clusters, and ensures end-to-end deployment consistency.
 
 ## 🎯 Agent Overview
 
-| Property | Value |
-|----------|-------|
-| **Name** | orchestrator-agent |
-| **Model** | Claude Opus |
-| **Version** | 3.0.0 |
-| **Tools** | Read, Write, Bash, Search, Git |
+| Property         | Value                                       |
+| ---------------- | ------------------------------------------- |
+| **Name**         | orchestrator-agent                          |
+| **Model**        | Claude Opus                                 |
+| **Version**      | 3.0.0                                       |
+| **Tools**        | Read, Write, Bash, Search, Git              |
 | **Primary Role** | Master coordination and workflow management |
 
 ## 🏗️ Architecture
@@ -30,14 +32,14 @@ graph TB
         COORD[Agent Coordinator]
         SCHED[Scheduler]
     end
-    
+
     subgraph "External Integrations"
         PORCH[Porch Package Management]
         ARGOCD[ArgoCD GitOps]
         K8S[Kubernetes API]
         GIT[Git Repositories]
     end
-    
+
     subgraph "Coordinated Agents"
         INF[Infrastructure Agent]
         CFG[Config Management Agent]
@@ -46,16 +48,16 @@ graph TB
         SEC[Security Agent]
         TEST[Testing Agent]
     end
-    
+
     WF --> STATE
     STATE --> COORD
     COORD --> SCHED
-    
+
     SCHED --> PORCH
     SCHED --> ARGOCD
     SCHED --> K8S
     SCHED --> GIT
-    
+
     COORD --> INF
     COORD --> CFG
     COORD --> NF
@@ -100,7 +102,8 @@ graph TB
 
 #### `deploy everything`
 
-Initiates a complete O-RAN stack deployment including infrastructure, configuration, and network functions.
+Initiates a complete O-RAN stack deployment including infrastructure, configuration, and network
+functions.
 
 **Workflow:**
 
@@ -226,16 +229,16 @@ The orchestrator maintains workflow state in `~/.claude-workflows/state.json`:
 
 Workflow stages and responsible agents:
 
-| Stage | Agent | Description |
-|-------|-------|-------------|
-| infrastructure | infrastructure-agent | Kubernetes cluster setup |
-| dependencies | dependency-doctor-agent | Dependency validation |
-| configuration | configuration-management-agent | Base configuration |
-| network-functions | network-functions-agent | O-RAN component deployment |
-| monitoring | monitoring-agent | Observability setup |
-| analytics | data-analytics-agent | Data pipeline setup |
-| security | security-compliance-agent | Security hardening |
-| testing | testing-validation-agent | End-to-end validation |
+| Stage             | Agent                          | Description                |
+| ----------------- | ------------------------------ | -------------------------- |
+| infrastructure    | infrastructure-agent           | Kubernetes cluster setup   |
+| dependencies      | dependency-doctor-agent        | Dependency validation      |
+| configuration     | configuration-management-agent | Base configuration         |
+| network-functions | network-functions-agent        | O-RAN component deployment |
+| monitoring        | monitoring-agent               | Observability setup        |
+| analytics         | data-analytics-agent           | Data pipeline setup        |
+| security          | security-compliance-agent      | Security hardening         |
+| testing           | testing-validation-agent       | End-to-end validation      |
 
 ## 📊 Configuration Examples
 
@@ -249,10 +252,10 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - clusters:
-      selector:
-        matchLabels:
-          oran-enabled: "true"
+    - clusters:
+        selector:
+          matchLabels:
+            oran-enabled: 'true'
   template:
     metadata:
       name: '{{name}}-oran'
@@ -270,7 +273,7 @@ spec:
           prune: true
           selfHeal: true
         syncOptions:
-        - CreateNamespace=true
+          - CreateNamespace=true
 ```
 
 ### PackageVariantSet Configuration
@@ -287,21 +290,21 @@ spec:
     repo: catalog
     revision: v2.0.0
   targets:
-  - objectSelector:
-      apiVersion: infra.nephio.org/v1alpha1
-      kind: WorkloadCluster
-      matchLabels:
-        nephio.org/region: us-east
+    - objectSelector:
+        apiVersion: infra.nephio.org/v1alpha1
+        kind: WorkloadCluster
+        matchLabels:
+          nephio.org/region: us-east
   template:
     downstream:
-      packageExpr: "oran-{{cluster.name}}"
-      repoExpr: "deployments"
+      packageExpr: 'oran-{{cluster.name}}'
+      repoExpr: 'deployments'
     packageContext:
       data:
-      - key: site-id
-        valueExpr: "{{cluster.metadata.labels.site-id}}"
-      - key: region
-        valueExpr: "{{cluster.metadata.labels.region}}"
+        - key: site-id
+          valueExpr: '{{cluster.metadata.labels.site-id}}'
+        - key: region
+          valueExpr: '{{cluster.metadata.labels.region}}'
 ```
 
 ### Network Slice Intent
@@ -314,16 +317,16 @@ metadata:
   namespace: default
 spec:
   sliceType: enhanced-mobile-broadband
-  sliceId: "100001"
+  sliceId: '100001'
   sites:
-  - name: edge-manufacturing
-    cu: 2
-    du: 4
-    ru: 8
-  - name: edge-logistics
-    cu: 1
-    du: 2
-    ru: 4
+    - name: edge-manufacturing
+      cu: 2
+      du: 4
+      ru: 8
+    - name: edge-logistics
+      cu: 1
+      du: 2
+      ru: 4
   requirements:
     bandwidth: 5Gbps
     latency: 5ms
@@ -331,7 +334,7 @@ spec:
     availability: 99.99
   qosPolicy:
     priorityLevel: 1
-    trafficClass: "conversational"
+    trafficClass: 'conversational'
     allocationRetentionPriority: 1
 ```
 
@@ -343,7 +346,7 @@ The orchestrator exposes the following metrics:
 
 ```prometheus
 # Workflow execution time
-oran_orchestrator_workflow_duration_seconds{stage="infrastructure|configuration|..."} 
+oran_orchestrator_workflow_duration_seconds{stage="infrastructure|configuration|..."}
 
 # Agent coordination success rate
 oran_orchestrator_agent_coordination_success_rate{agent="infrastructure-agent|..."}
@@ -420,42 +423,42 @@ orchestrator:
   workflow:
     timeout: 3600
     maxRetries: 3
-    stateDirectory: "~/.claude-workflows"
-    
+    stateDirectory: '~/.claude-workflows'
+
   agents:
     infrastructure:
-      name: "infrastructure-agent"
+      name: 'infrastructure-agent'
       timeout: 1800
       required: true
     configuration:
-      name: "configuration-management-agent"
+      name: 'configuration-management-agent'
       timeout: 900
       required: true
     networkFunctions:
-      name: "network-functions-agent"
+      name: 'network-functions-agent'
       timeout: 1200
       required: true
     monitoring:
-      name: "monitoring-agent"
+      name: 'monitoring-agent'
       timeout: 600
       required: false
-    
+
   integrations:
     porch:
-      endpoint: "http://porch-server.porch-system:8080"
+      endpoint: 'http://porch-server.porch-system:8080'
       timeout: 30
     argocd:
-      endpoint: "https://argocd-server.argocd:443"
+      endpoint: 'https://argocd-server.argocd:443'
       timeout: 60
-      
+
   packageManagement:
-    catalogRepo: "https://github.com/nephio-project/catalog"
-    deploymentRepo: "https://github.com/your-org/deployments"
+    catalogRepo: 'https://github.com/nephio-project/catalog'
+    deploymentRepo: 'https://github.com/your-org/deployments'
     approvalRequired: true
-    
+
   networkSlicing:
-    controller: "nephio.org/network-slice-controller"
-    defaultTemplate: "standard-embb"
+    controller: 'nephio.org/network-slice-controller'
+    defaultTemplate: 'standard-embb'
 ```
 
 ## 🛠️ Troubleshooting
@@ -464,8 +467,7 @@ orchestrator:
 
 #### Workflow Stuck in Progress
 
-**Symptoms:** Workflow state shows ongoing execution but no progress
-**Diagnosis:**
+**Symptoms:** Workflow state shows ongoing execution but no progress **Diagnosis:**
 
 ```bash
 # Check workflow state
@@ -486,8 +488,7 @@ kubectl logs -n claude-agents -l app=infrastructure-agent --tail=50
 
 #### Package Variant Generation Failures
 
-**Symptoms:** PackageVariantSet exists but no PackageRevisions created
-**Diagnosis:**
+**Symptoms:** PackageVariantSet exists but no PackageRevisions created **Diagnosis:**
 
 ```bash
 # Check Porch server status
@@ -508,8 +509,7 @@ kubectl logs -n porch-system -l app=porch-server --tail=100
 
 #### ArgoCD Synchronization Issues
 
-**Symptoms:** Applications show OutOfSync status
-**Diagnosis:**
+**Symptoms:** Applications show OutOfSync status **Diagnosis:**
 
 ```bash
 # Check ArgoCD application status
@@ -571,8 +571,10 @@ export ORCHESTRATOR_LOG_LEVEL=debug
 
 ## Related Documentation
 
-- **[Infrastructure Agent](/docs/infrastructure/nephio-infrastructure-agent)**: Cluster provisioning and management
-- **[Configuration Management Agent](/docs/config-management/configuration-management-agent)**: Configuration deployment
+- **[Infrastructure Agent](/docs/infrastructure/nephio-infrastructure-agent)**: Cluster provisioning
+  and management
+- **[Configuration Management Agent](/docs/config-management/configuration-management-agent)**:
+  Configuration deployment
 - **Network Functions Agent**: O-RAN component deployment (Coming Soon)
 - **[Architecture Overview](/docs/architecture/overview)**: System architecture details
 - **[Integration Patterns](/docs/integration/)**: Workflow integration guides

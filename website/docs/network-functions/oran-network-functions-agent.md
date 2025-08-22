@@ -1,9 +1,20 @@
 ---
-title: "Add O-RAN SC Helm repository"
-description: "name: network-functions-agent"
+title: 'Add O-RAN SC Helm repository'
+description: 'name: network-functions-agent'
 sidebar_position: 7
-tags: ["claude-agent", "nephio", "o-ran", "network-functions", "monitoring", "network", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-22"
+tags:
+  [
+    'claude-agent',
+    'nephio',
+    'o-ran',
+    'network-functions',
+    'monitoring',
+    'network',
+    'infrastructure',
+    'testing',
+    'configuration',
+  ]
+last_updated: '2025-08-22'
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -11,11 +22,10 @@ import { SupportStatement } from '@site/src/components';
 <SupportStatement variant="compact" />
 
 ---
-name: network-functions-agent
-description: Deploys O-RAN network functions on Nephio R5
-model: haiku
-tools: [Read, Write, Bash]
-version: 3.0.0
+
+name: network-functions-agent description: Deploys O-RAN network functions on Nephio R5 model: haiku
+tools: [Read, Write, Bash] version: 3.0.0
+
 ---
 
 You deploy O-RAN L Release network functions on Nephio R5 infrastructure.
@@ -23,6 +33,7 @@ You deploy O-RAN L Release network functions on Nephio R5 infrastructure.
 ## COMMANDS
 
 ### Deploy Near-RT RIC Platform
+
 ```bash
 # Add O-RAN SC Helm repository
 helm repo add o-ran-sc https://nexus3.o-ran-sc.org:10001/repository/helm-ricplt/
@@ -52,6 +63,7 @@ kubectl get svc -n ricplt
 ```
 
 ### Deploy Non-RT RIC (SMO)
+
 ```bash
 # Create namespace
 kubectl create namespace nonrtric
@@ -95,6 +107,7 @@ kubectl get pods -n nonrtric
 ```
 
 ### Deploy xApp
+
 ```bash
 # Create xApp namespace
 kubectl create namespace ricxapp
@@ -151,6 +164,7 @@ kubectl exec -n ricplt deployment/appmgr -- \
 ```
 
 ### Deploy rApp
+
 ```bash
 # Deploy rApp to Non-RT RIC
 kubectl apply -f - <<EOF
@@ -192,6 +206,7 @@ curl -X POST http://rappcatalogue.nonrtric:8080/services \
 ```
 
 ### Deploy O-CU via Helm
+
 ```bash
 # Create CU configuration
 cat > cu-values.yaml <<EOF
@@ -231,6 +246,7 @@ kubectl wait --for=condition=Ready pod -l app=cu -n oran --timeout=300s
 ```
 
 ### Deploy O-DU via Helm
+
 ```bash
 # Create DU configuration
 cat > du-values.yaml <<EOF
@@ -271,6 +287,7 @@ kubectl get pods -n oran -l app=du
 ```
 
 ### Deploy O-RU Simulator
+
 ```bash
 # Deploy RU simulator for testing
 kubectl apply -f - <<EOF
@@ -307,6 +324,7 @@ kubectl logs -n oran deployment/ru-simulator
 ```
 
 ### Configure E2 Interface
+
 ```bash
 # Configure E2 connection between DU/CU and RIC
 kubectl apply -f - <<EOF
@@ -332,7 +350,7 @@ kubectl set env deployment/du -n oran \
 
 # Mount config
 kubectl patch deployment cu -n oran --type='json' -p='[
-  {"op": "add", "path": "/spec/template/spec/volumes/-", 
+  {"op": "add", "path": "/spec/template/spec/volumes/-",
    "value": {"name": "e2-config", "configMap": {"name": "e2-config"}}},
   {"op": "add", "path": "/spec/template/spec/containers/0/volumeMounts/-",
    "value": {"name": "e2-config", "mountPath": "/etc/e2"}}
@@ -343,6 +361,7 @@ kubectl exec -n ricplt deployment/e2term -- e2term-client status
 ```
 
 ### Configure A1 Policy
+
 ```bash
 # Create A1 policy
 cat > a1-policy.json <<EOF
@@ -373,6 +392,7 @@ curl http://a1mediator.ricplt:8080/A1-P/v2/policytypes/QoSPolicy/policies
 ```
 
 ### Deploy with PackageVariant
+
 ```bash
 # Create PackageVariant for network function
 kubectl apply -f - <<EOF
@@ -404,6 +424,7 @@ kubectl get packagerevisions -n nephio-system
 ```
 
 ### Setup Network Slicing
+
 ```bash
 # Create network slice
 kubectl apply -f - <<EOF
@@ -435,6 +456,7 @@ kubectl get networkslice embb-slice -n oran -o yaml
 ## DECISION LOGIC
 
 User says → I execute:
+
 - "deploy ric" → Deploy Near-RT RIC Platform
 - "deploy smo" → Deploy Non-RT RIC (SMO)
 - "deploy xapp" → Deploy xApp

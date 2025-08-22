@@ -3,23 +3,29 @@ id: intro
 slug: /intro
 sidebar_position: 1
 title: Introduction
-description: Nephio O-RAN Claude Agents - Advanced cloud-native orchestration for O-RAN L Release and Nephio R5
+description:
+  Nephio O-RAN Claude Agents - Advanced cloud-native orchestration for O-RAN L Release and Nephio R5
 keywords: [nephio, o-ran, claude, agents, orchestration, 5g, cloud-native, automation]
 tags: [introduction, overview, getting-started, nephio, o-ran]
-last_updated: "2025-08-22"
+last_updated: '2025-08-22'
 ---
 
 # Nephio O-RAN Claude Agents
 
-Welcome to the **Nephio O-RAN Claude Agents** project - an advanced cloud-native orchestration system that bridges natural language network operations with O-RAN compliant deployments using cutting-edge AI agents.
+Welcome to the **Nephio O-RAN Claude Agents** project - an advanced cloud-native orchestration
+system that bridges natural language network operations with O-RAN compliant deployments using
+cutting-edge AI agents.
 
 ## 🎯 Project Mission
 
-The Nephio O-RAN Claude Agents project provides intelligent automation for deploying, managing, and optimizing O-RAN L Release networks using Nephio R5 infrastructure. Our AI-powered agents understand natural language commands and execute complex network operations with precision and reliability.
+The Nephio O-RAN Claude Agents project provides intelligent automation for deploying, managing, and
+optimizing O-RAN L Release networks using Nephio R5 infrastructure. Our AI-powered agents understand
+natural language commands and execute complex network operations with precision and reliability.
 
 ## 🏗️ System Architecture
 
-Our system consists of 10 specialized agents that work together to provide comprehensive O-RAN network lifecycle management:
+Our system consists of 10 specialized agents that work together to provide comprehensive O-RAN
+network lifecycle management:
 
 ```mermaid
 graph TB
@@ -27,20 +33,20 @@ graph TB
         CLI[Claude Code CLI]
         WEB[Web Interface]
     end
-    
+
     subgraph "Orchestration Layer"
         ORC[Nephio O-RAN Orchestrator Agent]
         ORC --> INF[Infrastructure Agent]
         ORC --> CFG[Configuration Management Agent]
         ORC --> NF[Network Functions Agent]
     end
-    
+
     subgraph "Infrastructure Layer"
         INF --> K8S[Kubernetes Clusters]
         INF --> METAL[Metal3 Bare Metal]
         INF --> PORCH[Porch Package Management]
     end
-    
+
     subgraph "Network Functions"
         NF --> RIC[Near-RT RIC Platform]
         NF --> SMO[Non-RT RIC / SMO]
@@ -48,7 +54,7 @@ graph TB
         NF --> DU[O-RAN DU]
         NF --> RU[O-RAN RU]
     end
-    
+
     subgraph "Operations & Support"
         MON[Monitoring Analytics Agent]
         SEC[Security Compliance Agent]
@@ -57,13 +63,13 @@ graph TB
         DATA[Data Analytics Agent]
         DOC[Dependency Doctor Agent]
     end
-    
+
     subgraph "Data & Analytics"
         DATA --> KAFKA[Kafka Streaming]
         DATA --> INFLUX[InfluxDB Time Series]
         DATA --> ML[Kubeflow ML Pipeline]
     end
-    
+
     CLI --> ORC
     WEB --> ORC
     MON --> K8S
@@ -105,18 +111,18 @@ graph TB
 
 ## 📋 Agent Inventory
 
-| Agent | Purpose | Model | Capabilities |
-|-------|---------|-------|--------------|
-| [**Orchestrator Agent**](./orchestration/nephio-oran-orchestrator-agent.md) | Master coordinator | Claude Opus | Multi-cluster deployment, workflow management, package variant orchestration |
-| [**Infrastructure Agent**](./infrastructure/nephio-infrastructure-agent.md) | Infrastructure provisioning | Claude Sonnet | Kind/Metal3 clusters, Nephio R5 components, ArgoCD, storage |
-| [**Configuration Management Agent**](./config-management/configuration-management-agent.md) | Configuration deployment | Claude Haiku | Porch packages, YANG models, network attachments, kpt functions |
-| [**Network Functions Agent**](./network-functions/oran-network-functions-agent.md) | O-RAN network functions | Claude Haiku | Near-RT RIC, SMO, xApps, rApps, CU/DU/RU deployment |
-| [**Monitoring Analytics Agent**](./monitoring/monitoring-analytics-agent.md) | Observability stack | Claude Sonnet | Prometheus, Grafana, VES collector, Jaeger tracing |
-| [**Data Analytics Agent**](./analytics/data-analytics-agent.md) | Data processing | Claude Sonnet | Kafka streaming, InfluxDB, Flink processing, ML pipelines |
-| [**Security Compliance Agent**](./security/security-compliance-agent.md) | Security validation | Claude Sonnet | WG11 compliance, FIPS mode, container scanning, zero-trust |
-| [**Performance Optimization Agent**](./performance/performance-optimization-agent.md) | Performance tuning | Claude Opus | SMO optimization, energy efficiency, AI/ML acceleration |
-| [**Testing Validation Agent**](./testing/testing-validation-agent.md) | End-to-end testing | Claude Haiku | Interface testing, chaos engineering, load testing, Go coverage |
-| [**Dependency Doctor Agent**](./infrastructure/oran-nephio-dep-doctor-agent.md) | Dependency resolution | Claude Sonnet | Go modules, Python packages, system libraries, container fixes |
+| Agent                                                                                       | Purpose                     | Model         | Capabilities                                                                 |
+| ------------------------------------------------------------------------------------------- | --------------------------- | ------------- | ---------------------------------------------------------------------------- |
+| [**Orchestrator Agent**](./orchestration/nephio-oran-orchestrator-agent.md)                 | Master coordinator          | Claude Opus   | Multi-cluster deployment, workflow management, package variant orchestration |
+| [**Infrastructure Agent**](./infrastructure/nephio-infrastructure-agent.md)                 | Infrastructure provisioning | Claude Sonnet | Kind/Metal3 clusters, Nephio R5 components, ArgoCD, storage                  |
+| [**Configuration Management Agent**](./config-management/configuration-management-agent.md) | Configuration deployment    | Claude Haiku  | Porch packages, YANG models, network attachments, kpt functions              |
+| [**Network Functions Agent**](./network-functions/oran-network-functions-agent.md)          | O-RAN network functions     | Claude Haiku  | Near-RT RIC, SMO, xApps, rApps, CU/DU/RU deployment                          |
+| [**Monitoring Analytics Agent**](./monitoring/monitoring-analytics-agent.md)                | Observability stack         | Claude Sonnet | Prometheus, Grafana, VES collector, Jaeger tracing                           |
+| [**Data Analytics Agent**](./analytics/data-analytics-agent.md)                             | Data processing             | Claude Sonnet | Kafka streaming, InfluxDB, Flink processing, ML pipelines                    |
+| [**Security Compliance Agent**](./security/security-compliance-agent.md)                    | Security validation         | Claude Sonnet | WG11 compliance, FIPS mode, container scanning, zero-trust                   |
+| [**Performance Optimization Agent**](./performance/performance-optimization-agent.md)       | Performance tuning          | Claude Opus   | SMO optimization, energy efficiency, AI/ML acceleration                      |
+| [**Testing Validation Agent**](./testing/testing-validation-agent.md)                       | End-to-end testing          | Claude Haiku  | Interface testing, chaos engineering, load testing, Go coverage              |
+| [**Dependency Doctor Agent**](./infrastructure/oran-nephio-dep-doctor-agent.md)             | Dependency resolution       | Claude Sonnet | Go modules, Python packages, system libraries, container fixes               |
 
 ## 🎯 Use Cases
 
@@ -290,14 +296,14 @@ Our development roadmap includes:
 
 ## ⚡ Performance Benchmarks
 
-| Metric | Target | Typical |
-|--------|--------|---------|
-| E2 Setup Time | < 5 seconds | 2.3s |
-| A1 Policy Deployment | < 2 seconds | 0.8s |
-| Package Deployment | < 30 seconds | 18s |
-| AI/ML Inference (P99) | < 50ms | 42ms |
-| Energy Efficiency | > 0.5 Gbps/W | 0.73 Gbps/W |
-| Test Coverage | > 85% | 87.3% |
+| Metric                | Target       | Typical     |
+| --------------------- | ------------ | ----------- |
+| E2 Setup Time         | < 5 seconds  | 2.3s        |
+| A1 Policy Deployment  | < 2 seconds  | 0.8s        |
+| Package Deployment    | < 30 seconds | 18s         |
+| AI/ML Inference (P99) | < 50ms       | 42ms        |
+| Energy Efficiency     | > 0.5 Gbps/W | 0.73 Gbps/W |
+| Test Coverage         | > 85%        | 87.3%       |
 
 ## 🔐 Security & Compliance
 

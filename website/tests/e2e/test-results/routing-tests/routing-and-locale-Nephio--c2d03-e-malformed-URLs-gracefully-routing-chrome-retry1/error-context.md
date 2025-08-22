@@ -1,0 +1,94 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - region "Skip to main content":
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#__docusaurus_skipToContent_fallback"
+  - navigation "Main" [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - link "Nephio O-RAN Claude Agents Logo Nephio O-RAN Claude Agents" [ref=e7] [cursor=pointer]:
+          - /url: /nephio-oran-claude-agents/
+          - img "Nephio O-RAN Claude Agents Logo" [ref=e9] [cursor=pointer]
+          - generic [ref=e10] [cursor=pointer]: Nephio O-RAN Claude Agents
+        - link "Docs" [ref=e11] [cursor=pointer]:
+          - /url: /nephio-oran-claude-agents/docs/intro
+        - link "Blog" [ref=e12] [cursor=pointer]:
+          - /url: /nephio-oran-claude-agents/blog
+      - generic [ref=e13]:
+        - button "English" [ref=e15] [cursor=pointer]:
+          - img [ref=e16] [cursor=pointer]
+          - text: English
+        - link "GitHub" [ref=e18] [cursor=pointer]:
+          - /url: https://github.com/thc1006/nephio-oran-claude-agents
+          - text: GitHub
+          - img [ref=e19] [cursor=pointer]
+        - button "Switch between dark and light mode (currently system mode)" [ref=e22] [cursor=pointer]:
+          - img [ref=e23] [cursor=pointer]
+        - button "Search (Ctrl+K)" [ref=e26] [cursor=pointer]:
+          - generic [ref=e27] [cursor=pointer]:
+            - img [ref=e28] [cursor=pointer]
+            - generic [ref=e30] [cursor=pointer]: Search
+          - generic [ref=e31] [cursor=pointer]:
+            - img [ref=e33] [cursor=pointer]
+            - generic [ref=e35] [cursor=pointer]: K
+  - main [ref=e37]:
+    - generic [ref=e39]:
+      - heading "Page Not Found" [level=1] [ref=e40]
+      - paragraph [ref=e41]: We could not find what you were looking for.
+      - paragraph [ref=e42]: Please contact the owner of the site that linked you to the original URL and let them know their link is broken.
+  - contentinfo [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - generic [ref=e47]: Documentation
+          - list [ref=e48]:
+            - listitem [ref=e49]:
+              - link "Introduction" [ref=e50] [cursor=pointer]:
+                - /url: /nephio-oran-claude-agents/docs/intro
+            - listitem [ref=e51]:
+              - link "Quick Start" [ref=e52] [cursor=pointer]:
+                - /url: /nephio-oran-claude-agents/docs/guides/quickstart
+            - listitem [ref=e53]:
+              - link "Architecture" [ref=e54] [cursor=pointer]:
+                - /url: /nephio-oran-claude-agents/docs/architecture
+            - listitem [ref=e55]:
+              - link "Agents" [ref=e56] [cursor=pointer]:
+                - /url: /nephio-oran-claude-agents/docs/agents
+        - generic [ref=e57]:
+          - generic [ref=e58]: Community
+          - list [ref=e59]:
+            - listitem [ref=e60]:
+              - link "Nephio Community" [ref=e61] [cursor=pointer]:
+                - /url: https://github.com/nephio-project
+                - text: Nephio Community
+                - img [ref=e62] [cursor=pointer]
+            - listitem [ref=e64]:
+              - link "O-RAN Alliance" [ref=e65] [cursor=pointer]:
+                - /url: https://www.o-ran.org/
+                - text: O-RAN Alliance
+                - img [ref=e66] [cursor=pointer]
+            - listitem [ref=e68]:
+              - link "Kubernetes" [ref=e69] [cursor=pointer]:
+                - /url: https://kubernetes.io/
+                - text: Kubernetes
+                - img [ref=e70] [cursor=pointer]
+        - generic [ref=e72]:
+          - generic [ref=e73]: More
+          - list [ref=e74]:
+            - listitem [ref=e75]:
+              - link "Blog" [ref=e76] [cursor=pointer]:
+                - /url: /nephio-oran-claude-agents/blog
+            - listitem [ref=e77]:
+              - link "GitHub" [ref=e78] [cursor=pointer]:
+                - /url: https://github.com/thc1006/nephio-oran-claude-agents
+                - text: GitHub
+                - img [ref=e79] [cursor=pointer]
+            - listitem [ref=e81]:
+              - link "Compatibility Matrix" [ref=e82] [cursor=pointer]:
+                - /url: https://github.com/thc1006/nephio-oran-claude-agents/blob/main/COMPATIBILITY_MATRIX.md
+                - text: Compatibility Matrix
+                - img [ref=e83] [cursor=pointer]
+      - generic [ref=e86]: Copyright © 2025 Nephio O-RAN Claude Agents Project. Built with Docusaurus.
+```

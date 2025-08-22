@@ -72,10 +72,10 @@ export default defineConfig({
   /* Test projects for different scenarios */
   projects: [
     {
-      name: 'routing-chrome',
+      name: 'routing-chromium',
       use: {
         ...devices['Desktop Chrome'],
-        channel: 'chrome',
+        channel: 'chromium',
       },
     },
 
@@ -112,12 +112,12 @@ export default defineConfig({
 
   /* Web server configuration */
   webServer: {
-    command: process.env.CI ? 'npm run serve' : 'npm run start:fast',
+    command: process.env.CI ? 'npm run build:ci && npm run serve' : 'npm run start:fast',
     url: process.env.BASE_URL || 'http://localhost:3000/nephio-oran-claude-agents',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    timeout: 180000, // Increased timeout for CI builds
     env: {
-      NODE_ENV: 'development', // Use development to ensure unsafe-inline is allowed
+      NODE_ENV: process.env.CI ? 'production' : 'development',
       DISABLE_CSP_FOR_TESTS: 'true',
     },
   },

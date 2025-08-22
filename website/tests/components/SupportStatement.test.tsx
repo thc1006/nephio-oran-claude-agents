@@ -135,27 +135,33 @@ describe('SupportStatement', () => {
       expect(container.firstChild).toHaveClass('custom-class');
     });
 
-    it('applies correct variant classes', () => {
-      const { container: fullContainer } = render(<SupportStatement variant="full" />);
-      const { container: compactContainer } = render(<SupportStatement variant="compact" />);
-      const { container: badgesContainer } = render(<SupportStatement variant="badges-only" />);
+    it('renders different variants correctly', () => {
+      // Test full variant
+      const { rerender } = render(<SupportStatement variant="full" />);
+      expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
+      expect(screen.getByText(/While these are the canonical supported versions/)).toBeInTheDocument();
       
-      // Check that the CSS module classes are applied (mocked as strings)
-      expect(fullContainer.firstChild).toHaveClass('supportStatement');
-      expect(fullContainer.firstChild).toHaveClass('full');
-      expect(compactContainer.firstChild).toHaveClass('supportStatement');
-      expect(compactContainer.firstChild).toHaveClass('compact');
-      expect(badgesContainer.firstChild).toHaveClass('supportStatement');
-      expect(badgesContainer.firstChild).toHaveClass('badges-only');
+      // Test compact variant
+      rerender(<SupportStatement variant="compact" />);
+      expect(screen.getByText('Supported Versions')).toBeInTheDocument();
+      expect(screen.queryByText(/While these are the canonical supported versions/)).not.toBeInTheDocument();
+      
+      // Test badges-only variant
+      rerender(<SupportStatement variant="badges-only" />);
+      expect(screen.queryByText('Version Support Statement')).not.toBeInTheDocument();
+      expect(screen.queryByText('Supported Versions')).not.toBeInTheDocument();
+      // But badges should still be present
+      expect(screen.getByTestId('release-badge-go')).toBeInTheDocument();
     });
 
     it('has proper content structure', () => {
-      const { container } = render(<SupportStatement />);
+      render(<SupportStatement />);
       
-      expect(container.querySelector('.supportStatement')).toBeInTheDocument();
-      expect(container.querySelector('.header')).toBeInTheDocument();
-      expect(container.querySelector('.content')).toBeInTheDocument();
-      expect(container.querySelector('.versionList')).toBeInTheDocument();
+      // Test functional behavior instead of CSS classes
+      expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
+      expect(screen.getByText(/Required Go runtime version/)).toBeInTheDocument();
+      expect(screen.getByText(/O-RAN Alliance L-Release specifications/)).toBeInTheDocument();
+      expect(screen.getByText(/Nephio R5 package orchestration/)).toBeInTheDocument();
     });
   });
 

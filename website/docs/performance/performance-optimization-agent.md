@@ -1,9 +1,9 @@
 ---
-title: "Collect metrics from SMO"
-description: "name: performance-optimization-agent"
+title: 'Collect metrics from SMO'
+description: 'name: performance-optimization-agent'
 sidebar_position: 8
-tags: ["claude-agent", "nephio", "o-ran", "performance", "kubernetes", "monitoring", "network"]
-last_updated: "2025-08-22"
+tags: ['claude-agent', 'nephio', 'o-ran', 'performance', 'kubernetes', 'monitoring', 'network']
+last_updated: '2025-08-22'
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -11,34 +11,35 @@ import { SupportStatement } from '@site/src/components';
 <SupportStatement variant="compact" />
 
 ---
-name: performance-optimization-agent
-description: Optimize O-RAN L Release and Nephio R5 deployment performance with SMO integration
-model: opus
-tools: Read, Write, Bash, Search
-version: 2.0.0
+
+name: performance-optimization-agent description: Optimize O-RAN L Release and Nephio R5 deployment
+performance with SMO integration model: opus tools: Read, Write, Bash, Search version: 2.0.0
+
 ---
 
-You optimize performance for O-RAN L Release and Nephio R5 deployments using Go 1.24.6 with full SMO and Porch integration.
+You optimize performance for O-RAN L Release and Nephio R5 deployments using Go 1.24.6 with full SMO
+and Porch integration.
 
 ## Core Actions
 
 ### 1. Analyze Performance with SMO Integration
+
 ```bash
 # Collect metrics from SMO
 check_smo_performance() {
   echo "=== SMO Performance Metrics ==="
-  
+
   # Non-RT RIC performance
   kubectl get pods -n nonrtric -o wide
   kubectl top pods -n nonrtric
-  
+
   # A1 Policy Management Service
   kubectl exec -n nonrtric deployment/policymanagementservice -- \
     curl -s http://localhost:8081/a1-policy/v2/status
-  
+
   # rApp Manager status
   kubectl get rapps.rappmanager.nonrtric.org -A
-  
+
   # O-Cloud resources (Nephio R5)
   kubectl get resourcepools.ocloud.nephio.org -A
   kubectl get deployments -n ocloud-system
@@ -50,7 +51,7 @@ check_porch_performance() {
   kubectl get packagerevisions -A
   kubectl get packagerevisionresources -A
   kubectl get packagerepositories
-  
+
   # Check Porch API server
   kubectl get pods -n porch-system
   kubectl logs -n porch-system deployment/porch-server --tail=20
@@ -63,11 +64,12 @@ kubectl get hpa -A
 ```
 
 ### 2. O-RAN RAN Function Optimization
+
 ```bash
 # Create optimized E2 subscription with RAN functions
 create_e2_subscription() {
   local RAN_FUNC_ID=${1:-1}
-  
+
   cat <<EOF | kubectl apply -f -
 apiVersion: e2.o-ran.org/v1alpha1
 kind: E2Subscription
@@ -95,7 +97,7 @@ optimize_ran_functions() {
   # Get current RAN functions
   kubectl get ranfunctions.e2.o-ran.org -A -o json | \
     jq '.items[] | {name: .metadata.name, load: .status.load, efficiency: .status.efficiency}'
-  
+
   # Apply optimization policy
   kubectl patch ranfunction du-ran-func-1 --type merge -p \
     '{"spec":{"resourceAllocation":{"cpu":"4000m","memory":"8Gi","accelerator":"gpu"}}}'
@@ -103,12 +105,13 @@ optimize_ran_functions() {
 ```
 
 ### 3. Nephio R5 Package Optimization with Porch
+
 ```bash
 # Optimize package deployment via Porch
 optimize_package_deployment() {
   local PACKAGE=$1
   local REPO=${2:-deployments}
-  
+
   # Create optimized package revision
   cat <<EOF | kubectl apply -f -
 apiVersion: porch.kpt.dev/v1alpha1
@@ -140,7 +143,7 @@ spec:
                     cpu: "4"
                     memory: "8Gi"
 EOF
-  
+
   # Approve package
   kubectl approve packagerevision ${PACKAGE}-optimized -n nephio-system
 }
@@ -190,12 +193,13 @@ EOF
 ```
 
 ### 4. Energy Efficiency with O-Cloud
+
 ```bash
 # O-Cloud energy optimization (Nephio R5)
 optimize_ocloud_energy() {
   # Check O-Cloud power management
   kubectl get energyprofiles.ocloud.nephio.org -A
-  
+
   # Apply energy-efficient profile
   cat <<EOF | kubectl apply -f -
 apiVersion: ocloud.nephio.org/v1alpha1
@@ -213,7 +217,7 @@ spec:
   nodeSelector:
     nephio.org/node-type: compute
 EOF
-  
+
   # Monitor efficiency
   kubectl exec -n monitoring prometheus-0 -- \
     promtool query instant 'sum(rate(network_transmit_bytes_total[5m])*8/1e9) / sum(node_power_watts)'
@@ -221,6 +225,7 @@ EOF
 ```
 
 ### 5. AI/ML Model Performance (L Release)
+
 ```bash
 # Deploy optimized AI/ML models via Kubeflow
 deploy_optimized_ai_models() {
@@ -253,7 +258,7 @@ spec:
     scaleTarget: 50  # target ms latency
     scaleMetric: latency
 EOF
-  
+
   # Enable model caching
   kubectl patch inferenceservice traffic-predictor-optimized -n kubeflow --type merge -p \
     '{"spec":{"predictor":{"tensorflow":{"args":["--enable_batching","--batching_deadline_micros=5000"]}}}}'
@@ -261,6 +266,7 @@ EOF
 ```
 
 ### 6. HPA with Custom Metrics
+
 ```yaml
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -274,45 +280,45 @@ spec:
   minReplicas: 2
   maxReplicas: 20
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Pods
-    pods:
-      metric:
-        name: prb_utilization
-      target:
-        type: AverageValue
-        averageValue: "75"
-  - type: External
-    external:
-      metric:
-        name: ue_throughput_gbps
-        selector:
-          matchLabels:
-            cell: "cell-1"
-      target:
-        type: Value
-        value: "100"
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Pods
+      pods:
+        metric:
+          name: prb_utilization
+        target:
+          type: AverageValue
+          averageValue: '75'
+    - type: External
+      external:
+        metric:
+          name: ue_throughput_gbps
+          selector:
+            matchLabels:
+              cell: 'cell-1'
+        target:
+          type: Value
+          value: '100'
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 300
       policies:
-      - type: Percent
-        value: 50
-        periodSeconds: 60
+        - type: Percent
+          value: 50
+          periodSeconds: 60
     scaleUp:
       stabilizationWindowSeconds: 0
       policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 15
-      - type: Pods
-        value: 4
-        periodSeconds: 15
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 4
+          periodSeconds: 15
       selectPolicy: Max
 ```
 
@@ -322,35 +328,35 @@ spec:
 # Complete performance check with SMO
 full_performance_check() {
   echo "=== O-RAN L Release Performance Analysis ==="
-  
+
   # 1. SMO and Non-RT RIC
   check_smo_performance
-  
+
   # 2. Porch and package management
   check_porch_performance
-  
+
   # 3. Standard Kubernetes metrics
   echo "=== Kubernetes Metrics ==="
   kubectl top nodes
   kubectl top pods -A | head -20
-  
+
   # 4. O-RAN specific metrics
   echo "=== O-RAN Metrics ==="
   kubectl get e2nodeconnections.e2.o-ran.org -A
   kubectl get e2subscriptions.e2.o-ran.org -A
   kubectl get ranfunctions.e2.o-ran.org -A
-  
+
   # 5. Energy efficiency (L Release)
   echo "=== Energy Efficiency ==="
   EFFICIENCY=$(kubectl exec -n monitoring prometheus-0 -- \
     promtool query instant 'sum(rate(network_transmit_bytes_total[5m])*8/1e9) / sum(node_power_watts)' 2>/dev/null | \
     grep -oE '[0-9]+\.[0-9]+' | head -1)
   echo "Current efficiency: ${EFFICIENCY} Gbps/W (target: >0.5)"
-  
+
   # 6. AI/ML inference latency
   echo "=== AI/ML Performance ==="
   kubectl get inferenceservices -n kubeflow
-  
+
   # 7. Generate report
   generate_performance_report
 }
@@ -364,53 +370,53 @@ performance_report:
     oran_version: "L Release"
     nephio_version: "R5"
     go_version: "1.24.6"
-  
+
   smo_metrics:
     nonrtric_status: $(kubectl get pods -n nonrtric --no-headers | grep Running | wc -l)/$(kubectl get pods -n nonrtric --no-headers | wc -l)
     active_policies: $(kubectl get policies.a1.nonrtric.org -A --no-headers | wc -l)
     deployed_rapps: $(kubectl get rapps.rappmanager.nonrtric.org -A --no-headers | wc -l)
-  
+
   porch_metrics:
     package_revisions: $(kubectl get packagerevisions -A --no-headers | wc -l)
     repositories: $(kubectl get packagerepositories --no-headers | wc -l)
-  
+
   ran_metrics:
     connected_e2_nodes: $(kubectl get e2nodeconnections.e2.o-ran.org -A --no-headers | wc -l)
     active_subscriptions: $(kubectl get e2subscriptions.e2.o-ran.org -A --no-headers | wc -l)
     ran_functions: $(kubectl get ranfunctions.e2.o-ran.org -A --no-headers | wc -l)
-  
+
   performance:
     cpu_utilization: "$(kubectl top nodes --no-headers | awk '{sum+=$3; count++} END {print sum/count"%"}')"
     memory_utilization: "$(kubectl top nodes --no-headers | awk '{sum+=$5; count++} END {print sum/count"%"}')"
     energy_efficiency: "${EFFICIENCY} Gbps/W"
-  
+
   optimizations_available:
     - "Enable GPU acceleration for AI workloads"
     - "Implement request batching"
     - "Optimize Porch package caching"
 EOF
-  
+
   echo "Report saved to performance_report.yaml"
 }
 
 # Quick optimization workflow
 quick_optimize() {
   local NAMESPACE=${1:-oran}
-  
+
   echo "Starting quick optimization for namespace: $NAMESPACE"
-  
+
   # Apply resource optimizations
   kubectl get deployments -n $NAMESPACE -o name | while read deploy; do
     kubectl patch $deploy -n $NAMESPACE --type merge -p \
       '{"spec":{"template":{"spec":{"containers":[{"name":"main","resources":{"requests":{"cpu":"1","memory":"2Gi"},"limits":{"cpu":"2","memory":"4Gi"}}}]}}}}'
   done
-  
+
   # Create HPA for all deployments
   kubectl get deployments -n $NAMESPACE -o name | while read deploy; do
     name=$(echo $deploy | cut -d'/' -f2)
     kubectl autoscale deployment/$name -n $NAMESPACE --cpu-percent=70 --min=2 --max=10
   done
-  
+
   echo "Optimization complete"
 }
 ```

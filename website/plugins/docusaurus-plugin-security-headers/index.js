@@ -126,11 +126,20 @@ module.exports = function securityHeadersPlugin(context, options) {
     })
     .join('; ');
 
+  // Build headers object, excluding undefined values
   const headers = {
     ...defaultHeaders,
-    'Content-Security-Policy': options.disableCSP ? undefined : cspHeader,
+    ...(options.disableCSP ? {} : { 'Content-Security-Policy': cspHeader }),
     ...options.customHeaders,
   };
+
+  // Filter out any undefined values from the headers object
+  const cleanHeaders = Object.entries(headers)
+    .filter(([_, value]) => value !== undefined && value !== null)
+    .reduce((acc, [key, value]) => {
+      acc[key] = value;
+      return acc;
+    }, {});
 
   return {
     name: 'docusaurus-plugin-security-headers',
@@ -142,7 +151,7 @@ module.exports = function securityHeadersPlugin(context, options) {
 
       return {
         devServer: {
-          headers: headers,
+          headers: cleanHeaders,
         },
       };
     },
@@ -152,8 +161,7 @@ module.exports = function securityHeadersPlugin(context, options) {
       const path = require('path');
 
       // Create _headers file for Netlify
-      const headersContent = Object.entries(headers)
-        .filter(([_, value]) => value !== undefined)
+      const headersContent = Object.entries(cleanHeaders)
         .map(([key, value]) => `  ${key}: ${value}`)
         .join('\n');
 
@@ -168,12 +176,16 @@ module.exports = function securityHeadersPlugin(context, options) {
       // Create headers.json for custom servers
       await fs.writeFile(
         path.join(outDir, 'headers.json'),
-        JSON.stringify({ headers }, null, 2),
+        JSON.stringify({ headers: cleanHeaders }, null, 2),
         'utf-8'
       );
 
       console.log('✅ Security headers configuration generated successfully');
-      console.log('🔒 Zero-trust security controls enabled');
+      if (!options.disableCSP) {
+        console.log('🔒 Zero-trust security controls enabled');
+      } else {
+        console.log('⚠️  CSP disabled for testing environment');
+      }
     },
 
     injectHtmlTags() {

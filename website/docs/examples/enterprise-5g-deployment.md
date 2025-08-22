@@ -1,6 +1,7 @@
 ---
 title: Enterprise 5G Deployment
-description: Complete example of deploying a private 5G network for enterprise use with O-RAN components
+description:
+  Complete example of deploying a private 5G network for enterprise use with O-RAN components
 sidebar_position: 1
 keywords: [enterprise, 5g, private-network, deployment, example]
 tags: [examples, enterprise, 5g, deployment]
@@ -8,7 +9,8 @@ tags: [examples, enterprise, 5g, deployment]
 
 # Enterprise 5G Deployment Example
 
-This comprehensive example demonstrates deploying a complete private 5G network with O-RAN components for an enterprise manufacturing facility using the Nephio O-RAN Claude Agents system.
+This comprehensive example demonstrates deploying a complete private 5G network with O-RAN
+components for an enterprise manufacturing facility using the Nephio O-RAN Claude Agents system.
 
 ## 🎯 Scenario Overview
 
@@ -34,7 +36,7 @@ graph TB
         PLC[PLCs & Controllers]
         VISION[Machine Vision Systems]
     end
-    
+
     subgraph "Private 5G Network"
         CORE[5G Core (Open Source)]
         CU[O-RAN CU (Central Unit)]
@@ -43,7 +45,7 @@ graph TB
         SLICE_URLLC[URLLC Network Slice]
         SLICE_EMBB[eMBB Network Slice]
     end
-    
+
     subgraph "RIC Platform"
         NEAR_RIC[Near-RT RIC]
         XAPP_TS[Traffic Steering xApp]
@@ -51,37 +53,37 @@ graph TB
         SMO[Non-RT RIC / SMO]
         RAPP_OPT[Optimization rApp]
     end
-    
+
     subgraph "Edge Computing"
         EDGE_K8S[Edge Kubernetes Cluster]
         EDGE_AI[Edge AI/ML Workloads]
         EDGE_STORAGE[Edge Storage (100TB)]
         MONITORING[Real-time Monitoring]
     end
-    
+
     subgraph "Enterprise Systems"
         MES[Manufacturing Execution System]
         ERP[Enterprise Resource Planning]
         HISTORIAN[Process Historian]
         ANALYTICS[Manufacturing Analytics]
     end
-    
+
     %% Device connections
     AGV --> RU
     ROBOTS --> RU
     SENSORS --> RU
     PLC --> RU
     VISION --> RU
-    
+
     %% 5G Network flow
     RU --> DU
     DU --> CU
     CU --> CORE
-    
+
     %% Network slices
     CORE --> SLICE_URLLC
     CORE --> SLICE_EMBB
-    
+
     %% RIC integration
     CU --> NEAR_RIC
     DU --> NEAR_RIC
@@ -89,14 +91,14 @@ graph TB
     NEAR_RIC --> XAPP_QOS
     SMO --> NEAR_RIC
     SMO --> RAPP_OPT
-    
+
     %% Edge computing
     SLICE_URLLC --> EDGE_K8S
     SLICE_EMBB --> EDGE_K8S
     EDGE_K8S --> EDGE_AI
     EDGE_K8S --> EDGE_STORAGE
     EDGE_K8S --> MONITORING
-    
+
     %% Enterprise integration
     EDGE_K8S --> MES
     MES --> ERP
@@ -116,7 +118,7 @@ claude-agent dependency-doctor-agent "check dependencies"
 
 # Expected environment:
 # - 3 physical servers (32 cores, 128GB RAM each)
-# - 10Gbps networking with SR-IOV support  
+# - 10Gbps networking with SR-IOV support
 # - GPU acceleration (NVIDIA A100)
 # - Enterprise security requirements
 ```
@@ -167,27 +169,27 @@ kind: Cluster
 metadata:
   name: enterprise-manufacturing
 nodes:
-- role: control-plane
-  labels:
-    node-type: control-plane
-  extraMounts:
-  - hostPath: /var/lib/manufacturing-data
-    containerPath: /data
-- role: worker
-  labels:
-    node-type: edge-computing
-    hardware: gpu-accelerated
-  extraMounts:
-  - hostPath: /dev/sriov
-    containerPath: /dev/sriov
-- role: worker
-  labels:
-    node-type: ran-functions
-    hardware: dpdk-enabled
-- role: worker
-  labels:
-    node-type: ot-integration
-    security-zone: manufacturing-floor
+  - role: control-plane
+    labels:
+      node-type: control-plane
+    extraMounts:
+      - hostPath: /var/lib/manufacturing-data
+        containerPath: /data
+  - role: worker
+    labels:
+      node-type: edge-computing
+      hardware: gpu-accelerated
+    extraMounts:
+      - hostPath: /dev/sriov
+        containerPath: /dev/sriov
+  - role: worker
+    labels:
+      node-type: ran-functions
+      hardware: dpdk-enabled
+  - role: worker
+    labels:
+      node-type: ot-integration
+      security-zone: manufacturing-floor
 ```
 
 #### Step 4: Network Configuration
@@ -235,7 +237,7 @@ spec:
       "master": "eth1",
       "mode": "bridge",
       "ipam": {
-        "type": "whereabouts", 
+        "type": "whereabouts",
         "range": "10.100.2.0/24"
       }
     }
@@ -293,7 +295,7 @@ data:
 # Deploy URLLC slice for critical manufacturing operations
 claude-agent orchestrator-agent "deploy network slice urllc"
 
-# Deploy eMBB slice for general connectivity  
+# Deploy eMBB slice for general connectivity
 claude-agent orchestrator-agent "deploy network slice embb"
 ```
 
@@ -307,13 +309,13 @@ metadata:
   namespace: manufacturing
 spec:
   sliceType: ultra-reliable-low-latency
-  sliceId: "100001"
+  sliceId: '100001'
   priority: critical
   sites:
-  - name: manufacturing-floor
-    cu: 1
-    du: 2
-    ru: 8
+    - name: manufacturing-floor
+      cu: 1
+      du: 2
+      ru: 8
   requirements:
     latency: 1ms
     reliability: 99.999
@@ -321,11 +323,11 @@ spec:
     bandwidth: 100Mbps
   qosPolicy:
     priorityLevel: 1
-    trafficClass: "conversational"
+    trafficClass: 'conversational'
     allocationRetentionPriority: 1
     guaranteedBitRate: 50Mbps
   manufacturingIntegration:
-    protocols: ["OPC-UA", "PROFINET", "Modbus-TCP"]
+    protocols: ['OPC-UA', 'PROFINET', 'Modbus-TCP']
     deterministic: true
     timeSync: ieee1588v2
 ```
@@ -381,16 +383,16 @@ class ManufacturingAnalyticsRApp:
         self.mes_client = MESIntegrationClient()
         self.anomaly_detector = IsolationForest(contamination=0.1)
         self.equipment_data = {}
-        
+
     async def process_equipment_data(self, data: Dict):
         """Process real-time equipment telemetry"""
         equipment_id = data.get('equipment_id')
         metrics = data.get('metrics', {})
-        
+
         # Store historical data
         if equipment_id not in self.equipment_data:
             self.equipment_data[equipment_id] = []
-        
+
         self.equipment_data[equipment_id].append({
             'timestamp': datetime.utcnow(),
             'vibration': metrics.get('vibration', 0),
@@ -398,19 +400,19 @@ class ManufacturingAnalyticsRApp:
             'pressure': metrics.get('pressure', 0),
             'current': metrics.get('current', 0)
         })
-        
+
         # Anomaly detection
         if len(self.equipment_data[equipment_id]) > 100:
             recent_data = self.equipment_data[equipment_id][-100:]
-            features = np.array([[d['vibration'], d['temperature'], 
-                                 d['pressure'], d['current']] 
+            features = np.array([[d['vibration'], d['temperature'],
+                                 d['pressure'], d['current']]
                                 for d in recent_data])
-            
+
             anomaly_score = self.anomaly_detector.fit_predict(features)
-            
+
             if anomaly_score[-1] == -1:  # Anomaly detected
                 await self.handle_equipment_anomaly(equipment_id, metrics)
-    
+
     async def handle_equipment_anomaly(self, equipment_id: str, metrics: Dict):
         """Handle detected equipment anomalies"""
         # Create A1 policy for traffic prioritization
@@ -424,9 +426,9 @@ class ManufacturingAnalyticsRApp:
                 "max_latency": "500us"
             }
         }
-        
+
         await self.policy_client.create_policy(policy)
-        
+
         # Notify MES system
         await self.mes_client.send_maintenance_alert(
             equipment_id=equipment_id,
@@ -434,7 +436,7 @@ class ManufacturingAnalyticsRApp:
             predicted_failure_time="2 hours",
             recommended_action="Schedule predictive maintenance"
         )
-        
+
         print(f"Anomaly detected for equipment {equipment_id}")
         print(f"Policy created: {policy['policy_id']}")
 
@@ -467,29 +469,29 @@ spec:
       modelFormat:
         name: onnx
       runtime: kserve-onnxruntime-gpu
-      storageUri: "s3://manufacturing-models/predictive-maintenance/v2.0"
+      storageUri: 's3://manufacturing-models/predictive-maintenance/v2.0'
       resources:
         requests:
-          cpu: "4"
-          memory: "8Gi"
-          nvidia.com/gpu: "1"
+          cpu: '4'
+          memory: '8Gi'
+          nvidia.com/gpu: '1'
         limits:
-          cpu: "8"
-          memory: "16Gi"
-          nvidia.com/gpu: "1"
+          cpu: '8'
+          memory: '16Gi'
+          nvidia.com/gpu: '1'
     minReplicas: 2
     maxReplicas: 10
-    scaleTarget: 10  # 10ms target latency
+    scaleTarget: 10 # 10ms target latency
     scaleMetric: latency
   transformer:
     containers:
-    - name: feature-extractor
-      image: manufacturing/feature-extractor:v1.0
-      env:
-      - name: FEATURE_WINDOW
-        value: "30s"
-      - name: SAMPLING_RATE
-        value: "1000Hz"
+      - name: feature-extractor
+        image: manufacturing/feature-extractor:v1.0
+        env:
+          - name: FEATURE_WINDOW
+            value: '30s'
+          - name: SAMPLING_RATE
+            value: '1000Hz'
 ```
 
 ### Phase 5: Monitoring and Analytics
@@ -516,20 +518,26 @@ claude-agent monitoring-analytics-agent "import dashboards"
       {
         "title": "URLLC Slice Latency",
         "type": "graph",
-        "targets": [{
-          "expr": "histogram_quantile(0.99, oran_urllc_latency_histogram)",
-          "legendFormat": "P99 Latency (URLLC)"
-        }],
-        "yAxes": [{
-          "unit": "ms",
-          "max": 5
-        }],
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.99, oran_urllc_latency_histogram)",
+            "legendFormat": "P99 Latency (URLLC)"
+          }
+        ],
+        "yAxes": [
+          {
+            "unit": "ms",
+            "max": 5
+          }
+        ],
         "alert": {
-          "conditions": [{
-            "query": {"queryType": ""},
-            "reducer": {"params": [], "type": "last"},
-            "evaluator": {"params": [1], "type": "gt"}
-          }],
+          "conditions": [
+            {
+              "query": { "queryType": "" },
+              "reducer": { "params": [], "type": "last" },
+              "evaluator": { "params": [1], "type": "gt" }
+            }
+          ],
           "executionErrorState": "alerting",
           "noDataState": "no_data",
           "frequency": "10s",
@@ -541,17 +549,19 @@ claude-agent monitoring-analytics-agent "import dashboards"
       {
         "title": "Equipment Connectivity",
         "type": "stat",
-        "targets": [{
-          "expr": "count(up{job=\"manufacturing-equipment\"} == 1)",
-          "legendFormat": "Connected Devices"
-        }],
+        "targets": [
+          {
+            "expr": "count(up{job=\"manufacturing-equipment\"} == 1)",
+            "legendFormat": "Connected Devices"
+          }
+        ],
         "fieldConfig": {
           "defaults": {
             "thresholds": {
               "steps": [
-                {"color": "red", "value": 0},
-                {"color": "yellow", "value": 950},
-                {"color": "green", "value": 1000}
+                { "color": "red", "value": 0 },
+                { "color": "yellow", "value": 950 },
+                { "color": "green", "value": 1000 }
               ]
             }
           }
@@ -560,23 +570,29 @@ claude-agent monitoring-analytics-agent "import dashboards"
       {
         "title": "Energy Efficiency",
         "type": "graph",
-        "targets": [{
-          "expr": "sum(rate(network_transmit_bytes_total[5m])*8/1e9) / sum(node_power_watts)",
-          "legendFormat": "Gbps/Watt"
-        }],
-        "yAxes": [{
-          "unit": "gbps/watt",
-          "min": 0.6
-        }]
+        "targets": [
+          {
+            "expr": "sum(rate(network_transmit_bytes_total[5m])*8/1e9) / sum(node_power_watts)",
+            "legendFormat": "Gbps/Watt"
+          }
+        ],
+        "yAxes": [
+          {
+            "unit": "gbps/watt",
+            "min": 0.6
+          }
+        ]
       },
       {
         "title": "Predictive Maintenance Alerts",
         "type": "table",
-        "targets": [{
-          "expr": "manufacturing_equipment_anomaly_score > 0.8",
-          "format": "table",
-          "instant": true
-        }]
+        "targets": [
+          {
+            "expr": "manufacturing_equipment_anomaly_score > 0.8",
+            "format": "table",
+            "instant": true
+          }
+        ]
       }
     ]
   }
@@ -662,7 +678,7 @@ else
   echo "✗ Connected devices: ${CONNECTED_DEVICES}/1000 - below target"
 fi
 
-# Test 3: Energy Efficiency  
+# Test 3: Energy Efficiency
 echo "Testing energy efficiency (target: >0.6 Gbps/W)..."
 EFFICIENCY=$(kubectl exec -n monitoring prometheus-0 -- \
   promtool query instant 'sum(rate(network_transmit_bytes_total[5m])*8/1e9) / sum(node_power_watts)' | \
@@ -736,35 +752,35 @@ EOF
 
 ### Performance Metrics Achieved
 
-| Metric | Requirement | Achieved | Status |
-|--------|-------------|----------|---------|
-| URLLC Latency (P99) | &lt;1ms | 0.8ms | ✅ |
-| Network Reliability | 99.99% | 99.997% | ✅ |
-| Energy Efficiency | >0.6 Gbps/W | 0.73 Gbps/W | ✅ |
-| Device Connectivity | 1000 devices | 1000 devices | ✅ |
-| AI/ML Inference (P99) | &lt;10ms | 7.2ms | ✅ |
-| Deployment Time | &lt;4 hours | 2.5 hours | ✅ |
+| Metric                | Requirement  | Achieved     | Status |
+| --------------------- | ------------ | ------------ | ------ |
+| URLLC Latency (P99)   | &lt;1ms      | 0.8ms        | ✅     |
+| Network Reliability   | 99.99%       | 99.997%      | ✅     |
+| Energy Efficiency     | >0.6 Gbps/W  | 0.73 Gbps/W  | ✅     |
+| Device Connectivity   | 1000 devices | 1000 devices | ✅     |
+| AI/ML Inference (P99) | &lt;10ms     | 7.2ms        | ✅     |
+| Deployment Time       | &lt;4 hours  | 2.5 hours    | ✅     |
 
 ### Resource Utilization
 
-| Component | CPU Usage | Memory Usage | Storage Usage |
-|-----------|-----------|--------------|---------------|
-| O-RAN Components | 60% (192/320 cores) | 70% (268GB/384GB) | 45% (45TB/100TB) |
-| Edge AI/ML | 25% (80/320 cores) | 20% (76GB/384GB) | 15% (15TB/100TB) |
-| Monitoring & Analytics | 10% (32/320 cores) | 8% (30GB/384GB) | 25% (25TB/100TB) |
-| System Overhead | 5% (16/320 cores) | 2% (10GB/384GB) | 15% (15TB/100TB) |
+| Component              | CPU Usage           | Memory Usage      | Storage Usage    |
+| ---------------------- | ------------------- | ----------------- | ---------------- |
+| O-RAN Components       | 60% (192/320 cores) | 70% (268GB/384GB) | 45% (45TB/100TB) |
+| Edge AI/ML             | 25% (80/320 cores)  | 20% (76GB/384GB)  | 15% (15TB/100TB) |
+| Monitoring & Analytics | 10% (32/320 cores)  | 8% (30GB/384GB)   | 25% (25TB/100TB) |
+| System Overhead        | 5% (16/320 cores)   | 2% (10GB/384GB)   | 15% (15TB/100TB) |
 
 ### Cost Analysis (Monthly)
 
-| Category | Cost |
-|----------|------|
-| Infrastructure (Hardware amortization) | $8,500 |
-| Software Licenses (Nephio, O-RAN SC) | $0 (Open Source) |
-| Network Connectivity | $1,200 |
-| Operations & Maintenance | $3,500 |
-| Energy Consumption | $2,800 |
-| **Total Monthly Cost** | **$16,000** |
-| **Cost per Connected Device** | **$16/device/month** |
+| Category                               | Cost                 |
+| -------------------------------------- | -------------------- |
+| Infrastructure (Hardware amortization) | $8,500               |
+| Software Licenses (Nephio, O-RAN SC)   | $0 (Open Source)     |
+| Network Connectivity                   | $1,200               |
+| Operations & Maintenance               | $3,500               |
+| Energy Consumption                     | $2,800               |
+| **Total Monthly Cost**                 | **$16,000**          |
+| **Cost per Connected Device**          | **$16/device/month** |
 
 ## 🔧 Operational Procedures
 
@@ -778,7 +794,7 @@ echo "=== Daily Manufacturing 5G Network Health Check ==="
 
 # Check critical services
 kubectl get pods -n oran | grep -v Running && echo "⚠️ O-RAN services issue" || echo "✅ O-RAN services healthy"
-kubectl get pods -n ricplt | grep -v Running && echo "⚠️ RIC services issue" || echo "✅ RIC services healthy"  
+kubectl get pods -n ricplt | grep -v Running && echo "⚠️ RIC services issue" || echo "✅ RIC services healthy"
 kubectl get pods -n manufacturing | grep -v Running && echo "⚠️ Manufacturing services issue" || echo "✅ Manufacturing services healthy"
 
 # Check device connectivity
@@ -809,7 +825,7 @@ echo "=== Daily Check Complete ==="
 - Update AI/ML models with latest training data
 - Review security audit logs
 
-#### Monthly Maintenance  
+#### Monthly Maintenance
 
 - Kubernetes cluster updates and patches
 - O-RAN component updates
@@ -831,13 +847,12 @@ echo "=== Daily Check Complete ==="
 
 #### Issue: High URLLC Latency
 
-**Symptoms:** Latency >1ms affecting manufacturing operations
-**Diagnosis:**
+**Symptoms:** Latency >1ms affecting manufacturing operations **Diagnosis:**
 
 ```bash
 # Check network path latency
 kubectl exec -n manufacturing test-pod -- traceroute urllc-gateway
-# Check CPU throttling on RAN components  
+# Check CPU throttling on RAN components
 kubectl top pods -n oran
 # Check for network congestion
 kubectl exec -n monitoring prometheus-0 -- promtool query instant 'rate(network_receive_bytes_total[1m])'
@@ -856,8 +871,7 @@ kubectl patch deployment oran-du -n oran -p '{"spec":{"template":{"spec":{"conta
 
 #### Issue: Device Connectivity Problems
 
-**Symptoms:** Manufacturing devices losing connection
-**Diagnosis:**
+**Symptoms:** Manufacturing devices losing connection **Diagnosis:**
 
 ```bash
 # Check RU status
@@ -922,4 +936,6 @@ claude-agent config-management-agent "setup network"
 - **Time to Market:** 20% faster product development cycles
 - **Competitive Advantage:** First in industry with private 5G manufacturing
 
-This comprehensive enterprise example demonstrates how the Nephio O-RAN Claude Agents system can deliver significant business value through intelligent automation, advanced O-RAN technologies, and seamless enterprise integration.
+This comprehensive enterprise example demonstrates how the Nephio O-RAN Claude Agents system can
+deliver significant business value through intelligent automation, advanced O-RAN technologies, and
+seamless enterprise integration.

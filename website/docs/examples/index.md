@@ -6,13 +6,15 @@ slug: /examples/
 
 # Examples
 
-Welcome to the Examples documentation section. Here you'll find real-world usage scenarios and implementation examples for Nephio O-RAN Claude Agents.
+Welcome to the Examples documentation section. Here you'll find real-world usage scenarios and
+implementation examples for Nephio O-RAN Claude Agents.
 
 ## Available Examples
 
 ### Enterprise Deployments
 
-- [Enterprise 5G Deployment](./enterprise-5g-deployment.md) - Complete enterprise 5G network deployment example
+- [Enterprise 5G Deployment](./enterprise-5g-deployment.md) - Complete enterprise 5G network
+  deployment example
 
 ## Example Categories
 
@@ -49,4 +51,5 @@ Welcome to the Examples documentation section. Here you'll find real-world usage
 
 ## Contributing Examples
 
-We welcome contributions of real-world examples. Please see our contribution guidelines for submitting new examples.
+We welcome contributions of real-world examples. Please see our contribution guidelines for
+submitting new examples.

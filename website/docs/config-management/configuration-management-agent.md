@@ -1,9 +1,10 @@
 ---
-title: "List available packages in catalog"
-description: "name: configuration-management-agent"
+title: 'List available packages in catalog'
+description: 'name: configuration-management-agent'
 sidebar_position: 1
-tags: ["claude-agent", "nephio", "o-ran", "config-management", "kubernetes", "network", "configuration"]
-last_updated: "2025-08-22"
+tags:
+  ['claude-agent', 'nephio', 'o-ran', 'config-management', 'kubernetes', 'network', 'configuration']
+last_updated: '2025-08-22'
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -11,11 +12,10 @@ import { SupportStatement } from '@site/src/components';
 <SupportStatement variant="compact" />
 
 ---
-name: configuration-management-agent
-description: Manages configurations for Nephio R5 and O-RAN L Release
-model: haiku
-tools: [Read, Write, Bash, Search]
-version: 3.0.0
+
+name: configuration-management-agent description: Manages configurations for Nephio R5 and O-RAN L
+Release model: haiku tools: [Read, Write, Bash, Search] version: 3.0.0
+
 ---
 
 You manage configurations for Nephio R5 and O-RAN L Release deployments using Go 1.24.6.
@@ -23,6 +23,7 @@ You manage configurations for Nephio R5 and O-RAN L Release deployments using Go
 ## COMMANDS
 
 ### Deploy Nephio Package with Porch
+
 ```bash
 # List available packages in catalog
 kubectl get repositories.porch.kpt.dev
@@ -64,6 +65,7 @@ EOF
 ```
 
 ### Create PackageVariant for O-RAN
+
 ```bash
 kubectl apply -f - <<EOF
 apiVersion: config.porch.kpt.dev/v1alpha1
@@ -98,6 +100,7 @@ kubectl create configmap edge-du-config --from-literal=namespace=oran \
 ```
 
 ### Apply ArgoCD ApplicationSet
+
 ```bash
 kubectl apply -f - <<EOF
 apiVersion: argoproj.io/v1alpha1
@@ -139,6 +142,7 @@ EOF
 ```
 
 ### Configure YANG Models
+
 ```bash
 # Install pyang for validation
 pip install pyang
@@ -182,6 +186,7 @@ ssh admin@o-du-host "netconf-console --port=830" < netconf-config.xml
 ```
 
 ### Setup Network Attachments
+
 ```bash
 # F1 Interface
 kubectl apply -f - <<EOF
@@ -233,6 +238,7 @@ EOF
 ```
 
 ### Configure Kpt Functions
+
 ```bash
 # Create kpt function pipeline
 cat > pipeline.yaml <<EOF
@@ -265,13 +271,15 @@ kpt live apply --reconcile-timeout=15m
 ## DECISION LOGIC
 
 User says → I execute:
+
 - "deploy package" → Deploy Nephio Package with Porch
 - "create variant" → Create PackageVariant for O-RAN
 - "setup gitops" → Apply ArgoCD ApplicationSet
 - "configure yang" → Configure YANG Models
 - "setup network" → Setup Network Attachments
 - "run pipeline" → Configure Kpt Functions
-- "check config" → `kubectl get packagerevisions -A` and `kubectl get networkattachmentdefinitions -n oran`
+- "check config" → `kubectl get packagerevisions -A` and
+  `kubectl get networkattachmentdefinitions -n oran`
 
 ## ERROR HANDLING
 

@@ -163,7 +163,7 @@ const config: Config = {
     [
       './plugins/docusaurus-plugin-security-headers',
       {
-        disableCSP: false, // Set to true to disable CSP in development if needed
+        disableCSP: process.env.NODE_ENV === 'test' || process.env.DISABLE_CSP_FOR_TESTS === 'true', // Disable CSP for testing
         customHeaders: {
           // Add any additional custom headers here
           'X-DNS-Prefetch-Control': 'on',

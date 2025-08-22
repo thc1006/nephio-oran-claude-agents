@@ -8,11 +8,13 @@ tags: [integration, workflows, deployment, automation]
 
 # Deployment Workflows
 
-This guide provides comprehensive deployment workflows for different use cases and environments using the Nephio O-RAN Claude Agents system.
+This guide provides comprehensive deployment workflows for different use cases and environments
+using the Nephio O-RAN Claude Agents system.
 
 ## 🚀 Standard Deployment Workflow
 
-The standard deployment workflow follows a systematic approach to deploy a complete O-RAN L Release stack using Nephio R5 infrastructure.
+The standard deployment workflow follows a systematic approach to deploy a complete O-RAN L Release
+stack using Nephio R5 infrastructure.
 
 ### Workflow Overview
 
@@ -23,57 +25,57 @@ graph TB
         P2[Security Setup]
         P3[Dependency Check]
     end
-    
+
     subgraph "Phase 2: Infrastructure"
         I1[Cluster Provisioning]
         I2[Nephio R5 Setup]
         I3[GitOps Configuration]
     end
-    
+
     subgraph "Phase 3: Configuration"
         C1[Base Configuration]
         C2[Package Management]
         C3[Network Attachments]
     end
-    
+
     subgraph "Phase 4: Network Functions"
         N1[Near-RT RIC Deployment]
         N2[Non-RT RIC/SMO Setup]
         N3[O-RAN CU/DU/RU Deployment]
     end
-    
+
     subgraph "Phase 5: Operations"
         O1[Monitoring Setup]
         O2[Data Analytics Pipeline]
         O3[Performance Optimization]
     end
-    
+
     subgraph "Phase 6: Validation"
         V1[Interface Testing]
         V2[End-to-End Validation]
         V3[Security Compliance Check]
     end
-    
+
     P1 --> P2
     P2 --> P3
     P3 --> I1
-    
+
     I1 --> I2
     I2 --> I3
     I3 --> C1
-    
+
     C1 --> C2
     C2 --> C3
     C3 --> N1
-    
+
     N1 --> N2
     N2 --> N3
     N3 --> O1
-    
+
     O1 --> O2
     O2 --> O3
     O3 --> V1
-    
+
     V1 --> V2
     V2 --> V3
 ```
@@ -378,44 +380,44 @@ graph TB
         FLEET[Fleet Manager]
         GLOBAL_ARGOCD[Global ArgoCD]
     end
-    
+
     subgraph "Regional Hub - US East"
         RH1[Regional Hub Cluster]
         RH1_ARGOCD[Regional ArgoCD]
         RH1_PORCH[Regional Porch]
     end
-    
+
     subgraph "Regional Hub - EU West"
         RH2[Regional Hub Cluster]
         RH2_ARGOCD[Regional ArgoCD]
         RH2_PORCH[Regional Porch]
     end
-    
+
     subgraph "Edge Sites - US East"
         E1[Manufacturing Site]
         E2[Healthcare Site]
         E3[Smart City Site]
     end
-    
+
     subgraph "Edge Sites - EU West"
         E4[Automotive Site]
         E5[Logistics Site]
         E6[Energy Site]
     end
-    
+
     GM --> FLEET
     FLEET --> GLOBAL_ARGOCD
-    
+
     GLOBAL_ARGOCD --> RH1_ARGOCD
     GLOBAL_ARGOCD --> RH2_ARGOCD
-    
+
     RH1_ARGOCD --> RH1_PORCH
     RH2_ARGOCD --> RH2_PORCH
-    
+
     RH1_PORCH --> E1
     RH1_PORCH --> E2
     RH1_PORCH --> E3
-    
+
     RH2_PORCH --> E4
     RH2_PORCH --> E5
     RH2_PORCH --> E6
@@ -428,7 +430,7 @@ graph TB
    ```bash
    # Deploy global management cluster
    claude-agent orchestrator-agent "deploy global management"
-   
+
    # Setup fleet management
    claude-agent infrastructure-agent "setup fleet management"
    ```
@@ -438,7 +440,7 @@ graph TB
    ```bash
    # Deploy regional hubs
    claude-agent orchestrator-agent "deploy regional hubs"
-   
+
    # Configure cross-region networking
    claude-agent infrastructure-agent "setup cross-region networking"
    ```
@@ -448,7 +450,7 @@ graph TB
    ```bash
    # Create PackageVariantSet for edge sites
    claude-agent orchestrator-agent "create edge package variants"
-   
+
    # Deploy edge-specific configurations
    claude-agent config-management-agent "deploy edge configurations"
    ```
@@ -458,7 +460,7 @@ graph TB
    ```bash
    # Deploy lightweight O-RAN components
    claude-agent network-functions-agent "deploy edge oran components"
-   
+
    # Configure network slices per site
    claude-agent orchestrator-agent "deploy network slice urllc"
    ```
@@ -468,7 +470,7 @@ graph TB
    ```bash
    # Setup distributed monitoring
    claude-agent monitoring-analytics-agent "setup edge monitoring"
-   
+
    # Deploy edge AI/ML
    claude-agent data-analytics-agent "setup edge ml"
    ```
@@ -494,42 +496,42 @@ graph TB
         SENSORS[IoT Sensors]
         SCADA[SCADA Systems]
     end
-    
+
     subgraph "Edge Computing"
         EDGE_5G[Private 5G Network]
         EDGE_K8S[Edge Kubernetes]
         ORAN_EDGE[O-RAN Edge Functions]
         AI_EDGE[Edge AI/ML]
     end
-    
+
     subgraph "Factory IT"
         MES[Manufacturing Execution System]
         ERP[Enterprise Resource Planning]
         HISTORIAN[Process Historian]
         ANALYTICS[Manufacturing Analytics]
     end
-    
+
     subgraph "Cloud Integration"
         CLOUD_ANALYTICS[Cloud Analytics]
         DIGITAL_TWIN[Digital Twin Platform]
         SUPPLY_CHAIN[Supply Chain Integration]
     end
-    
+
     PLC --> EDGE_5G
     ROBOTS --> EDGE_5G
     SENSORS --> EDGE_5G
     SCADA --> EDGE_5G
-    
+
     EDGE_5G --> EDGE_K8S
     EDGE_K8S --> ORAN_EDGE
     EDGE_K8S --> AI_EDGE
-    
+
     ORAN_EDGE --> MES
     AI_EDGE --> MES
     MES --> ERP
     MES --> HISTORIAN
     HISTORIAN --> ANALYTICS
-    
+
     ANALYTICS --> CLOUD_ANALYTICS
     CLOUD_ANALYTICS --> DIGITAL_TWIN
     DIGITAL_TWIN --> SUPPLY_CHAIN
@@ -542,7 +544,7 @@ graph TB
    ```bash
    # Deploy ruggedized edge cluster
    claude-agent infrastructure-agent "create industrial cluster"
-   
+
    # Configure OT/IT network segmentation
    claude-agent security-compliance-agent "setup industrial security"
    ```
@@ -552,7 +554,7 @@ graph TB
    ```bash
    # Deploy ultra-low latency slice
    claude-agent orchestrator-agent "deploy network slice urllc"
-   
+
    # Configure deterministic networking
    claude-agent config-management-agent "configure deterministic network"
    ```
@@ -562,7 +564,7 @@ graph TB
    ```bash
    # Deploy manufacturing-specific O-RAN functions
    claude-agent network-functions-agent "deploy manufacturing oran"
-   
+
    # Setup OPC-UA integration
    claude-agent config-management-agent "setup opcua integration"
    ```
@@ -572,7 +574,7 @@ graph TB
    ```bash
    # Deploy edge AI for predictive maintenance
    claude-agent data-analytics-agent "deploy predictive maintenance"
-   
+
    # Setup real-time anomaly detection
    claude-agent performance-optimization-agent "setup anomaly detection"
    ```
@@ -582,7 +584,7 @@ graph TB
    ```bash
    # Run industrial-specific tests
    claude-agent testing-validation-agent "test industrial requirements"
-   
+
    # Validate safety systems
    claude-agent testing-validation-agent "test safety validation"
    ```
@@ -605,7 +607,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
    ```bash
    # One-command research deployment
    claude-agent orchestrator-agent "deploy research stack"
-   
+
    # Enable development mode
    export ORAN_RESEARCH_MODE=true
    ```
@@ -615,7 +617,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
    ```bash
    # Deploy experimental xApps
    claude-agent network-functions-agent "deploy experimental xapp"
-   
+
    # Setup A/B testing framework
    claude-agent testing-validation-agent "setup ab testing"
    ```
@@ -625,7 +627,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
    ```bash
    # Enhanced data collection
    claude-agent data-analytics-agent "setup research analytics"
-   
+
    # Export research data
    claude-agent data-analytics-agent "export research data"
    ```
@@ -635,7 +637,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
    ```bash
    # Run chaos experiments
    claude-agent testing-validation-agent "run chaos tests"
-   
+
    # Analyze resilience patterns
    claude-agent performance-optimization-agent "analyze resilience"
    ```
@@ -741,4 +743,5 @@ claude-agent orchestrator-agent "resume deployment from infrastructure"
 - Create runbooks for operational procedures
 - Keep security and compliance documentation current
 
-These workflows provide a solid foundation for deploying O-RAN networks using the Nephio O-RAN Claude Agents system across various use cases and environments.
+These workflows provide a solid foundation for deploying O-RAN networks using the Nephio O-RAN
+Claude Agents system across various use cases and environments.
