@@ -4,7 +4,7 @@
  */
 
 import { readFileSync, readdirSync, statSync } from 'fs';
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
 import { execSync } from 'child_process';
 
 interface ValidationResult {
@@ -234,20 +234,81 @@ class ContentValidator {
     }
     
     // Check for relative links that might break
+    errors.push(...this.validateRelativeLinks(content, filePath));
+    
+    return errors;
+  }
+
+  /**
+   * Validate relative links in markdown content
+   */
+  private validateRelativeLinks(content: string, filePath: string): string[] {
+    const errors: string[] = [];
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
     let linkMatch;
     
     while ((linkMatch = linkRegex.exec(content)) !== null) {
       const linkUrl = linkMatch[2];
       
-      // Check for potentially problematic relative links
-      if (linkUrl.startsWith('./') || linkUrl.startsWith('../')) {
-        // This is a basic check - more sophisticated validation could be added
-        if (!linkUrl.endsWith('.md') && !linkUrl.endsWith('.mdx') && !linkUrl.includes('#')) {
+      // Skip absolute URLs and anchors
+      if (!linkUrl.startsWith('./') && !linkUrl.startsWith('../')) {
+        continue;
+      }
+      
+      // Skip hash-only links (internal page anchors)
+      if (linkUrl.startsWith('#')) {
+        continue;
+      }
+      
+      // Extract the path part (remove hash fragment if present)
+      const pathPart = linkUrl.split('#')[0];
+      
+      // Skip if it's just a hash link
+      if (!pathPart) {
+        continue;
+      }
+      
+      // Resolve the path relative to the current file
+      const fileDir = dirname(join(this.rootPath, filePath.replace(this.rootPath, '').replace(/^[\/\\]/, '')));
+      const resolvedPath = join(fileDir, pathPart);
+      
+      try {
+        const fs = require('fs');
+        
+        let targetExists = false;
+        
+        if (pathPart.endsWith('/')) {
+          // Directory link - check for index.md or index.mdx
+          const indexMd = join(resolvedPath, 'index.md');
+          const indexMdx = join(resolvedPath, 'index.mdx');
+          targetExists = fs.existsSync(indexMd) || fs.existsSync(indexMdx);
+        } else if (pathPart.endsWith('.md') || pathPart.endsWith('.mdx')) {
+          // Direct file link
+          targetExists = fs.existsSync(resolvedPath);
+        } else {
+          // Could be a directory without trailing slash or a file without extension
+          // Check if it's a directory with index file
+          const indexMd = join(resolvedPath, 'index.md');
+          const indexMdx = join(resolvedPath, 'index.mdx');
+          const directFile = resolvedPath + '.md';
+          const directFileMdx = resolvedPath + '.mdx';
+          
+          targetExists = fs.existsSync(indexMd) || 
+                        fs.existsSync(indexMdx) || 
+                        fs.existsSync(directFile) || 
+                        fs.existsSync(directFileMdx) ||
+                        fs.existsSync(resolvedPath);
+        }
+        
+        if (!targetExists) {
           errors.push(
-            `Potentially broken relative link in ${filePath}: "${linkUrl}"`
+            `Broken relative link in ${filePath}: "${linkUrl}" (resolved to: ${resolvedPath})`
           );
         }
+        
+      } catch (error) {
+        // If we can't check the file system, issue a warning rather than an error
+        console.warn(`Warning: Could not validate link "${linkUrl}" in ${filePath}: ${error.message}`);
       }
     }
     

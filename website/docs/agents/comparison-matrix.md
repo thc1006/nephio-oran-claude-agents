@@ -15,15 +15,15 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 | Agent | Model | Primary Domain | Complexity | Key Capability |
 |-------|-------|---------------|------------|----------------|
 | [**Orchestrator**](./orchestrator-agent.md) | Opus | Workflow Management | ⭐⭐⭐⭐⭐ | Multi-cluster coordination |
-| [**Infrastructure**](./infrastructure-agent.md) | Sonnet | Infrastructure | ⭐⭐⭐⭐ | Cluster provisioning |
-| [**Config Management**](./config-management-agent.md) | Haiku | Configuration | ⭐⭐⭐ | Porch package deployment |
-| [**Network Functions**](./network-functions-agent.md) | Haiku | O-RAN Components | ⭐⭐⭐⭐ | RIC/SMO deployment |
-| [**Monitoring Analytics**](./monitoring-analytics-agent.md) | Sonnet | Observability | ⭐⭐⭐ | Metrics & dashboards |
-| [**Data Analytics**](./data-analytics-agent.md) | Sonnet | Data Processing | ⭐⭐⭐⭐ | ML/AI pipelines |
-| [**Security Compliance**](./security-compliance-agent.md) | Sonnet | Security | ⭐⭐⭐⭐⭐ | WG11 compliance |
-| [**Performance Optimization**](./performance-optimization-agent.md) | Opus | Performance | ⭐⭐⭐⭐⭐ | Energy efficiency |
-| [**Testing Validation**](./testing-validation-agent.md) | Haiku | Quality Assurance | ⭐⭐⭐ | E2E testing |
-| [**Dependency Doctor**](./dependency-doctor-agent.md) | Sonnet | Troubleshooting | ⭐⭐⭐ | Issue resolution |
+| [**Infrastructure**](./infrastructure/nephio-infrastructure-agent.mdx) | Sonnet | Infrastructure | ⭐⭐⭐⭐ | Cluster provisioning |
+| [**Config Management**](./config-management/configuration-management-agent.mdx) | Haiku | Configuration | ⭐⭐⭐ | Porch package deployment |
+| **Network Functions** | Haiku | O-RAN Components | ⭐⭐⭐⭐ | RIC/SMO deployment |
+| [**Monitoring Analytics**](./monitoring/monitoring-analytics-agent.mdx) | Sonnet | Observability | ⭐⭐⭐ | Metrics & dashboards |
+| [**Data Analytics**](./data-analytics/data-analytics-agent.mdx) | Sonnet | Data Processing | ⭐⭐⭐⭐ | ML/AI pipelines |
+| **Security Compliance** | Sonnet | Security | ⭐⭐⭐⭐⭐ | WG11 compliance |
+| **Performance Optimization** | Opus | Performance | ⭐⭐⭐⭐⭐ | Energy efficiency |
+| **Testing Validation** | Haiku | Quality Assurance | ⭐⭐⭐ | E2E testing |
+| [**Dependency Doctor**](./testing/oran-nephio-dep-doctor-agent.mdx) | Sonnet | Troubleshooting | ⭐⭐⭐ | Issue resolution |
 
 ## 📊 Detailed Capability Matrix
 
