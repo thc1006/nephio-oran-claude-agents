@@ -1,0 +1,15 @@
+{
+  "label": "API 參考文件",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "完整 API 參考文件",
+    "description": "完整的 API 文件，包含 REST 端點、gRPC 服務、事件處理和資料結構說明。",
+    "keywords": ["api", "參考文件", "端點", "grpc", "rest", "資料結構"]
+  },
+  "customProps": {
+    "icon": "📡",
+    "audience": "開發人員",
+    "badge": "最新"
+  }
+}

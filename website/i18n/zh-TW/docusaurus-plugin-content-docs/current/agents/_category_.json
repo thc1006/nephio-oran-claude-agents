@@ -1,0 +1,10 @@
+{
+  "label": "智能代理",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "智能代理文件",
+    "description": "完整記錄所有 10 個專業化 Nephio O-RAN Claude 智能代理的詳細文件",
+    "keywords": ["智能代理", "文件", "api", "功能", "配置設定"]
+  }
+}

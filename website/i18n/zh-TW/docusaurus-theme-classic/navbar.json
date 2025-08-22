@@ -1,22 +1,22 @@
 {
   "title": {
-    "message": "Nephio O-RAN Claude 代理",
+    "message": "Nephio O-RAN Claude 代理平台",
     "description": "The title in the navbar"
   },
   "logo.alt": {
-    "message": "Nephio O-RAN Claude 代理標誌",
+    "message": "Nephio O-RAN Claude 代理平台標誌",
     "description": "The alt text of navbar logo"
   },
   "item.label.Tutorial": {
-    "message": "教程",
+    "message": "快速入門",
     "description": "Navbar item with label Tutorial"
   },
   "item.label.Guides": {
-    "message": "指南",
+    "message": "使用指南",
     "description": "Navbar item with label Guides"
   },
   "item.label.GitHub": {
-    "message": "GitHub",
+    "message": "GitHub 程式庫",
     "description": "Navbar item with label GitHub"
   }
 }

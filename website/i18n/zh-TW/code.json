@@ -44,7 +44,7 @@
     "description": "The label of the link targeting the tag list page"
   },
   "theme.colorToggle.ariaLabel.mode.system": {
-    "message": "system mode",
+    "message": "系統模式",
     "description": "The name for the system color mode"
   },
   "theme.colorToggle.ariaLabel.mode.light": {
@@ -255,11 +255,11 @@
     "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
   },
   "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
-    "message": "Expand the dropdown",
+    "message": "展開下拉選單",
     "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
   },
   "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
-    "message": "Collapse the dropdown",
+    "message": "收起下拉選單",
     "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
   },
   "theme.docs.sidebar.expandButtonTitle": {
@@ -363,7 +363,7 @@
     "description": "The text for the link to report missing results"
   },
   "theme.SearchModal.placeholder": {
-    "message": "搜尋文檔",
+    "message": "搜尋技術文件",
     "description": "The placeholder of the input of the DocSearch pop-up modal"
   },
   "theme.SearchPage.documentsFound.plurals": {
@@ -375,7 +375,7 @@
     "description": "The search page title for non-empty query"
   },
   "theme.SearchPage.emptyResultsTitle": {
-    "message": "在文件中搜尋",
+    "message": "搜尋 O-RAN 技術文件",
     "description": "The search page title for empty query"
   },
   "theme.SearchPage.inputPlaceholder": {
@@ -452,5 +452,361 @@
   "theme.tags.tagsPageTitle": {
     "message": "標籤",
     "description": "The title of the tag list page"
+  },
+  "theme.common.loading": {
+    "message": "載入中...",
+    "description": "The loading text"
+  },
+  "theme.common.close": {
+    "message": "關閉",
+    "description": "The close button text"
+  },
+  "theme.common.submit": {
+    "message": "提交",
+    "description": "The submit button text"
+  },
+  "theme.common.cancel": {
+    "message": "取消",
+    "description": "The cancel button text"
+  },
+  "theme.common.save": {
+    "message": "儲存",
+    "description": "The save button text"
+  },
+  "theme.common.delete": {
+    "message": "刪除",
+    "description": "The delete button text"
+  },
+  "theme.common.edit": {
+    "message": "編輯",
+    "description": "The edit button text"
+  },
+  "theme.common.more": {
+    "message": "更多",
+    "description": "The more button text"
+  },
+  "theme.common.less": {
+    "message": "較少",
+    "description": "The less button text"
+  },
+  "theme.common.showMore": {
+    "message": "顯示更多",
+    "description": "The show more button text"
+  },
+  "theme.common.showLess": {
+    "message": "顯示較少",
+    "description": "The show less button text"
+  },
+  "theme.common.expand": {
+    "message": "展開",
+    "description": "The expand button text"
+  },
+  "theme.common.collapse": {
+    "message": "收起",
+    "description": "The collapse button text"
+  },
+  "theme.common.toggle": {
+    "message": "切換",
+    "description": "The toggle button text"
+  },
+  "theme.common.required": {
+    "message": "必填",
+    "description": "The required field text"
+  },
+  "theme.common.optional": {
+    "message": "選填",
+    "description": "The optional field text"
+  },
+  "theme.common.yes": {
+    "message": "是",
+    "description": "The yes button text"
+  },
+  "theme.common.no": {
+    "message": "否",
+    "description": "The no button text"
+  },
+  "theme.common.ok": {
+    "message": "確定",
+    "description": "The OK button text"
+  },
+  "theme.common.continue": {
+    "message": "繼續",
+    "description": "The continue button text"
+  },
+  "theme.common.back": {
+    "message": "返回",
+    "description": "The back button text"
+  },
+  "theme.common.next": {
+    "message": "下一步",
+    "description": "The next button text"
+  },
+  "theme.common.previous": {
+    "message": "上一步",
+    "description": "The previous button text"
+  },
+  "theme.common.refresh": {
+    "message": "重新整理",
+    "description": "The refresh button text"
+  },
+  "theme.common.reload": {
+    "message": "重新載入",
+    "description": "The reload button text"
+  },
+  "theme.common.reset": {
+    "message": "重設",
+    "description": "The reset button text"
+  },
+  "theme.common.clear": {
+    "message": "清除",
+    "description": "The clear button text"
+  },
+  "theme.common.apply": {
+    "message": "套用",
+    "description": "The apply button text"
+  },
+  "theme.common.filter": {
+    "message": "篩選",
+    "description": "The filter button text"
+  },
+  "theme.common.sort": {
+    "message": "排序",
+    "description": "The sort button text"
+  },
+  "theme.common.download": {
+    "message": "下載",
+    "description": "The download button text"
+  },
+  "theme.common.upload": {
+    "message": "上傳",
+    "description": "The upload button text"
+  },
+  "theme.common.share": {
+    "message": "分享",
+    "description": "The share button text"
+  },
+  "theme.common.print": {
+    "message": "列印",
+    "description": "The print button text"
+  },
+  "theme.common.settings": {
+    "message": "設定",
+    "description": "The settings button text"
+  },
+  "theme.common.preferences": {
+    "message": "偏好設定",
+    "description": "The preferences button text"
+  },
+  "theme.common.help": {
+    "message": "說明",
+    "description": "The help button text"
+  },
+  "theme.common.support": {
+    "message": "支援",
+    "description": "The support button text"
+  },
+  "theme.common.about": {
+    "message": "關於",
+    "description": "The about button text"
+  },
+  "theme.common.version": {
+    "message": "版本",
+    "description": "The version text"
+  },
+  "theme.common.language": {
+    "message": "語言",
+    "description": "The language text"
+  },
+  "theme.common.theme": {
+    "message": "主題",
+    "description": "The theme text"
+  },
+  "homepage.hero.title": {
+    "message": "Nephio O-RAN Claude 代理平台",
+    "description": "The main hero title on homepage"
+  },
+  "homepage.hero.subtitle": {
+    "message": "智慧化雲原生 O-RAN 部署編排解決方案",
+    "description": "The hero subtitle on homepage"
+  },
+  "homepage.hero.getStarted": {
+    "message": "立即開始 - 5分鐘快速上手",
+    "description": "Get started button text"
+  },
+  "homepage.features.smartOrchestration.title": {
+    "message": "智慧化 O-RAN 編排",
+    "description": "Smart orchestration feature title"
+  },
+  "homepage.features.smartOrchestration.description": {
+    "message": "運用 Claude AI 智慧代理技術，自動化管理 O-RAN 網路功能的部署與編排。從 RIC 平台到 xApps 應用，一站式解決複雜的電信級基礎設施管理需求。",
+    "description": "Smart orchestration feature description"
+  },
+  "homepage.features.enterpriseSolution.title": {
+    "message": "專業電信解決方案",
+    "description": "Enterprise solution feature title"
+  },
+  "homepage.features.enterpriseSolution.description": {
+    "message": "專為台灣電信產業設計的企業級平台。整合 Nephio、Kubernetes 與 O-RAN 標準，讓您專注於 5G 網路創新 而非繁瑣的基礎設施維護工作。",
+    "description": "Enterprise solution feature description"
+  },
+  "homepage.features.cloudNative.title": {
+    "message": "雲原生架構優勢",
+    "description": "Cloud native architecture feature title"
+  },
+  "homepage.features.cloudNative.description": {
+    "message": "基於容器化與微服務架構，提供彈性擴展與高可用性。符合 CNF（Cloud Native Functions）標準，滿足電信級服務品質要求。",
+    "description": "Cloud native architecture feature description"
+  },
+  "component.compatibilityMatrix.title": {
+    "message": "版本相容性對照表",
+    "description": "Compatibility matrix component title"
+  },
+  "component.compatibilityMatrix.component": {
+    "message": "元件",
+    "description": "Component column header"
+  },
+  "component.compatibilityMatrix.version": {
+    "message": "版本",
+    "description": "Version column header"
+  },
+  "component.compatibilityMatrix.status": {
+    "message": "狀態",
+    "description": "Status column header"
+  },
+  "component.compatibilityMatrix.lastTested": {
+    "message": "最後測試",
+    "description": "Last tested column header"
+  },
+  "component.compatibilityMatrix.notes": {
+    "message": "備註",
+    "description": "Notes column header"
+  },
+  "component.compatibilityMatrix.statusLegend": {
+    "message": "狀態說明:",
+    "description": "Status legend title"
+  },
+  "component.compatibilityMatrix.supported": {
+    "message": "支援",
+    "description": "Supported status label"
+  },
+  "component.compatibilityMatrix.deprecated": {
+    "message": "已棄用",
+    "description": "Deprecated status label"
+  },
+  "component.compatibilityMatrix.experimental": {
+    "message": "實驗性",
+    "description": "Experimental status label"
+  },
+  "component.compatibilityMatrix.notSupported": {
+    "message": "不支援",
+    "description": "Not supported status label"
+  },
+  "component.supportStatement.title.full": {
+    "message": "版本支援聲明",
+    "description": "Full version support statement title"
+  },
+  "component.supportStatement.title.compact": {
+    "message": "支援版本",
+    "description": "Compact version support statement title"
+  },
+  "component.supportStatement.updated": {
+    "message": "更新時間:",
+    "description": "Last updated prefix"
+  },
+  "component.supportStatement.description": {
+    "message": "本技術文件和相關的 Claude 代理已在以下 O-RAN、Nephio 和相關技術的標準版本上進行測試並提供支援。",
+    "description": "Support statement description"
+  },
+  "component.supportStatement.goDescription": {
+    "message": "代理執行所需的 Go 運行環境版本",
+    "description": "Go version description"
+  },
+  "component.supportStatement.oranDescription": {
+    "message": "O-RAN 聯盟 L-Release 規範和實作",
+    "description": "O-RAN version description"
+  },
+  "component.supportStatement.nephioDescription": {
+    "message": "Nephio R5 套件編排和 GitOps 工作流程",
+    "description": "Nephio version description"
+  },
+  "component.supportStatement.kptDescription": {
+    "message": "使用 kpt 進行配置即數據的套件管理",
+    "description": "kpt version description"
+  },
+  "component.supportStatement.note": {
+    "message": "備註:",
+    "description": "Note prefix"
+  },
+  "component.supportStatement.noteText": {
+    "message": "雖然這些是標準支援版本，但許多代理可能在相鄰版本上也能正常運作。請參考各代理的技術文件了解具體的相容性需求。",
+    "description": "Support statement note text"
+  },
+  "component.supportStatement.policy": {
+    "message": "支援政策:",
+    "description": "Support policy prefix"
+  },
+  "component.supportStatement.policyText": {
+    "message": "我們遵循 Kubernetes 的支援政策，維持與最新三個次要版本的相容性。",
+    "description": "Support policy text"
+  },
+  "theme.common.darkMode": {
+    "message": "深色模式",
+    "description": "The dark mode text"
+  },
+  "theme.common.lightMode": {
+    "message": "淺色模式",
+    "description": "The light mode text"
+  },
+  "theme.common.systemMode": {
+    "message": "系統模式",
+    "description": "The system mode text"
+  },
+  "theme.common.auto": {
+    "message": "自動",
+    "description": "The auto text"
+  },
+  "theme.common.manual": {
+    "message": "手動",
+    "description": "The manual text"
+  },
+  "theme.common.enabled": {
+    "message": "已啟用",
+    "description": "The enabled text"
+  },
+  "theme.common.disabled": {
+    "message": "已停用",
+    "description": "The disabled text"
+  },
+  "theme.common.online": {
+    "message": "線上",
+    "description": "The online status text"
+  },
+  "theme.common.offline": {
+    "message": "離線",
+    "description": "The offline status text"
+  },
+  "theme.common.connected": {
+    "message": "已連線",
+    "description": "The connected status text"
+  },
+  "theme.common.disconnected": {
+    "message": "已中斷連線",
+    "description": "The disconnected status text"
+  },
+  "theme.common.success": {
+    "message": "成功",
+    "description": "The success status text"
+  },
+  "theme.common.error": {
+    "message": "錯誤",
+    "description": "The error status text"
+  },
+  "theme.common.warning": {
+    "message": "警告",
+    "description": "The warning status text"
+  },
+  "theme.common.info": {
+    "message": "資訊",
+    "description": "The info status text"
   }
 }
