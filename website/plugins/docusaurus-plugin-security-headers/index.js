@@ -1,7 +1,7 @@
 /**
  * Docusaurus Security Headers Plugin
  * Adds comprehensive security headers to all responses
- * 
+ *
  * Security Features:
  * - Content Security Policy (CSP) with strict directives
  * - HTTP Strict Transport Security (HSTS)
@@ -14,34 +14,38 @@
 
 module.exports = function securityHeadersPlugin(context, options) {
   const isDevelopment = process.env.NODE_ENV === 'development';
-  
+
   // Default security headers configuration
   const defaultHeaders = {
     // Prevent clickjacking attacks
     'X-Frame-Options': 'DENY',
-    
+
     // Prevent MIME type sniffing
     'X-Content-Type-Options': 'nosniff',
-    
+
     // Enable XSS protection (legacy browsers)
     'X-XSS-Protection': '1; mode=block',
-    
+
     // Control referrer information
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    
+
     // Permissions Policy (formerly Feature Policy)
-    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
-    
+    'Permissions-Policy':
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
+
     // Cross-Origin security headers for zero-trust implementation
     'Cross-Origin-Embedder-Policy': 'require-corp',
     'Cross-Origin-Opener-Policy': 'same-origin',
     'Cross-Origin-Resource-Policy': 'same-origin',
-    
+
     // HTTP Strict Transport Security (HSTS)
     // Only in production to avoid development issues
-    ...(isDevelopment ? {} : {
-      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'
-    })
+    ...(isDevelopment
+      ? {}
+      : {
+          'Strict-Transport-Security':
+            'max-age=31536000; includeSubDomains; preload',
+        }),
   };
 
   // Content Security Policy configuration - HARDENED FOR ZERO-TRUST
@@ -57,14 +61,14 @@ module.exports = function securityHeadersPlugin(context, options) {
       // Algolia search - specific domains only
       'https://cdn.jsdelivr.net', // For Algolia DocSearch
       'https://*.algolia.net',
-      'https://*.algolianet.com'
+      'https://*.algolianet.com',
     ],
     'style-src': [
       "'self'",
       // Required for Docusaurus theming
       isDevelopment ? "'unsafe-inline'" : "'nonce-{{nonce}}'",
       // Specific font providers only
-      'https://fonts.googleapis.com'
+      'https://fonts.googleapis.com',
     ],
     'img-src': [
       "'self'",
@@ -74,13 +78,13 @@ module.exports = function securityHeadersPlugin(context, options) {
       'https://www.google-analytics.com',
       'https://github.com', // For GitHub badges/images
       'https://img.shields.io', // For status badges
-      'https://raw.githubusercontent.com' // For documentation images
+      'https://raw.githubusercontent.com', // For documentation images
     ],
     'font-src': [
       "'self'",
       'data:',
       // Google Fonts only
-      'https://fonts.gstatic.com'
+      'https://fonts.gstatic.com',
     ],
     'connect-src': [
       "'self'",
@@ -94,7 +98,7 @@ module.exports = function securityHeadersPlugin(context, options) {
       'https://*.algolianet.com',
       // WebSocket for hot reload in development
       isDevelopment ? 'ws://localhost:*' : '',
-      isDevelopment ? 'http://localhost:*' : ''
+      isDevelopment ? 'http://localhost:*' : '',
     ].filter(Boolean),
     'frame-src': ["'none'"],
     'frame-ancestors': ["'none'"],
@@ -105,9 +109,11 @@ module.exports = function securityHeadersPlugin(context, options) {
     'worker-src': ["'self'", 'blob:'],
     'media-src': ["'self'"],
     // Upgrade insecure requests in production
-    ...(isDevelopment ? {} : {
-      'upgrade-insecure-requests': []
-    })
+    ...(isDevelopment
+      ? {}
+      : {
+          'upgrade-insecure-requests': [],
+        }),
   };
 
   // Build CSP header string
@@ -121,7 +127,7 @@ module.exports = function securityHeadersPlugin(context, options) {
   const headers = {
     ...defaultHeaders,
     'Content-Security-Policy': options.disableCSP ? undefined : cspHeader,
-    ...options.customHeaders
+    ...options.customHeaders,
   };
 
   return {
@@ -134,23 +140,23 @@ module.exports = function securityHeadersPlugin(context, options) {
 
       return {
         devServer: {
-          headers: headers
-        }
+          headers: headers,
+        },
       };
     },
 
     async postBuild({ outDir }) {
       const fs = require('fs').promises;
       const path = require('path');
-      
+
       // Create _headers file for Netlify
       const headersContent = Object.entries(headers)
         .filter(([_, value]) => value !== undefined)
         .map(([key, value]) => `  ${key}: ${value}`)
         .join('\n');
-      
+
       const netlifyHeaders = `/*\n${headersContent}`;
-      
+
       await fs.writeFile(
         path.join(outDir, '_headers'),
         netlifyHeaders,
@@ -180,26 +186,26 @@ module.exports = function securityHeadersPlugin(context, options) {
             tagName: 'meta',
             attributes: {
               'http-equiv': 'X-UA-Compatible',
-              content: 'IE=edge'
-            }
+              content: 'IE=edge',
+            },
           },
           {
             tagName: 'meta',
             attributes: {
               name: 'format-detection',
-              content: 'telephone=no'
-            }
+              content: 'telephone=no',
+            },
           },
           // O-RAN security compliance indicator
           {
             tagName: 'meta',
             attributes: {
               name: 'security-compliance',
-              content: 'oran-wg11-partial nephio-r5-partial'
-            }
-          }
-        ]
+              content: 'oran-wg11-partial nephio-r5-partial',
+            },
+          },
+        ],
       };
-    }
+    },
   };
 };
