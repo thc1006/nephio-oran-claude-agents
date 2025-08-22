@@ -1,0 +1,10 @@
+{
+  "label": "系統架構",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "系統架構",
+    "description": "Nephio O-RAN Claude 智能代理的完整系統架構文件",
+    "keywords": ["架構", "設計", "系統", "元件", "整合"]
+  }
+}

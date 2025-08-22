@@ -519,8 +519,8 @@ export ORCHESTRATOR_LOG_LEVEL=debug
 
 ## Related Documentation
 
-- **[Infrastructure Agent](./infrastructure-agent.md)**: Cluster provisioning and management
-- **[Configuration Management Agent](./config-management-agent.md)**: Configuration deployment
-- **[Network Functions Agent](./network-functions-agent.md)**: O-RAN component deployment
+- **[Infrastructure Agent](./infrastructure/nephio-infrastructure-agent.mdx)**: Cluster provisioning and management
+- **[Configuration Management Agent](./config-management/configuration-management-agent.mdx)**: Configuration deployment
+- **Network Functions Agent**: O-RAN component deployment (Coming Soon)
 - **[Architecture Overview](../architecture/overview.md)**: System architecture details
 - **[Integration Patterns](../integration/)**: Workflow integration guides

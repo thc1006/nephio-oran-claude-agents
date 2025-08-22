@@ -233,7 +233,7 @@ This documentation is organized into the following sections:
 - **[Integration](./integration/)**: Workflow guides and best practices
 - **[API Reference](./api/)**: Complete API documentation
 - **[Examples](./examples/)**: Real-world usage scenarios
-- **[Troubleshooting](./troubleshooting/)**: Common issues and solutions
+- **[Troubleshooting](./07-troubleshooting/)**: Common issues and solutions
 
 ## 🤝 Community & Support
 

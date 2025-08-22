@@ -1,5 +1,5 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
@@ -90,7 +90,8 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
+          editUrl:
+            'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
           // Versioning support
           includeCurrentVersion: true,
           lastVersion: 'current',
@@ -108,15 +109,18 @@ const config: Config = {
         },
         blog: {
           showReadingTime: true,
-          editUrl: 'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
+          editUrl:
+            'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
           // Enhanced blog features
           blogTitle: 'Nephio O-RAN Claude Agents Blog',
-          blogDescription: 'Latest updates and insights on O-RAN orchestration with Claude agents',
+          blogDescription:
+            'Latest updates and insights on O-RAN orchestration with Claude agents',
           postsPerPage: 10,
           feedOptions: {
             type: 'all',
             title: 'Nephio O-RAN Claude Agents Blog',
-            description: 'Latest updates and insights on O-RAN orchestration with Claude agents',
+            description:
+              'Latest updates and insights on O-RAN orchestration with Claude agents',
             copyright: `Copyright © ${new Date().getFullYear()} Nephio O-RAN Claude Agents Project`,
             language: 'en-US',
           },
@@ -134,17 +138,28 @@ const config: Config = {
         // 1. Set GOOGLE_ANALYTICS_ID in your .env.local file
         // 2. Use format: G-XXXXXXXXXX or UA-XXXXXXXXX-X
         // 3. Never commit actual tracking IDs to version control
-        gtag: process.env.GOOGLE_ANALYTICS_ID ? {
-          trackingID: process.env.GOOGLE_ANALYTICS_ID,
-          anonymizeIP: true, // Respects user privacy by anonymizing IP addresses
-        } : undefined,
+        gtag: process.env.GOOGLE_ANALYTICS_ID
+          ? {
+              trackingID: process.env.GOOGLE_ANALYTICS_ID,
+              anonymizeIP: true, // Respects user privacy by anonymizing IP addresses
+            }
+          : undefined,
       } satisfies Preset.Options,
     ],
   ],
 
   plugins: [
-    // Performance optimization plugin
-    './plugins/performance-optimizer',
+    // Performance optimization plugin with graceful fallbacks
+    [
+      './plugins/performance-optimizer',
+      {
+        enableBundleAnalyzer: true, // Enable bundle analysis (if available)
+        enableTerser: true, // Enable Terser minification (if available)
+        enableCssOptimization: true, // Enable CSS optimization (if available)
+        enableWebVitals: true, // Enable Web Vitals monitoring
+        silent: false, // Show plugin status messages
+      },
+    ],
     // Security Headers Plugin
     [
       './plugins/docusaurus-plugin-security-headers',
@@ -153,9 +168,9 @@ const config: Config = {
         customHeaders: {
           // Add any additional custom headers here
           'X-DNS-Prefetch-Control': 'on',
-          'X-Permitted-Cross-Domain-Policies': 'none'
-        }
-      }
+          'X-Permitted-Cross-Domain-Policies': 'none',
+        },
+      },
     ],
     // PWA Plugin for offline support (optional)
     // [
@@ -192,12 +207,20 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     metadata: [
-      {name: 'keywords', content: 'O-RAN, Nephio, cloud-native orchestration, Kubernetes operators, telco automation, 5G orchestration, O-RAN L release, Nephio R5 agents'},
-      {name: 'description', content: 'Advanced cloud-native orchestration for telecom infrastructure. Leverage Nephio and O-RAN technologies with intelligent Claude agents for seamless 5G network automation.'},
-      {name: 'robots', content: 'index, follow'},
-      {name: 'revisit-after', content: '7 days'},
-      {name: 'language', content: 'English'},
-      {name: 'generator', content: 'Docusaurus'},
+      {
+        name: 'keywords',
+        content:
+          'O-RAN, Nephio, cloud-native orchestration, Kubernetes operators, telco automation, 5G orchestration, O-RAN L release, Nephio R5 agents',
+      },
+      {
+        name: 'description',
+        content:
+          'Advanced cloud-native orchestration for telecom infrastructure. Leverage Nephio and O-RAN technologies with intelligent Claude agents for seamless 5G network automation.',
+      },
+      { name: 'robots', content: 'index, follow' },
+      { name: 'revisit-after', content: '7 days' },
+      { name: 'language', content: 'English' },
+      { name: 'generator', content: 'Docusaurus' },
     ],
     colorMode: {
       defaultMode: 'light',
@@ -299,7 +322,7 @@ const config: Config = {
       // 1. Copy .env.example to .env.local
       // 2. Replace with your actual Algolia credentials
       // 3. Never commit .env.local to version control
-      // 
+      //
       // Get free DocSearch at: https://docsearch.algolia.com/
       // Or create your own at: https://www.algolia.com/
       appId: process.env.ALGOLIA_APP_ID || 'PLACEHOLDER_APP_ID', // PLACEHOLDER - Replace via environment variable
