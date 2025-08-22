@@ -661,7 +661,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         </ol>
       `;
       
-      render(<MockMDXContent content={content} />);
+      render(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
       
       expect(screen.getByTestId('mdx-ul')).toBeInTheDocument();
       expect(screen.getByTestId('mdx-ol')).toBeInTheDocument();
@@ -676,7 +676,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         <a href="/docs/intro">Internal Link</a>
       `;
       
-      render(<MockMDXContent content={content} />);
+      render(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
       
       const links = screen.getAllByTestId('mdx-link');
       expect(links).toHaveLength(2);
@@ -692,7 +692,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         </blockquote>
       `;
       
-      render(<MockMDXContent content={content} />);
+      render(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
       
       expect(screen.getByTestId('mdx-blockquote')).toBeInTheDocument();
     });
@@ -715,7 +715,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         </table>
       `;
       
-      render(<MockMDXContent content={content} />);
+      render(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
       
       expect(screen.getByTestId('mdx-table')).toBeInTheDocument();
       
@@ -883,7 +883,7 @@ kubectl get pods
         <a href="/docs/agents/infrastructure/nephio-infrastructure-agent">Infrastructure Agent</a>
       `;
       
-      render(<MockMDXContent content={content} />);
+      render(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
       
       const links = screen.getAllByTestId('mdx-link');
       
@@ -900,7 +900,7 @@ kubectl get pods
         <a href="https://kubernetes.io">Kubernetes</a>
       `;
       
-      render(<MockMDXContent content={content} />);
+      render(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
       
       const links = screen.getAllByTestId('mdx-link');
       
