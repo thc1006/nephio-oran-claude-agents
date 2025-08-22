@@ -1,0 +1,354 @@
+name: Website Routing and Locale Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'website/**'
+      - '.github/workflows/website-routing-tests.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'website/**'
+      - '.github/workflows/website-routing-tests.yml'
+  schedule:
+    # Run tests daily at 2 AM UTC to catch any routing regressions
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_level:
+        description: 'Test level to run'
+        required: false
+        default: 'full'
+        type: choice
+        options:
+          - 'unit'
+          - 'integration'
+          - 'e2e'
+          - 'full'
+
+env:
+  NODE_VERSION: '18'
+  CACHE_VERSION: v1
+
+jobs:
+  # Unit and Integration Tests
+  unit-integration-tests:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_level == 'unit' || github.event.inputs.test_level == 'integration' || github.event.inputs.test_level == 'full' || github.event.inputs.test_level == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'website/package-lock.json'
+          
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+        
+      - name: Run TypeScript type checking
+        working-directory: website
+        run: npm run typecheck
+        
+      - name: Run linting
+        working-directory: website
+        run: npm run lint:check
+        
+      - name: Run unit tests
+        working-directory: website
+        run: npm run test:unit:coverage
+        
+      - name: Upload unit test coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          directory: ./website/coverage
+          flags: unit-tests
+          name: unit-test-coverage
+          
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-results
+          path: |
+            website/coverage/
+            website/test-results/
+            
+  # E2E Routing Tests
+  e2e-routing-tests:
+    name: E2E Routing Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_level == 'e2e' || github.event.inputs.test_level == 'full' || github.event.inputs.test_level == '' }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'website/package-lock.json'
+          
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        working-directory: website
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+        
+      - name: Build website
+        working-directory: website
+        run: npm run build:ci
+        env:
+          NODE_ENV: production
+          
+      - name: Run E2E routing tests
+        working-directory: website
+        run: npx playwright test --config=tests/e2e/routing.config.ts --project=routing-${{ matrix.browser }}
+        env:
+          CI: true
+          BASE_URL: http://localhost:3000
+          
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-test-results-${{ matrix.browser }}
+          path: |
+            website/test-results/
+            website/playwright-report/
+          retention-days: 7
+          
+      - name: Upload E2E test videos
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-test-videos-${{ matrix.browser }}
+          path: website/test-results/**/*.webm
+          retention-days: 7
+
+  # Accessibility Tests
+  accessibility-tests:
+    name: Accessibility Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_level == 'full' || github.event.inputs.test_level == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'website/package-lock.json'
+          
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+        
+      - name: Build website
+        working-directory: website
+        run: npm run build:ci
+        
+      - name: Start server for accessibility testing
+        working-directory: website
+        run: npm run serve &
+        
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000 --timeout 60000
+        
+      - name: Run accessibility tests
+        working-directory: website
+        run: npm run test:a11y
+        continue-on-error: true
+        
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-test-results
+          path: website/pa11y-results.json
+          
+  # Performance Tests
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_level == 'full' || github.event.inputs.test_level == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'website/package-lock.json'
+          
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+        
+      - name: Build website
+        working-directory: website
+        run: npm run build:production
+        
+      - name: Run Lighthouse CI
+        working-directory: website
+        run: npm run lighthouse
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: website/.lighthouseci/
+          
+  # Security Tests
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_level == 'full' || github.event.inputs.test_level == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'website/package-lock.json'
+          
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+        
+      - name: Run security audit
+        working-directory: website
+        run: npm run security:all
+        continue-on-error: true
+        
+      - name: Build website
+        working-directory: website
+        run: npm run build:production
+        
+      - name: Test security headers
+        working-directory: website
+        run: npm run security:test
+        
+      - name: Upload security results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-test-results
+          path: website/security-audit-results.json
+
+  # Test Summary
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [unit-integration-tests, e2e-routing-tests, accessibility-tests, performance-tests, security-tests]
+    if: always()
+    
+    steps:
+      - name: Download all test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: test-artifacts
+          
+      - name: Generate test summary
+        run: |
+          echo "# Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Check if unit tests passed
+          if [ "${{ needs.unit-integration-tests.result }}" == "success" ]; then
+            echo "✅ Unit & Integration Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Unit & Integration Tests: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check if E2E tests passed
+          if [ "${{ needs.e2e-routing-tests.result }}" == "success" ]; then
+            echo "✅ E2E Routing Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ E2E Routing Tests: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check if accessibility tests passed
+          if [ "${{ needs.accessibility-tests.result }}" == "success" ]; then
+            echo "✅ Accessibility Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Accessibility Tests: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check if performance tests passed
+          if [ "${{ needs.performance-tests.result }}" == "success" ]; then
+            echo "✅ Performance Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Performance Tests: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Check if security tests passed
+          if [ "${{ needs.security-tests.result }}" == "success" ]; then
+            echo "✅ Security Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Security Tests: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Test artifacts are available in the workflow run artifacts section." >> $GITHUB_STEP_SUMMARY
+          
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const summary = `
+            ## 🧪 Test Results Summary
+            
+            | Test Suite | Status |
+            |------------|--------|
+            | Unit & Integration | ${{ needs.unit-integration-tests.result == 'success' && '✅ PASSED' || '❌ FAILED' }} |
+            | E2E Routing | ${{ needs.e2e-routing-tests.result == 'success' && '✅ PASSED' || '❌ FAILED' }} |
+            | Accessibility | ${{ needs.accessibility-tests.result == 'success' && '✅ PASSED' || '⚠️ FAILED' }} |
+            | Performance | ${{ needs.performance-tests.result == 'success' && '✅ PASSED' || '⚠️ FAILED' }} |
+            | Security | ${{ needs.security-tests.result == 'success' && '✅ PASSED' || '⚠️ FAILED' }} |
+            
+            View detailed results in the [workflow run](${context.payload.pull_request.html_url}/checks).
+            `;
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body: summary
+            });

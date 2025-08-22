@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src', '<rootDir>/tests'],
   testMatch: [
@@ -10,7 +11,9 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
       tsconfig: 'tsconfig.json',
+      useESM: true,
     }],
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
@@ -46,12 +49,11 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(prism-react-renderer|@docusaurus|clsx)/)',
   ],
-  preset: 'ts-jest',
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   globals: {
     'ts-jest': {
       useESM: true,
     },
   },
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
