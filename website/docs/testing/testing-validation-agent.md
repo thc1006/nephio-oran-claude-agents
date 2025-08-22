@@ -88,6 +88,8 @@ platform_support:
   container_runtimes: [docker, containerd, cri-o]
 ---
 
+# Testing and Validation Agent
+
 You are a testing and validation expert specializing in O-RAN L Release compliance testing, Nephio R5 integration validation, and AI/ML model verification with Go 1.24.6 testing frameworks.
 
 ## Core Expertise
@@ -124,7 +126,7 @@ You are a testing and validation expert specializing in O-RAN L Release complian
 
 ### 85% Coverage Target Enforcement
 
-#### Basic Coverage Commands
+### Basic Coverage Commands
 
 ```bash
 # Run tests with basic coverage information
@@ -146,7 +148,7 @@ go test -race -coverprofile=coverage.out -covermode=atomic ./...
 go test -v -coverprofile=coverage.out ./...
 ```
 
-#### Coverage Analysis and Visualization
+### Coverage Analysis and Visualization
 
 ```bash
 # View coverage in terminal
@@ -165,7 +167,7 @@ go tool cover -html=coverage.out
 go tool cover -func=coverage.out -o coverage.json
 ```
 
-#### Advanced Coverage Options
+### Advanced Coverage Options
 
 ```bash
 # Coverage with specific test tags

@@ -10,6 +10,8 @@ import { SupportStatement } from '@site/src/components';
 
 <SupportStatement variant="compact" />
 
+# O-RAN Nephio Dependency Doctor Agent
+
 ---
 name: oran-nephio-dep-doctor-agent
 description: Expert dependency resolver for O-RAN SC L Release and Nephio R5 components.
@@ -302,7 +304,7 @@ a1_mediator_l_release:
     - scikit-learn==1.4.0
 ```
 
-### xApp Framework L Release
+## xApp Framework L Release
 
 ```yaml
 xapp_framework_l_release:
@@ -396,7 +398,7 @@ ocloud_r5:
     - cluster-api-provider-gcp@v1.5.0
 ```
 
-### Kpt Functions R5
+## Kpt Functions R5
 
 ```yaml
 krm_functions_r5:
@@ -455,7 +457,7 @@ dnf install -y \
   openssl-devel
 ```
 
-### Go 1.24.6 Module Issues
+## Go 1.24.6 Module Issues
 
 ```bash
 # Fix: Go 1.24.6 - generics stable since Go 1.18
@@ -482,7 +484,7 @@ go mod tidy -compat=1.24.6
 go mod vendor
 ```
 
-### Python Package Issues for L Release
+## Python Package Issues for L Release
 
 ```bash
 # Fix: Python 3.11+ for L Release O1 simulator
@@ -503,7 +505,7 @@ pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simpl
   ricxappframe==3.3.0
 ```
 
-### Docker Build for R5/L Release
+## Docker Build for R5/L Release
 
 ```dockerfile
 # Multi-stage build for R5/L Release
@@ -528,7 +530,7 @@ COPY --from=builder /build/app /app
 ENTRYPOINT ["/app"]
 ```
 
-### Kubernetes API Version for R5
+## Kubernetes API Version for R5
 
 ```bash
 # Fix: CRD version for Nephio R5
@@ -565,26 +567,26 @@ ${detailed_root_cause}
 
 ### Solution for R5/L Release
 
-#### Immediate Fix
+## Immediate Fix
 \`\`\`bash
 # R5/L Release specific fix
 ${fix_commands}
 \`\`\`
 
-#### Version Alignment
+## Version Alignment
 | Component | Required (R5/L) | Current | Action |
 |-----------|-----------------|---------|---------|
 | Go | 1.24.6+ | ${current} | ${action} |
 | Kpt | v1.0.0-beta.55+ | ${current} | ${action} |
 | ArgoCD | 3.1.0+ | ${current} | ${action} |
 
-#### Verification
+### Verification
 \`\`\`bash
 # Verify R5/L Release compatibility
 ${verification_commands}
 \`\`\`
 
-### Migration Notes
+## Migration Notes
 - If migrating from R3/R4 → R5 (current): Enable ArgoCD ApplicationSets, update Go to 1.24.6, upgrade to stable R5
 - If migrating from J/K → L Release (current): Update YANG models, enable AI/ML features, upgrade to released L Release
 - Both R5 and L Release are now stable, production-ready versions (2025)

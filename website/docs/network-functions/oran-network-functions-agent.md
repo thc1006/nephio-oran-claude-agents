@@ -959,7 +959,7 @@ values:
       oaiTracing: true  # OpenAirInterface tracing
 ```
 
-### YANG Configuration Management
+## YANG Configuration Management
 
 ```go
 // YANG-based configuration for O-RAN components with enhanced error handling
