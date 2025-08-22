@@ -1,15 +1,15 @@
 {
-  "label": "疑難排解",
+  "label": "故障排除",
   "position": 7,
   "link": {
     "type": "generated-index",
-    "title": "疑難排解與技術支援",
-    "description": "找出常見問題的解決方案、偵錯技巧和常見問題解答。",
-    "keywords": ["疑難排解", "偵錯", "常見問題", "技術支援", "問題解決"]
+    "title": "故障排除與技術支援",
+    "description": "尋找常見問題的解決方案、除錯技巧和常見問答，讓您快速解決技術困難。",
+    "keywords": ["故障排除", "除錯", "FAQ", "技術支援", "問題"]
   },
   "customProps": {
     "icon": "🔧",
-    "audience": "系統管理員",
+    "audience": "操作人員",
     "searchBoost": 2
   }
 }

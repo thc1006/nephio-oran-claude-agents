@@ -1,11 +1,11 @@
 import React from 'react';
 import clsx from 'clsx';
 import { 
-  GO_VERSION, 
-  ORAN_L_RELEASE, 
-  NEPHIO_VERSION, 
-  KPT_VERSION,
-  VERSION_DISPLAY,
+  GO_VERSION as _GO_VERSION, 
+  ORAN_L_RELEASE as _ORAN_L_RELEASE, 
+  NEPHIO_VERSION as _NEPHIO_VERSION, 
+  KPT_VERSION as _KPT_VERSION,
+  VERSION_DISPLAY as _VERSION_DISPLAY,
   LAST_UPDATED 
 } from '../../data/siteConfig';
 import ReleaseBadge from '../ReleaseBadge';

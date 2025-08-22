@@ -4,7 +4,7 @@
   "link": {
     "type": "generated-index",
     "title": "整合模式",
-    "description": "Nephio O-RAN Claude 智能代理的完整整合模式與工作流程指南",
-    "keywords": ["整合", "工作流程", "模式", "部署", "gitops"]
+    "description": "Nephio O-RAN Claude 智能代理的完整整合模式與部署工作流程指南",
+    "keywords": ["系統整合", "工作流程", "部署模式", "自動化部署", "GitOps"]
   }
 }
