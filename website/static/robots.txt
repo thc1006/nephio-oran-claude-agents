@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thc1006.github.io/nephio-oran-claude-agents/sitemap.xml
