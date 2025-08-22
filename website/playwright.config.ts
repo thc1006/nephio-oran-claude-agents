@@ -100,7 +100,6 @@ export default defineConfig({
     
     /* Take screenshot on assertion failure */
     toHaveScreenshot: {
-      mode: 'only-on-failure',
       threshold: 0.25,
     },
     
