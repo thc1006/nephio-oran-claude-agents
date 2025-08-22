@@ -25,7 +25,7 @@ func init() {
 		Level:     slog.LevelInfo,
 		AddSource: true,
 	}
-	
+
 	// Use JSON handler for production, Text for development
 	if os.Getenv("LOG_FORMAT") == "text" {
 		handler := slog.NewTextHandler(os.Stdout, opts)
@@ -208,10 +208,10 @@ func (o *Orchestrator) ProcessBatchesWithIterator(ctx context.Context, items []s
 	batchNum := 0
 	for batch := range ChunkSlice(items, batchSize) {
 		batchNum++
-		
+
 		// Create batch-specific context with timeout
 		batchCtx, batchCancel := context.WithTimeout(ctx, 30*time.Second)
-		
+
 		logger.DebugContext(batchCtx, "Processing batch",
 			slog.String("correlation_id", o.correlationID),
 			slog.Int("batch_num", batchNum),
@@ -220,7 +220,7 @@ func (o *Orchestrator) ProcessBatchesWithIterator(ctx context.Context, items []s
 		// Process batch with retry
 		err := o.processBatchWithBackoff(batchCtx, batch, batchNum)
 		batchCancel()
-		
+
 		if err != nil {
 			logger.ErrorContext(ctx, "Batch processing failed",
 				slog.String("correlation_id", o.correlationID),
@@ -354,7 +354,7 @@ func (o *Orchestrator) ProcessConcurrently(ctx context.Context, items []string, 
 		wg.Add(1)
 		go func(workerID int) {
 			defer wg.Done()
-			
+
 			for item := range itemChan {
 				select {
 				case <-ctx.Done():
@@ -440,7 +440,7 @@ func (o *Orchestrator) ProcessWithIteratorV2(ctx context.Context, items []string
 				slog.String("correlation_id", o.correlationID),
 				slog.Int("index", i),
 				slog.String("item", item))
-			
+
 			if err := o.processItem(ctx, item); err != nil {
 				return err
 			}

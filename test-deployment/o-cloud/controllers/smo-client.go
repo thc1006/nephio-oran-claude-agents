@@ -43,7 +43,7 @@ func (s *SMOClient) Connect(ctx context.Context, config SMOConfig) error {
 	s.mu.Unlock()
 
 	// Test connection
-	req, err := http.NewRequestWithContext(ctx, "GET", 
+	req, err := http.NewRequestWithContext(ctx, "GET",
 		fmt.Sprintf("%s/api/v1/health", config.Endpoint), nil)
 	if err != nil {
 		return fmt.Errorf("failed to create health check request: %w", err)
@@ -261,23 +261,23 @@ func (s *SMOClient) IsConnected() bool {
 
 // OCloudRegistration represents O-Cloud registration data
 type OCloudRegistration struct {
-	ID                 string             `json:"id"`
-	Name               string             `json:"name"`
-	Description        string             `json:"description"`
-	InfrastructureType string             `json:"infrastructureType"`
-	Regions            []string           `json:"regions"`
-	ResourcePools      []SMOResourcePool  `json:"resourcePools"`
-	O2InterfaceVersion string             `json:"o2InterfaceVersion"`
-	Capabilities       []string           `json:"capabilities"`
-	RegisteredAt       time.Time          `json:"registeredAt"`
+	ID                 string            `json:"id"`
+	Name               string            `json:"name"`
+	Description        string            `json:"description"`
+	InfrastructureType string            `json:"infrastructureType"`
+	Regions            []string          `json:"regions"`
+	ResourcePools      []SMOResourcePool `json:"resourcePools"`
+	O2InterfaceVersion string            `json:"o2InterfaceVersion"`
+	Capabilities       []string          `json:"capabilities"`
+	RegisteredAt       time.Time         `json:"registeredAt"`
 }
 
 // SMOResourcePool represents a resource pool in SMO format
 type SMOResourcePool struct {
-	Name     string               `json:"name"`
-	Type     string               `json:"type"`
-	Location string               `json:"location"`
-	Capacity SMOResourceCapacity  `json:"capacity"`
+	Name     string              `json:"name"`
+	Type     string              `json:"type"`
+	Location string              `json:"location"`
+	Capacity SMOResourceCapacity `json:"capacity"`
 }
 
 // SMOResourceCapacity represents resource capacity in SMO format
@@ -290,33 +290,33 @@ type SMOResourceCapacity struct {
 
 // ResourceUpdate represents a resource update notification
 type ResourceUpdate struct {
-	OCloudID      string                 `json:"oCloudId"`
-	ResourceType  string                 `json:"resourceType"`
-	ResourceID    string                 `json:"resourceId"`
-	UpdateType    string                 `json:"updateType"`
-	OldValue      map[string]interface{} `json:"oldValue,omitempty"`
-	NewValue      map[string]interface{} `json:"newValue"`
-	Timestamp     time.Time              `json:"timestamp"`
+	OCloudID     string                 `json:"oCloudId"`
+	ResourceType string                 `json:"resourceType"`
+	ResourceID   string                 `json:"resourceId"`
+	UpdateType   string                 `json:"updateType"`
+	OldValue     map[string]interface{} `json:"oldValue,omitempty"`
+	NewValue     map[string]interface{} `json:"newValue"`
+	Timestamp    time.Time              `json:"timestamp"`
 }
 
 // Policy represents an SMO policy
 type Policy struct {
-	ID          string                 `json:"id"`
-	Name        string                 `json:"name"`
-	Type        string                 `json:"type"`
-	Priority    int                    `json:"priority"`
-	Conditions  []PolicyCondition      `json:"conditions"`
-	Actions     []PolicyAction         `json:"actions"`
-	Parameters  map[string]interface{} `json:"parameters"`
-	ValidFrom   time.Time              `json:"validFrom"`
-	ValidUntil  time.Time              `json:"validUntil"`
+	ID         string                 `json:"id"`
+	Name       string                 `json:"name"`
+	Type       string                 `json:"type"`
+	Priority   int                    `json:"priority"`
+	Conditions []PolicyCondition      `json:"conditions"`
+	Actions    []PolicyAction         `json:"actions"`
+	Parameters map[string]interface{} `json:"parameters"`
+	ValidFrom  time.Time              `json:"validFrom"`
+	ValidUntil time.Time              `json:"validUntil"`
 }
 
 // PolicyCondition represents a policy condition
 type PolicyCondition struct {
-	Type      string `json:"type"`
-	Operator  string `json:"operator"`
-	Value     string `json:"value"`
+	Type     string `json:"type"`
+	Operator string `json:"operator"`
+	Value    string `json:"value"`
 }
 
 // PolicyAction represents a policy action

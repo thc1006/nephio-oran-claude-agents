@@ -84,7 +84,7 @@ func RunJSONHandlerTest(w io.Writer) error {
 	logger.Info("Info message", slog.String("handler", "json"))
 	logger.Warn("Warning message", slog.String("handler", "json"))
 	logger.Error("Error message", slog.String("handler", "json"))
-	
+
 	return nil
 }
 
@@ -102,7 +102,7 @@ func RunTextHandlerTest(w io.Writer) error {
 		slog.Int("count", 42))
 	logger.Warn("Warning with text handler",
 		slog.Duration("elapsed", 1500*time.Millisecond))
-	
+
 	return nil
 }
 
@@ -130,12 +130,12 @@ func RunContextLoggingTest(w io.Writer) error {
 
 	start := time.Now()
 	time.Sleep(10 * time.Millisecond) // Reduced for tests
-	
+
 	logger.InfoContext(ctx, "Request completed",
 		slog.String("correlation_id", correlationID),
 		slog.Duration("duration", time.Since(start)),
 		slog.String("status", "success"))
-	
+
 	return nil
 }
 
@@ -170,7 +170,7 @@ func RunStructuredAttributesTest(w io.Writer) error {
 	serviceLogger.Info("Batch processed",
 		slog.Any("items", []string{"item1", "item2", "item3"}),
 		slog.Int("batch_size", 3))
-	
+
 	return nil
 }
 
@@ -194,7 +194,7 @@ func RunLogLevelsTest(w io.Writer) error {
 		logger.Warn("Warn level test", slog.String("level", level.String()))
 		logger.Error("Error level test", slog.String("level", level.String()))
 	}
-	
+
 	return nil
 }
 
@@ -223,7 +223,7 @@ func RunJSONKeysVerificationTest(w io.Writer) error {
 
 	requiredKeys := []string{"time", "level", "msg", "key1", "key2", "timestamp", "duration", "flag"}
 	missingKeys := []string{}
-	
+
 	for _, key := range requiredKeys {
 		if _, exists := result[key]; !exists {
 			missingKeys = append(missingKeys, key)
@@ -259,7 +259,7 @@ func RunErrorLoggingTest(w io.Writer) error {
 	logger := slog.New(handler)
 
 	err := fmt.Errorf("database connection failed: timeout after 30s")
-	
+
 	logger.Error("Operation failed",
 		slog.String("operation", "database_connect"),
 		slog.String("error", err.Error()),
@@ -268,6 +268,6 @@ func RunErrorLoggingTest(w io.Writer) error {
 		slog.Int("retry_count", 3),
 		slog.Duration("retry_after", 5*time.Second),
 	)
-	
+
 	return nil
 }

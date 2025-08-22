@@ -1,4 +1,4 @@
-// slog_smoke.go - Smoke test for slog implementation  
+// slog_smoke.go - Smoke test for slog implementation
 // Run with: go run cmd/slog-smoke/main.go
 package main
 

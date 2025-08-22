@@ -24,36 +24,36 @@ import (
 type OCloudSpec struct {
 	// SMO configuration
 	SMO SMOConfig `json:"smo"`
-	
+
 	// Resource pools
 	ResourcePools []ResourcePool `json:"resourcePools"`
-	
+
 	// O2 Interface configuration
 	O2Interface O2InterfaceConfig `json:"o2Interface"`
-	
+
 	// Cloud infrastructure type
 	InfrastructureType string `json:"infrastructureType"`
-	
+
 	// Deployment regions
 	Regions []string `json:"regions"`
 }
 
 // SMOConfig represents Service Management and Orchestration configuration
 type SMOConfig struct {
-	Enabled       bool              `json:"enabled"`
-	Endpoint      string            `json:"endpoint"`
-	AuthType      string            `json:"authType"`
-	Capabilities  []string          `json:"capabilities"`
-	AIMLEnabled   bool              `json:"aimlEnabled"`
+	Enabled      bool     `json:"enabled"`
+	Endpoint     string   `json:"endpoint"`
+	AuthType     string   `json:"authType"`
+	Capabilities []string `json:"capabilities"`
+	AIMLEnabled  bool     `json:"aimlEnabled"`
 }
 
 // ResourcePool represents a pool of cloud resources
 type ResourcePool struct {
-	Name         string            `json:"name"`
-	Type         string            `json:"type"`
-	Location     string            `json:"location"`
-	Capacity     ResourceCapacity  `json:"capacity"`
-	Labels       map[string]string `json:"labels"`
+	Name     string            `json:"name"`
+	Type     string            `json:"type"`
+	Location string            `json:"location"`
+	Capacity ResourceCapacity  `json:"capacity"`
+	Labels   map[string]string `json:"labels"`
 }
 
 // ResourceCapacity defines resource limits
@@ -66,10 +66,10 @@ type ResourceCapacity struct {
 
 // O2InterfaceConfig represents O2 interface configuration
 type O2InterfaceConfig struct {
-	Enabled      bool     `json:"enabled"`
-	Version      string   `json:"version"`
-	Endpoints    []string `json:"endpoints"`
-	AuthEnabled  bool     `json:"authEnabled"`
+	Enabled     bool     `json:"enabled"`
+	Version     string   `json:"version"`
+	Endpoints   []string `json:"endpoints"`
+	AuthEnabled bool     `json:"authEnabled"`
 }
 
 // OCloudStatus defines the observed state of OCloud
@@ -85,13 +85,13 @@ type OCloudStatus struct {
 
 // ResourceInventory tracks available resources
 type ResourceInventory struct {
-	TotalCPU        int64             `json:"totalCpu"`
-	AvailableCPU    int64             `json:"availableCpu"`
-	TotalMemory     int64             `json:"totalMemory"`
-	AvailableMemory int64             `json:"availableMemory"`
-	TotalStorage    int64             `json:"totalStorage"`
-	AvailableStorage int64            `json:"availableStorage"`
-	ResourceTypes   map[string]int    `json:"resourceTypes"`
+	TotalCPU         int64          `json:"totalCpu"`
+	AvailableCPU     int64          `json:"availableCpu"`
+	TotalMemory      int64          `json:"totalMemory"`
+	AvailableMemory  int64          `json:"availableMemory"`
+	TotalStorage     int64          `json:"totalStorage"`
+	AvailableStorage int64          `json:"availableStorage"`
+	ResourceTypes    map[string]int `json:"resourceTypes"`
 }
 
 // Condition represents a status condition
@@ -141,12 +141,12 @@ func NewOCloudReconciler(client client.Client, scheme *runtime.Scheme) *OCloudRe
 	)
 
 	return &OCloudReconciler{
-		Client:          client,
-		Scheme:          scheme,
-		Logger:          logger,
-		SMOClient:       NewSMOClient(logger),
-		O2Client:        NewO2InterfaceClient(logger),
-		ResourceManager: NewCloudResourceManager(logger),
+		Client:           client,
+		Scheme:           scheme,
+		Logger:           logger,
+		SMOClient:        NewSMOClient(logger),
+		O2Client:         NewO2InterfaceClient(logger),
+		ResourceManager:  NewCloudResourceManager(logger),
 		TelemetryManager: NewTelemetryManager(logger),
 	}
 }
@@ -155,7 +155,7 @@ func NewOCloudReconciler(client client.Client, scheme *runtime.Scheme) *OCloudRe
 func (r *OCloudReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	correlationID := uuid.New().String()
 	ctx = context.WithValue(ctx, "correlation_id", correlationID)
-	
+
 	r.Logger.InfoContext(ctx, "Starting O-Cloud reconciliation",
 		slog.String("name", req.Name),
 		slog.String("namespace", req.Namespace),
@@ -213,7 +213,7 @@ func (r *OCloudReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 
 	// Update status
 	r.updateStatus(ctx, &ocloud, "Ready", "O-Cloud is operational")
-	
+
 	r.Logger.InfoContext(ctx, "O-Cloud reconciliation completed successfully",
 		slog.String("name", req.Name))
 
@@ -318,8 +318,8 @@ func (r *OCloudReconciler) reconcileResourcePools(ctx context.Context, ocloud *O
 			},
 			Spec: corev1.ResourceQuotaSpec{
 				Hard: corev1.ResourceList{
-					corev1.ResourceCPU:    resource.MustParse(pool.Capacity.CPU),
-					corev1.ResourceMemory: resource.MustParse(pool.Capacity.Memory),
+					corev1.ResourceCPU:     resource.MustParse(pool.Capacity.CPU),
+					corev1.ResourceMemory:  resource.MustParse(pool.Capacity.Memory),
 					corev1.ResourceStorage: resource.MustParse(pool.Capacity.Storage),
 				},
 			},

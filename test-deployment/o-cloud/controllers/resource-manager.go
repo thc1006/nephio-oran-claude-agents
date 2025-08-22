@@ -55,16 +55,16 @@ func (c *CloudResourceManager) EnsureResourcePool(ctx context.Context, pool Reso
 	}
 
 	managedPool := &ManagedResourcePool{
-		Pool:              pool,
-		TotalCPU:          cpu,
-		TotalMemory:       memory,
-		TotalStorage:      storage,
-		AllocatedCPU:      0,
-		AllocatedMemory:   0,
-		AllocatedStorage:  0,
-		Allocations:       make(map[string]*ResourceAllocation),
-		LastUpdated:       time.Now(),
-		Status:            "active",
+		Pool:             pool,
+		TotalCPU:         cpu,
+		TotalMemory:      memory,
+		TotalStorage:     storage,
+		AllocatedCPU:     0,
+		AllocatedMemory:  0,
+		AllocatedStorage: 0,
+		Allocations:      make(map[string]*ResourceAllocation),
+		LastUpdated:      time.Now(),
+		Status:           "active",
 	}
 
 	// Initialize with some simulated allocations
@@ -455,16 +455,16 @@ func (t *TelemetryManager) GetMetrics(ctx context.Context, limit int) []Telemetr
 
 // TelemetryMetrics represents telemetry data
 type TelemetryMetrics struct {
-	Timestamp       time.Time
-	OCloudName      string
-	ResourcePools   int
-	TotalCPU        int64
-	AvailableCPU    int64
-	TotalMemory     int64
-	AvailableMemory int64
-	TotalStorage    int64
-	AvailableStorage int64
+	Timestamp         time.Time
+	OCloudName        string
+	ResourcePools     int
+	TotalCPU          int64
+	AvailableCPU      int64
+	TotalMemory       int64
+	AvailableMemory   int64
+	TotalStorage      int64
+	AvailableStorage  int64
 	ActiveAllocations int
-	ErrorCount      int
-	WarningCount    int
+	ErrorCount        int
+	WarningCount      int
 }

@@ -79,16 +79,16 @@ var versionMatrix = map[string]VersionConstraint{
 
 // API version constraints
 var apiVersions = map[string]string{
-	"argoproj.io/v1alpha1":              "ArgoCD Application/ApplicationSet",
-	"kafka.strimzi.io/v1beta2":          "Strimzi Kafka",
-	"metal3.io/v1alpha1":                "Metal3 BareMetalHost",
-	"kpt.dev/v1":                        "Kpt package",
-	"monitoring.coreos.com/v1":          "Prometheus ServiceMonitor",
-	"admissionregistration.k8s.io/v1":   "ValidatingWebhookConfiguration",
-	"networking.k8s.io/v1":              "Ingress/NetworkPolicy",
-	"batch/v1":                          "Job/CronJob",
-	"apps/v1":                           "Deployment/StatefulSet/DaemonSet",
-	"v1":                                "Core resources (Service/ConfigMap/Secret)",
+	"argoproj.io/v1alpha1":            "ArgoCD Application/ApplicationSet",
+	"kafka.strimzi.io/v1beta2":        "Strimzi Kafka",
+	"metal3.io/v1alpha1":              "Metal3 BareMetalHost",
+	"kpt.dev/v1":                      "Kpt package",
+	"monitoring.coreos.com/v1":        "Prometheus ServiceMonitor",
+	"admissionregistration.k8s.io/v1": "ValidatingWebhookConfiguration",
+	"networking.k8s.io/v1":            "Ingress/NetworkPolicy",
+	"batch/v1":                        "Job/CronJob",
+	"apps/v1":                         "Deployment/StatefulSet/DaemonSet",
+	"v1":                              "Core resources (Service/ConfigMap/Secret)",
 }
 
 // Run executes the verification process

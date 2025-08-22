@@ -63,27 +63,27 @@ func (e *XAppError) Unwrap() error {
 
 // E2Metrics represents parsed E2 indication data
 type E2Metrics struct {
-	UECount       int       `json:"ue_count"`
-	Throughput    float64   `json:"throughput_mbps"`
-	Latency       float64   `json:"latency_ms"`
-	PacketLoss    float64   `json:"packet_loss_percent"`
-	CellID        string    `json:"cell_id"`
-	Timestamp     time.Time `json:"timestamp"`
-	PRBUsageDL    float64   `json:"prb_usage_dl"`
-	PRBUsageUL    float64   `json:"prb_usage_ul"`
-	RSRP          float64   `json:"rsrp_dbm"`
-	RSRQ          float64   `json:"rsrq_db"`
-	EnergyEfficiency float64 `json:"energy_efficiency"`
+	UECount          int       `json:"ue_count"`
+	Throughput       float64   `json:"throughput_mbps"`
+	Latency          float64   `json:"latency_ms"`
+	PacketLoss       float64   `json:"packet_loss_percent"`
+	CellID           string    `json:"cell_id"`
+	Timestamp        time.Time `json:"timestamp"`
+	PRBUsageDL       float64   `json:"prb_usage_dl"`
+	PRBUsageUL       float64   `json:"prb_usage_ul"`
+	RSRP             float64   `json:"rsrp_dbm"`
+	RSRQ             float64   `json:"rsrq_db"`
+	EnergyEfficiency float64   `json:"energy_efficiency"`
 }
 
 // SteeringDecision represents traffic steering decision
 type SteeringDecision struct {
-	Action      string            `json:"action"`
-	Parameters  map[string]string `json:"parameters"`
-	Priority    int               `json:"priority"`
-	ValidUntil  time.Time         `json:"valid_until"`
-	Confidence  float64           `json:"confidence"`
-	Reasoning   string            `json:"reasoning"`
+	Action     string            `json:"action"`
+	Parameters map[string]string `json:"parameters"`
+	Priority   int               `json:"priority"`
+	ValidUntil time.Time         `json:"valid_until"`
+	Confidence float64           `json:"confidence"`
+	Reasoning  string            `json:"reasoning"`
 }
 
 // A1Policy represents A1 policy configuration
@@ -113,10 +113,10 @@ type TrafficSteeringXApp struct {
 	metrics        map[string]*E2Metrics
 	policies       map[string]*A1Policy
 	httpServer     *http.Server
-	
+
 	// L Release AI/ML features
-	AIMLEnabled     bool
-	ModelEndpoint   string
+	AIMLEnabled        bool
+	ModelEndpoint      string
 	PythonO1SimEnabled bool
 }
 
@@ -157,14 +157,14 @@ func NewTrafficSteeringXApp(ctx context.Context, name string) (*TrafficSteeringX
 	}
 
 	xapp := &TrafficSteeringXApp{
-		Logger:         logger,
-		ProcessTimeout: 30 * time.Second,
-		CorrelationID:  correlationID,
-		metrics:        make(map[string]*E2Metrics),
-		policies:       make(map[string]*A1Policy),
-		httpServer:     server,
-		AIMLEnabled:    os.Getenv("AI_ML_ENABLED") == "true",
-		ModelEndpoint:  os.Getenv("ML_MODEL_ENDPOINT"),
+		Logger:             logger,
+		ProcessTimeout:     30 * time.Second,
+		CorrelationID:      correlationID,
+		metrics:            make(map[string]*E2Metrics),
+		policies:           make(map[string]*A1Policy),
+		httpServer:         server,
+		AIMLEnabled:        os.Getenv("AI_ML_ENABLED") == "true",
+		ModelEndpoint:      os.Getenv("ML_MODEL_ENDPOINT"),
 		PythonO1SimEnabled: os.Getenv("PYTHON_O1_SIMULATOR") == "enabled",
 	}
 
@@ -179,10 +179,10 @@ func (x *TrafficSteeringXApp) setupRoutes(router *mux.Router) {
 	// Health check endpoints
 	router.HandleFunc("/ric/v1/health/alive", x.handleAlive).Methods("GET")
 	router.HandleFunc("/ric/v1/health/ready", x.handleReady).Methods("GET")
-	
+
 	// Metrics endpoint
 	router.HandleFunc("/metrics", x.handleMetrics).Methods("GET")
-	
+
 	// xApp specific endpoints
 	router.HandleFunc("/ric/v1/steering/decision", x.handleSteeringDecision).Methods("POST")
 	router.HandleFunc("/ric/v1/policies", x.handlePolicies).Methods("GET", "POST")
@@ -199,7 +199,7 @@ func (x *TrafficSteeringXApp) handleAlive(w http.ResponseWriter, r *http.Request
 		"version":     "l-release-2.0.0",
 		"correlation": x.CorrelationID,
 	}
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
@@ -207,27 +207,27 @@ func (x *TrafficSteeringXApp) handleAlive(w http.ResponseWriter, r *http.Request
 func (x *TrafficSteeringXApp) handleReady(w http.ResponseWriter, r *http.Request) {
 	// Check if xApp is ready to serve traffic
 	ready := true
-	
+
 	// Could add additional readiness checks here
 	if x.AIMLEnabled && x.ModelEndpoint == "" {
 		ready = false
 	}
-	
+
 	response := map[string]interface{}{
-		"status":      map[string]bool{"ready": ready},
-		"timestamp":   time.Now().UTC(),
+		"status":    map[string]bool{"ready": ready},
+		"timestamp": time.Now().UTC(),
 		"features": map[string]bool{
 			"ai_ml_enabled": x.AIMLEnabled,
 			"python_o1_sim": x.PythonO1SimEnabled,
 		},
 	}
-	
+
 	if ready {
 		w.WriteHeader(http.StatusOK)
 	} else {
 		w.WriteHeader(http.StatusServiceUnavailable)
 	}
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
@@ -235,7 +235,7 @@ func (x *TrafficSteeringXApp) handleReady(w http.ResponseWriter, r *http.Request
 func (x *TrafficSteeringXApp) handleMetrics(w http.ResponseWriter, r *http.Request) {
 	x.mu.RLock()
 	defer x.mu.RUnlock()
-	
+
 	// Generate Prometheus-style metrics
 	metrics := fmt.Sprintf(`# HELP xapp_e2_indications_total Total E2 indications received
 # TYPE xapp_e2_indications_total counter
@@ -258,22 +258,22 @@ xapp_cell_count{xapp="traffic-steering"} %d
 		len(x.policies),
 		len(x.metrics),
 	)
-	
+
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte(metrics))
 }
 
 func (x *TrafficSteeringXApp) handleSteeringDecision(w http.ResponseWriter, r *http.Request) {
 	var request struct {
-		CellID  string            `json:"cell_id"`
+		CellID  string             `json:"cell_id"`
 		Metrics map[string]float64 `json:"metrics"`
 	}
-	
+
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	
+
 	// Make steering decision
 	decision, err := x.makeIntelligentSteeringDecision(r.Context(), request.CellID, request.Metrics)
 	if err != nil {
@@ -283,7 +283,7 @@ func (x *TrafficSteeringXApp) handleSteeringDecision(w http.ResponseWriter, r *h
 		http.Error(w, "Failed to make decision", http.StatusInternalServerError)
 		return
 	}
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(decision)
 }
@@ -297,25 +297,25 @@ func (x *TrafficSteeringXApp) handlePolicies(w http.ResponseWriter, r *http.Requ
 			policies = append(policies, policy)
 		}
 		x.mu.RUnlock()
-		
+
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(policies)
-		
+
 	case "POST":
 		var policy A1Policy
 		if err := json.NewDecoder(r.Body).Decode(&policy); err != nil {
 			http.Error(w, "Invalid policy format", http.StatusBadRequest)
 			return
 		}
-		
+
 		x.mu.Lock()
 		x.policies[policy.PolicyID] = &policy
 		x.mu.Unlock()
-		
+
 		x.Logger.Info("A1 policy updated",
 			slog.String("policy_id", policy.PolicyID),
 			slog.String("policy_type", policy.Type))
-		
+
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(policy)
 	}
@@ -324,7 +324,7 @@ func (x *TrafficSteeringXApp) handlePolicies(w http.ResponseWriter, r *http.Requ
 func (x *TrafficSteeringXApp) handleE2Metrics(w http.ResponseWriter, r *http.Request) {
 	x.mu.RLock()
 	defer x.mu.RUnlock()
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(x.metrics)
 }
@@ -431,16 +431,16 @@ func (x *TrafficSteeringXApp) parseE2Indication(ctx context.Context, payload []b
 	}
 
 	metrics := &E2Metrics{
-		UECount:       int(payload[0]),
-		Throughput:    float64(payload[1]) * 10.0,
-		Latency:       float64(payload[2]) * 0.5,
-		PacketLoss:    float64(payload[3]) * 0.1,
-		CellID:        fmt.Sprintf("cell-%d", payload[4]),
-		Timestamp:     time.Now(),
-		PRBUsageDL:    float64(payload[5]) * 1.5,
-		PRBUsageUL:    float64(payload[6]) * 1.2,
-		RSRP:          -70.0 - float64(payload[7]),
-		RSRQ:          -10.0 - float64(payload[8]),
+		UECount:          int(payload[0]),
+		Throughput:       float64(payload[1]) * 10.0,
+		Latency:          float64(payload[2]) * 0.5,
+		PacketLoss:       float64(payload[3]) * 0.1,
+		CellID:           fmt.Sprintf("cell-%d", payload[4]),
+		Timestamp:        time.Now(),
+		PRBUsageDL:       float64(payload[5]) * 1.5,
+		PRBUsageUL:       float64(payload[6]) * 1.2,
+		RSRP:             -70.0 - float64(payload[7]),
+		RSRQ:             -10.0 - float64(payload[8]),
 		EnergyEfficiency: float64(payload[1]) / (float64(payload[9]) + 1), // Throughput/Power
 	}
 
@@ -461,12 +461,12 @@ func (x *TrafficSteeringXApp) makeAIMLSteeringDecision(ctx context.Context, metr
 
 	// Simulate AI/ML decision making
 	decision := &SteeringDecision{
-		Action:      "optimize",
-		Parameters:  make(map[string]string),
-		Priority:    1,
-		ValidUntil:  time.Now().Add(5 * time.Minute),
-		Confidence:  0.95,
-		Reasoning:   "AI/ML model prediction based on historical patterns",
+		Action:     "optimize",
+		Parameters: make(map[string]string),
+		Priority:   1,
+		ValidUntil: time.Now().Add(5 * time.Minute),
+		Confidence: 0.95,
+		Reasoning:  "AI/ML model prediction based on historical patterns",
 	}
 
 	// Enhanced decision logic using AI/ML features
@@ -500,12 +500,12 @@ func (x *TrafficSteeringXApp) makeTraditionalSteeringDecision(ctx context.Contex
 		slog.String("cell_id", metrics.CellID))
 
 	decision := &SteeringDecision{
-		Action:      "optimize",
-		Parameters:  make(map[string]string),
-		Priority:    1,
-		ValidUntil:  time.Now().Add(5 * time.Minute),
-		Confidence:  0.75,
-		Reasoning:   "Rule-based decision using traditional thresholds",
+		Action:     "optimize",
+		Parameters: make(map[string]string),
+		Priority:   1,
+		ValidUntil: time.Now().Add(5 * time.Minute),
+		Confidence: 0.75,
+		Reasoning:  "Rule-based decision using traditional thresholds",
 	}
 
 	// Simple decision logic based on thresholds
@@ -527,14 +527,14 @@ func (x *TrafficSteeringXApp) makeTraditionalSteeringDecision(ctx context.Contex
 func (x *TrafficSteeringXApp) makeIntelligentSteeringDecision(ctx context.Context, cellID string, metricsData map[string]float64) (*SteeringDecision, error) {
 	// Convert metrics data to E2Metrics structure
 	metrics := &E2Metrics{
-		CellID:      cellID,
-		Timestamp:   time.Now(),
-		Throughput:  metricsData["throughput"],
-		Latency:     metricsData["latency"],
-		PacketLoss:  metricsData["packet_loss"],
-		PRBUsageDL:  metricsData["prb_usage_dl"],
-		PRBUsageUL:  metricsData["prb_usage_ul"],
-		UECount:     int(metricsData["ue_count"]),
+		CellID:     cellID,
+		Timestamp:  time.Now(),
+		Throughput: metricsData["throughput"],
+		Latency:    metricsData["latency"],
+		PacketLoss: metricsData["packet_loss"],
+		PRBUsageDL: metricsData["prb_usage_dl"],
+		PRBUsageUL: metricsData["prb_usage_ul"],
+		UECount:    int(metricsData["ue_count"]),
 	}
 
 	if x.AIMLEnabled {

@@ -117,7 +117,7 @@ downstream: target-agent`,
 			assert.Equal(t, tt.expected.Name, agent.Name)
 			assert.Equal(t, tt.expected.AcceptsFrom, agent.AcceptsFrom)
 			assert.Equal(t, tt.expected.HandoffTo, agent.HandoffTo)
-			
+
 			// Check line numbers for important fields
 			for key, expectedLine := range tt.expected.LineNumbers {
 				if actualLine, exists := agent.LineNumbers[key]; exists {
@@ -274,12 +274,12 @@ func TestDetectCycles(t *testing.T) {
 
 func TestValidateDAG(t *testing.T) {
 	tests := []struct {
-		name           string
-		agents         map[string]*Agent
-		adjacency      map[string][]string
-		expectedValid  bool
-		expectedCycles int
-		expectedBroken int
+		name            string
+		agents          map[string]*Agent
+		adjacency       map[string][]string
+		expectedValid   bool
+		expectedCycles  int
+		expectedBroken  int
 		expectedSources []string
 		expectedSinks   []string
 	}{
@@ -847,12 +847,11 @@ func TestExecuteCommand(t *testing.T) {
 	// Test executeCommand function
 	err := executeCommand("echo test")
 	assert.NoError(t, err, "executeCommand should not error for any command")
-	
+
 	// Test with different command
 	err = executeCommand("ls")
 	assert.NoError(t, err, "executeCommand should not error")
 }
-
 
 func TestBuildGraphErrorCases(t *testing.T) {
 	// Test with non-existent directory
@@ -862,18 +861,18 @@ func TestBuildGraphErrorCases(t *testing.T) {
 		assert.NotNil(t, graph)
 		assert.NoError(t, err) // Glob might not error for non-existent dir
 	})
-	
+
 	// Test with invalid agent file
 	t.Run("invalid agent file", func(t *testing.T) {
 		tmpDir, err := ioutil.TempDir("", "test_agents_")
 		require.NoError(t, err)
 		defer os.RemoveAll(tmpDir)
-		
+
 		// Create invalid agent file
 		invalidFile := filepath.Join(tmpDir, "invalid-agent.md")
 		err = ioutil.WriteFile(invalidFile, []byte("invalid content"), 0644)
 		require.NoError(t, err)
-		
+
 		// Build graph should handle invalid files gracefully
 		graph, err := buildGraph(tmpDir)
 		assert.NoError(t, err)

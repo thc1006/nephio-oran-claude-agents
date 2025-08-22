@@ -16,14 +16,14 @@ import (
 
 // O2InterfaceClient manages the O2 interface API
 type O2InterfaceClient struct {
-	logger       *slog.Logger
-	server       *http.Server
-	router       *mux.Router
-	config       O2InterfaceConfig
-	resources    map[string]*O2Resource
-	deployments  map[string]*O2Deployment
-	mu           sync.RWMutex
-	running      bool
+	logger      *slog.Logger
+	server      *http.Server
+	router      *mux.Router
+	config      O2InterfaceConfig
+	resources   map[string]*O2Resource
+	deployments map[string]*O2Deployment
+	mu          sync.RWMutex
+	running     bool
 }
 
 // NewO2InterfaceClient creates a new O2 interface client
@@ -131,7 +131,7 @@ func (o *O2InterfaceClient) setupRoutes() {
 
 func (o *O2InterfaceClient) handleListResourcePools(w http.ResponseWriter, r *http.Request) {
 	o.logger.Debug("Handling list resource pools request")
-	
+
 	pools := []O2ResourcePool{
 		{
 			ID:          "pool-1",
@@ -159,7 +159,7 @@ func (o *O2InterfaceClient) handleListResourcePools(w http.ResponseWriter, r *ht
 func (o *O2InterfaceClient) handleGetResourcePool(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	poolID := vars["poolId"]
-	
+
 	o.logger.Debug("Getting resource pool", slog.String("pool_id", poolID))
 
 	pool := O2ResourcePool{
@@ -192,7 +192,7 @@ func (o *O2InterfaceClient) handleCreateResourcePool(w http.ResponseWriter, r *h
 	}
 
 	pool.ID = fmt.Sprintf("pool-%d", time.Now().Unix())
-	
+
 	o.logger.Info("Created resource pool", slog.String("pool_id", pool.ID))
 
 	w.Header().Set("Content-Type", "application/json")
@@ -203,7 +203,7 @@ func (o *O2InterfaceClient) handleCreateResourcePool(w http.ResponseWriter, r *h
 func (o *O2InterfaceClient) handleUpdateResourcePool(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	poolID := vars["poolId"]
-	
+
 	var pool O2ResourcePool
 	if err := json.NewDecoder(r.Body).Decode(&pool); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -211,7 +211,7 @@ func (o *O2InterfaceClient) handleUpdateResourcePool(w http.ResponseWriter, r *h
 	}
 
 	pool.ID = poolID
-	
+
 	o.logger.Info("Updated resource pool", slog.String("pool_id", poolID))
 
 	w.Header().Set("Content-Type", "application/json")
@@ -221,7 +221,7 @@ func (o *O2InterfaceClient) handleUpdateResourcePool(w http.ResponseWriter, r *h
 func (o *O2InterfaceClient) handleDeleteResourcePool(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	poolID := vars["poolId"]
-	
+
 	o.logger.Info("Deleted resource pool", slog.String("pool_id", poolID))
 
 	w.WriteHeader(http.StatusNoContent)
@@ -411,11 +411,11 @@ func (o *O2InterfaceClient) handleGetInventory(w http.ResponseWriter, r *http.Re
 	inventory := O2Inventory{
 		Timestamp: time.Now(),
 		Compute: ComputeInventory{
-			TotalNodes:     10,
-			AvailableNodes: 7,
-			TotalCores:     320,
-			AvailableCores: 200,
-			TotalMemoryGB:  2048,
+			TotalNodes:        10,
+			AvailableNodes:    7,
+			TotalCores:        320,
+			AvailableCores:    200,
+			TotalMemoryGB:     2048,
 			AvailableMemoryGB: 1280,
 		},
 		Network: NetworkInventory{
@@ -479,12 +479,12 @@ func (o *O2InterfaceClient) handleGetStorageInventory(w http.ResponseWriter, r *
 func (o *O2InterfaceClient) handleListAlarms(w http.ResponseWriter, r *http.Request) {
 	alarms := []O2Alarm{
 		{
-			ID:          "alarm-1",
-			Type:        "resource",
-			Severity:    "warning",
-			Source:      "compute-node-1",
-			Description: "High CPU utilization",
-			Timestamp:   time.Now().Add(-1 * time.Hour),
+			ID:           "alarm-1",
+			Type:         "resource",
+			Severity:     "warning",
+			Source:       "compute-node-1",
+			Description:  "High CPU utilization",
+			Timestamp:    time.Now().Add(-1 * time.Hour),
 			Acknowledged: false,
 		},
 	}
@@ -619,14 +619,14 @@ type O2ResourceCapacity struct {
 
 // O2Resource represents a cloud resource
 type O2Resource struct {
-	ID          string                 `json:"id"`
-	Name        string                 `json:"name"`
-	Type        string                 `json:"type"`
-	PoolID      string                 `json:"poolId"`
-	Status      string                 `json:"status"`
-	Properties  map[string]interface{} `json:"properties"`
-	CreatedAt   time.Time              `json:"createdAt"`
-	UpdatedAt   time.Time              `json:"updatedAt"`
+	ID         string                 `json:"id"`
+	Name       string                 `json:"name"`
+	Type       string                 `json:"type"`
+	PoolID     string                 `json:"poolId"`
+	Status     string                 `json:"status"`
+	Properties map[string]interface{} `json:"properties"`
+	CreatedAt  time.Time              `json:"createdAt"`
+	UpdatedAt  time.Time              `json:"updatedAt"`
 }
 
 // O2Deployment represents a deployment
@@ -643,10 +643,10 @@ type O2Deployment struct {
 
 // O2Inventory represents the overall inventory
 type O2Inventory struct {
-	Timestamp time.Time         `json:"timestamp"`
-	Compute   ComputeInventory  `json:"compute"`
-	Network   NetworkInventory  `json:"network"`
-	Storage   StorageInventory  `json:"storage"`
+	Timestamp time.Time        `json:"timestamp"`
+	Compute   ComputeInventory `json:"compute"`
+	Network   NetworkInventory `json:"network"`
+	Storage   StorageInventory `json:"storage"`
 }
 
 // ComputeInventory represents compute inventory

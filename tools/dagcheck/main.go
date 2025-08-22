@@ -50,12 +50,12 @@ type BrokenEdge struct {
 }
 
 var (
-	agentDir     = flag.String("dir", "agents", "Directory containing agent markdown files")
-	outputFile   = flag.String("output", "docs/agents/dag_report.md", "Output report file")
-	dotFile      = flag.String("dot", "docs/agents/agent_dag.dot", "Graphviz DOT output file")
-	verbose      = flag.Bool("verbose", false, "Enable verbose output")
-	strict       = flag.Bool("strict", false, "Fail on warnings")
-	generatePNG  = flag.Bool("png", true, "Generate PNG visualization if graphviz is available")
+	agentDir    = flag.String("dir", "agents", "Directory containing agent markdown files")
+	outputFile  = flag.String("output", "docs/agents/dag_report.md", "Output report file")
+	dotFile     = flag.String("dot", "docs/agents/agent_dag.dot", "Graphviz DOT output file")
+	verbose     = flag.Bool("verbose", false, "Enable verbose output")
+	strict      = flag.Bool("strict", false, "Fail on warnings")
+	generatePNG = flag.Bool("png", true, "Generate PNG visualization if graphviz is available")
 )
 
 // Expected source and sink agents
@@ -120,9 +120,9 @@ func buildGraph(dir string) (*Graph, error) {
 			log.Printf("Warning: Failed to parse %s: %v", file, err)
 			continue
 		}
-		
+
 		graph.Agents[agent.Name] = agent
-		
+
 		// Build adjacency list
 		for _, target := range agent.HandoffTo {
 			if target != "" && target != "null" {
@@ -165,7 +165,7 @@ func parseAgentFile(filePath string) (*Agent, error) {
 	downstreamPattern := regexp.MustCompile(`downstream:\s*(.+)`)
 
 	var currentListField string
-	
+
 	for scanner.Scan() {
 		lineNum++
 		line := scanner.Text()
@@ -256,15 +256,15 @@ func parseAgentFile(filePath string) (*Agent, error) {
 
 func parseAgentList(input string) []string {
 	agents := make([]string, 0) // Initialize as empty slice, not nil
-	
+
 	// Remove quotes and brackets
 	input = strings.Trim(input, `"[]`)
-	
+
 	// Split by common delimiters
 	parts := strings.FieldsFunc(input, func(r rune) bool {
 		return r == ',' || r == ';' || r == '|'
 	})
-	
+
 	for _, part := range parts {
 		agent := strings.TrimSpace(part)
 		// Remove comments (everything after #)
@@ -277,21 +277,21 @@ func parseAgentList(input string) []string {
 			agents = append(agents, agent)
 		}
 	}
-	
+
 	return agents
 }
 
 func deduplicate(items []string) []string {
 	seen := make(map[string]bool)
 	result := make([]string, 0) // Initialize as empty slice, not nil
-	
+
 	for _, item := range items {
 		if !seen[item] {
 			seen[item] = true
 			result = append(result, item)
 		}
 	}
-	
+
 	return result
 }
 
@@ -315,25 +315,25 @@ func validateDAG(graph *Graph) ValidationResult {
 		for _, target := range agent.HandoffTo {
 			if _, exists := graph.Agents[target]; !exists {
 				result.BrokenEdges = append(result.BrokenEdges, BrokenEdge{
-					From:   agentName,
-					To:     target,
-					File:   agent.File,
-					Line:   agent.LineNumbers["handoff_to"],
-					Reason: fmt.Sprintf("Target agent '%s' does not exist", target),
+					From:     agentName,
+					To:       target,
+					File:     agent.File,
+					Line:     agent.LineNumbers["handoff_to"],
+					Reason:   fmt.Sprintf("Target agent '%s' does not exist", target),
 					Suggests: fmt.Sprintf("Check if '%s.md' exists or fix the agent name", target),
 				})
 				result.IsValid = false
 			}
 		}
-		
+
 		for _, source := range agent.AcceptsFrom {
 			if _, exists := graph.Agents[source]; !exists {
 				result.BrokenEdges = append(result.BrokenEdges, BrokenEdge{
-					From:   source,
-					To:     agentName,
-					File:   agent.File,
-					Line:   agent.LineNumbers["accepts_from"],
-					Reason: fmt.Sprintf("Source agent '%s' does not exist", source),
+					From:     source,
+					To:       agentName,
+					File:     agent.File,
+					Line:     agent.LineNumbers["accepts_from"],
+					Reason:   fmt.Sprintf("Source agent '%s' does not exist", source),
 					Suggests: fmt.Sprintf("Check if '%s.md' exists or fix the agent name", source),
 				})
 				result.IsValid = false
@@ -379,7 +379,7 @@ func validateDAG(graph *Graph) ValidationResult {
 		}
 	}
 	if !sourceFound {
-		result.Warnings = append(result.Warnings, 
+		result.Warnings = append(result.Warnings,
 			fmt.Sprintf("Expected source agent '%s' is not a source (has incoming edges)", expectedSource))
 	}
 
@@ -455,10 +455,10 @@ func generateMarkdownReport(graph *Graph, result ValidationResult, outputFile st
 	}
 
 	var report strings.Builder
-	
+
 	report.WriteString("# Agent Collaboration DAG Report\n\n")
 	report.WriteString(fmt.Sprintf("Generated: %s\n\n", time.Now().Format("2006-01-02 15:04:05")))
-	
+
 	// Validation Status
 	report.WriteString("## Validation Status\n\n")
 	if result.IsValid {
@@ -472,7 +472,7 @@ func generateMarkdownReport(graph *Graph, result ValidationResult, outputFile st
 	report.WriteString(fmt.Sprintf("- Total Agents: %d\n", len(graph.Agents)))
 	report.WriteString(fmt.Sprintf("- Source Agents: %d\n", len(result.SourceAgents)))
 	report.WriteString(fmt.Sprintf("- Sink Agents: %d\n", len(result.SinkAgents)))
-	
+
 	totalEdges := 0
 	for _, agent := range graph.Agents {
 		totalEdges += len(agent.HandoffTo)
@@ -536,20 +536,20 @@ func generateMarkdownReport(graph *Graph, result ValidationResult, outputFile st
 	// Adjacency List
 	report.WriteString("## Adjacency List\n\n")
 	report.WriteString("```mermaid\ngraph TD\n")
-	
+
 	// Sort agents for consistent output
 	var agentNames []string
 	for name := range graph.Agents {
 		agentNames = append(agentNames, name)
 	}
 	sort.Strings(agentNames)
-	
+
 	for _, name := range agentNames {
 		agent := graph.Agents[name]
 		if len(agent.HandoffTo) > 0 {
 			for _, target := range agent.HandoffTo {
-				report.WriteString(fmt.Sprintf("    %s --> %s\n", 
-					sanitizeForMermaid(name), 
+				report.WriteString(fmt.Sprintf("    %s --> %s\n",
+					sanitizeForMermaid(name),
 					sanitizeForMermaid(target)))
 			}
 		} else {
@@ -565,9 +565,9 @@ func generateMarkdownReport(graph *Graph, result ValidationResult, outputFile st
 		agent := graph.Agents[name]
 		report.WriteString(fmt.Sprintf("### %s\n\n", name))
 		report.WriteString(fmt.Sprintf("- **File**: `%s`\n", agent.File))
-		report.WriteString(fmt.Sprintf("- **Accepts From**: %s\n", 
+		report.WriteString(fmt.Sprintf("- **Accepts From**: %s\n",
 			formatAgentList(agent.AcceptsFrom)))
-		report.WriteString(fmt.Sprintf("- **Hands Off To**: %s\n", 
+		report.WriteString(fmt.Sprintf("- **Hands Off To**: %s\n",
 			formatAgentList(agent.HandoffTo)))
 		report.WriteString("\n")
 	}
@@ -576,7 +576,7 @@ func generateMarkdownReport(graph *Graph, result ValidationResult, outputFile st
 	report.WriteString("## Visualization\n\n")
 	pngFile := strings.TrimSuffix(outputFile, ".md") + "_dag.png"
 	if _, err := os.Stat(pngFile); err == nil {
-		report.WriteString(fmt.Sprintf("![Agent Collaboration DAG](%s)\n\n", 
+		report.WriteString(fmt.Sprintf("![Agent Collaboration DAG](%s)\n\n",
 			filepath.Base(pngFile)))
 	} else {
 		report.WriteString("*Visualization not available. Install Graphviz and run with --png flag*\n\n")
@@ -594,57 +594,57 @@ func generateDOTFile(graph *Graph, result ValidationResult, dotFile string) erro
 	}
 
 	var dot strings.Builder
-	
+
 	dot.WriteString("digraph AgentCollaboration {\n")
 	dot.WriteString("    rankdir=TB;\n")
 	dot.WriteString("    node [shape=box, style=rounded];\n")
 	dot.WriteString("    \n")
-	
+
 	// Node styling based on role
 	for _, name := range result.SourceAgents {
 		color := "lightblue"
 		if name == expectedSource {
 			color = "lightgreen"
 		}
-		dot.WriteString(fmt.Sprintf("    \"%s\" [fillcolor=%s, style=\"rounded,filled\"];\n", 
+		dot.WriteString(fmt.Sprintf("    \"%s\" [fillcolor=%s, style=\"rounded,filled\"];\n",
 			name, color))
 	}
-	
+
 	for _, name := range result.SinkAgents {
 		color := "lightcoral"
 		if name == expectedSink {
 			color = "lightgreen"
 		}
-		dot.WriteString(fmt.Sprintf("    \"%s\" [fillcolor=%s, style=\"rounded,filled\"];\n", 
+		dot.WriteString(fmt.Sprintf("    \"%s\" [fillcolor=%s, style=\"rounded,filled\"];\n",
 			name, color))
 	}
-	
+
 	// Regular nodes
 	for name := range graph.Agents {
 		isSource := false
 		isSink := false
-		
+
 		for _, s := range result.SourceAgents {
 			if s == name {
 				isSource = true
 				break
 			}
 		}
-		
+
 		for _, s := range result.SinkAgents {
 			if s == name {
 				isSink = true
 				break
 			}
 		}
-		
+
 		if !isSource && !isSink {
 			dot.WriteString(fmt.Sprintf("    \"%s\";\n", name))
 		}
 	}
-	
+
 	dot.WriteString("    \n")
-	
+
 	// Edges
 	for _, agent := range graph.Agents {
 		for _, target := range agent.HandoffTo {
@@ -656,17 +656,17 @@ func generateDOTFile(graph *Graph, result ValidationResult, dotFile string) erro
 					break
 				}
 			}
-			
+
 			if isBroken {
-				dot.WriteString(fmt.Sprintf("    \"%s\" -> \"%s\" [color=red, style=dashed];\n", 
+				dot.WriteString(fmt.Sprintf("    \"%s\" -> \"%s\" [color=red, style=dashed];\n",
 					agent.Name, target))
 			} else {
-				dot.WriteString(fmt.Sprintf("    \"%s\" -> \"%s\";\n", 
+				dot.WriteString(fmt.Sprintf("    \"%s\" -> \"%s\";\n",
 					agent.Name, target))
 			}
 		}
 	}
-	
+
 	// Add legend
 	dot.WriteString("    \n")
 	dot.WriteString("    subgraph cluster_legend {\n")
@@ -677,15 +677,15 @@ func generateDOTFile(graph *Graph, result ValidationResult, dotFile string) erro
 	dot.WriteString("        \"Expected Source/Sink\" [fillcolor=lightgreen, style=\"rounded,filled\"];\n")
 	dot.WriteString("        \"Normal Agent\" [style=rounded];\n")
 	dot.WriteString("    }\n")
-	
+
 	dot.WriteString("}\n")
-	
+
 	return ioutil.WriteFile(dotFile, []byte(dot.String()), 0644)
 }
 
 func generatePNGVisualization(dotFile string) {
 	pngFile := strings.TrimSuffix(dotFile, ".dot") + ".png"
-	
+
 	// Try to run graphviz
 	cmd := fmt.Sprintf("dot -Tpng %s -o %s", dotFile, pngFile)
 	if err := executeCommand(cmd); err != nil {
@@ -702,32 +702,32 @@ func printResults(graph *Graph, result ValidationResult) {
 	fmt.Println("Agent Collaboration DAG Validation")
 	fmt.Println("========================================")
 	fmt.Println()
-	
+
 	if result.IsValid {
 		fmt.Println("✅ VALIDATION PASSED")
 	} else {
 		fmt.Println("❌ VALIDATION FAILED")
 	}
-	
+
 	fmt.Printf("\nAgents: %d\n", len(graph.Agents))
 	fmt.Printf("Edges: %d\n", len(graph.Adjacency))
 	fmt.Printf("Source Agents: %v\n", result.SourceAgents)
 	fmt.Printf("Sink Agents: %v\n", result.SinkAgents)
-	
+
 	if len(result.Cycles) > 0 {
 		fmt.Printf("\n⚠️ CYCLES DETECTED: %d\n", len(result.Cycles))
 		for _, cycle := range result.Cycles {
 			fmt.Printf("  - %s\n", strings.Join(cycle, " → "))
 		}
 	}
-	
+
 	if len(result.BrokenEdges) > 0 {
 		fmt.Printf("\n⚠️ BROKEN EDGES: %d\n", len(result.BrokenEdges))
 		for _, edge := range result.BrokenEdges {
 			fmt.Printf("  - %s → %s (%s)\n", edge.From, edge.To, edge.Reason)
 		}
 	}
-	
+
 	if len(result.Warnings) > 0 {
 		fmt.Printf("\n⚠️ WARNINGS:\n")
 		for _, warning := range result.Warnings {

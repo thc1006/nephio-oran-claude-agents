@@ -9,13 +9,13 @@ import (
 func TestRunSmokeTests(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunSmokeTests(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunSmokeTests failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Verify all test sections are present
 	expectedSections := []string{
 		"=== SLOG Smoke Test ===",
@@ -28,7 +28,7 @@ func TestRunSmokeTests(t *testing.T) {
 		"✅ JSON keys verification PASSED",
 		"=== All smoke tests completed successfully ===",
 	}
-	
+
 	for _, section := range expectedSections {
 		if !strings.Contains(output, section) {
 			t.Errorf("Expected section %q not found in output", section)
@@ -39,13 +39,13 @@ func TestRunSmokeTests(t *testing.T) {
 func TestRunJSONHandlerTest(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunJSONHandlerTest(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunJSONHandlerTest failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Should contain JSON formatted log lines
 	if !strings.Contains(output, `"handler":"json"`) {
 		t.Error("Expected JSON handler output not found")
@@ -55,13 +55,13 @@ func TestRunJSONHandlerTest(t *testing.T) {
 func TestRunTextHandlerTest(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunTextHandlerTest(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunTextHandlerTest failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Should contain text formatted log lines
 	if !strings.Contains(output, "format=text") {
 		t.Error("Expected text handler output not found")
@@ -71,13 +71,13 @@ func TestRunTextHandlerTest(t *testing.T) {
 func TestRunContextLoggingTest(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunContextLoggingTest(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunContextLoggingTest failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Should contain context fields
 	if !strings.Contains(output, "correlation_id") {
 		t.Error("Expected correlation_id not found in context logging output")
@@ -90,13 +90,13 @@ func TestRunContextLoggingTest(t *testing.T) {
 func TestRunStructuredAttributesTest(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunStructuredAttributesTest(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunStructuredAttributesTest failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Should contain structured data
 	if !strings.Contains(output, "nephio-orchestrator") {
 		t.Error("Expected service name not found in structured attributes output")
@@ -106,13 +106,13 @@ func TestRunStructuredAttributesTest(t *testing.T) {
 func TestRunLogLevelsTest(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunLogLevelsTest(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunLogLevelsTest failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Should contain different log levels
 	levels := []string{"DEBUG", "INFO", "WARN", "ERROR"}
 	for _, level := range levels {
@@ -125,13 +125,13 @@ func TestRunLogLevelsTest(t *testing.T) {
 func TestRunJSONKeysVerificationTest(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunJSONKeysVerificationTest(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunJSONKeysVerificationTest failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Should verify JSON structure
 	if !strings.Contains(output, "JSON output verified successfully") {
 		t.Error("Expected JSON verification success message not found")
@@ -141,13 +141,13 @@ func TestRunJSONKeysVerificationTest(t *testing.T) {
 func TestRunErrorLoggingTest(t *testing.T) {
 	var buf bytes.Buffer
 	err := RunErrorLoggingTest(&buf)
-	
+
 	if err != nil {
 		t.Fatalf("RunErrorLoggingTest failed: %v", err)
 	}
-	
+
 	output := buf.String()
-	
+
 	// Should contain error context
 	if !strings.Contains(output, "database connection failed") {
 		t.Error("Expected error message not found in error logging output")
