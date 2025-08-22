@@ -16,12 +16,12 @@ Status: ✅ L Release is the current O-RAN SC release
 | `monitoring-analytics-agent.md` | Nephio R5/O-RAN L Release Team | Nephio R5/O-RAN L Release (June 30, 2025) Team | [L Release Notes](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/release-notes.html) |
 | `monitoring-analytics-agent.md` | O-RAN L Release Architecture v1.0 | O-RAN L Release Architecture (June 30, 2025) | [L Release Architecture](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/) |
 | `monitoring-analytics-agent.md` | Python O1 simulator monitoring (L Release) | Python O1 simulator monitoring (L Release June 30, 2025 - aligned to Nov 2024 YANG models) | [L Release Simulators](https://lf-o-ran-sc.atlassian.net/wiki/spaces/ORAN/pages/26706182/L+Release+Feature+Scope) |
-| `monitoring-analytics-agent.md` | L-Release-Beta \| ⚠️ Upcoming \| Expected late 2025 | L-Release \| ✅ Current \| L Release (June 30, 2025) is current | [Version History](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/release-notes.html#version-history) |
-| `security-compliance-agent.md` | L Release expected later in 2025 | L Release (June 30, 2025) now current | [O-RAN SC Home](https://o-ran-sc.org/) |
+| `monitoring-analytics-agent.md` | L-Release-Beta \| ⚠️ Upcoming \| Future release | L-Release \| ✅ Current \| L Release (June 30, 2025) is current | [Version History](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/release-notes.html#version-history) |
+| `security-compliance-agent.md` | L Release future version | L Release (June 30, 2025) now current | [O-RAN SC Home](https://o-ran-sc.org/) |
 | `security-compliance-agent.md` | L-Release-Beta \| ⚠️ Upcoming | L-Release \| ✅ Current | [L Release Status](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/) |
-| `data-analytics-agent.md` | L Release expected later in 2025 | L Release (June 30, 2025) now current | [L Release Docs](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/) |
-| `data-analytics-agent.md` | O-RAN L Release Data Domains (2024-2025) | O-RAN L Release (June 30, 2025) Data Domains | [L Release Features](https://lf-o-ran-sc.atlassian.net/wiki/spaces/ORAN/pages/26706182/L+Release+Feature+Scope) |
-| All agent files | Expected late 2025, J/K released April 2025 | L Release (June 30, 2025) is current, superseding J/K (April 2025) | [Release Timeline](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/release-notes.html) |
+| `data-analytics-agent.md` | L Release future version | L Release (June 30, 2025) now current | [L Release Docs](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/) |
+| `data-analytics-agent.md` | O-RAN L Release Data Domains (previous years) | O-RAN L Release (June 30, 2025) Data Domains | [L Release Features](https://lf-o-ran-sc.atlassian.net/wiki/spaces/ORAN/pages/26706182/L+Release+Feature+Scope) |
+| All agent files | Future release dates, J/K released April 2025 | L Release (June 30, 2025) is current, superseding J/K (April 2025) | [Release Timeline](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/release-notes.html) |
 
 ## L Release (June 30, 2025) Key Highlights
 

@@ -1,0 +1,150 @@
+.releaseBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+  line-height: 1.2;
+}
+
+.releaseBadge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Variants */
+.default {
+  /* Default badge styling from Docusaurus */
+}
+
+.outline {
+  background-color: transparent !important;
+  border: 1.5px solid currentColor;
+  color: inherit;
+}
+
+.minimal {
+  background-color: var(--ifm-color-emphasis-100) !important;
+  color: var(--ifm-color-emphasis-800) !important;
+  border: none;
+}
+
+/* Sizes */
+.small {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+}
+
+.small .icon {
+  font-size: 0.8rem;
+}
+
+.medium {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+}
+
+.medium .icon {
+  font-size: 1rem;
+}
+
+.large {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.large .icon {
+  font-size: 1.2rem;
+}
+
+/* Content layout */
+.content {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.version {
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.icon {
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.withIcon .content {
+  margin-left: 0.1rem;
+}
+
+/* Dark theme adjustments */
+[data-theme='dark'] .minimal {
+  background-color: var(--ifm-color-emphasis-200) !important;
+  color: var(--ifm-color-emphasis-900) !important;
+}
+
+[data-theme='dark'] .outline {
+  background-color: transparent !important;
+  border-color: currentColor;
+}
+
+/* Animation for interactive badges */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.releaseBadge:active {
+  animation: pulse 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .large {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .medium {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .small {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/* Accessibility improvements */
+.releaseBadge:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.releaseBadge:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .releaseBadge {
+    border: 2px solid currentColor;
+    font-weight: 600;
+  }
+}

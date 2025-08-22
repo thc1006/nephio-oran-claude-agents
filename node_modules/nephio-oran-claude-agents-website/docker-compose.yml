@@ -1,0 +1,164 @@
+# Docker Compose for Nephio O-RAN Claude Agents Documentation
+# Supports development, testing, and production scenarios
+
+version: '3.8'
+
+services:
+  # Development server with hot reload
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        NODE_VERSION: 18
+    container_name: nephio-docs-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Hot reload support
+      - .:/app
+      - /app/node_modules
+      - /app/build
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - nephio-docs
+
+  # Production build
+  production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nephio-docs-prod
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - nephio-docs
+
+  # Testing environment
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: nephio-docs-test
+    volumes:
+      - ./test-results:/app/test-results
+    environment:
+      - NODE_ENV=test
+    command: npm run test:ci
+    depends_on:
+      - production
+    networks:
+      - nephio-docs
+
+  # Lighthouse CI for performance testing
+  lighthouse:
+    image: patrickhulce/lhci-client:0.12.0
+    container_name: nephio-docs-lighthouse
+    volumes:
+      - ./.lighthouseci:/usr/src/app/.lighthouseci
+      - ./lighthouserc.json:/usr/src/app/lighthouserc.json:ro
+    depends_on:
+      production:
+        condition: service_healthy
+    environment:
+      - LHCI_BUILD_CONTEXT__CURRENT_HASH=${GITHUB_SHA:-local}
+      - LHCI_BUILD_CONTEXT__COMMIT_TIME=${GITHUB_COMMIT_TIME:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}
+      - LHCI_BUILD_CONTEXT__CURRENT_BRANCH=${GITHUB_REF_NAME:-local}
+    command: >
+      sh -c "
+        echo 'Waiting for production service...' &&
+        sleep 10 &&
+        lhci autorun --config=/usr/src/app/lighthouserc.json
+      "
+    networks:
+      - nephio-docs
+
+  # Link checker service
+  linkchecker:
+    image: linkchecker/linkchecker:latest
+    container_name: nephio-docs-linkcheck
+    depends_on:
+      production:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Waiting for production service...' &&
+        sleep 10 &&
+        linkchecker --verbose --check-extern http://production:8080
+      "
+    networks:
+      - nephio-docs
+
+  # Monitoring stack (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: nephio-docs-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - nephio-docs
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nephio-docs-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - nephio-docs
+    profiles:
+      - monitoring
+
+# Additional Dockerfile for development
+# This will be created as a separate file
+
+networks:
+  nephio-docs:
+    driver: bridge
+    name: nephio-docs-network
+
+volumes:
+  grafana-storage:
+    name: nephio-docs-grafana-storage
+
+# Usage examples:
+# Development: docker-compose up dev
+# Production: docker-compose up production
+# Testing: docker-compose up production test
+# Full stack: docker-compose --profile monitoring up
+# Cleanup: docker-compose down -v --remove-orphans

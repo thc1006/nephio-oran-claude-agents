@@ -1,1 +1,17 @@
-PyYAML>=6.0
+# O-RAN L Release Python Dependencies
+# Python 3.11+ required for L Release O1 simulator
+PyYAML>=6.0.1
+
+# O-RAN L Release AI/ML packages for enhanced capabilities
+tensorflow>=2.15.0
+onnxruntime>=1.17.0
+scikit-learn>=1.4.0
+
+# Enhanced configuration management for R5/L Release
+pydantic>=2.5.0
+click>=8.1.7
+rich>=13.7.0
+
+# Security and validation
+cryptography>=42.0.0
+requests>=2.31.0

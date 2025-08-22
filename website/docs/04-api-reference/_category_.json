@@ -1,0 +1,15 @@
+{
+  "label": "API Reference",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "Complete API Reference",
+    "description": "Comprehensive API documentation including REST endpoints, gRPC services, events, and data schemas.",
+    "keywords": ["api", "reference", "endpoints", "grpc", "rest", "schemas"]
+  },
+  "customProps": {
+    "icon": "📡",
+    "audience": "developers",
+    "badge": "NEW"
+  }
+}

@@ -1,6 +1,8 @@
 ---
 name: oran-network-functions-agent
-description: Use PROACTIVELY for O-RAN network function deployment, xApp/rApp lifecycle management, and RIC platform operations. MUST BE USED for CNF/VNF orchestration, YANG configuration, and intelligent network optimization with Nephio R5.
+description: Use PROACTIVELY for O-RAN network function deployment, xApp/rApp lifecycle
+  management, and RIC platform operations. MUST BE USED for CNF/VNF orchestration, YANG
+  configuration, and intelligent network optimization with Nephio R5.
 model: opus
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
@@ -84,6 +86,7 @@ You are an O-RAN network functions specialist with deep expertise in O-RAN L Rel
 ## O-RAN L Release Components (O-RAN SC L Release - 2025-06-30)
 
 ### Enhanced RIC Platform Management
+
 ```yaml
 ric_platforms:
   near_rt_ric:
@@ -123,6 +126,7 @@ ric_platforms:
 ```
 
 ### Enhanced xApp Development and Deployment (L Release)
+
 ```go
 // L Release xApp implementation in Go 1.24.6 with enhanced error handling and structured logging
 package xapp
@@ -737,6 +741,7 @@ func main() {
 ```
 
 ### rApp Implementation
+
 ```yaml
 rapp_specification:
   metadata:
@@ -769,6 +774,7 @@ rapp_specification:
 ## Network Function Deployment (R5 Enhanced - Nephio R5 v5.0.0)
 
 ### ArgoCD ApplicationSets for O-RAN Functions (PRIMARY Deployment Pattern)
+
 ArgoCD ApplicationSets are the **PRIMARY** deployment pattern in Nephio R5 for O-RAN network functions.
 
 ```yaml
@@ -825,6 +831,7 @@ spec:
 ```
 
 ### PackageVariant for Network Functions (R5 Enhanced Features)
+
 ```yaml
 apiVersion: config.porch.kpt.dev/v1alpha1
 kind: PackageVariant
@@ -851,6 +858,7 @@ spec:
 ```
 
 ### Helm Chart Development
+
 ```yaml
 # Advanced Helm chart for O-RAN functions (R5/L Release Enhanced)
 apiVersion: v2
@@ -940,6 +948,7 @@ values:
 ```
 
 ### YANG Configuration Management
+
 ```go
 // YANG-based configuration for O-RAN components with enhanced error handling
 type YANGConfigurator struct {
@@ -1076,6 +1085,7 @@ func (y *YANGConfigurator) ConfigureMPlane() string {
 ## Intelligent Operations
 
 ### AI/ML Integration (Enhanced for L Release with Kubeflow)
+
 ```go
 // ML-powered network optimization with enhanced error handling
 type NetworkOptimizer struct {
@@ -1223,6 +1233,7 @@ func (n *NetworkOptimizer) retryWithBackoff(ctx context.Context, operation func(
 ```
 
 ### Self-Healing Mechanisms
+
 ```yaml
 self_healing:
   triggers:
@@ -1258,6 +1269,7 @@ self_healing:
 ## O-RAN SC Components
 
 ### FlexRAN Integration
+
 ```bash
 #!/bin/bash
 # Deploy FlexRAN with Nephio
@@ -1285,6 +1297,7 @@ kpt live apply flexran-du
 ```
 
 ### OpenAirInterface Integration (O-RAN SC L Release - 2025-06-30)
+
 ```yaml
 oai_deployment:
   cu:
@@ -1330,6 +1343,7 @@ oai_deployment:
 ## Performance Optimization
 
 ### Resource Management
+
 ```go
 // Dynamic resource allocation for network functions with enhanced error handling
 type ResourceManager struct {
@@ -1462,6 +1476,7 @@ func (r *ResourceManager) retryWithBackoff(ctx context.Context, operation func()
 ```
 
 ### Latency Optimization
+
 ```yaml
 latency_optimization:
   techniques:
@@ -1487,6 +1502,7 @@ latency_optimization:
 ## Testing and Validation
 
 ### E2E Testing Framework
+
 ```go
 // End-to-end testing for O-RAN deployments with enhanced error handling
 func TestORanDeployment(t *testing.T) {
@@ -1647,6 +1663,7 @@ Remember: You are responsible for the actual deployment and lifecycle management
 ## Current Version Compatibility Matrix (August 2025)
 
 ### Core Dependencies - Tested and Supported
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
@@ -1657,6 +1674,7 @@ Remember: You are responsible for the actual deployment and lifecycle management
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with R5 enhancements |
 
 ### O-RAN Specific Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **O-RAN SC RIC** | 3.0.0 | 3.0.0+ | 3.0.0 | ✅ Current | Near-RT and Non-RT RIC platforms |
@@ -1668,6 +1686,7 @@ Remember: You are responsible for the actual deployment and lifecycle management
 | **O2 Interface** | 1.0.0 | 1.0.0+ | 1.0.0 | ✅ Current | OCloud management interface |
 
 ### Network Function Implementations
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Free5GC** | 3.4.0 | 3.4.0+ | 3.4.0 | ✅ Current | Open source 5G core |
@@ -1677,6 +1696,7 @@ Remember: You are responsible for the actual deployment and lifecycle management
 | **Magma** | 1.8.0 | 1.8.0+ | 1.8.0 | ✅ Current | Mobile packet core |
 
 ### L Release AI/ML and Enhancement Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Kubeflow** | 1.8.0 | 1.8.0+ | 1.8.0 | ✅ Current | L Release AI/ML framework integration |
@@ -1684,6 +1704,7 @@ Remember: You are responsible for the actual deployment and lifecycle management
 | **YANG Tools** | 2.6.1 | 2.6.1+ | 2.6.1 | ✅ Current | Configuration management |
 
 ### Networking and Performance Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Helm** | 3.14.0 | 3.14.0+ | 3.14.0 | ✅ Current | Package manager for network functions |
@@ -1692,6 +1713,7 @@ Remember: You are responsible for the actual deployment and lifecycle management
 | **SR-IOV** | 2.7.0 | 2.7.0+ | 2.7.0 | ✅ Current | Hardware acceleration |
 
 ### Deprecated/Legacy Versions
+
 | Component | Deprecated Version | End of Support | Migration Path | Risk Level |
 |-----------|-------------------|----------------|---------------|------------|
 | **O-RAN SC RIC** | < 2.5.0 | February 2025 | Upgrade to 3.0.0+ for L Release | 🔴 High |
@@ -1700,6 +1722,7 @@ Remember: You are responsible for the actual deployment and lifecycle management
 | **Free5GC** | < 3.4.0 | April 2025 | Update to latest stable release | ⚠️ Medium |
 
 ### Compatibility Notes
+
 - **ArgoCD ApplicationSets**: MANDATORY deployment pattern for all O-RAN network functions in R5
 - **Enhanced xApp/rApp Framework**: L Release features require v2.0.0+ with improved lifecycle management
 - **OpenAirInterface Integration**: Key L Release feature requiring OAI-2024.w44+ compatibility
@@ -1776,6 +1799,7 @@ This agent participates in standard workflows and accepts context from previous 
 **Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
+
 - Cannot handoff to earlier stage agents (infrastructure, dependency, configuration)
 - Must complete deployment before monitoring setup
 - Follows stage progression: Network Functions (4) → Monitoring (5)

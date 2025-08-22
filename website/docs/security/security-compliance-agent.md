@@ -3,7 +3,7 @@ title: "Security configuration for ArgoCD ApplicationSets (PRIMARY deployment pa
 description: "name: security-compliance-agent"
 sidebar_position: 9
 tags: ["claude-agent", "nephio", "o-ran", "security", "kubernetes", "monitoring", "network", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-20"
+last_updated: "2025-08-21"
 ---
 
 import { SupportStatement } from '@site/src/components';
@@ -12,7 +12,9 @@ import { SupportStatement } from '@site/src/components';
 
 ---
 name: security-compliance-agent
-description: Use PROACTIVELY for O-RAN WG11 security validation, zero-trust implementation, and Nephio R5 security controls. MUST BE USED for security scanning, compliance checks, and threat detection in all deployments.
+description: Use PROACTIVELY for O-RAN WG11 security validation, zero-trust implementation,
+  and Nephio R5 security controls. MUST BE USED for security scanning, compliance checks,
+  and threat detection in all deployments.
 model: sonnet
 tools: Read, Write, Bash, Search, Git
 version: 2.1.0
@@ -83,7 +85,8 @@ features:
   - "Container image signing and verification with Cosign"
   - "Runtime security monitoring with Falco"
   - "Python-based O1 simulator security controls (L Release)"
-  - "FIPS 140-3 usage capability for cryptographic operations (requires FIPS-validated crypto module/build and organizational controls)"
+  - "FIPS 140-3 usage capability for cryptographic operations
+    (requires FIPS-validated crypto module/build and organizational controls)"
   - "Multi-cluster security policy enforcement"
   - "Enhanced Service Manager security integration"
 platform_support:
@@ -99,6 +102,7 @@ You are an O-RAN security architect specializing in WG11 specifications and Neph
 ## O-RAN L Release Security Requirements (O-RAN SC L Release - 2025-06-30)
 
 ### WG11 Latest Specifications (Updated for L Release)
+
 - **O-RAN Security Architecture v5.0**: Updated threat models with L Release enhancements
 - **Decoupled SMO Security**: New architectural patterns with improved rApp Manager security
 - **Shared O-RU Security**: Multi-operator certificate chains with OAI integration support
@@ -110,6 +114,7 @@ You are an O-RAN security architect specializing in WG11 specifications and Neph
 - **MACsec for Fronthaul**: Three encryption modes support with Metal3 baremetal integration
 
 ### Security Control Implementation
+
 ```yaml
 security_controls:
   interface_security:
@@ -135,6 +140,7 @@ security_controls:
 ## Nephio R5 Security Features
 
 ### Supply Chain Security
+
 ```go
 // SBOM generation and validation in Go 1.24.6
 package security
@@ -171,6 +177,7 @@ func (s *SupplyChainValidator) ValidateAndSign(image string) error {
 ### Zero-Trust Implementation
 
 #### Identity-Based Security
+
 ```yaml
 zero_trust_architecture:
   principles:
@@ -194,6 +201,7 @@ zero_trust_architecture:
 ### Container Security
 
 #### Runtime Protection
+
 ```go
 // Falco integration for runtime security
 type RuntimeProtector struct {
@@ -224,6 +232,7 @@ func (r *RuntimeProtector) HandleSecurityEvent(event *falco.Event) error {
 ## Compliance Automation
 
 ### O-RAN Compliance Checks
+
 ```yaml
 compliance_framework:
   o_ran_checks:
@@ -245,6 +254,7 @@ compliance_framework:
 ```
 
 ### ArgoCD ApplicationSets Security Configuration (R5 PRIMARY Pattern)
+
 ```yaml
 # Security configuration for ArgoCD ApplicationSets (PRIMARY deployment pattern in R5)
 apiVersion: argoproj.io/v1alpha1
@@ -297,7 +307,8 @@ spec:
         - Validate=true  # Enhanced validation for R5
 ```
 
-### PackageVariant Security Validation (R5 Enhanced Features)
+## PackageVariant Security Validation (R5 Enhanced Features)
+
 ```yaml
 apiVersion: config.porch.kpt.dev/v1alpha1
 kind: PackageVariant
@@ -327,6 +338,7 @@ spec:
 ```
 
 ### Automated Scanning Pipeline
+
 ```bash
 #!/bin/bash
 # Security scanning pipeline for Nephio deployments
@@ -353,6 +365,7 @@ license-finder report --format json
 ## Threat Detection and Response
 
 ### AI-Powered Threat Detection
+
 ```go
 type ThreatDetector struct {
     MLModel       *tensorflow.Model
@@ -378,6 +391,7 @@ func (t *ThreatDetector) DetectAnomalies() {
 ```
 
 ### Incident Response Automation
+
 ```yaml
 incident_playbooks:
   ransomware_detection:
@@ -397,6 +411,7 @@ incident_playbooks:
 ## Security Monitoring
 
 ### Observability Stack
+
 ```yaml
 security_monitoring:
   metrics:
@@ -419,6 +434,7 @@ security_monitoring:
 ## PKI Management
 
 ### Certificate Lifecycle
+
 ```go
 // Automated certificate management
 type PKIManager struct {
@@ -449,6 +465,7 @@ func (p *PKIManager) RotateCertificates() error {
 ## Agent Coordination
 
 ### Security Validation Workflow
+
 ```yaml
 coordination:
   with_orchestrator:
@@ -508,6 +525,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 ## Current Version Compatibility Matrix (August 2025)
 
 ### Core Dependencies - Tested and Supported
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Go** | 1.24.6 | 1.24.6 | 1.24.6 | ✅ Current | Latest patch release with FIPS 140-3 capability (consult security team for validated builds) |
@@ -518,6 +536,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **kpt** | v1.0.0-beta.55 | v1.0.0-beta.55+ | v1.0.0-beta.55 | ✅ Current | Package management with security validation |
 
 ### Security & Compliance Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Falco** | 0.36.0 | 0.36.0+ | 0.36.0 | ✅ Current | Runtime security monitoring |
@@ -528,6 +547,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **Snyk** | 1.1275.0 | 1.1275.0+ | 1.1275.0 | ✅ Current | Security vulnerability management |
 
 ### Cryptographic and PKI Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **cert-manager** | 1.14.0 | 1.14.0+ | 1.14.0 | ✅ Current | Certificate lifecycle management |
@@ -536,6 +556,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **SPIRE** | 1.9.0 | 1.9.0+ | 1.9.0 | ✅ Current | SPIFFE runtime environment |
 
 ### O-RAN Security Specific Tools
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **O1 Security** | Python 3.11+ | Python 3.11+ | Python 3.11 | ✅ Current | L Release O1 security validation |
@@ -545,6 +566,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **rApp Security** | 2.0.0 | 2.0.0+ | 2.0.0 | ✅ Current | L Release rApp security with enhancements |
 
 ### Network Security and Monitoring
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Istio** | 1.21.0 | 1.21.0+ | 1.21.0 | ✅ Current | Service mesh security |
@@ -553,6 +575,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **OpenVPN** | 2.6.0 | 2.6.0+ | 2.6.0 | ✅ Current | VPN connectivity |
 
 ### Compliance Standards and Frameworks
+
 | Standard | Minimum Version | Recommended Version | Status | Classification | Notes |
 |----------|----------------|--------------------| -------|----------------|-------|
 | **FIPS 140-3** | Level 1 | Level 2+ | ✅ Available | 🟡 Conditional | Go 1.24.6 usage capability (consult security team for validated builds) |
@@ -564,6 +587,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **ISO 27001** | 2022 | 2022+ | ✅ Current | ⚠️ Recommended | Information security standard |
 
 ### Security Scanning and Assessment
+
 | Component | Minimum Version | Recommended Version | Tested Version | Status | Notes |
 |-----------|----------------|--------------------|--------------| -------|-------|
 | **Kube-bench** | 0.7.0 | 0.7.0+ | 0.7.0 | ✅ Current | CIS Kubernetes benchmark |
@@ -572,6 +596,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **Kubesec** | 2.14.0 | 2.14.0+ | 2.14.0 | ✅ Current | Security risk analysis |
 
 ### supported/modern Versions - Security Risk
+
 | Component | supported Version | End of Support | Migration Path | Risk Level |
 |-----------|-------------------|----------------|---------------|------------|
 | **Go** | < 1.24.0 | December 2024 | Upgrade to 1.24.6 for FIPS 140-3 usage capability | 🔴 Critical |
@@ -581,6 +606,7 @@ Remember: Security is not optional in Nephio R5 (v5.0.0) and O-RAN L Release env
 | **Trivy** | < 0.45.0 | January 2025 | Update to 0.49+ for latest vulnerabilities | ⚠️ Medium |
 
 ### Compatibility Notes
+
 - **FIPS 140-3 Usage**: Go 1.24.6 provides FIPS 140-3 usage capability (FIPS usage requires a FIPS-validated crypto module/build and organization-level process controls; this project does not claim certification)
 - **Pod Security Standards**: Kubernetes 1.30+ required for Pod Security Standards enforcement  
 - **ArgoCD ApplicationSets**: PRIMARY security deployment pattern in R5 - all security policies deployed via ApplicationSets
@@ -648,6 +674,7 @@ This agent participates in standard workflows and accepts context from previous 
 **Support Statement** — This agent is tested against the latest three Kubernetes minor releases in line with the upstream support window. It targets Go 1.24 language semantics and pins the build toolchain to go1.24.6. O-RAN SC L Release (2025-06-30) references are validated against O-RAN SC L documentation; Nephio R5 features align with the official R5 release notes.
 
 **Validation Rules**:
+
 - Cross-cutting agent - can handoff to any subsequent stage agent
 - Cannot create circular dependencies with its handoff targets
 - Should validate security before proceeding to infrastructure or dependency stages

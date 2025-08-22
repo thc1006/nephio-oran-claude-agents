@@ -3,6 +3,9 @@
 CLAUDE.md
 .mcp.json
 
+# Node modules
+node_modules/
+
 # Python cache
 __pycache__/
 *.py[cod]
@@ -54,6 +57,10 @@ coverage.xml
 
 # Environments
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .venv
 env/
 venv/

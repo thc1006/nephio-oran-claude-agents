@@ -4,11 +4,40 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Claude Code Compatible](https://img.shields.io/badge/Claude%20Code-v1.0.60+-blue.svg)](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
+[![Documentation](https://img.shields.io/badge/Docs-Website-blue.svg)](https://thc1006.github.io/nephio-oran-claude-agents/)
 [![Telecom Automation](https://img.shields.io/badge/Domain-Telecom%20Automation-green.svg)]()
 [![Industry First](https://img.shields.io/badge/Industry-First-gold.svg)]()
 [![O-RAN Compatible](https://img.shields.io/badge/O--RAN-L%20Release-blue.svg)]()
 [![Nephio Version](https://img.shields.io/badge/Nephio-R5-green.svg)]()
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Agents-purple.svg)]()
+
+## 📚 Documentation Website
+
+**Visit our comprehensive documentation**: [https://thc1006.github.io/nephio-oran-claude-agents/](https://thc1006.github.io/nephio-oran-claude-agents/)
+
+The documentation website includes:
+- 📖 Detailed agent documentation
+- 🎯 Interactive compatibility matrices
+- 🌐 Multi-language support (English & Traditional Chinese)
+- 🔍 Full-text search
+- 🌙 Dark/Light theme
+
+### Running Documentation Locally
+
+```bash
+# Navigate to website directory
+cd website
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+# Website available at http://localhost:3000/nephio-oran-claude-agents/
+
+# Build for production
+npm run build
+```
 
 ## 🚀 Quick Start (2 minutes)
 
@@ -24,7 +53,7 @@ cp agents/*.md ~/.claude/agents/
 # 3. Verify installation
 claude code
 # Type: /agents
-# You should see all 9 agents listed
+# You should see all 10 agents listed
 
 # 4. Start using agents
 claude code "Deploy O-Cloud infrastructure with Nephio"
@@ -38,363 +67,190 @@ claude code "Deploy O-Cloud infrastructure with Nephio"
 
 ## 🎯 Version Compatibility
 
-- **O-RAN SC**: L Release (June 30, 2025) - Current
-- **Nephio**: R5 (v5.0.0)
-- **Go**: 1.24.6 with FIPS 140-3 usage capability (consult security team for validated builds)
-- **Kubernetes**: 1.32.x
+All agents enforce consistent versioning:
+- **O-RAN SC**: L Release (released 2025-06-30)
+- **Nephio**: R5 (v5.x)
+- **Go**: 1.24.6
+- **kpt**: v1.0.0-beta.55
+- **Kubernetes**: Latest three minor releases policy
 
 ## 📦 What You Get
 
-**9 Production-Ready Subagents** with proper YAML frontmatter and Claude Code tool configuration:
+**10 Production-Ready Subagents** with proper YAML frontmatter and Claude Code tool configuration:
 
 ### 🏗️ Infrastructure & Configuration
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| `nephio-infrastructure-agent` | **haiku** | O-Cloud provisioning, Kubernetes lifecycle, resource optimization |
-| `configuration-management-agent` | **sonnet** | YANG models, GitOps, IaC templates, drift detection |
+| Agent | Purpose | Model |
+|-------|---------|-------|
+| **[nephio-infrastructure-agent](agents/nephio-infrastructure-agent.md)** | Deploy and manage Nephio infrastructure with ArgoCD GitOps | haiku |
+| **[configuration-management-agent](agents/configuration-management-agent.md)** | YANG models, Kpt packages, Helm charts, ArgoCD ApplicationSets | haiku |
+| **[oran-nephio-dep-doctor-agent](agents/oran-nephio-dep-doctor-agent.md)** | Diagnose and fix dependency issues in deployments | haiku |
 
-### 📡 O-RAN Network Functions
+### 🎮 Orchestration & Operations
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| `oran-network-functions-agent` | **sonnet** | CNF/VNF deployment, xApp/rApp management, RIC operations |
-| `nephio-oran-orchestrator-agent` | **opus** | End-to-end service orchestration, cross-domain automation |
+| Agent | Purpose | Model |
+|-------|---------|-------|
+| **[nephio-oran-orchestrator-agent](agents/nephio-oran-orchestrator-agent.md)** | End-to-end O-RAN deployment on Nephio infrastructure | opus |
+| **[oran-network-functions-agent](agents/oran-network-functions-agent.md)** | Deploy RAN network functions (CU/DU/RU) with vendor abstraction | haiku |
+| **[performance-optimization-agent](agents/performance-optimization-agent.md)** | Optimize RAN performance with AI/ML integration | haiku |
 
 ### 📊 Monitoring & Analytics
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| `monitoring-analytics-agent` | **sonnet** | Observability, NWDAF integration, predictive maintenance |
-| `data-analytics-agent` | **haiku** | Data processing, KPI calculation, ML pipeline support |
+| Agent | Purpose | Model |
+|-------|---------|-------|
+| **[monitoring-analytics-agent](agents/monitoring-analytics-agent.md)** | Real-time monitoring with Prometheus, Grafana, and SMO integration | haiku |
+| **[data-analytics-agent](agents/data-analytics-agent.md)** | Advanced analytics with Jupyter Notebooks and TensorFlow | haiku |
 
-### 🔒 Security & Performance
+### 🔒 Security & Compliance
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| `security-compliance-agent` | **opus** | O-RAN security standards, zero-trust, compliance validation |
-| `performance-optimization-agent` | **opus** | AI-driven optimization, intelligent scaling, QoS management |
+| Agent | Purpose | Model |
+|-------|---------|-------|
+| **[security-compliance-agent](agents/security-compliance-agent.md)** | Kubernetes security and O-RAN compliance validation | haiku |
+| **[testing-validation-agent](agents/testing-validation-agent.md)** | Comprehensive testing with ONAP OTIC framework | haiku |
 
-### 🔧 Specialized Tools
+## 🤝 Agent Workflow DAG
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| `oran-nephio-dep-doctor` | **sonnet** | Dependency resolution, build/runtime error diagnosis |
+The agents follow a directed acyclic graph (DAG) workflow that prevents circular dependencies:
 
-## 💡 Installation Options
-
-### Option 1: User-Level Installation (Recommended)
-
-Available across all your projects:
-
-```bash
-# Linux/macOS
-mkdir -p ~/.claude/agents
-cp agents/*.md ~/.claude/agents/
-
-# Windows
-mkdir %USERPROFILE%\.claude\agents
-copy agents\*.md %USERPROFILE%\.claude\agents\
+```mermaid
+graph TD
+    Start([Deploy O-RAN])
+    
+    %% Stage 1: Infrastructure
+    Start --> infra[nephio-infrastructure-agent]
+    
+    %% Stage 2: Dependencies
+    infra --> doctor[oran-nephio-dep-doctor-agent]
+    
+    %% Stage 3: Configuration
+    doctor --> config[configuration-management-agent]
+    
+    %% Stage 4: Network Functions
+    config --> nf[oran-network-functions-agent]
+    
+    %% Stage 5: Operations - Multiple parallel paths
+    nf --> orchestrator[nephio-oran-orchestrator-agent]
+    nf --> monitor[monitoring-analytics-agent]
+    nf --> security[security-compliance-agent]
+    
+    %% Stage 6: Analytics
+    monitor --> analytics[data-analytics-agent]
+    
+    %% Stage 7: Optimization
+    analytics --> perf[performance-optimization-agent]
+    orchestrator --> perf
+    
+    %% Stage 8: Testing
+    perf --> test[testing-validation-agent]
+    security --> test
+    
+    %% End state
+    test --> End([Deployment Complete])
 ```
 
-### Option 2: Project-Level Installation
+## 🏃 Usage Examples
 
-For specific project use:
-
+### Basic O-RAN Deployment
 ```bash
-# Navigate to your project first
-cd /path/to/your/project
-
-# Create agents directory
-mkdir -p .claude/agents
-
-# Copy agents
-cp /path/to/nephio-oran-claude-agents/agents/*.md .claude/agents/
+claude code "Deploy a complete O-RAN infrastructure with Nephio R5"
 ```
 
-### Option 3: Selective Installation
-
-Install only the agents you need:
-
+### Network Function Deployment
 ```bash
-# Example: Install only infrastructure and security agents
-cp agents/nephio-infrastructure-agent.md ~/.claude/agents/
-cp agents/security-compliance-agent.md ~/.claude/agents/
+claude code "Deploy Nokia CU/DU on the existing Nephio cluster"
 ```
 
-## ⚡ Model Configuration & Cost Optimization
-
-Agents are configured with optimal Claude models based on task complexity:
-
-| Model | Agents | Use Case | Relative Cost |
-|-------|--------|----------|---------------|
-| **haiku** | `nephio-infrastructure`, `data-analytics` | Simple tasks, quick operations | 1x |
-| **sonnet** | `oran-network-functions`, `monitoring-analytics`, `configuration-management`, `oran-nephio-dep-doctor` | Standard development tasks | ~30x |
-| **opus** | `nephio-oran-orchestrator`, `security-compliance`, `performance-optimization` | Complex reasoning, critical decisions | ~75x |
-
-## 🎯 Usage Examples
-
-### Automatic Agent Selection
-
-Claude Code automatically selects the appropriate agent based on your task:
-
+### Performance Optimization
 ```bash
-# Infrastructure tasks → nephio-infrastructure-agent
-claude code "Provision a new Nephio cluster for edge deployment"
-
-# Network function deployment → oran-network-functions-agent
-claude code "Deploy O-RAN CU and DU with proper YANG configuration"
-
-# Security audit → security-compliance-agent
-claude code "Perform O-RAN WG11 security compliance check"
-
-# Performance issues → performance-optimization-agent
-claude code "Optimize RAN performance for high-traffic scenarios"
+claude code "Optimize RAN performance for edge deployment"
 ```
 
-### Explicit Agent Invocation
-
-Directly specify which agent to use:
-
+### Security Audit
 ```bash
-# Specific agent usage
-claude code "Use nephio-infrastructure-agent to analyze cluster resources"
-claude code "Have security-compliance-agent review our zero-trust implementation"
-claude code "Get oran-nephio-dep-doctor to fix this build error"
+claude code "Run security compliance check for O-RAN deployment"
 ```
 
-### Complex Workflows
+## 🔧 Advanced Features
 
-Agents can work together:
+- **Vendor Abstraction**: Support for Nokia, Ericsson, Samsung, ZTE
+- **GitOps Automation**: ArgoCD ApplicationSets for declarative deployments
+- **AI/ML Integration**: Kubeflow pipelines for RAN optimization
+- **Multi-Cloud**: AWS, Azure, GCP, and on-premise support
+- **FIPS 140-3**: Security compliance capability (requires validated builds)
 
-```bash
-claude code "First use configuration-management-agent to validate YANG models, 
-             then have oran-network-functions-agent deploy the CNFs, 
-             and finally use monitoring-analytics-agent to set up observability"
-```
-
-## 🛠️ Agent Management
-
-### View Installed Agents
-
-```bash
-# In Claude Code
-/agents
-
-# Lists all available agents with their descriptions
-```
-
-### Update Agent Configuration
-
-```bash
-# Use the /agents command to modify agent settings
-/agents
-
-# Select agent → Edit → Modify tools or description
-```
-
-### Check Agent Files
-
-```bash
-# Linux/macOS
-ls -la ~/.claude/agents/
-
-# Windows
-dir %USERPROFILE%\.claude\agents\
-```
-
-## 🤝 Multi-Agent Collaboration
-
-### Quick Start
-Run complete automated workflows:
-- `./scripts/run-workflow.sh deploy` - Full O-RAN deployment
-- `./scripts/run-workflow.sh troubleshoot` - Issue diagnosis and resolution
-- `./scripts/run-workflow.sh validate` - Security and compliance check
-- `./scripts/run-workflow.sh upgrade` - System upgrade
-
-### Advanced Usage
-Use Python orchestrator for detailed control:
-```bash
-# Dry run to see workflow stages
-python3 orchestration/orchestrator.py deploy --dry-run
-
-# Execute with verbose output
-python3 orchestration/orchestrator.py deploy --verbose
-```
-
-### Manual Agent Chaining
-Agents provide `handoff_to` suggestions for workflow continuation.
-
-### Workflow State Management
-State files are automatically created in `~/.claude-workflows/` for tracking progress and enabling workflow continuation.
-
-## 📊 Repository Structure
+## 📁 Repository Structure
 
 ```
 nephio-oran-claude-agents/
-├── agents/                        # All agent files
-│   ├── nephio-infrastructure-agent.md
-│   ├── oran-network-functions-agent.md
-│   ├── monitoring-analytics-agent.md
-│   ├── configuration-management-agent.md
-│   ├── security-compliance-agent.md
-│   ├── performance-optimization-agent.md
-│   ├── nephio-oran-orchestrator-agent.md
-│   ├── data-analytics-agent.md
-│   └── oran-nephio-dep-doctor.md
-├── docs/
-│   ├── AGENT_DETAILS.md          # Detailed agent documentation
-│   ├── INTEGRATION_GUIDE.md      # Nephio-O-RAN integration patterns
-│   └── TROUBLESHOOTING.md        # Common issues and solutions
-├── examples/
-│   ├── workflows/                # Example multi-agent workflows
-│   └── use-cases/                # Real-world telecom scenarios
-├── tests/
-│   ├── validate_agents.py        # Agent validation script
-│   └── test_scenarios.py         # Integration test scenarios
-├── .github/workflows/
-│   └── validate.yml              # CI/CD validation
-├── LICENSE
-└── README.md
+├── agents/                 # Agent markdown files with YAML frontmatter
+├── website/               # Documentation website (Docusaurus v3)
+│   ├── docs/             # Documentation content
+│   ├── src/              # React components
+│   └── package.json      # Website dependencies
+├── .github/workflows/     # CI/CD pipelines
+├── tests/                # Agent tests and validation
+├── tools/                # Helper scripts
+└── README.md            # This file
 ```
-
-## ✅ Key Features
-
-- **🔄 Proper Subagent Format** - Correct YAML frontmatter with Claude Code compatibility
-- **🛠️ Built-in Tools Only** - Uses only Claude Code's native tools (no external dependencies)
-- **💰 Cost Optimized** - Appropriate model selection (haiku/sonnet/opus) for each task
-- **🎯 Domain Expertise** - Deep telecom and O-RAN/Nephio knowledge embedded
-- **🔒 Security First** - O-RAN WG11 security standards compliance
-- **📊 Comprehensive Coverage** - Full lifecycle from infrastructure to optimization
-- **🚀 Zero External Dependencies** - Works immediately with Claude Code
-
-## 🧪 Testing & Validation
-
-```bash
-# Run validation tests
-cd tests/
-python3 validate_agents.py
-
-# Test specific scenarios
-python3 test_scenarios.py --scenario infrastructure_deployment
-python3 test_scenarios.py --scenario security_audit
-```
-
-## 📝 Agent Capabilities Summary
-
-### Infrastructure Layer
-
-- Kubernetes cluster management
-- O-Cloud provisioning
-- Resource optimization
-- Cost analysis
-
-### Network Functions Layer
-
-- CNF/VNF lifecycle management
-- xApp/rApp deployment
-- RIC integration
-- YANG configuration
-
-### Management Layer
-
-- GitOps workflows
-- Configuration drift detection
-- Multi-vendor abstraction
-- IaC templates
-
-### Intelligence Layer
-
-- Real-time monitoring
-- Predictive analytics
-- AI/ML optimization
-- NWDAF integration
-
-### Security Layer
-
-- Zero-trust implementation
-- Compliance validation
-- Vulnerability assessment
-- Policy enforcement
 
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these guidelines:
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-1. **Agent Format**: Maintain proper YAML frontmatter structure
-2. **Tool Usage**: Use only Claude Code built-in tools
-3. **Documentation**: Update relevant documentation
-4. **Testing**: Include test scenarios for new agents
-5. **Model Selection**: Choose appropriate model based on complexity
+### Development Setup
 
 ```bash
-# Fork and clone
-git clone https://github.com/YOUR_USERNAME/nephio-oran-claude-agents.git
+# Clone repository
+git clone https://github.com/thc1006/nephio-oran-claude-agents.git
+cd nephio-oran-claude-agents
 
-# Create feature branch
-git checkout -b feature/new-agent
+# Run tests
+./tools/test_dag_cycles.sh
 
-# Make changes and test
-python3 tests/validate_agents.py
+# Validate agents
+./tools/validate_agents.sh
 
-# Submit pull request
+# Run documentation website
+cd website && npm start
 ```
 
-## 📚 Additional Resources
+## 📊 Testing
 
-- [Claude Code Subagents Documentation](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
-- [Nephio Project](https://nephio.org/)
-- [O-RAN Alliance](https://www.o-ran.org/)
-- [O-RAN Software Community](https://o-ran-sc.org/)
-- [O-RAN SC L Release Documentation (June 30, 2025)](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/)
-- [L Release Notes](https://docs.o-ran-sc.org/projects/o-ran-sc-doc/en/latest/release-notes.html)
+The repository includes comprehensive testing:
+- DAG cycle detection
+- Agent dependency validation
+- Version consistency checks
+- YAML frontmatter validation
 
-## 🐛 Troubleshooting
-
-### Agents Not Appearing
-
+Run all tests:
 ```bash
-# Check Claude Code version
-claude code --version  # Should be 1.0.60+
-
-# Verify file locations
-ls ~/.claude/agents/*.md
-
-# Check file permissions
-chmod 644 ~/.claude/agents/*.md
+./tools/run_all_tests.sh
 ```
-
-### Agent Not Being Selected
-
-- Ensure description includes "Use PROACTIVELY" for automatic selection
-- Check that agent name matches file name (without .md)
-- Verify YAML frontmatter format is correct
-
-### Tool Errors
-
-- Agents use only: Read, Write, Bash, Search, Git
-- No external tools (kubectl, terraform, etc.) are available
-- Use Bash tool for command execution
 
 ## 📄 License
 
-Apache 2.0 License - see [LICENSE](LICENSE) for details.
+Apache License 2.0 - See [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- Built for the Claude Code community
-- Optimized for Nephio and O-RAN ecosystems
-- Inspired by telecom automation best practices
-- Special thanks to early adopters and contributors
+- **Nephio Project** - Cloud-native automation platform
+- **O-RAN Alliance** - Open RAN specifications
+- **Claude by Anthropic** - AI assistant platform
+- **Community Contributors** - Thank you for your support!
 
-## 📞 Support
+## 📮 Support
 
+- **Documentation**: [https://thc1006.github.io/nephio-oran-claude-agents/](https://thc1006.github.io/nephio-oran-claude-agents/)
 - **Issues**: [GitHub Issues](https://github.com/thc1006/nephio-oran-claude-agents/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/thc1006/nephio-oran-claude-agents/discussions)
-- **Email**: <hctsai@linux.com>
 
 ---
 
-> **Ready to revolutionize your telecom automation?** Install these agents and experience the power of specialized AI assistance for Nephio and O-RAN! 🚀
+**Note**: This project enforces strict version normalization:
+- O-RAN L (released 2025-06-30)
+- Nephio R5 (v5.x)
+- Go 1.24.6
+- kpt v1.0.0-beta.55
+- Kubernetes (latest three minor releases)
 
-**Last Updated**: Aug 2025 | **Version**: 1.0.0 |
+All agents and documentation maintain these version standards automatically.
