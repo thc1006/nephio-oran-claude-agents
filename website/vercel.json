@@ -24,12 +24,24 @@
           "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
         },
         {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy", 
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "same-origin"
+        },
+        {
           "key": "Strict-Transport-Security",
           "value": "max-age=31536000; includeSubDomains; preload"
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'sha256-inline-hash-here' https://www.google-analytics.com https://www.googletagmanager.com https://*.algolia.net https://*.algolianet.com; style-src 'self' 'sha256-inline-hash-here' https://fonts.googleapis.com; img-src 'self' data: https: https://avatars.githubusercontent.com https://www.google-analytics.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.github.com https://www.google-analytics.com https://www.googletagmanager.com https://*.algolia.net https://*.algolianet.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self' blob:; media-src 'self'; upgrade-insecure-requests;"
+          "value": "default-src 'self'; script-src 'self' 'sha256-inline-hash-here' https://www.google-analytics.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://*.algolia.net https://*.algolianet.com; style-src 'self' 'sha256-inline-hash-here' https://fonts.googleapis.com; img-src 'self' data: https://avatars.githubusercontent.com https://www.google-analytics.com https://github.com https://img.shields.io https://raw.githubusercontent.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.github.com https://www.google-analytics.com https://www.googletagmanager.com https://*.algolia.net https://*.algolianet.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self' blob:; media-src 'self'; upgrade-insecure-requests;"
         }
       ]
     },

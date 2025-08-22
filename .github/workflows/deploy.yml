@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'  # Standardized to match CI
   DEPLOYMENT_TIMEOUT: '600' # 10 minutes
 
 jobs:

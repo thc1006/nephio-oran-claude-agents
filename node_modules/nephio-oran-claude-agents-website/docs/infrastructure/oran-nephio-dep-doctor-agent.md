@@ -137,29 +137,29 @@ When invoked, I will:
        def _detect_versions(self):
            """Detect Nephio and O-RAN versions"""
            versions = {
-               'nephio': 'r5',  ## Default to latest
+               'nephio': 'r5',  # Default to latest
                'oran': 'l-release',
                'go': '1.24.6',
                'kubernetes': '1.32'
            }
            
-           ## Check for version indicators
+           # Check for version indicators
            if 'nephio' in self.error_text.lower():
                if 'r3' in self.error_text:
                    versions['nephio'] = 'r3'
                elif 'r4' in self.error_text:
                    versions['nephio'] = 'r4'
                elif 'r5' in self.error_text:
-                   versions['nephio'] = 'r5'  ## Current stable version
+                   versions['nephio'] = 'r5'  # Current stable version
                
-           ## Detect O-RAN versions
+           # Detect O-RAN versions
            if 'o-ran' in self.error_text.lower() or 'oran' in self.error_text.lower():
                if 'l-release' in self.error_text or 'l release' in self.error_text:
-                   versions['oran'] = 'l-release'  ## Current released version
+                   versions['oran'] = 'l-release'  # Current released version
                elif 'j-release' in self.error_text or 'k-release' in self.error_text:
-                   versions['oran'] = 'modern'  ## modern versions
+                   versions['oran'] = 'modern'  # modern versions
            
-           ## Generics stable since Go 1.18, no type alias support for generics yet
+           # Generics stable since Go 1.18, no type alias support for generics yet
            if 'type parameter' in self.error_text:
                versions['go'] = 'pre-1.18'
            
@@ -169,7 +169,7 @@ When invoked, I will:
 2. **Execute Targeted Searches for L Release/R5**
 
    ```bash
-   ## Search strategy for latest versions
+   # Search strategy for latest versions
    function search_for_solution() {
      local error_type=$1
      local component=$2
@@ -210,41 +210,41 @@ When invoked, I will:
 
    ```bash
    #!/bin/bash
-   ## Comprehensive environment check for R5/L Release
+   # Comprehensive environment check for R5/L Release
    
    function check_environment() {
      echo "=== R5/L Release Environment Diagnostic ==="
      
-     ## Check Go version for 1.24.6+
+     # Check Go version for 1.24.6+
      go_version=$(go version | grep -oP 'go\K[0-9.]+')
      if [[ $(echo "$go_version >= 1.24.6" | bc) -eq 0 ]]; then
        echo "WARNING: Go $go_version detected. R5/L Release requires Go 1.24.6"
      fi
      
-     ## Check Nephio version
+     # Check Nephio version
      if command -v kpt &> /dev/null; then
        kpt_version=$(kpt version 2>&1 | grep -oP 'v[0-9.]+(-[a-z]+\.[0-9]+)?')
        echo "Kpt version: $kpt_version (R5 current stable requires v1.0.0-beta.55+)"
      fi
      
-     ## Check for Nephio R5 specific components
+     # Check for Nephio R5 specific components
      if kubectl get crd packagevariants.config.porch.kpt.dev &> /dev/null; then
        echo "✅ Nephio R5 PackageVariant CRD detected (R5 feature)"
      else
        echo "⚠️  Nephio R5 PackageVariant CRD not found - may need R5 upgrade"
      fi
      
-     ## Check for ArgoCD (primary in R5)
+     # Check for ArgoCD (primary in R5)
      if command -v argocd &> /dev/null; then
        echo "ArgoCD: $(argocd version --client --short) (R5 current primary GitOps)"
      else
        echo "WARNING: ArgoCD not found (primary GitOps in current R5 stable)"
      fi
      
-     ## Check O-RAN L Release components (Released June 2025)
+     # Check O-RAN L Release components (Released June 2025)
      echo "Checking O-RAN L Release compatibility (current released version)..."
      
-     ## Check Python for O1 simulator
+     # Check Python for O1 simulator
      python_version=$(python3 --version | grep -oP '[0-9.]+')
      if [[ $(echo "$python_version >= 3.11" | bc) -eq 0 ]]; then
        echo "WARNING: Python $python_version detected. L Release (current) O1 simulator requires 3.11+"
@@ -252,7 +252,7 @@ When invoked, I will:
        echo "✅ Python $python_version compatible with L Release O1 simulator"
      fi
      
-     ## Check for L Release specific features
+     # Check for L Release specific features
      echo "Checking L Release AI/ML capabilities..."
      if python3 -c "import tensorflow" &> /dev/null; then
        echo "✅ TensorFlow available for L Release AI/ML features"
@@ -267,7 +267,7 @@ When invoked, I will:
 ### RIC Platform Dependencies (L Release)
 
 ```yaml
-## Near-RT RIC L Release Components
+# Near-RT RIC L Release Components
 e2term_l_release:
   system_packages:
     - libsctp-dev        # >= 1.0.19
@@ -287,7 +287,7 @@ e2term_l_release:
     GO111MODULE=on go mod download
     CGO_ENABLED=1 go build -buildmode=pie -o e2term ./cmd/e2term
 
-## A1 Mediator L Release
+# A1 Mediator L Release
 a1_mediator_l_release:
   python_packages:
     - rmr==4.9.5         # L Release version
@@ -347,7 +347,7 @@ xapp_framework_l_release:
 ### Core Nephio R5 Components
 
 ```yaml
-## Porch R5 Dependencies
+# Porch R5 Dependencies
 porch_r5:
   go_version: ">=1.24.6"
   go_modules:
@@ -359,11 +359,11 @@ porch_r5:
     - github.com/google/go-containerregistry@v0.17.0
   
   build_fix: |
-    ## R5 requires Go 1.24.6 (generics stable since Go 1.18)
+    # R5 requires Go 1.24.6 (generics stable since Go 1.18)
     go mod edit -go=1.24.6.6
     go mod tidy -compat=1.24.6.6
 
-## ArgoCD Integration (Primary in R5)
+# ArgoCD Integration (Primary in R5)
 argocd_r5:
   version: ">=3.1.0"
   dependencies:
@@ -372,7 +372,7 @@ argocd_r5:
     - jsonnet@v0.20.0
   
   kpt_plugin: |
-    ## ArgoCD plugin for Kpt packages
+    # ArgoCD plugin for Kpt packages
     apiVersion: v1
     kind: ConfigManagementPlugin
     metadata:
@@ -383,7 +383,7 @@ argocd_r5:
         command: ["kpt"]
         args: ["fn", "render", "."]
 
-## OCloud Dependencies (New in R5)
+# OCloud Dependencies (New in R5)
 ocloud_r5:
   baremetal:
     - metal3-io/baremetal-operator@v0.5.0
@@ -431,26 +431,26 @@ krm_functions_r5:
 ### System Libraries for Latest Versions
 
 ```bash
-## Ubuntu 22.04/24.04 for R5/L Release
+# Ubuntu 22.04/24.04 for R5/L Release
 apt-get update && apt-get install -y \
-  libsctp-dev \           ## >= 1.0.19 for L Release
-  libprotobuf-dev \       ## >= 25.0
-  protobuf-compiler \     ## >= 25.0
-  libboost-all-dev \      ## >= 1.83
-  libasn1c-dev \          ## >= 0.9.29
-  python3.11-dev \        ## L Release O1 simulator
-  build-essential \       ## GCC 13 for C++23
+  libsctp-dev \           # >= 1.0.19 for L Release
+  libprotobuf-dev \       # >= 25.0
+  protobuf-compiler \     # >= 25.0
+  libboost-all-dev \      # >= 1.83
+  libasn1c-dev \          # >= 0.9.29
+  python3.11-dev \        # L Release O1 simulator
+  build-essential \       # GCC 13 for C++23
   pkg-config \
-  libssl-dev \            ## >= 3.0
+  libssl-dev \            # >= 3.0
   libcurl4-openssl-dev
 
-## RHEL 9 / Rocky Linux 9
+# RHEL 9 / Rocky Linux 9
 dnf install -y \
   lksctp-tools-devel \
   protobuf-devel \
   protobuf-compiler \
   boost-devel \
-  gcc-toolset-13 \      ## C++23 support
+  gcc-toolset-13 \      # C++23 support
   python3.11-devel \
   openssl-devel
 ```
@@ -458,26 +458,26 @@ dnf install -y \
 ### Go 1.24.6 Module Issues
 
 ```bash
-## Fix: Go 1.24.6 - generics stable since Go 1.18
-## No experimental flags needed for generics
+# Fix: Go 1.24.6 - generics stable since Go 1.18
+# No experimental flags needed for generics
 go mod edit -go=1.24.6
 
-## Fix: FIPS 140-3 usage capability
-## Go 1.24.6 includes FIPS 140-3 usage capability through the Go Cryptographic Module v1.0.0 (consult security team for validated builds)
-## without requiring BoringCrypto or external libraries
-## Runtime FIPS mode activation (Go 1.24.6 standard approach)
+# Fix: FIPS 140-3 usage capability
+# Go 1.24.6 includes FIPS 140-3 usage capability through the Go Cryptographic Module v1.0.0 (consult security team for validated builds)
+# without requiring BoringCrypto or external libraries
+# Runtime FIPS mode activation (Go 1.24.6 standard approach)
 export GODEBUG=fips140=on
 
-## Fix: Tool dependencies - use go install
-## No tool directive in go.mod, install tools directly
+# Fix: Tool dependencies - use go install
+# No tool directive in go.mod, install tools directly
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go install golang.org/x/tools/cmd/goimports@latest
 
-## Fix: private repository access for O-RAN SC
+# Fix: private repository access for O-RAN SC
 go env -w GOPRIVATE=gerrit.o-ran-sc.org,github.com/nephio-project
 go env -w GONOSUMDB=gerrit.o-ran-sc.org
 
-## Fix: version conflicts in R5
+# Fix: version conflicts in R5
 go mod tidy -compat=1.24.6
 go mod vendor
 ```
@@ -485,19 +485,19 @@ go mod vendor
 ### Python Package Issues for L Release
 
 ```bash
-## Fix: Python 3.11+ for L Release O1 simulator
+# Fix: Python 3.11+ for L Release O1 simulator
 python3.11 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip setuptools wheel
 
-## Fix: L Release specific packages
+# Fix: L Release specific packages
 pip install \
   rmr==4.9.5 \
   ricsdl==3.2.0 \
   mdclogpy==1.2.0 \
   onnxruntime==1.17.0
 
-## Fix: O-RAN SC PyPI repository
+# Fix: O-RAN SC PyPI repository
 pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simple/ \
   --trusted-host nexus3.o-ran-sc.org \
   ricxappframe==3.3.0
@@ -506,14 +506,14 @@ pip install --index-url https://nexus3.o-ran-sc.org/repository/pypi-public/simpl
 ### Docker Build for R5/L Release
 
 ```dockerfile
-## Multi-stage build for R5/L Release
+# Multi-stage build for R5/L Release
 FROM golang:1.24.6-alpine AS builder
 
-## Enable FIPS 140-3 usage capability
-## Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
-## Runtime FIPS mode activation (Go 1.24.6 standard approach)
+# Enable FIPS 140-3 usage capability
+# Go 1.24.6 native FIPS support via Go Cryptographic Module v1.0.0 - no external libraries required
+# Runtime FIPS mode activation (Go 1.24.6 standard approach)
 ENV GODEBUG=fips140=on
-## Generics stable since Go 1.18 - no experimental flags needed
+# Generics stable since Go 1.18 - no experimental flags needed
 
 RUN apk add --no-cache git make gcc musl-dev
 WORKDIR /build
@@ -531,13 +531,13 @@ ENTRYPOINT ["/app"]
 ### Kubernetes API Version for R5
 
 ```bash
-## Fix: CRD version for Nephio R5
+# Fix: CRD version for Nephio R5
 kubectl apply -f https://raw.githubusercontent.com/nephio-project/api/r5.0.0/crds.yaml
 
-## Fix: O-RAN L Release CRDs
+# Fix: O-RAN L Release CRDs
 kubectl apply -f https://raw.githubusercontent.com/o-ran-sc/ric-plt-a1/l-release/deploy/crds/
 
-## Fix: ArgoCD setup for R5 (primary GitOps)
+# Fix: ArgoCD setup for R5 (primary GitOps)
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.0/manifests/install.yaml
 ```
@@ -565,22 +565,22 @@ ${detailed_root_cause}
 
 ### Solution for R5/L Release
 
-### Immediate Fix
+#### Immediate Fix
 \`\`\`bash
-## R5/L Release specific fix
+# R5/L Release specific fix
 ${fix_commands}
 \`\`\`
 
-### Version Alignment
+#### Version Alignment
 | Component | Required (R5/L) | Current | Action |
 |-----------|-----------------|---------|---------|
 | Go | 1.24.6+ | ${current} | ${action} |
 | Kpt | v1.0.0-beta.55+ | ${current} | ${action} |
 | ArgoCD | 3.1.0+ | ${current} | ${action} |
 
-### Verification
+#### Verification
 \`\`\`bash
-## Verify R5/L Release compatibility
+# Verify R5/L Release compatibility
 ${verification_commands}
 \`\`\`
 
@@ -597,16 +597,16 @@ ${verification_commands}
 ```python
 def search_oran_l_release_dependency(component, error):
     search_queries = [
-        ## L Release specific (released June 2025)
+        # L Release specific (released June 2025)
         f"O-RAN SC L Release {component} 2025 released",
         f"site:github.com/o-ran-sc {component} l-release branch",
         f"O-RAN L Release AI ML {component} current",
         f"O-RAN L Release stable production {component}",
         
-        ## YANG model updates
+        # YANG model updates
         f"O-RAN.WG4.MP.0-R004-v16.01 {component}",
         
-        ## Python O1 simulator
+        # Python O1 simulator
         f"O-RAN L Release Python-based O1 simulator {component}",
     ]
     return search_queries
@@ -617,13 +617,13 @@ def search_oran_l_release_dependency(component, error):
 ```python
 def search_nephio_r5_dependency(component, error):
     search_queries = [
-        ## R5 specific (current stable)
+        # R5 specific (current stable)
         f"Nephio R5 {component} 2025 current stable",
         f"Nephio R5 ArgoCD {component} released",
         f"Nephio R5 OCloud baremetal {component}",
         f"Nephio R5 production ready {component}",
         
-        ## Go 1.24.6 compatibility
+        # Go 1.24.6 compatibility
         f"Nephio R5 Go 1.24.6 {component}",
         f"kpt v1.0.0-beta.55 {component}",
     ]

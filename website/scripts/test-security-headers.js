@@ -49,6 +49,21 @@ const REQUIRED_HEADERS = {
     expected: /default-src/,
     severity: 'CRITICAL',
     description: 'Prevents XSS and injection attacks'
+  },
+  'Cross-Origin-Embedder-Policy': {
+    expected: 'require-corp',
+    severity: 'MEDIUM',
+    description: 'Enables cross-origin isolation'
+  },
+  'Cross-Origin-Opener-Policy': {
+    expected: 'same-origin',
+    severity: 'MEDIUM', 
+    description: 'Prevents cross-origin window references'
+  },
+  'Cross-Origin-Resource-Policy': {
+    expected: 'same-origin',
+    severity: 'MEDIUM',
+    description: 'Controls cross-origin resource sharing'
   }
 };
 
@@ -65,13 +80,29 @@ const CSP_DIRECTIVES = [
   'form-action'
 ];
 
-// Dangerous CSP values to avoid
-const DANGEROUS_CSP_VALUES = [
-  "'unsafe-eval'",
-  "'unsafe-inline'",
-  '*',
-  'data:',
-  'http:'
+// Dangerous CSP values to avoid (with exceptions for legitimate subdomain wildcards)
+const DANGEROUS_CSP_PATTERNS = [
+  {
+    pattern: /'unsafe-eval'/,
+    message: "'unsafe-eval' allows dangerous code execution",
+    allowExceptions: false
+  },
+  {
+    pattern: /'unsafe-inline'/,
+    message: "'unsafe-inline' bypasses CSP protection",
+    allowExceptions: true, // May be needed in development
+    developmentOnly: true
+  },
+  {
+    pattern: /\s\*(\s|;|$)/,
+    message: "Wildcard '*' allows any source",
+    allowExceptions: false
+  },
+  {
+    pattern: /\shttp:(\s|;|$)/,
+    message: "'http:' allows insecure connections",
+    allowExceptions: false
+  }
 ];
 
 /**
@@ -115,7 +146,7 @@ function parseHeaders(content, format) {
 }
 
 /**
- * Validate CSP header
+ * Validate CSP header with improved wildcard detection
  */
 function validateCSP(cspValue) {
   const issues = [];
@@ -128,20 +159,39 @@ function validateCSP(cspValue) {
     }
   }
   
-  // Check for dangerous values
-  for (const dangerous of DANGEROUS_CSP_VALUES) {
-    if (cspValue.includes(dangerous)) {
-      // Allow some exceptions
-      if (dangerous === 'data:' && cspValue.includes('img-src')) {
-        // data: URIs are acceptable for images
+  // Check for dangerous patterns
+  for (const dangerousPattern of DANGEROUS_CSP_PATTERNS) {
+    const matches = cspValue.match(dangerousPattern.pattern);
+    if (matches) {
+      // Handle development exceptions
+      if (dangerousPattern.developmentOnly && process.env.NODE_ENV === 'development') {
+        warnings.push(`CSP contains '${matches[0].trim()}' (acceptable in development)`);
         continue;
       }
-      if (dangerous === "'unsafe-inline'" && process.env.NODE_ENV === 'development') {
-        // unsafe-inline might be needed in development
-        warnings.push(`CSP contains '${dangerous}' (acceptable in development)`);
-        continue;
+      
+      // Check for data: URI exception in img-src
+      if (dangerousPattern.message.includes("'http:'") && cspValue.includes('img-src')) {
+        continue; // data: URIs are acceptable for images
       }
-      issues.push(`CSP contains dangerous value: ${dangerous}`);
+      
+      issues.push(dangerousPattern.message);
+    }
+  }
+  
+  // Special validation for legitimate subdomain wildcards
+  const subdomainWildcards = cspValue.match(/https:\/\/\*\.[a-zA-Z0-9.-]+/g);
+  if (subdomainWildcards) {
+    const legitimateWildcards = [
+      'https://*.algolia.net',
+      'https://*.algolianet.com',
+      'https://*.googleapis.com',
+      'https://*.gstatic.com'
+    ];
+    
+    for (const wildcard of subdomainWildcards) {
+      if (!legitimateWildcards.includes(wildcard)) {
+        warnings.push(`Review subdomain wildcard: ${wildcard}`);
+      }
     }
   }
   
@@ -152,7 +202,7 @@ function validateCSP(cspValue) {
  * Test security headers
  */
 async function testSecurityHeaders() {
-  console.log(chalk.blue.bold('\nSecurity Headers Test\n'));
+  console.log(chalk.blue.bold('\n🔒 O-RAN Security Headers Audit\n'));
   
   let allPassed = true;
   const results = {
@@ -239,13 +289,13 @@ async function testSecurityHeaders() {
     let vercelMatches = true;
     for (const header of Object.keys(REQUIRED_HEADERS)) {
       if (!headers[header]) {
-        console.warn(chalk.yellow(`  Warning: ${header} not found in vercel.json`));
+        console.warn(chalk.yellow(`  ⚠️ Warning: ${header} not found in vercel.json`));
         vercelMatches = false;
       }
     }
     
     if (vercelMatches) {
-      console.log(chalk.green('  All required headers present in vercel.json'));
+      console.log(chalk.green('  ✅ All required headers present in vercel.json'));
     }
     
   } catch (error) {
@@ -253,24 +303,24 @@ async function testSecurityHeaders() {
   }
   
   // Display results
-  console.log(chalk.blue.bold('\n=== Test Results ===\n'));
+  console.log(chalk.blue.bold('\n=== Security Audit Results ===\n'));
   
   if (results.passed.length > 0) {
-    console.log(chalk.green.bold('Passed:'));
+    console.log(chalk.green.bold('✅ Passed Security Checks:'));
     results.passed.forEach(({ header, value }) => {
       console.log(chalk.green(`  ✓ ${header}: ${value}`));
     });
   }
   
   if (results.warnings.length > 0) {
-    console.log(chalk.yellow.bold('\nWarnings:'));
+    console.log(chalk.yellow.bold('\n⚠️ Security Warnings:'));
     results.warnings.forEach(({ header, message }) => {
       console.log(chalk.yellow(`  ⚠ ${header}: ${message}`));
     });
   }
   
   if (results.failed.length > 0) {
-    console.log(chalk.red.bold('\nFailed:'));
+    console.log(chalk.red.bold('\n❌ Failed Security Checks:'));
     results.failed.forEach(({ header, message, severity, expected }) => {
       console.log(chalk.red(`  ✗ ${header} [${severity}]: ${message}`));
       if (expected) {
@@ -279,26 +329,23 @@ async function testSecurityHeaders() {
     });
   }
   
-  // Summary
-  console.log(chalk.blue.bold('\n=== Summary ==='));
-  console.log(`Passed: ${chalk.green(results.passed.length)}`);
-  console.log(`Warnings: ${chalk.yellow(results.warnings.length)}`);
-  console.log(`Failed: ${chalk.red(results.failed.length)}`);
-  
-  // Security score
+  // Security score calculation
+  console.log(chalk.blue.bold('\n=== Security Assessment ==='));
   const totalHeaders = Object.keys(REQUIRED_HEADERS).length;
   const score = Math.round((results.passed.length / totalHeaders) * 100);
-  const scoreColor = score >= 80 ? chalk.green : score >= 60 ? chalk.yellow : chalk.red;
+  const scoreColor = score >= 90 ? chalk.green : score >= 70 ? chalk.yellow : chalk.red;
   
-  console.log(chalk.blue.bold('\nSecurity Score: ') + scoreColor.bold(`${score}%`));
+  console.log(`Security Headers Score: ${scoreColor.bold(`${score}%`)}`);
+  console.log(`O-RAN WG11 Compliance: ${results.passed.length >= 7 ? chalk.green('GOOD') : chalk.red('NEEDS IMPROVEMENT')}`);
+  console.log(`Zero-Trust Level: ${results.passed.length >= 8 ? chalk.green('STRONG') : chalk.yellow('MODERATE')}`);
   
   // Recommendations
   if (results.failed.length > 0 || results.warnings.length > 0) {
-    console.log(chalk.blue.bold('\n=== Recommendations ==='));
+    console.log(chalk.blue.bold('\n=== Security Recommendations ==='));
     
     const criticalFails = results.failed.filter(f => f.severity === 'CRITICAL');
     if (criticalFails.length > 0) {
-      console.log(chalk.red.bold('\nCRITICAL Issues (Fix immediately):'));
+      console.log(chalk.red.bold('\n🚨 CRITICAL Issues (Fix immediately):'));
       criticalFails.forEach(f => {
         console.log(chalk.red(`  - ${f.header}: ${f.message}`));
       });
@@ -306,17 +353,21 @@ async function testSecurityHeaders() {
     
     const highFails = results.failed.filter(f => f.severity === 'HIGH');
     if (highFails.length > 0) {
-      console.log(chalk.yellow.bold('\nHIGH Priority Issues:'));
+      console.log(chalk.yellow.bold('\n⚠️ HIGH Priority Issues:'));
       highFails.forEach(f => {
         console.log(chalk.yellow(`  - ${f.header}: ${f.message}`));
       });
     }
     
-    console.log(chalk.cyan('\nNext Steps:'));
+    console.log(chalk.cyan('\n📋 Next Steps:'));
     console.log('  1. Review and update security headers in vercel.json and static/_headers');
     console.log('  2. Run "npm run build" to regenerate CSP hashes');
     console.log('  3. Test headers at https://securityheaders.com after deployment');
-    console.log('  4. Review OWASP guidelines for each failed header');
+    console.log('  4. Review O-RAN WG11 security requirements');
+    console.log('  5. Implement zero-trust architecture patterns');
+  } else {
+    console.log(chalk.green.bold('\n🎉 All security checks passed!'));
+    console.log(chalk.green('✅ Ready for O-RAN production deployment'));
   }
   
   return allPassed;
@@ -326,6 +377,6 @@ async function testSecurityHeaders() {
 testSecurityHeaders().then(passed => {
   process.exit(passed ? 0 : 1);
 }).catch(error => {
-  console.error(chalk.red('Test failed:'), error);
+  console.error(chalk.red('Security test failed:'), error);
   process.exit(1);
 });

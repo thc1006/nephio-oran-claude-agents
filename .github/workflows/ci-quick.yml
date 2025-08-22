@@ -14,11 +14,15 @@ concurrency:
   group: quick-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  NODE_VERSION: '20'
+  CACHE_VERSION: 'v2-quick'
+
 jobs:
   quick-check:
     name: Quick Validation
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,21 +30,44 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: website/package-lock.json
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: website/node_modules
+          key: ${{ runner.os }}-quick-${{ env.CACHE_VERSION }}-${{ hashFiles('website/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-quick-${{ env.CACHE_VERSION }}-
+            ${{ runner.os }}-node-v2-${{ hashFiles('website/package-lock.json') }}
       
       - name: Install dependencies
         working-directory: website
-        run: npm ci --prefer-offline --no-audit
+        run: npm ci --prefer-offline --no-audit --omit=optional
         
-      - name: Content validation
+      - name: Parallel validation
         working-directory: website
-        run: npm run validate:content || echo "⚠️ Content validation issues found"
-        
-      - name: Type check
-        working-directory: website
-        run: npm run typecheck
+        run: |
+          # Run validation and type checking in parallel
+          npm run validate:content &
+          PID1=$!
+          npm run typecheck &
+          PID2=$!
+          
+          # Wait for both processes and collect exit codes
+          wait $PID1
+          EXIT1=$?
+          wait $PID2
+          EXIT2=$?
+          
+          if [ $EXIT1 -ne 0 ]; then
+            echo "⚠️ Content validation issues found"
+          fi
+          
+          if [ $EXIT2 -ne 0 ]; then
+            echo "❌ Type checking failed"
+            exit 1
+          fi
         
       - name: Quick build test
         working-directory: website

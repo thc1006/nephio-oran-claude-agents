@@ -256,7 +256,7 @@ compliance_framework:
 ### ArgoCD ApplicationSets Security Configuration (R5 PRIMARY Pattern)
 
 ```yaml
-## Security configuration for ArgoCD ApplicationSets (PRIMARY deployment pattern in R5)
+# Security configuration for ArgoCD ApplicationSets (PRIMARY deployment pattern in R5)
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -341,24 +341,24 @@ spec:
 
 ```bash
 #!/bin/bash
-## Security scanning pipeline for Nephio deployments
+# Security scanning pipeline for Nephio deployments
 
-## Container scanning
+# Container scanning
 trivy image --severity CRITICAL,HIGH \
   --format sarif \
   --output trivy-results.sarif \
   ${IMAGE_NAME}
 
-## Kubernetes manifest scanning
+# Kubernetes manifest scanning
 kubesec scan deployment.yaml
 
-## Network policy validation
+# Network policy validation
 kubectl-validate policy -f network-policies/
 
-## SAST for Go code
+# SAST for Go code
 gosec -fmt sarif -out gosec-results.sarif ./...
 
-## License compliance
+# License compliance
 license-finder report --format json
 ```
 
