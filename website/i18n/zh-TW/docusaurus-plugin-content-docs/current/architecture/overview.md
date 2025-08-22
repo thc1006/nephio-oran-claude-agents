@@ -572,7 +572,7 @@ graph TB
 
 ## 下一步
 
-- **[代理參考](../agents/)**：了解個別代理功能
-- **[整合模式](../integration/)**：理解工作流程模式
-- **[API 文件](../api/)**：探索 API 規格
+- **[代理參考](/zh-TW/docs/agents/)**：了解個別代理功能
+- **[整合模式](/zh-TW/docs/integration/)**：理解工作流程模式
+- **[API 文件](/zh-TW/docs/api/)**：探索 API 規格
 - **[範例](../examples/)**：查看真實世界實作範例

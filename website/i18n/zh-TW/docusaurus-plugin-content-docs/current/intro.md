@@ -1,5 +1,6 @@
 ---
-slug: /
+id: intro
+slug: /intro
 sidebar_position: 1
 title: 簡介
 description: Nephio O-RAN Claude Agents - 專為 O-RAN L Release 和 Nephio R5 打造的先進雲原生編排系統

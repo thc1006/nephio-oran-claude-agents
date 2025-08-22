@@ -619,12 +619,12 @@ claude-agent testing-validation-agent "test equipment connectivity 1000 devices"
 echo "=== 製造 5G 網路驗證 ==="
 
 # 測試 1：URLLC 延遲需求
-echo "測試 URLLC 延遲需求 (<1ms)..."
+echo "測試 URLLC 延遲需求 (&lt;1ms)..."
 LATENCY=$(kubectl exec -n manufacturing test-pod -- ping -c 100 urllc-gateway.manufacturing | \
   grep "min/avg/max" | awk -F'/' '{print $5}')
 
 if (( $(echo "$LATENCY < 1" | bc -l) )); then
-  echo "✓ URLLC 延遲：${LATENCY}ms （需求：<1ms）"
+  echo "✓ URLLC 延遲：${LATENCY}ms （需求：&lt;1ms）"
 else
   echo "✗ URLLC 延遲：${LATENCY}ms 超過需求"
   exit 1
@@ -654,12 +654,12 @@ else
 fi
 
 # 測試 4：AI/ML 推理效能
-echo "測試 AI/ML 推理延遲（目標：<10ms P99）..."
+echo "測試 AI/ML 推理延遲（目標：&lt;10ms P99）..."
 AI_LATENCY=$(kubectl logs -n manufacturing predictive-maintenance-model --tail=1000 | \
   grep "inference_latency_p99" | tail -1 | awk '{print $3}')
 
 if (( $(echo "$AI_LATENCY < 10" | bc -l) )); then
-  echo "✓ AI/ML 推理 P99：${AI_LATENCY}ms （需求：<10ms）"
+  echo "✓ AI/ML 推理 P99：${AI_LATENCY}ms （需求：&lt;10ms）"
 else
   echo "✗ AI/ML 推理 P99：${AI_LATENCY}ms 超過需求"
 fi
@@ -716,12 +716,12 @@ EOF
 
 | 指標 | 需求 | 達成 | 狀態 |
 |--------|-------------|----------|---------|
-| URLLC 延遲 (P99) | <1ms | 0.8ms | ✅ |
+| URLLC 延遲 (P99) | &lt;1ms | 0.8ms | ✅ |
 | 網路可靠性 | 99.99% | 99.997% | ✅ |
 | 能源效率 | >0.6 Gbps/W | 0.73 Gbps/W | ✅ |
 | 設備連接性 | 1000 設備 | 1000 設備 | ✅ |
-| AI/ML 推理 (P99) | <10ms | 7.2ms | ✅ |
-| 部署時間 | <4 小時 | 2.5 小時 | ✅ |
+| AI/ML 推理 (P99) | &lt;10ms | 7.2ms | ✅ |
+| 部署時間 | &lt;4 小時 | 2.5 小時 | ✅ |
 
 ### 資源使用率
 

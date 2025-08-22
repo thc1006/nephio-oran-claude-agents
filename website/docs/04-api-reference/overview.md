@@ -12,6 +12,7 @@ Welcome to the comprehensive API documentation for Nephio O-RAN Claude Agents. T
 ## API Categories
 
 ### 🌐 REST API
+
 RESTful HTTP endpoints for managing agents and operations.
 
 - **Base URL**: `https://api.nephio-oran.example.com/v1`
@@ -22,6 +23,7 @@ RESTful HTTP endpoints for managing agents and operations.
 [Explore REST API →](#rest-api-details)
 
 ### ⚡ gRPC API
+
 High-performance gRPC services for real-time operations.
 
 - **Protocol**: HTTP/2
@@ -32,6 +34,7 @@ High-performance gRPC services for real-time operations.
 [Explore gRPC API →](#grpc-api-details)
 
 ### 📢 Event System
+
 Event-driven architecture for asynchronous operations.
 
 - **Event Bus**: Kubernetes Events / CloudEvents
@@ -42,6 +45,7 @@ Event-driven architecture for asynchronous operations.
 [Explore Events →](#event-system-details)
 
 ### 📋 Data Schemas
+
 Comprehensive data models and validation schemas.
 
 - **Format**: JSON Schema / OpenAPI 3.0
@@ -109,6 +113,7 @@ API rate limits are enforced per client:
 | Enterprise | 10000 | 20000 |
 
 Rate limit headers:
+
 - `X-RateLimit-Limit`: Maximum requests
 - `X-RateLimit-Remaining`: Remaining requests
 - `X-RateLimit-Reset`: Reset timestamp
@@ -133,6 +138,7 @@ Standard error response format:
 ```
 
 Common error codes:
+
 - `400`: Bad Request
 - `401`: Unauthorized
 - `403`: Forbidden
@@ -145,6 +151,7 @@ Common error codes:
 Official SDKs available:
 
 ### Go SDK
+
 ```go
 import "github.com/nephio-oran/claude-agents-sdk-go"
 
@@ -153,6 +160,7 @@ agents, err := client.Agents.List(ctx)
 ```
 
 ### Python SDK
+
 ```python
 from nephio_oran_sdk import Client
 
@@ -161,6 +169,7 @@ agents = client.agents.list()
 ```
 
 ### JavaScript/TypeScript SDK
+
 ```typescript
 import { NephioOranClient } from '@nephio-oran/sdk';
 
@@ -244,6 +253,7 @@ Need help with the APIs?
 ## Changelog
 
 ### v1.0.0 (2025-08-22)
+
 - Initial API release
 - REST and gRPC endpoints
 - Event system implementation

@@ -203,6 +203,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 ## 🔍 Selection Guide
 
 ### Choose Orchestrator Agent When:
+
 - Managing complex multi-agent workflows
 - Coordinating across multiple clusters
 - Need network slice orchestration
@@ -210,6 +211,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Managing enterprise-scale deployments
 
 ### Choose Infrastructure Agent When:
+
 - Setting up Kubernetes clusters
 - Deploying Nephio R5 components
 - Managing bare metal infrastructure
@@ -217,6 +219,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Storage and networking configuration
 
 ### Choose Config Management Agent When:
+
 - Deploying Porch packages
 - Managing YANG models
 - Configuring network attachments
@@ -224,6 +227,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Managing O-RAN configurations
 
 ### Choose Network Functions Agent When:
+
 - Deploying O-RAN components
 - Managing RIC platforms (Near-RT/Non-RT)
 - Deploying xApps and rApps
@@ -231,6 +235,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Network slice implementation
 
 ### Choose Monitoring Analytics Agent When:
+
 - Setting up observability stack
 - Deploying Prometheus/Grafana
 - Managing VES collectors
@@ -238,6 +243,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Distributed tracing setup
 
 ### Choose Data Analytics Agent When:
+
 - Processing O-RAN telemetry
 - Setting up streaming pipelines
 - ML/AI model deployment
@@ -245,6 +251,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Data lake management
 
 ### Choose Security Compliance Agent When:
+
 - WG11 compliance validation
 - FIPS 140-3 enforcement
 - Container security scanning
@@ -252,6 +259,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Security policy automation
 
 ### Choose Performance Optimization Agent When:
+
 - Energy efficiency optimization
 - SMO performance tuning
 - AI/ML workload optimization
@@ -259,6 +267,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - SLA management
 
 ### Choose Testing Validation Agent When:
+
 - E2E testing automation
 - Interface validation (E2/A1/O1/O2)
 - Chaos engineering
@@ -266,6 +275,7 @@ This comprehensive comparison matrix provides an overview of all 10 Nephio O-RAN
 - Go test coverage
 
 ### Choose Dependency Doctor Agent When:
+
 - Troubleshooting deployment issues
 - Resolving dependencies
 - System health diagnosis

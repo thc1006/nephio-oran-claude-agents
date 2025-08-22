@@ -539,30 +539,35 @@ graph TB
 ## 🏷️ Key Architecture Principles
 
 ### 1. Cloud-Native First
+
 - **Kubernetes-native**: All components run on Kubernetes
 - **Containerized**: Everything is containerized with OCI standards
 - **12-Factor App**: Following cloud-native application principles
 - **API-driven**: REST/GraphQL APIs for all interactions
 
 ### 2. GitOps Everything
+
 - **Git as single source of truth**: All configurations in Git
 - **Declarative**: Infrastructure and applications as code
 - **Automated**: Continuous deployment through GitOps controllers
 - **Auditable**: Complete change history in Git
 
 ### 3. Security by Design
+
 - **Zero-trust architecture**: Never trust, always verify
 - **Least privilege**: Minimal required permissions
 - **Defense in depth**: Multiple security layers
 - **Compliance first**: Built-in WG11 and FIPS compliance
 
 ### 4. Observable by Default
+
 - **Metrics everywhere**: Prometheus metrics for all components
 - **Structured logging**: Consistent JSON logging format
 - **Distributed tracing**: End-to-end request tracing
 - **Custom dashboards**: O-RAN specific visualizations
 
 ### 5. AI-Powered Operations
+
 - **Intelligent automation**: AI agents for decision making
 - **Predictive analytics**: Machine learning for optimization
 - **Self-healing**: Automatic issue detection and resolution
@@ -572,7 +577,7 @@ graph TB
 
 ## Next Steps
 
-- **[Agent Reference](../agents/)**: Learn about individual agent capabilities
-- **[Integration Patterns](../integration/)**: Understand workflow patterns
-- **[API Documentation](../api/)**: Explore the API specifications
+- **[Agent Reference](/docs/agents/)**: Learn about individual agent capabilities
+- **[Integration Patterns](/docs/integration/)**: Understand workflow patterns
+- **[API Documentation](/docs/api/)**: Explore the API specifications
 - **[Examples](../examples/)**: See real-world implementation examples

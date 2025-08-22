@@ -123,6 +123,7 @@ Determine which CSP directives the service needs:
 Edit the CSP in the appropriate configuration file:
 
 **For Vercel deployment:** `website/vercel.json`
+
 ```json
 {
   "headers": [
@@ -135,12 +136,14 @@ Edit the CSP in the appropriate configuration file:
 ```
 
 **For Netlify deployment:** `website/static/_headers`
+
 ```
 /*
   Content-Security-Policy: ... script-src 'self' https://new-service.com; ...
 ```
 
 **For Docusaurus plugin:** `website/plugins/docusaurus-plugin-security-headers/index.js`
+
 ```javascript
 'script-src': [
   "'self'",
@@ -152,6 +155,7 @@ Edit the CSP in the appropriate configuration file:
 ### 3. Test CSP Changes
 
 1. **Development Testing:**
+
    ```bash
    # Run local development server
    npm run start
@@ -161,6 +165,7 @@ Edit the CSP in the appropriate configuration file:
    ```
 
 2. **Staging Testing:**
+
    ```bash
    # Deploy to staging
    npm run build
@@ -171,6 +176,7 @@ Edit the CSP in the appropriate configuration file:
    ```
 
 3. **Production Validation:**
+
    ```bash
    # After deployment, validate CSP
    ./scripts/test-csp.sh
@@ -183,11 +189,14 @@ Edit the CSP in the appropriate configuration file:
 **Symptom:** `Refused to execute inline script`
 
 **Solutions:**
+
 1. Move inline scripts to external files
 2. Use nonces (for Docusaurus dynamic content):
+
    ```javascript
    'script-src': ["'self'", "'nonce-{{nonce}}'"]
    ```
+
 3. As last resort (not recommended): Add `'unsafe-inline'`
 
 ### Issue 2: Third-Party Images Blocked
@@ -195,6 +204,7 @@ Edit the CSP in the appropriate configuration file:
 **Symptom:** Images from external sources not loading
 
 **Solution:** Add specific domains to `img-src`:
+
 ```javascript
 'img-src': ['self', 'data:', 'https://specific-domain.com']
 ```
@@ -204,6 +214,7 @@ Edit the CSP in the appropriate configuration file:
 **Symptom:** Custom fonts not loading
 
 **Solution:** Ensure both font source and stylesheet are allowed:
+
 ```javascript
 'font-src': ["'self'", 'https://fonts.gstatic.com'],
 'style-src': ["'self'", 'https://fonts.googleapis.com']
@@ -212,20 +223,24 @@ Edit the CSP in the appropriate configuration file:
 ## Monitoring Checklist
 
 ### Daily Monitoring
+
 - [ ] Check browser console for CSP violations during normal usage
 - [ ] Review any CSP violation reports from users
 
 ### Weekly Monitoring
+
 - [ ] Run automated CSP test suite
 - [ ] Check security headers score at securityheaders.com
 - [ ] Review analytics for blocked resources
 
 ### Monthly Monitoring
+
 - [ ] Audit CSP configuration for unnecessary permissions
 - [ ] Review and remove unused third-party service permissions
 - [ ] Update CSP documentation with any changes
 
 ### Before Adding New Features
+
 - [ ] Identify all external resources required
 - [ ] Test in CSP Report-Only mode first
 - [ ] Document CSP changes in commit message
@@ -280,5 +295,6 @@ document.addEventListener('securitypolicyviolation', (e) => {
 ## Contact
 
 For CSP-related issues or questions:
+
 - Open an issue on [GitHub](https://github.com/thc1006/nephio-oran-claude-agents/issues)
 - Tag with `security` and `csp` labels

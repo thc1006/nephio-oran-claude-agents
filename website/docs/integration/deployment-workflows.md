@@ -81,6 +81,7 @@ graph TB
 ### Phase 1: Preparation
 
 #### Environment Validation
+
 ```bash
 # Use the dependency doctor agent for comprehensive validation
 claude-agent dependency-doctor-agent "check dependencies"
@@ -90,6 +91,7 @@ claude-agent dependency-doctor-agent "verify environment"
 ```
 
 **Validates:**
+
 - Go 1.24.6 installation and FIPS mode support
 - Kubernetes cluster accessibility (v1.30+)
 - Required CLI tools (kubectl, kpt, helm, argocd)
@@ -97,6 +99,7 @@ claude-agent dependency-doctor-agent "verify environment"
 - Storage and compute resource availability
 
 #### Security Setup
+
 ```bash
 # Apply initial security policies and FIPS mode
 claude-agent security-compliance-agent "enforce_fips_mode"
@@ -109,6 +112,7 @@ claude-agent security-compliance-agent "apply_zero_trust_policies"
 ```
 
 **Configures:**
+
 - FIPS 140-3 cryptographic mode
 - WG11 O-RAN security specifications
 - Zero-trust network policies
@@ -118,6 +122,7 @@ claude-agent security-compliance-agent "apply_zero_trust_policies"
 ### Phase 2: Infrastructure
 
 #### Cluster Provisioning
+
 ```bash
 # Create management cluster
 claude-agent infrastructure-agent "create cluster"
@@ -131,6 +136,7 @@ claude-agent infrastructure-agent "setup storage"
 ```
 
 **Deploys:**
+
 - Kubernetes clusters (management + workload clusters)
 - Nephio R5 core components (Porch, controllers)
 - ArgoCD for GitOps automation
@@ -138,6 +144,7 @@ claude-agent infrastructure-agent "setup storage"
 - Storage solutions (OpenEBS, persistent volumes)
 
 #### GitOps Configuration
+
 ```bash
 # Configure ArgoCD and repositories
 claude-agent orchestrator-agent "setup multi-cluster"
@@ -147,6 +154,7 @@ claude-agent orchestrator-agent "create package variants"
 ```
 
 **Establishes:**
+
 - ArgoCD ApplicationSets for multi-cluster deployment
 - Git repositories for packages and configurations
 - Porch package management integration
@@ -155,6 +163,7 @@ claude-agent orchestrator-agent "create package variants"
 ### Phase 3: Configuration
 
 #### Base Configuration
+
 ```bash
 # Deploy base configurations via Porch
 claude-agent config-management-agent "deploy package"
@@ -167,6 +176,7 @@ claude-agent config-management-agent "setup network"
 ```
 
 **Configures:**
+
 - Porch PackageRevisions and PackageVariants
 - O-RAN YANG models validation and deployment
 - Network attachment definitions for O-RAN interfaces
@@ -175,6 +185,7 @@ claude-agent config-management-agent "setup network"
 ### Phase 4: Network Functions
 
 #### Near-RT RIC Platform
+
 ```bash
 # Deploy Near-RT RIC components
 claude-agent network-functions-agent "deploy ric"
@@ -187,12 +198,14 @@ claude-agent network-functions-agent "deploy xapp"
 ```
 
 **Deploys:**
+
 - E2 Manager, E2 Termination, Subscription Manager
 - A1 Mediator for policy enforcement
 - Database services (Redis, SDL)
 - xApps for specific use cases (KPIMon, Traffic Steering)
 
 #### Non-RT RIC / SMO
+
 ```bash
 # Deploy SMO components
 claude-agent network-functions-agent "deploy smo"
@@ -205,12 +218,14 @@ claude-agent network-functions-agent "deploy rapp"
 ```
 
 **Deploys:**
+
 - Policy Management Service
 - Information Coordination Service (ICS)
 - rApp Catalogue and rApp Manager
 - Control Panel and dashboards
 
 #### O-RAN Network Functions
+
 ```bash
 # Deploy O-RAN CU
 claude-agent network-functions-agent "deploy cu"
@@ -223,6 +238,7 @@ claude-agent network-functions-agent "deploy ru"
 ```
 
 **Deploys:**
+
 - O-RAN Central Unit (CU) with F1/E1 interfaces
 - O-RAN Distributed Unit (DU) with fronthaul interfaces
 - O-RAN Radio Unit (RU) simulators for testing
@@ -231,6 +247,7 @@ claude-agent network-functions-agent "deploy ru"
 ### Phase 5: Operations
 
 #### Monitoring Setup
+
 ```bash
 # Deploy Prometheus stack
 claude-agent monitoring-analytics-agent "setup monitoring"
@@ -243,6 +260,7 @@ claude-agent monitoring-analytics-agent "import dashboards"
 ```
 
 **Establishes:**
+
 - Prometheus metrics collection with O-RAN KPIs
 - VES (Virtual Event Streaming) collector for 3GPP events
 - Grafana dashboards for O-RAN visualization
@@ -250,6 +268,7 @@ claude-agent monitoring-analytics-agent "import dashboards"
 - Jaeger for distributed tracing
 
 #### Data Analytics Pipeline
+
 ```bash
 # Setup data streaming
 claude-agent data-analytics-agent "setup kafka"
@@ -262,6 +281,7 @@ claude-agent data-analytics-agent "setup ml pipeline"
 ```
 
 **Deploys:**
+
 - Kafka streaming platform with KRaft mode
 - InfluxDB for time-series data storage
 - Apache Flink for stream processing
@@ -269,6 +289,7 @@ claude-agent data-analytics-agent "setup ml pipeline"
 - Data analytics dashboards (Superset)
 
 #### Performance Optimization
+
 ```bash
 # Analyze performance
 claude-agent performance-optimization-agent "full_performance_check"
@@ -281,6 +302,7 @@ claude-agent performance-optimization-agent "deploy_optimized_ai_models"
 ```
 
 **Optimizes:**
+
 - Resource allocation and HPA policies
 - Energy efficiency targeting >0.5 Gbps/W
 - AI/ML inference optimization (&lt;50ms P99)
@@ -290,6 +312,7 @@ claude-agent performance-optimization-agent "deploy_optimized_ai_models"
 ### Phase 6: Validation
 
 #### Interface Testing
+
 ```bash
 # Test all O-RAN interfaces
 claude-agent testing-validation-agent "test_e2_interface"
@@ -299,6 +322,7 @@ claude-agent testing-validation-agent "test_o2_interface"
 ```
 
 **Validates:**
+
 - E2 interface with RAN functions (KPM, RC, CCC)
 - A1 interface policy enforcement
 - O1 interface YANG/NETCONF operations
@@ -306,6 +330,7 @@ claude-agent testing-validation-agent "test_o2_interface"
 - SMO integration functionality
 
 #### End-to-End Validation
+
 ```bash
 # Run complete test suite
 claude-agent testing-validation-agent "run_complete_test_suite"
@@ -315,6 +340,7 @@ claude-agent testing-validation-agent "generate_test_report"
 ```
 
 **Tests:**
+
 - Network slice end-to-end functionality
 - Multi-cluster communication
 - Performance benchmarks (latency, throughput)
@@ -322,6 +348,7 @@ claude-agent testing-validation-agent "generate_test_report"
 - Load testing and scalability
 
 #### Security Compliance Check
+
 ```bash
 # Final security audit
 claude-agent security-compliance-agent "full_security_audit"
@@ -331,6 +358,7 @@ claude-agent security-compliance-agent "scan_all_containers"
 ```
 
 **Verifies:**
+
 - WG11 O-RAN security compliance
 - FIPS 140-3 cryptographic compliance
 - Zero-trust network policy enforcement
@@ -396,6 +424,7 @@ graph TB
 ### Workflow Steps
 
 1. **Global Management Setup**
+
    ```bash
    # Deploy global management cluster
    claude-agent orchestrator-agent "deploy global management"
@@ -405,6 +434,7 @@ graph TB
    ```
 
 2. **Regional Hub Deployment**
+
    ```bash
    # Deploy regional hubs
    claude-agent orchestrator-agent "deploy regional hubs"
@@ -414,6 +444,7 @@ graph TB
    ```
 
 3. **Edge Site Provisioning**
+
    ```bash
    # Create PackageVariantSet for edge sites
    claude-agent orchestrator-agent "create edge package variants"
@@ -423,6 +454,7 @@ graph TB
    ```
 
 4. **Edge Network Functions**
+
    ```bash
    # Deploy lightweight O-RAN components
    claude-agent network-functions-agent "deploy edge oran components"
@@ -432,6 +464,7 @@ graph TB
    ```
 
 5. **Edge Monitoring & Analytics**
+
    ```bash
    # Setup distributed monitoring
    claude-agent monitoring-analytics-agent "setup edge monitoring"
@@ -445,6 +478,7 @@ graph TB
 Specialized workflow for ultra-low latency manufacturing environments.
 
 ### Requirements
+
 - **Latency**: &lt;1ms for critical control loops
 - **Reliability**: 99.999% uptime
 - **Security**: OT/IT convergence with strict isolation
@@ -504,6 +538,7 @@ graph TB
 ### Deployment Steps
 
 1. **Industrial Infrastructure Setup**
+
    ```bash
    # Deploy ruggedized edge cluster
    claude-agent infrastructure-agent "create industrial cluster"
@@ -513,6 +548,7 @@ graph TB
    ```
 
 2. **URLLC Network Slice**
+
    ```bash
    # Deploy ultra-low latency slice
    claude-agent orchestrator-agent "deploy network slice urllc"
@@ -522,6 +558,7 @@ graph TB
    ```
 
 3. **Manufacturing Integration**
+
    ```bash
    # Deploy manufacturing-specific O-RAN functions
    claude-agent network-functions-agent "deploy manufacturing oran"
@@ -531,6 +568,7 @@ graph TB
    ```
 
 4. **Predictive Maintenance AI**
+
    ```bash
    # Deploy edge AI for predictive maintenance
    claude-agent data-analytics-agent "deploy predictive maintenance"
@@ -540,6 +578,7 @@ graph TB
    ```
 
 5. **Industrial Testing**
+
    ```bash
    # Run industrial-specific tests
    claude-agent testing-validation-agent "test industrial requirements"
@@ -553,6 +592,7 @@ graph TB
 Accelerated deployment for O-RAN research environments with rapid prototyping capabilities.
 
 ### Research Environment Features
+
 - **Rapid Deployment**: &lt;15 minutes to full stack
 - **Flexibility**: Easy component swapping and testing
 - **Observability**: Comprehensive data collection
@@ -561,6 +601,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
 ### Workflow
 
 1. **Quick Stack Deployment**
+
    ```bash
    # One-command research deployment
    claude-agent orchestrator-agent "deploy research stack"
@@ -570,6 +611,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
    ```
 
 2. **Experimental Configuration**
+
    ```bash
    # Deploy experimental xApps
    claude-agent network-functions-agent "deploy experimental xapp"
@@ -579,6 +621,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
    ```
 
 3. **Data Collection**
+
    ```bash
    # Enhanced data collection
    claude-agent data-analytics-agent "setup research analytics"
@@ -588,6 +631,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
    ```
 
 4. **Chaos Engineering**
+
    ```bash
    # Run chaos experiments
    claude-agent testing-validation-agent "run chaos tests"
@@ -601,6 +645,7 @@ Accelerated deployment for O-RAN research environments with rapid prototyping ca
 ### Common Deployment Issues
 
 #### Issue: Package Deployment Failure
+
 ```bash
 # Diagnose package issues
 claude-agent dependency-doctor-agent "diagnose package failure"
@@ -614,6 +659,7 @@ claude-agent config-management-agent "fix package deployment"
 ```
 
 #### Issue: E2 Connection Problems
+
 ```bash
 # Test E2 connectivity
 claude-agent testing-validation-agent "test_e2_interface"
@@ -626,6 +672,7 @@ kubectl rollout restart deployment/e2term -n oran
 ```
 
 #### Issue: Performance Below Targets
+
 ```bash
 # Analyze performance
 claude-agent performance-optimization-agent "full_performance_check"
@@ -640,6 +687,7 @@ claude-agent performance-optimization-agent "quick_optimize oran"
 ### Recovery Procedures
 
 #### Complete Deployment Recovery
+
 ```bash
 # Save current state
 claude-agent orchestrator-agent "backup current state"
@@ -659,30 +707,35 @@ claude-agent orchestrator-agent "resume deployment from infrastructure"
 ## Best Practices
 
 ### 1. Pre-deployment Validation
+
 - Always run dependency checks first
 - Validate network connectivity and DNS
 - Ensure sufficient resources are available
 - Check security compliance requirements
 
 ### 2. Phased Deployment
+
 - Follow the standard workflow phases
 - Validate each phase before proceeding
 - Maintain rollback points at phase boundaries
 - Monitor system health during deployment
 
 ### 3. Monitoring Integration
+
 - Set up monitoring early in the deployment
 - Configure alerts for critical components
 - Establish baseline performance metrics
 - Implement health checks for all services
 
 ### 4. Security First
+
 - Apply security policies from the beginning
 - Use FIPS-compliant cryptography
 - Implement zero-trust networking
 - Regular security scanning and audits
 
 ### 5. Documentation and Logging
+
 - Document all configuration changes
 - Maintain deployment logs and artifacts
 - Create runbooks for operational procedures

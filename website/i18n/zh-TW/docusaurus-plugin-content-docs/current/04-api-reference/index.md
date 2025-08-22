@@ -17,8 +17,8 @@ tags: ['api', 'reference', 'endpoints', 'grpc', 'rest']
 
 目前，請參閱：
 - [概述](./overview.md)
-- [入門指南](../01-getting-started/)
-- [代理程式文件](../agents/)
+- [入門指南](/zh-TW/docs/01-getting-started/)
+- [代理程式文件](/zh-TW/docs/agents/)
 
 ## API 類型
 

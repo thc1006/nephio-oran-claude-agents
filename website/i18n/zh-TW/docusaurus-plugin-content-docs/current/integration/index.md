@@ -24,7 +24,7 @@ slug: /integration/
 
 ## 快速開始
 
-1. 檢視[架構概覽](../architecture/overview.md)，了解系統設計架構
-2. 參閱[代理文件](../agents/)，熟悉各代理的核心功能
+1. 檢視[架構概覽](/zh-TW/docs/architecture/overview)，了解系統設計架構
+2. 參閱[代理文件](/zh-TW/docs/agents/)，熟悉各代理的核心功能
 3. 依循[部署工作流程](./deployment-workflows.md)指南進行實作
-4. 探索[實例範本](../examples/)，了解真實場景應用
+4. 探索[實例範本](/zh-TW/docs/examples/)，了解真實場景應用

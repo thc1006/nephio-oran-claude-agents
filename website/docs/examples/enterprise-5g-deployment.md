@@ -15,6 +15,7 @@ This comprehensive example demonstrates deploying a complete private 5G network 
 **Enterprise:** Global Manufacturing Corp  
 **Location:** Manufacturing facility in Detroit, Michigan  
 **Requirements:**
+
 - Ultra-low latency for industrial automation (< 5ms)
 - High reliability (99.99% uptime)
 - Private 5G network with 1000+ connected devices
@@ -108,6 +109,7 @@ graph TB
 ### Phase 1: Environment Preparation
 
 #### Step 1: Infrastructure Validation
+
 ```bash
 # Validate the enterprise environment
 claude-agent dependency-doctor-agent "check dependencies"
@@ -120,6 +122,7 @@ claude-agent dependency-doctor-agent "check dependencies"
 ```
 
 **Validation Output:**
+
 ```
 ✓ Go 1.24.6 with FIPS 140-3 support
 ✓ Kubernetes 1.30+ (v1.30.2)
@@ -131,6 +134,7 @@ claude-agent dependency-doctor-agent "check dependencies"
 ```
 
 #### Step 2: Security Baseline
+
 ```bash
 # Establish security baseline for manufacturing environment
 claude-agent security-compliance-agent "enforce_fips_mode"
@@ -143,6 +147,7 @@ claude-agent security-compliance-agent "apply_zero_trust_policies"
 ### Phase 2: Kubernetes Infrastructure
 
 #### Step 3: Cluster Deployment
+
 ```bash
 # Create management cluster
 claude-agent infrastructure-agent "create cluster"
@@ -155,6 +160,7 @@ claude-agent infrastructure-agent "setup storage"
 ```
 
 **Cluster Configuration:**
+
 ```yaml
 apiVersion: kind.x-k8s.io/v1alpha4
 kind: Cluster
@@ -185,6 +191,7 @@ nodes:
 ```
 
 #### Step 4: Network Configuration
+
 ```bash
 # Setup SR-IOV and DPDK for high-performance networking
 claude-agent config-management-agent "setup network"
@@ -240,6 +247,7 @@ kubectl apply -f manufacturing-network-attachments.yaml
 ### Phase 3: O-RAN Network Functions Deployment
 
 #### Step 5: Near-RT RIC Platform
+
 ```bash
 # Deploy Near-RT RIC optimized for manufacturing
 claude-agent network-functions-agent "deploy ric"
@@ -249,6 +257,7 @@ claude-agent network-functions-agent "deploy xapp"
 ```
 
 **Manufacturing-Optimized RIC Configuration:**
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -279,6 +288,7 @@ data:
 ```
 
 #### Step 6: Network Slice Deployment
+
 ```bash
 # Deploy URLLC slice for critical manufacturing operations
 claude-agent orchestrator-agent "deploy network slice urllc"
@@ -288,6 +298,7 @@ claude-agent orchestrator-agent "deploy network slice embb"
 ```
 
 **URLLC Network Slice Configuration:**
+
 ```yaml
 apiVersion: nephio.org/v1alpha1
 kind: NetworkSlice
@@ -320,6 +331,7 @@ spec:
 ```
 
 #### Step 7: O-RAN Components
+
 ```bash
 # Deploy O-RAN CU with manufacturing optimizations
 claude-agent network-functions-agent "deploy cu"
@@ -336,6 +348,7 @@ done
 ### Phase 4: SMO and AI/ML Integration
 
 #### Step 8: Non-RT RIC / SMO Deployment
+
 ```bash
 # Deploy SMO with manufacturing analytics
 claude-agent network-functions-agent "deploy smo"
@@ -345,6 +358,7 @@ claude-agent network-functions-agent "deploy rapp"
 ```
 
 **Manufacturing Analytics rApp:**
+
 ```python
 #!/usr/bin/env python3
 """
@@ -430,6 +444,7 @@ if __name__ == "__main__":
 ```
 
 #### Step 9: Edge AI/ML Deployment
+
 ```bash
 # Deploy Kubeflow for edge AI/ML
 claude-agent data-analytics-agent "setup ml pipeline"
@@ -439,6 +454,7 @@ claude-agent performance-optimization-agent "deploy_optimized_ai_models"
 ```
 
 **Edge AI Deployment Configuration:**
+
 ```yaml
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
@@ -479,6 +495,7 @@ spec:
 ### Phase 5: Monitoring and Analytics
 
 #### Step 10: Comprehensive Monitoring
+
 ```bash
 # Deploy monitoring stack optimized for manufacturing
 claude-agent monitoring-analytics-agent "setup monitoring"
@@ -488,6 +505,7 @@ claude-agent monitoring-analytics-agent "import dashboards"
 ```
 
 **Manufacturing KPI Dashboard Configuration:**
+
 ```json
 {
   "dashboard": {
@@ -566,6 +584,7 @@ claude-agent monitoring-analytics-agent "import dashboards"
 ```
 
 #### Step 11: Data Analytics Pipeline
+
 ```bash
 # Setup manufacturing data pipeline
 claude-agent data-analytics-agent "setup kafka"
@@ -600,6 +619,7 @@ EOF
 ### Phase 6: Testing and Validation
 
 #### Step 12: End-to-End Testing
+
 ```bash
 # Run comprehensive manufacturing-specific tests
 claude-agent testing-validation-agent "run_complete_test_suite"
@@ -612,6 +632,7 @@ claude-agent testing-validation-agent "test equipment connectivity 1000 devices"
 ```
 
 **Custom Manufacturing Tests:**
+
 ```bash
 #!/bin/bash
 # Manufacturing-specific validation tests
@@ -668,6 +689,7 @@ echo "=== Manufacturing Validation Complete ==="
 ```
 
 #### Step 13: Security Compliance Validation
+
 ```bash
 # Final security audit
 claude-agent security-compliance-agent "full_security_audit"
@@ -747,6 +769,7 @@ EOF
 ## 🔧 Operational Procedures
 
 ### Daily Operations Checklist
+
 ```bash
 #!/bin/bash
 # Daily operations checklist for manufacturing 5G network
@@ -779,6 +802,7 @@ echo "=== Daily Check Complete ==="
 ### Maintenance Procedures
 
 #### Weekly Maintenance
+
 - Update Grafana dashboards with latest KPIs
 - Review and rotate certificates
 - Analyze energy consumption trends
@@ -786,6 +810,7 @@ echo "=== Daily Check Complete ==="
 - Review security audit logs
 
 #### Monthly Maintenance  
+
 - Kubernetes cluster updates and patches
 - O-RAN component updates
 - Performance optimization review
@@ -793,6 +818,7 @@ echo "=== Daily Check Complete ==="
 - Disaster recovery testing
 
 #### Quarterly Maintenance
+
 - Major version updates (Nephio R5, O-RAN L Release)
 - Security compliance re-certification
 - Hardware refresh planning
@@ -804,8 +830,10 @@ echo "=== Daily Check Complete ==="
 ### Common Issues and Solutions
 
 #### Issue: High URLLC Latency
+
 **Symptoms:** Latency >1ms affecting manufacturing operations
 **Diagnosis:**
+
 ```bash
 # Check network path latency
 kubectl exec -n manufacturing test-pod -- traceroute urllc-gateway
@@ -814,7 +842,9 @@ kubectl top pods -n oran
 # Check for network congestion
 kubectl exec -n monitoring prometheus-0 -- promtool query instant 'rate(network_receive_bytes_total[1m])'
 ```
+
 **Resolution:**
+
 ```bash
 # Scale up RAN components
 kubectl scale deployment oran-du --replicas=4 -n oran
@@ -825,8 +855,10 @@ kubectl patch deployment oran-du -n oran -p '{"spec":{"template":{"spec":{"conta
 ```
 
 #### Issue: Device Connectivity Problems
+
 **Symptoms:** Manufacturing devices losing connection
 **Diagnosis:**
+
 ```bash
 # Check RU status
 kubectl get pods -n oran -l component=ru
@@ -835,7 +867,9 @@ kubectl get sriovnetworknodepolicies -A
 # Check network attachment definitions
 kubectl get network-attachment-definitions -n manufacturing
 ```
+
 **Resolution:**
+
 ```bash
 # Restart affected RUs
 kubectl rollout restart daemonset/oran-ru -n oran
@@ -846,6 +880,7 @@ claude-agent config-management-agent "setup network"
 ### Emergency Procedures
 
 #### Production Line Outage
+
 1. **Immediate Response (0-5 minutes)**
    - Check manufacturing pod status
    - Verify URLLC slice connectivity
@@ -864,12 +899,14 @@ claude-agent config-management-agent "setup network"
 ## 📈 Success Metrics & ROI
 
 ### Operational Improvements
+
 - **Reduced Downtime:** 45% reduction in unplanned downtime
 - **Improved Efficiency:** 12% increase in overall equipment effectiveness (OEE)
 - **Energy Savings:** 18% reduction in energy consumption per unit produced
 - **Maintenance Optimization:** 35% reduction in maintenance costs through predictive maintenance
 
 ### ROI Analysis (Annual)
+
 - **Implementation Cost:** $350,000 (hardware, software, deployment)
 - **Operational Savings:** $420,000/year
 - **Productivity Gains:** $280,000/year
@@ -879,6 +916,7 @@ claude-agent config-management-agent "setup network"
 - **ROI:** 160% in first year
 
 ### Business Impact
+
 - **Production Capacity:** Increased by 15% through optimized automation
 - **Quality Improvement:** 25% reduction in defect rates
 - **Time to Market:** 20% faster product development cycles

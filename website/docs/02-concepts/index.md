@@ -27,26 +27,31 @@ Our agents are built on several core principles:
 ### Agent Types and Roles
 
 #### 🎼 Orchestration Agents
+
 - **Primary Role**: High-level workflow coordination
 - **Key Functions**: Deployment planning, resource allocation, dependency management
 - **Example**: [Nephio O-RAN Orchestrator Agent](../orchestration/nephio-oran-orchestrator-agent.md)
 
 #### 🏗️ Infrastructure Agents  
+
 - **Primary Role**: Cluster and infrastructure management
 - **Key Functions**: Node provisioning, network configuration, resource monitoring
 - **Examples**: [Infrastructure Agent](../infrastructure/nephio-infrastructure-agent.md), [Deployment Doctor](../infrastructure/oran-nephio-dep-doctor-agent.md)
 
 #### 📊 Analytics and Monitoring Agents
+
 - **Primary Role**: Data collection, analysis, and observability
 - **Key Functions**: Performance monitoring, anomaly detection, capacity planning
 - **Examples**: [Data Analytics Agent](../analytics/data-analytics-agent.md), [Monitoring Agent](../monitoring/monitoring-analytics-agent.md)
 
 #### ⚙️ Configuration Management Agents
+
 - **Primary Role**: Configuration lifecycle management
 - **Key Functions**: Config validation, drift detection, compliance checking
 - **Example**: [Configuration Management Agent](../config-management/configuration-management-agent.md)
 
 #### 🛡️ Security and Compliance Agents
+
 - **Primary Role**: Security posture management
 - **Key Functions**: Policy enforcement, vulnerability scanning, compliance reporting
 - **Example**: [Security Compliance Agent](../security/security-compliance-agent.md)
@@ -72,11 +77,13 @@ data:
 ### AI Integration Patterns
 
 #### Prompt Engineering
+
 - **Structured Prompts**: Consistent input formats for reliable AI responses
 - **Context Awareness**: Agents understand current cluster state and history
 - **Decision Transparency**: AI reasoning is logged and auditable
 
 #### Feedback Loops
+
 - **Learning from Outcomes**: Agents improve decisions based on deployment results
 - **Continuous Optimization**: Performance metrics guide future AI recommendations
 - **Human-in-the-Loop**: Critical decisions can require human approval
@@ -88,16 +95,19 @@ data:
 Our agents are designed to work seamlessly with O-RAN architecture:
 
 #### Near Real-Time RIC (nRT-RIC)
+
 - **xApp Management**: Intelligent deployment and lifecycle management of xApps
 - **Policy Coordination**: Seamless integration with RAN Intelligent Controller
 - **Performance Optimization**: AI-driven resource allocation for optimal performance
 
 #### Non-Real-Time RIC (Non-RT RIC)
+
 - **rApp Orchestration**: Coordinated deployment of RAN applications
 - **Service Management**: End-to-end service lifecycle management
 - **Data Analytics**: Integration with SMO data lake and analytics platforms
 
 #### O-Cloud Infrastructure
+
 - **Resource Management**: Intelligent allocation of compute, storage, and network resources
 - **Multi-tenancy**: Support for multiple O-RAN deployments on shared infrastructure
 - **Edge Computing**: Optimization for distributed edge deployment scenarios
@@ -253,9 +263,9 @@ Now that you understand the core concepts, explore these areas:
 
 ### Practical Applications
 
-1. **[Examples](../examples/index.md)** - Real-world deployment scenarios
-2. **[Troubleshooting](../07-troubleshooting/index.md)** - Common issues and solutions
-3. **[Agent Guides](../agents/index.md)** - Individual agent documentation
+1. **[Examples](/docs/examples/)** - Real-world deployment scenarios
+2. **[Troubleshooting](/docs/07-troubleshooting/)** - Common issues and solutions
+3. **[Agent Guides](/docs/agents/)** - Individual agent documentation
 
 ## Community and Contribution
 

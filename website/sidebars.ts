@@ -101,15 +101,14 @@ const sidebars: SidebarsConfig = {
         'examples/enterprise-5g-deployment',
       ],
     },
-    // Future: Troubleshooting section will be added when content is available
-    // {
-    //   type: 'category',
-    //   label: 'Troubleshooting',
-    //   collapsed: true,
-    //   items: [
-    //     // Will be populated with troubleshooting guides
-    //   ],
-    // },
+    {
+      type: 'category',
+      label: 'Troubleshooting',
+      collapsed: true,
+      items: [
+        'troubleshooting/index',
+      ],
+    },
   ],
 };
 

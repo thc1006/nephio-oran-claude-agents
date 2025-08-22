@@ -18,12 +18,12 @@ export default function NotFound() {
             <div style={{textAlign: 'center', marginTop: '2rem'}}>
               <Link
                 className="button button--primary button--lg"
-                to="/zh-TW/">
+                to="/">
                 返回首頁
               </Link>
               <Link
                 className="button button--secondary button--lg margin-left--md"
-                to="/zh-TW/docs/intro">
+                to="docs/intro">
                 瀏覽文件
               </Link>
             </div>

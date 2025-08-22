@@ -11,6 +11,7 @@ Welcome to the Integration documentation section. This section provides comprehe
 ## Integration Guides
 
 ### Deployment Workflows
+
 - [Deployment Workflows](./deployment-workflows.md) - Complete guide to deployment patterns and best practices
 
 ## Integration Patterns
@@ -24,7 +25,7 @@ This section covers various integration patterns and workflows for:
 
 ## Quick Start
 
-1. Review the [Architecture Overview](../architecture/overview.md) to understand system design
-2. Check the [Agent Documentation](../agents/) for specific agent capabilities
+1. Review the [Architecture Overview](/docs/architecture/overview) to understand system design
+2. Check the [Agent Documentation](/docs/agents/) for specific agent capabilities
 3. Follow the [Deployment Workflows](./deployment-workflows.md) guide
-4. Explore [Examples](../examples/) for real-world scenarios
+4. Explore [Examples](/docs/examples/) for real-world scenarios

@@ -237,13 +237,12 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'docsSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Docs',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'docsSidebar',
-          position: 'left',
-          label: 'Guides',
+          to: 'blog',
+          label: 'Blog',
+          position: 'left'
         },
         {
           type: 'localeDropdown',
@@ -263,12 +262,20 @@ const config: Config = {
           title: 'Documentation',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Introduction',
+              to: 'docs/intro',
             },
             {
               label: 'Quick Start',
-              to: '/docs/guides/quickstart',
+              to: 'docs/guides/quickstart',
+            },
+            {
+              label: 'Architecture',
+              to: 'docs/architecture',
+            },
+            {
+              label: 'Agents',
+              to: 'docs/agents',
             },
           ],
         },
@@ -294,7 +301,7 @@ const config: Config = {
           items: [
             {
               label: 'Blog',
-              to: '/blog',
+              to: 'blog',
             },
             {
               label: 'GitHub',

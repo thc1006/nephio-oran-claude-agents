@@ -37,9 +37,9 @@ Nephio O-RAN Claude Agents 為開放無線接取網路 (O-RAN) 部署提供智�
 
 ### 必要的第一步
 
-1. **[快速入門指南](../guides/quickstart.md)** - 30 分鐘內完成部署
-2. **[架構概觀](../architecture/index.md)** - 了解系統設計理念
-3. **[代理程式設定](../agents/index.md)** - 認識可用的代理程式
+1. **[快速入門指南](/zh-TW/docs/guides/quickstart)** - 30 分鐘內完成部署
+2. **[架構概觀](/zh-TW/docs/architecture/)** - 了解系統設計理念
+3. **[代理程式設定](/zh-TW/docs/agents/)** - 認識可用的代理程式
 
 ### 核心概念
 
@@ -49,9 +49,9 @@ Nephio O-RAN Claude Agents 為開放無線接取網路 (O-RAN) 部署提供智�
 
 ### 常見任務
 
-- **[部署網路功能](../agents/orchestrator/nephio-oran-orchestrator-agent.mdx)**
-- **[設定監控機制](../agents/monitoring/monitoring-analytics-agent.mdx)**
-- **[設定基礎建設](../agents/infrastructure/nephio-infrastructure-agent.mdx)**
+- **[部署網路功能](/zh-TW/docs/agents/orchestrator/nephio-oran-orchestrator-agent)**
+- **[設定監控機制](/zh-TW/docs/agents/monitoring/monitoring-analytics-agent)**
+- **[設定基礎建設](/zh-TW/docs/agents/infrastructure/nephio-infrastructure-agent)**
 
 ## 前置需求
 
@@ -96,17 +96,17 @@ make install && make deploy
 
 當您確認前置需求都已準備完成後：
 
-1. **開始行動**: [快速入門指南](../guides/quickstart.md) - 30 分鐘完成全部設定
-2. **學習概念**: [架構概觀](../architecture/index.md) - 深入了解系統架構
-3. **探索代理**: [代理程式文件](../agents/index.md) - 發現所有可用的代理程式
-4. **設定安全**: [測試驗證代理](../agents/testing/oran-nephio-dep-doctor-agent.mdx) - 保護您的部署環境
+1. **開始行動**: [快速入門指南](/zh-TW/docs/guides/quickstart) - 30 分鐘完成全部設定
+2. **學習概念**: [架構概觀](/zh-TW/docs/architecture/) - 深入了解系統架構
+3. **探索代理**: [代理程式文件](/zh-TW/docs/agents/) - 發現所有可用的代理程式
+4. **設定安全**: [測試驗證代理](/zh-TW/docs/agents/testing/oran-nephio-dep-doctor-agent) - 保護您的部署環境
 
 ## 取得協助
 
 需要任何協助嗎？我們很樂意為您提供支援：
 
 - **技術文件**: 瀏覽我們的完整指南文件
-- **疑難排解**: 查看 [疑難排解指南](../troubleshooting/index.md)
+- **疑難排解**: 查看 [疑難排解指南](/zh-TW/docs/07-troubleshooting/)
 - **社群討論**: 加入 [GitHub Discussions](https://github.com/thc1006/nephio-oran-claude-agents/discussions)
 - **問題回報**: 在 [GitHub Issues](https://github.com/thc1006/nephio-oran-claude-agents/issues) 回報錯誤
 

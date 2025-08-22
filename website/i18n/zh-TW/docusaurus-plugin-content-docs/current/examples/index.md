@@ -37,9 +37,9 @@ slug: /examples/
 
 ## 範例入門
 
-1. 查看[架構概述](../architecture/overview.md)以了解系統
-2. 查看[代理文件](../agents/)了解特定功能
-3. 遵循[整合指南](../integration/)了解工作流程模式
+1. 查看[架構概述](/zh-TW/docs/architecture/overview)以了解系統
+2. 查看[代理文件](/zh-TW/docs/agents/)了解特定功能
+3. 遵循[整合指南](/zh-TW/docs/integration/)了解工作流程模式
 4. 嘗試符合您使用案例的範例
 
 ## 貢獻範例

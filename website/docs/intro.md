@@ -1,5 +1,6 @@
 ---
-slug: /
+id: intro
+slug: /intro
 sidebar_position: 1
 title: Introduction
 description: Nephio O-RAN Claude Agents - Advanced cloud-native orchestration for O-RAN L Release and Nephio R5
@@ -75,24 +76,28 @@ graph TB
 ## 🚀 Key Features
 
 ### 🤖 Intelligent Agent System
+
 - **10 Specialized Agents**: Each agent is an expert in a specific domain
 - **Natural Language Processing**: Understand and execute commands in plain English
 - **Autonomous Operation**: Agents can work independently or collaboratively
 - **Self-Healing**: Automatic detection and resolution of issues
 
 ### 🌐 O-RAN L Release Compliance
+
 - **Complete Interface Support**: E2, A1, O1, O2 interfaces fully implemented
 - **WG11 Security Standards**: Advanced security and compliance validation
 - **SMO Integration**: Full Service Management and Orchestration support
 - **RAN Functions**: KPM, RC, and CCC RAN function support
 
 ### ☸️ Nephio R5 Integration
+
 - **Porch Package Management**: Advanced GitOps-based package orchestration
 - **PackageVariantSet**: Multi-cluster deployment automation
 - **O-Cloud Integration**: Cloud-native infrastructure management
 - **FIPS 140-3 Compliance**: Secure cryptographic operations with Go 1.24.6
 
 ### 🔧 Advanced Automation
+
 - **Infrastructure as Code**: Declarative infrastructure management
 - **GitOps Workflows**: ArgoCD and Flux-based continuous deployment
 - **Zero-Downtime Operations**: Blue-green and canary deployments
@@ -116,28 +121,36 @@ graph TB
 ## 🎯 Use Cases
 
 ### 🏢 Enterprise 5G Deployment
+
 Deploy a complete private 5G network with O-RAN components for enterprise use cases:
+
 - Automated infrastructure provisioning
 - Security-first deployment with WG11 compliance
 - Performance optimization for specific workloads
 - Continuous monitoring and analytics
 
 ### 🌍 Multi-Site Edge Computing
+
 Manage distributed edge computing infrastructure across multiple sites:
+
 - PackageVariantSet for site-specific configurations
 - Energy-efficient operations with sustainability metrics
 - AI/ML workload placement and optimization
 - Zero-touch provisioning and maintenance
 
 ### 🔬 Research & Development
+
 Accelerate O-RAN research with rapid prototyping capabilities:
+
 - Quick deployment of test environments
 - Chaos engineering for resilience testing
 - Custom xApp and rApp development workflows
 - Comprehensive performance benchmarking
 
 ### 🏭 Industrial IoT & Manufacturing
+
 Deploy industrial-grade 5G networks for manufacturing and IoT:
+
 - Ultra-low latency network slice management
 - Predictive maintenance with AI/ML analytics
 - Strict security and compliance requirements
@@ -146,6 +159,7 @@ Deploy industrial-grade 5G networks for manufacturing and IoT:
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Kubernetes 1.30+
 - Go 1.24.6 (with FIPS 140-3 support)
 - Docker/Podman
@@ -153,6 +167,7 @@ Deploy industrial-grade 5G networks for manufacturing and IoT:
 - kubectl and kpt CLI tools
 
 ### 1-Minute Demo
+
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/nephio-oran-claude-agents.git
@@ -172,6 +187,7 @@ claude-agent testing-validation-agent "quick validation"
 ```
 
 ### Standard Deployment Workflow
+
 1. **Infrastructure Setup**: Create Kubernetes clusters with Nephio R5
 2. **Security Configuration**: Apply WG11 security policies and FIPS mode
 3. **Network Function Deployment**: Deploy O-RAN components via Porch packages
@@ -182,12 +198,14 @@ claude-agent testing-validation-agent "quick validation"
 ## 📊 System Requirements
 
 ### Minimum Requirements
+
 - **CPU**: 16 cores
 - **Memory**: 64GB RAM
 - **Storage**: 500GB SSD
 - **Network**: 10Gbps connectivity
 
 ### Recommended for Production
+
 - **CPU**: 32+ cores with SR-IOV support
 - **Memory**: 128GB+ RAM
 - **Storage**: 2TB+ NVMe SSD
@@ -197,6 +215,7 @@ claude-agent testing-validation-agent "quick validation"
 ## 🔧 Technology Stack
 
 ### Core Technologies
+
 - **Container Platform**: Kubernetes 1.30+, containerd
 - **Package Management**: Helm, kpt, Porch
 - **GitOps**: ArgoCD, Flux
@@ -204,6 +223,7 @@ claude-agent testing-validation-agent "quick validation"
 - **Storage**: OpenEBS, Rook-Ceph
 
 ### O-RAN Components
+
 - **Near-RT RIC**: O-RAN SC platform v3.0.0+
 - **Non-RT RIC/SMO**: O-RAN SC Non-RT RIC v2.5.0+
 - **E2 Interface**: ASN.1 based with RAN functions
@@ -211,6 +231,7 @@ claude-agent testing-validation-agent "quick validation"
 - **O1 Interface**: NETCONF/YANG configuration
 
 ### Data & Analytics
+
 - **Streaming**: Apache Kafka with KRaft
 - **Time Series**: InfluxDB 2.x
 - **Processing**: Apache Flink
@@ -218,6 +239,7 @@ claude-agent testing-validation-agent "quick validation"
 - **Visualization**: Grafana, Superset
 
 ### Security & Compliance
+
 - **Cryptography**: FIPS 140-3 with Go 1.24.6
 - **Network Security**: Calico, Network Policies
 - **Container Security**: Falco, Trivy scanning
@@ -238,13 +260,16 @@ This documentation is organized into the following sections:
 ## 🤝 Community & Support
 
 ### Getting Help
+
 - **Documentation**: Comprehensive guides and API references
 - **GitHub Issues**: Bug reports and feature requests
 - **Community Slack**: Real-time discussion and support
 - **Office Hours**: Weekly community calls
 
 ### Contributing
+
 We welcome contributions from the community! Whether it's:
+
 - Bug reports and fixes
 - New agent capabilities
 - Documentation improvements
@@ -254,7 +279,9 @@ We welcome contributions from the community! Whether it's:
 Please see our [Contributing Guide](./CONTRIBUTING.md) for details on how to get started.
 
 ### Roadmap
+
 Our development roadmap includes:
+
 - **Q4 2024**: O-RAN L Release full compliance
 - **Q1 2025**: Advanced AI/ML integration
 - **Q2 2025**: Multi-cloud deployment support

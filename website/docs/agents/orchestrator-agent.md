@@ -67,24 +67,28 @@ graph TB
 ## ⚡ Core Capabilities
 
 ### 1. Multi-Cluster Orchestration
+
 - **Cluster Registration**: Automatically register and manage multiple Kubernetes clusters
 - **Cross-Cluster Networking**: Configure cluster-to-cluster communication
 - **Load Balancing**: Distribute workloads across clusters based on capacity and location
 - **Failover Management**: Handle cluster failures with automatic workload migration
 
 ### 2. Package Variant Management
+
 - **PackageVariantSet Creation**: Generate site-specific configurations from blueprints
 - **Template Customization**: Apply environment-specific parameters
 - **Version Control**: Manage package versions across deployment lifecycles
 - **Rollback Capabilities**: Safe rollback to previous package versions
 
 ### 3. Workflow Coordination
+
 - **Agent Orchestration**: Coordinate execution across specialized agents
 - **Dependency Management**: Ensure proper order of operations
 - **State Tracking**: Maintain deployment state across complex workflows
 - **Error Recovery**: Handle failures with intelligent retry and recovery strategies
 
 ### 4. Network Slice Management
+
 - **Slice Intent Processing**: Deploy network slices based on high-level requirements
 - **Resource Allocation**: Automatically allocate compute, network, and storage resources
 - **SLA Monitoring**: Ensure network slice performance meets requirements
@@ -95,9 +99,11 @@ graph TB
 ### Core Commands
 
 #### `deploy everything`
+
 Initiates a complete O-RAN stack deployment including infrastructure, configuration, and network functions.
 
 **Workflow:**
+
 1. Create workflow state directory
 2. Validate environment prerequisites
 3. Coordinate with infrastructure agent for cluster setup
@@ -107,53 +113,65 @@ Initiates a complete O-RAN stack deployment including infrastructure, configurat
 7. Run validation tests
 
 **Example:**
+
 ```bash
 claude-agent orchestrator-agent "deploy everything"
 ```
 
 #### `setup multi-cluster`
+
 Configures multi-cluster deployment with ArgoCD ApplicationSets and cross-cluster networking.
 
 **Parameters:**
+
 - `clusters`: List of cluster names to register
 - `network-policy`: Cross-cluster networking configuration
 - `load-balancing`: Traffic distribution strategy
 
 **Example:**
+
 ```bash
 claude-agent orchestrator-agent "setup multi-cluster with edge-01,edge-02,core-01"
 ```
 
 #### `create package variants`
+
 Generates PackageVariantSet resources for site-specific deployments.
 
 **Parameters:**
+
 - `upstream-package`: Source package from catalog
 - `target-sites`: List of deployment sites
 - `customizations`: Site-specific parameter overrides
 
 **Example:**
+
 ```bash
 claude-agent orchestrator-agent "create package variants for oran-du targeting edge-sites"
 ```
 
 #### `deploy network slice`
+
 Creates and deploys network slices based on intent specifications.
 
 **Parameters:**
+
 - `slice-type`: eMBB, mIoT, URLLC
 - `requirements`: Bandwidth, latency, reliability targets
 - `sites`: Deployment locations
 
 **Example:**
+
 ```bash
 claude-agent orchestrator-agent "deploy network slice embb with 1Gbps bandwidth 10ms latency"
 ```
 
 #### `validate deployment`
+
 Runs comprehensive end-to-end validation of the entire deployment.
 
 **Checks:**
+
 - Infrastructure health
 - Network function status
 - Configuration consistency
@@ -161,20 +179,24 @@ Runs comprehensive end-to-end validation of the entire deployment.
 - Security compliance
 
 **Example:**
+
 ```bash
 claude-agent orchestrator-agent "validate deployment"
 ```
 
 #### `rollback`
+
 Safely rolls back deployments to previous known-good state.
 
 **Features:**
+
 - Automatic backup creation
 - ArgoCD application rollback
 - PackageVariant cleanup
 - Configuration restoration
 
 **Example:**
+
 ```bash
 claude-agent orchestrator-agent "rollback to previous version"
 ```
@@ -182,6 +204,7 @@ claude-agent orchestrator-agent "rollback to previous version"
 ### Workflow Management API
 
 #### State Management
+
 The orchestrator maintains workflow state in `~/.claude-workflows/state.json`:
 
 ```json
@@ -200,6 +223,7 @@ The orchestrator maintains workflow state in `~/.claude-workflows/state.json`:
 ```
 
 #### Agent Coordination
+
 Workflow stages and responsible agents:
 
 | Stage | Agent | Description |
@@ -216,6 +240,7 @@ Workflow stages and responsible agents:
 ## 📊 Configuration Examples
 
 ### Multi-Cluster ApplicationSet
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -249,6 +274,7 @@ spec:
 ```
 
 ### PackageVariantSet Configuration
+
 ```yaml
 apiVersion: config.porch.kpt.dev/v1alpha2
 kind: PackageVariantSet
@@ -279,6 +305,7 @@ spec:
 ```
 
 ### Network Slice Intent
+
 ```yaml
 apiVersion: nephio.org/v1alpha1
 kind: NetworkSlice
@@ -311,6 +338,7 @@ spec:
 ## 🔍 Monitoring and Observability
 
 ### Key Metrics
+
 The orchestrator exposes the following metrics:
 
 ```prometheus
@@ -331,7 +359,9 @@ oran_orchestrator_cluster_sync_status{cluster="edge-01|..."}
 ```
 
 ### Health Checks
+
 Regular health checks monitor:
+
 - Workflow engine status
 - Agent connectivity
 - Porch API availability
@@ -339,7 +369,9 @@ Regular health checks monitor:
 - Kubernetes API responsiveness
 
 ### Logging
+
 Structured logs include:
+
 ```json
 {
   "timestamp": "2025-08-22T10:30:00Z",
@@ -359,6 +391,7 @@ Structured logs include:
 ## ⚙️ Configuration
 
 ### Environment Variables
+
 ```bash
 # Workflow configuration
 ORCHESTRATOR_WORKFLOW_TIMEOUT=3600          # Workflow timeout in seconds
@@ -381,6 +414,7 @@ DEFAULT_SLICE_TEMPLATE="standard-embb"
 ```
 
 ### Configuration File (`orchestrator-config.yaml`)
+
 ```yaml
 orchestrator:
   workflow:
@@ -429,8 +463,10 @@ orchestrator:
 ### Common Issues
 
 #### Workflow Stuck in Progress
+
 **Symptoms:** Workflow state shows ongoing execution but no progress
 **Diagnosis:**
+
 ```bash
 # Check workflow state
 cat ~/.claude-workflows/state.json
@@ -441,14 +477,18 @@ kubectl get pods -n claude-agents
 # Check agent logs
 kubectl logs -n claude-agents -l app=infrastructure-agent --tail=50
 ```
+
 **Resolution:**
+
 - Restart stuck agent
 - Clear workflow state and retry
 - Check network connectivity between components
 
 #### Package Variant Generation Failures
+
 **Symptoms:** PackageVariantSet exists but no PackageRevisions created
 **Diagnosis:**
+
 ```bash
 # Check Porch server status
 kubectl get pods -n porch-system
@@ -459,14 +499,18 @@ kubectl describe packagevariantset edge-deployment-set -n nephio-system
 # Check Porch server logs
 kubectl logs -n porch-system -l app=porch-server --tail=100
 ```
+
 **Resolution:**
+
 - Verify upstream package exists
 - Check repository permissions
 - Validate PackageVariantSet template syntax
 
 #### ArgoCD Synchronization Issues
+
 **Symptoms:** Applications show OutOfSync status
 **Diagnosis:**
+
 ```bash
 # Check ArgoCD application status
 argocd app list
@@ -477,13 +521,17 @@ argocd app get multi-cluster-oran
 # Check ArgoCD server logs
 kubectl logs -n argocd -l app.kubernetes.io/name=argocd-application-controller
 ```
+
 **Resolution:**
+
 - Manual sync with `argocd app sync <app-name>`
 - Check repository access permissions
 - Validate Kubernetes resource definitions
 
 ### Debug Mode
+
 Enable debug mode for detailed logging:
+
 ```bash
 export ORCHESTRATOR_DEBUG=true
 export ORCHESTRATOR_LOG_LEVEL=debug
@@ -492,24 +540,28 @@ export ORCHESTRATOR_LOG_LEVEL=debug
 ## 📚 Best Practices
 
 ### 1. Workflow Design
+
 - **Idempotent Operations**: Design all operations to be safely retryable
 - **State Persistence**: Always save workflow state before agent handoffs
 - **Timeout Management**: Set appropriate timeouts for each workflow stage
 - **Error Boundaries**: Implement proper error handling and recovery
 
 ### 2. Multi-Cluster Management
+
 - **Cluster Labeling**: Use consistent labeling strategy for cluster selection
 - **Network Policies**: Implement proper inter-cluster network policies
 - **Resource Quotas**: Set appropriate resource limits per cluster
 - **Monitoring**: Monitor cluster health and connectivity
 
 ### 3. Package Management
+
 - **Version Control**: Use semantic versioning for all packages
 - **Testing**: Test package variants in staging before production
 - **Approval Process**: Implement approval workflows for production deployments
 - **Rollback Strategy**: Always have a tested rollback plan
 
 ### 4. Security
+
 - **RBAC**: Implement least-privilege access controls
 - **Secret Management**: Use external secret management systems
 - **Network Security**: Implement zero-trust networking
@@ -519,8 +571,8 @@ export ORCHESTRATOR_LOG_LEVEL=debug
 
 ## Related Documentation
 
-- **[Infrastructure Agent](./infrastructure/nephio-infrastructure-agent.mdx)**: Cluster provisioning and management
-- **[Configuration Management Agent](./config-management/configuration-management-agent.mdx)**: Configuration deployment
+- **[Infrastructure Agent](/docs/infrastructure/nephio-infrastructure-agent)**: Cluster provisioning and management
+- **[Configuration Management Agent](/docs/config-management/configuration-management-agent)**: Configuration deployment
 - **Network Functions Agent**: O-RAN component deployment (Coming Soon)
-- **[Architecture Overview](../architecture/overview.md)**: System architecture details
-- **[Integration Patterns](../integration/)**: Workflow integration guides
+- **[Architecture Overview](/docs/architecture/overview)**: System architecture details
+- **[Integration Patterns](/docs/integration/)**: Workflow integration guides
