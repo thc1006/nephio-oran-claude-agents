@@ -766,7 +766,7 @@ spec:
                 cpu: "8"
 ```
 
-#### Python Implementation for L Release AI/ML Pipeline
+## Python Implementation for L Release AI/ML Pipeline
 
 ```python
 #!/usr/bin/env python3
@@ -1241,7 +1241,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### xApp/rApp Data Support (L Release Enhanced)
+## xApp/rApp Data Support (L Release Enhanced)
 
 - **Training Data Preparation**: Feature engineering pipelines with Kubeflow integration
 - **Model Performance Monitoring**: A/B testing frameworks with improved rApp Manager support

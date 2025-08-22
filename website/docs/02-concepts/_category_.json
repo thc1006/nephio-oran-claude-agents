@@ -1,0 +1,15 @@
+{
+  "label": "Core Concepts",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "Core Concepts and Architecture",
+    "description": "Understand the fundamental concepts, architecture, and design principles behind Nephio O-RAN Claude Agents.",
+    "keywords": ["concepts", "architecture", "design", "principles"]
+  },
+  "customProps": {
+    "icon": "🏗️",
+    "audience": "architects",
+    "timeToComplete": "45 minutes"
+  }
+}
