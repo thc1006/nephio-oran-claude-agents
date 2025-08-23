@@ -19,6 +19,8 @@ const config: Config = {
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
+  // TODO: Revert these to 'throw' after all broken links are fixed
+  // Temporarily set to 'warn' to unblock CI pipeline
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 

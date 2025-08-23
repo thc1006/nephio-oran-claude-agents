@@ -1,6 +1,5 @@
 {
-  // This file is not used in compilation. It is here just for a nice editor experience.
-  "extends": "@docusaurus/tsconfig",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "types": ["jest", "@testing-library/jest-dom", "node"],
@@ -9,20 +8,21 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "jsx": "react-jsx"
+    "isolatedModules": true
   },
   "include": [
-    "src/**/*",
+    "tests/**/*",
     "types/**/*.d.ts",
-    "global-types.d.ts",
-    "**/*.d.ts"
+    "tests/setup/**/*.d.ts",
+    "src/jest-dom.d.ts",
+    "jest.d.ts",
+    "test-helpers.d.ts",
+    "types/jest-dom.d.ts"
   ],
   "exclude": [
     "node_modules",
     "build",
     ".docusaurus",
-    "tests/**/*"
+    "tests/e2e/**/*"
   ]
 }

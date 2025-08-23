@@ -3,7 +3,7 @@ title: "Install kube-prometheus-stack with O-RAN customizations"
 description: "name: monitoring-agent"
 sidebar_position: 3
 tags: ["claude-agent", "nephio", "o-ran", "monitoring", "kubernetes", "infrastructure", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';

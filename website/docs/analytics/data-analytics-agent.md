@@ -3,7 +3,7 @@ title: "Install Kafka without ZooKeeper (KRaft mode)"
 description: "name: data-analytics-agent"
 sidebar_position: 2
 tags: ["claude-agent", "nephio", "o-ran", "analytics", "kubernetes", "monitoring", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';

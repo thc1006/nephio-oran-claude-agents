@@ -1,37 +1,14 @@
 /// <reference types="jest" />
 /// <reference types="@testing-library/jest-dom" />
 
+// Import the Jest DOM matchers to extend Jest's expect function
 import '@testing-library/jest-dom';
 
-// Explicitly declare Jest globals with proper types that include .skip
+// Declare the custom matchers globally for TypeScript
 declare global {
-  var describe: {
-    (name: string, fn: () => void): void;
-    skip: (name: string, fn: () => void) => void;
-    only: (name: string, fn: () => void) => void;
-  };
-  
-  var it: {
-    (name: string, fn: () => void | Promise<void>): void;
-    skip: (name: string, fn: () => void | Promise<void>) => void;
-    only: (name: string, fn: () => void | Promise<void>) => void;
-  };
-  
-  var test: {
-    (name: string, fn: () => void | Promise<void>): void;
-    skip: (name: string, fn: () => void | Promise<void>) => void;
-    only: (name: string, fn: () => void | Promise<void>) => void;
-  };
-  
-  var expect: jest.Expect;
-  var beforeAll: jest.Lifecycle;
-  var afterAll: jest.Lifecycle;
-  var beforeEach: jest.Lifecycle;
-  var afterEach: jest.Lifecycle;
-  var jest: jest.Jest;
-
   namespace jest {
     interface Matchers<R> {
+      // @testing-library/jest-dom matchers
       toBeInTheDocument(): R;
       toHaveAttribute(attr: string, value?: string): R;
       toHaveTextContent(text: string | RegExp): R;
@@ -50,8 +27,21 @@ declare global {
       toHaveAccessibleDescription(text?: string | RegExp): R;
       toHaveAccessibleName(text?: string | RegExp): R;
       toHaveErrorMessage(text?: string | RegExp): R;
+      toHaveFormValues(expectedValues: Record<string, any>): R;
+      toHaveStyle(css: string | Record<string, any>): R;
+      toBeEmptyDOMElement(): R;
+      toContainElement(element: HTMLElement | null): R;
+      toContainHTML(htmlText: string): R;
+      toBePartiallyChecked(): R;
+    }
+  }
+
+  namespace NodeJS {
+    interface Global {
+      // Declare any global variables that might be needed for tests
     }
   }
 }
 
+// Re-export to ensure this module is treated as a module
 export {};

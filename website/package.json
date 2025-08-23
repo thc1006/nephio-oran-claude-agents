@@ -40,6 +40,8 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc --noEmit",
+    "typecheck:src": "tsc --noEmit",
+    "typecheck:tests": "tsc --noEmit --project tsconfig.test.json",
     "typecheck:watch": "tsc --noEmit --watch",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "lint:check": "eslint src --ext .js,.jsx,.ts,.tsx",

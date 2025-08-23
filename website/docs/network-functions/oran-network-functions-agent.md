@@ -3,7 +3,7 @@ title: "Add O-RAN SC Helm repository"
 description: "name: network-functions-agent"
 sidebar_position: 7
 tags: ["claude-agent", "nephio", "o-ran", "network-functions", "monitoring", "network", "infrastructure", "testing", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';

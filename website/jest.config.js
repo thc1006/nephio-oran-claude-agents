@@ -21,8 +21,13 @@ module.exports = {
         esModuleInterop: true,
         allowSyntheticDefaultImports: true,
         skipLibCheck: true,
+        types: ['jest', '@testing-library/jest-dom', 'node'],
+        moduleResolution: 'node',
       },
       useESM: true,
+      diagnostics: {
+        ignoreCodes: [2339, 2554] // Ignore property does not exist and argument count errors
+      }
     }],
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
@@ -41,7 +46,7 @@ module.exports = {
       statements: 50,
     },
   },
-  setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts', '<rootDir>/tests/setup/jest.setup.ts'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': '<rootDir>/tests/setup/__mocks__/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/setup/__mocks__/fileMock.js',

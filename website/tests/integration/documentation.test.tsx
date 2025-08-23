@@ -4,6 +4,8 @@
  */
 
 /// <reference types="jest" />
+/// <reference types="@testing-library/jest-dom" />
+/// <reference path="../../types/jest-dom.d.ts" />
 // Explicitly import Jest globals to ensure proper typing
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import '@testing-library/jest-dom';
@@ -189,7 +191,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
   });
 
   describe('Locale and Internationalization', () => {
-    it.skip('should handle English locale correctly', () => {
+    it('should handle English locale correctly', () => {
       const EnglishPage = () => {
         const context = mockUseDocusaurusContext();
         return (
@@ -208,7 +210,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
       ).toBeInTheDocument();
     });
 
-    it.skip('should handle Traditional Chinese locale correctly', () => {
+    it('should handle Traditional Chinese locale correctly', () => {
       const ChinesePage = () => {
         const context = {
           ...mockUseDocusaurusContext(),
@@ -255,9 +257,9 @@ describe('Nephio O-RAN Website Integration Tests', () => {
       ];
 
       const invalidPaths = [
-        '/zh-TW/zh-TW/docs/intro',
-        '/en/en/docs/intro',
-        '/zh-TW/zh-TW/',
+        '/zh-TW/zh-TW/docs/intro', // Double locale prefix
+        '/en/en/docs/intro', // Double locale prefix
+        '/zh-TW/zh-TW/', // Double locale prefix
       ];
 
       validPaths.forEach(path => {
@@ -732,7 +734,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         '/docs/intro"; DROP TABLE users; --',
         '/docs/<script>alert("xss")</script>',
         '/invalid/path',
-        '/zh-TW/zh-TW/docs/intro',
+        '/zh-TW/zh-TW/docs/intro', // Double locale prefix
       ];
 
       validPaths.forEach(path => {

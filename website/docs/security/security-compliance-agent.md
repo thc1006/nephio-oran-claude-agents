@@ -3,7 +3,7 @@ title: "Complete WG11 compliance check"
 description: "name: security-compliance-agent"
 sidebar_position: 9
 tags: ["claude-agent", "nephio", "o-ran", "security", "kubernetes", "network", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';

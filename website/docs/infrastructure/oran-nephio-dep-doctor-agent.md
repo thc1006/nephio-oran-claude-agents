@@ -3,7 +3,7 @@ title: "Full environment check"
 description: "name: dependency-doctor-agent"
 sidebar_position: 6
 tags: ["claude-agent", "nephio", "o-ran", "infrastructure", "kubernetes", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';
