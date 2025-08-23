@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { rtlRender as rtlRender, screen } from '@testing-library/react';
 import HomepageFeatures from '../../src/components/HomepageFeatures';
 
 // Mock the Docusaurus Heading component
@@ -23,17 +23,18 @@ jest.mock('@site/static/img/undraw_docusaurus_react.svg', () => ({
 }));
 
 describe('HomepageFeatures', () => {
-  beforeEach(() => {
-    render(<HomepageFeatures />);
-  });
 
-  it('renders all feature items', () => {
+  it('rtlRenders all feature items', () => {
+    rtlRender(<HomepageFeatures />);
+    
     expect(screen.getByText('Easy to Use')).toBeInTheDocument();
     expect(screen.getByText('Focus on What Matters')).toBeInTheDocument();
     expect(screen.getByText('Powered by React')).toBeInTheDocument();
   });
 
-  it('renders feature descriptions', () => {
+  it('rtlRenders feature descriptions', () => {
+    rtlRender(<HomepageFeatures />);
+    
     expect(
       screen.getByText(/Docusaurus was designed from the ground up to be easily installed/)
     ).toBeInTheDocument();
@@ -47,7 +48,9 @@ describe('HomepageFeatures', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders SVG icons with correct roles', () => {
+  it('rtlRenders SVG icons with correct roles', () => {
+    rtlRender(<HomepageFeatures />);
+    
     const svgs = screen.getAllByRole('img');
     expect(svgs).toHaveLength(3);
     
@@ -57,7 +60,7 @@ describe('HomepageFeatures', () => {
   });
 
   it('has proper container structure', () => {
-    const { container } = render(<HomepageFeatures />);
+    const { container } = rtlRender(<HomepageFeatures />);
     
     const section = container.querySelector('section');
     expect(section).toBeInTheDocument();
@@ -69,7 +72,9 @@ describe('HomepageFeatures', () => {
     expect(row).toBeInTheDocument();
   });
 
-  it('renders features in responsive grid columns', () => {
+  it('rtlRenders features in responsive grid columns', () => {
+    rtlRender(<HomepageFeatures />);
+    
     const features = screen.getAllByText(/Easy to Use|Focus on What Matters|Powered by React/);
     
     features.forEach((feature) => {
@@ -79,6 +84,8 @@ describe('HomepageFeatures', () => {
   });
 
   it('has accessible headings', () => {
+    rtlRender(<HomepageFeatures />);
+    
     const headings = screen.getAllByRole('heading', { level: 3 });
     expect(headings).toHaveLength(3);
     
@@ -88,11 +95,15 @@ describe('HomepageFeatures', () => {
   });
 
   it('includes code element in the second feature description', () => {
+    rtlRender(<HomepageFeatures />);
+    
     const codeElement = screen.getByText('docs');
     expect(codeElement.tagName).toBe('CODE');
   });
 
   it('centers text content appropriately', () => {
+    rtlRender(<HomepageFeatures />);
+    
     const textCenterElements = document.querySelectorAll('.text--center');
     expect(textCenterElements.length).toBeGreaterThan(0);
   });

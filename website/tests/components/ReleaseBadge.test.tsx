@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { rtlRender as rtlRender, screen } from '@testing-library/react';
 import ReleaseBadge, { 
   OranBadge, 
   NephioBadge, 
@@ -26,22 +26,22 @@ describe('ReleaseBadge', () => {
   };
 
   describe('Basic Rendering', () => {
-    it('renders with default props', () => {
-      render(<ReleaseBadge {...defaultProps} />);
+    it('rtlRenders with default props', () => {
+      rtlRender(<ReleaseBadge {...defaultProps} />);
       
       expect(screen.getByText('O-RAN')).toBeInTheDocument();
       expect(screen.getByText('O-RAN L (2025-06-30)')).toBeInTheDocument();
     });
 
-    it('renders with custom version', () => {
-      render(<ReleaseBadge type="nephio" version="R6 (v6.0)" />);
+    it('rtlRenders with custom version', () => {
+      rtlRender(<ReleaseBadge type="nephio" version="R6 (v6.0)" />);
       
       expect(screen.getByText('Nephio')).toBeInTheDocument();
       expect(screen.getByText('R6 (v6.0)')).toBeInTheDocument();
     });
 
     it('displays correct title attribute', () => {
-      render(<ReleaseBadge type="go" />);
+      rtlRender(<ReleaseBadge type="go" />);
       
       // The title attribute is on the outermost span with the badge classes
       const badge = screen.getByText('Go').closest('span.badge');
@@ -59,8 +59,8 @@ describe('ReleaseBadge', () => {
     ];
 
     badgeTypes.forEach(({ type, label, color, icon }) => {
-      it(`renders ${type} badge correctly`, () => {
-        render(<ReleaseBadge type={type} />);
+      it(`rtlRenders ${type} badge correctly`, () => {
+        rtlRender(<ReleaseBadge type={type} />);
         
         expect(screen.getByText(label)).toBeInTheDocument();
         
@@ -75,20 +75,20 @@ describe('ReleaseBadge', () => {
   });
 
   describe('Variants', () => {
-    it('renders with default variant', () => {
-      render(<ReleaseBadge type="oran" variant="default" />);
+    it('rtlRenders with default variant', () => {
+      rtlRender(<ReleaseBadge type="oran" variant="default" />);
       expect(screen.getByText('O-RAN')).toBeInTheDocument();
       expect(screen.getByText('O-RAN L (2025-06-30)')).toBeInTheDocument();
     });
 
-    it('renders with outline variant', () => {
-      render(<ReleaseBadge type="oran" variant="outline" />);
+    it('rtlRenders with outline variant', () => {
+      rtlRender(<ReleaseBadge type="oran" variant="outline" />);
       expect(screen.getByText('O-RAN')).toBeInTheDocument();
       expect(screen.getByText('O-RAN L (2025-06-30)')).toBeInTheDocument();
     });
 
-    it('renders with minimal variant', () => {
-      render(<ReleaseBadge type="oran" variant="minimal" />);
+    it('rtlRenders with minimal variant', () => {
+      rtlRender(<ReleaseBadge type="oran" variant="minimal" />);
       expect(screen.getByText('O-RAN')).toBeInTheDocument();
       expect(screen.getByText('O-RAN L (2025-06-30)')).toBeInTheDocument();
     });
@@ -98,8 +98,8 @@ describe('ReleaseBadge', () => {
     const sizes = ['small', 'medium', 'large'] as const;
 
     sizes.forEach(size => {
-      it(`renders with ${size} size`, () => {
-        render(<ReleaseBadge type="oran" size={size} />);
+      it(`rtlRenders with ${size} size`, () => {
+        rtlRender(<ReleaseBadge type="oran" size={size} />);
         expect(screen.getByText('O-RAN')).toBeInTheDocument();
         expect(screen.getByText('O-RAN L (2025-06-30)')).toBeInTheDocument();
       });
@@ -108,7 +108,7 @@ describe('ReleaseBadge', () => {
 
   describe('Icon Display', () => {
     it('shows icon by default', () => {
-      render(<ReleaseBadge type="oran" />);
+      rtlRender(<ReleaseBadge type="oran" />);
       
       const icon = screen.getByRole('img', { name: 'O-RAN' });
       expect(icon).toBeInTheDocument();
@@ -116,13 +116,13 @@ describe('ReleaseBadge', () => {
     });
 
     it('hides icon when showIcon is false', () => {
-      render(<ReleaseBadge type="oran" showIcon={false} />);
+      rtlRender(<ReleaseBadge type="oran" showIcon={false} />);
       
       expect(screen.queryByRole('img', { name: 'O-RAN' })).not.toBeInTheDocument();
     });
 
     it('applies withIcon class when icon is shown', () => {
-      const { container } = render(<ReleaseBadge type="oran" showIcon={true} />);
+      const { container } = rtlRender(<ReleaseBadge type="oran" showIcon={true} />);
       
       // Check that the icon is shown (functional test rather than CSS class test)
       const icon = container.querySelector('span[role="img"]');
@@ -132,7 +132,7 @@ describe('ReleaseBadge', () => {
     });
 
     it('does not apply withIcon class when icon is hidden', () => {
-      const { container } = render(<ReleaseBadge type="oran" showIcon={false} />);
+      const { container } = rtlRender(<ReleaseBadge type="oran" showIcon={false} />);
       
       // Check that the icon is NOT shown (functional test rather than CSS class test)
       const icon = container.querySelector('span[role="img"]');
@@ -141,8 +141,8 @@ describe('ReleaseBadge', () => {
   });
 
   describe('Custom className', () => {
-    it('renders with custom className', () => {
-      const { container } = render(<ReleaseBadge type="oran" className="custom-class" />);
+    it('rtlRenders with custom className', () => {
+      const { container } = rtlRender(<ReleaseBadge type="oran" className="custom-class" />);
       const badge = container.querySelector('span[title*="O-RAN"]');
       expect(badge).toBeInTheDocument();
       // Since CSS modules return "undefined", just check that the badge element exists
@@ -152,14 +152,14 @@ describe('ReleaseBadge', () => {
 
   describe('Accessibility', () => {
     it('has proper aria-label for icon', () => {
-      render(<ReleaseBadge type="nephio" />);
+      rtlRender(<ReleaseBadge type="nephio" />);
       
       const icon = screen.getByRole('img', { name: 'Nephio' });
       expect(icon).toHaveAttribute('aria-label', 'Nephio');
     });
 
     it('has descriptive title attribute', () => {
-      render(<ReleaseBadge type="kpt" version="v2.0.0" />);
+      rtlRender(<ReleaseBadge type="kpt" version="v2.0.0" />);
       
       const badge = screen.getByText('kpt').closest('span.badge');
       expect(badge).toHaveAttribute('title', 'kpt v2.0.0');
@@ -167,33 +167,33 @@ describe('ReleaseBadge', () => {
   });
 
   describe('Convenience Components', () => {
-    it('OranBadge renders correctly', () => {
-      render(<OranBadge />);
+    it('OranBadge rtlRenders correctly', () => {
+      rtlRender(<OranBadge />);
       expect(screen.getByText('O-RAN')).toBeInTheDocument();
     });
 
-    it('NephioBadge renders correctly', () => {
-      render(<NephioBadge />);
+    it('NephioBadge rtlRenders correctly', () => {
+      rtlRender(<NephioBadge />);
       expect(screen.getByText('Nephio')).toBeInTheDocument();
     });
 
-    it('GoBadge renders correctly', () => {
-      render(<GoBadge />);
+    it('GoBadge rtlRenders correctly', () => {
+      rtlRender(<GoBadge />);
       expect(screen.getByText('Go')).toBeInTheDocument();
     });
 
-    it('KptBadge renders correctly', () => {
-      render(<KptBadge />);
+    it('KptBadge rtlRenders correctly', () => {
+      rtlRender(<KptBadge />);
       expect(screen.getByText('kpt')).toBeInTheDocument();
     });
 
-    it('KubernetesBadge renders correctly', () => {
-      render(<KubernetesBadge />);
+    it('KubernetesBadge rtlRenders correctly', () => {
+      rtlRender(<KubernetesBadge />);
       expect(screen.getByText('Kubernetes')).toBeInTheDocument();
     });
 
     it('convenience components accept props correctly', () => {
-      render(<OranBadge version="Custom L" size="large" variant="outline" />);
+      rtlRender(<OranBadge version="Custom L" size="large" variant="outline" />);
       
       expect(screen.getByText('Custom L')).toBeInTheDocument();
       
@@ -209,7 +209,7 @@ describe('ReleaseBadge', () => {
 
   describe('Content Structure', () => {
     it('has proper content structure', () => {
-      render(<ReleaseBadge type="oran" />);
+      rtlRender(<ReleaseBadge type="oran" />);
       
       // Verify that both label and version text are present
       expect(screen.getByText('O-RAN')).toBeInTheDocument();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { rtlRender as rtlRender, screen } from '@testing-library/react';
 
 // Mock Docusaurus components BEFORE importing the component
 jest.mock('@theme/Layout', () => {
@@ -50,8 +50,8 @@ describe('404 Page', () => {
     console.error = originalError;
   });
 
-  it('renders the 404 page with correct content', () => {
-    render(<NotFound />);
+  it('rtlRenders the 404 page with correct content', () => {
+    rtlRender(<NotFound />);
     
     // Check main heading
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('404 - Page Not Found');
@@ -69,9 +69,9 @@ describe('404 Page', () => {
   });
 
   it('uses correct Layout props', () => {
-    render(<NotFound />);
+    rtlRender(<NotFound />);
     
-    // Due to mocking complexity, just check that the content is rendered correctly
+    // Due to mocking complexity, just check that the content is rtlRendered correctly
     // The Layout component is mocked so we just verify the main content exists
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('404 - Page Not Found');
     expect(screen.getByText('We could not find what you were looking for.')).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe('404 Page', () => {
   });
 
   it('has proper semantic structure', () => {
-    render(<NotFound />);
+    rtlRender(<NotFound />);
     
     const main = screen.getByRole('main');
     expect(main).toHaveClass('container', 'margin-vert--xl');
@@ -103,7 +103,7 @@ describe('404 Page', () => {
   });
 
   it('has accessible heading hierarchy', () => {
-    render(<NotFound />);
+    rtlRender(<NotFound />);
     
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveClass('hero__title');
@@ -111,7 +111,7 @@ describe('404 Page', () => {
   });
 
   it('provides helpful error message and guidance', () => {
-    render(<NotFound />);
+    rtlRender(<NotFound />);
     
     // Check that all expected text content is present
     expect(screen.getByText('We could not find what you were looking for.')).toBeInTheDocument();
@@ -120,7 +120,7 @@ describe('404 Page', () => {
   });
 
   it('provides navigation back to homepage', () => {
-    render(<NotFound />);
+    rtlRender(<NotFound />);
     
     const homeLink = screen.getByText('Return to Homepage');
     expect(homeLink.closest('a')).toHaveAttribute('href', '/');

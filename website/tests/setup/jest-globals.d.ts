@@ -1,15 +1,31 @@
 /// <reference types="jest" />
 
+// Explicitly declare Jest globals with proper types that include .skip
 declare global {
-  const describe: jest.Describe;
-  const it: jest.It;
-  const test: jest.It;
-  const expect: jest.Expect;
-  const beforeAll: jest.Lifecycle;
-  const afterAll: jest.Lifecycle;
-  const beforeEach: jest.Lifecycle;
-  const afterEach: jest.Lifecycle;
-  const jest: jest.Jest;
+  var describe: {
+    (name: string, fn: () => void): void;
+    skip: (name: string, fn: () => void) => void;
+    only: (name: string, fn: () => void) => void;
+  };
+  
+  var it: {
+    (name: string, fn: () => void | Promise<void>): void;
+    skip: (name: string, fn: () => void | Promise<void>) => void;
+    only: (name: string, fn: () => void | Promise<void>) => void;
+  };
+  
+  var test: {
+    (name: string, fn: () => void | Promise<void>): void;
+    skip: (name: string, fn: () => void | Promise<void>) => void;
+    only: (name: string, fn: () => void | Promise<void>) => void;
+  };
+  
+  var expect: jest.Expect;
+  var beforeAll: jest.Lifecycle;
+  var afterAll: jest.Lifecycle;
+  var beforeEach: jest.Lifecycle;
+  var afterEach: jest.Lifecycle;
+  var jest: jest.Jest;
 }
 
 export {};

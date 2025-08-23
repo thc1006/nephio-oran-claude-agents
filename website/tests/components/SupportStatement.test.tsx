@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { rtlRender as rtlRender, screen } from '@testing-library/react';
 import SupportStatement, { SupportStatementProps } from '../../src/components/SupportStatement';
 
 // Mock the siteConfig module
@@ -37,8 +37,8 @@ describe('SupportStatement', () => {
   const defaultProps: SupportStatementProps = {};
 
   describe('Full variant (default)', () => {
-    it('renders full variant with all content', () => {
-      render(<SupportStatement {...defaultProps} />);
+    it('rtlRenders full variant with all content', () => {
+      rtlRender(<SupportStatement {...defaultProps} />);
       
       expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
       expect(screen.getByText(/This documentation and the associated Claude agents/)).toBeInTheDocument();
@@ -49,20 +49,20 @@ describe('SupportStatement', () => {
     });
 
     it('shows last updated date by default', () => {
-      render(<SupportStatement {...defaultProps} />);
+      rtlRender(<SupportStatement {...defaultProps} />);
       
       expect(screen.getByText('Updated: 2025-08-22')).toBeInTheDocument();
     });
 
     it('displays additional info in full variant', () => {
-      render(<SupportStatement {...defaultProps} />);
+      rtlRender(<SupportStatement {...defaultProps} />);
       
       expect(screen.getByText(/While these are the canonical supported versions/)).toBeInTheDocument();
       expect(screen.getByText(/We follow Kubernetes' support policy/)).toBeInTheDocument();
     });
 
-    it('renders all release badges with correct props', () => {
-      render(<SupportStatement {...defaultProps} />);
+    it('rtlRenders all release badges with correct props', () => {
+      rtlRender(<SupportStatement {...defaultProps} />);
       
       expect(screen.getByTestId('release-badge-go')).toHaveAttribute('data-variant', 'outline');
       expect(screen.getByTestId('release-badge-go')).toHaveAttribute('data-size', 'medium');
@@ -73,8 +73,8 @@ describe('SupportStatement', () => {
   });
 
   describe('Compact variant', () => {
-    it('renders compact variant with reduced content', () => {
-      render(<SupportStatement variant="compact" />);
+    it('rtlRenders compact variant with reduced content', () => {
+      rtlRender(<SupportStatement variant="compact" />);
       
       expect(screen.getByText('Supported Versions')).toBeInTheDocument();
       expect(screen.queryByText(/This documentation and the associated Claude agents/)).not.toBeInTheDocument();
@@ -82,7 +82,7 @@ describe('SupportStatement', () => {
     });
 
     it('still shows version descriptions in compact variant', () => {
-      render(<SupportStatement variant="compact" />);
+      rtlRender(<SupportStatement variant="compact" />);
       
       expect(screen.getByText(/Required Go runtime version/)).toBeInTheDocument();
       expect(screen.getByText(/O-RAN Alliance L-Release specifications/)).toBeInTheDocument();
@@ -90,22 +90,22 @@ describe('SupportStatement', () => {
   });
 
   describe('Badges-only variant', () => {
-    it('renders only badges without text content', () => {
-      render(<SupportStatement variant="badges-only" />);
+    it('rtlRenders only badges without text content', () => {
+      rtlRender(<SupportStatement variant="badges-only" />);
       
       expect(screen.queryByText('Version Support Statement')).not.toBeInTheDocument();
       expect(screen.queryByText('Supported Versions')).not.toBeInTheDocument();
       expect(screen.queryByText(/Required Go runtime version/)).not.toBeInTheDocument();
       
-      // Should still render badges
+      // Should still rtlRender badges
       expect(screen.getByTestId('release-badge-go')).toBeInTheDocument();
       expect(screen.getByTestId('release-badge-oran')).toBeInTheDocument();
       expect(screen.getByTestId('release-badge-nephio')).toBeInTheDocument();
       expect(screen.getByTestId('release-badge-kpt')).toBeInTheDocument();
     });
 
-    it('renders badges with small size in badges-only variant', () => {
-      render(<SupportStatement variant="badges-only" />);
+    it('rtlRenders badges with small size in badges-only variant', () => {
+      rtlRender(<SupportStatement variant="badges-only" />);
       
       expect(screen.getByTestId('release-badge-go')).toHaveAttribute('data-size', 'small');
       expect(screen.getByTestId('release-badge-oran')).toHaveAttribute('data-size', 'small');
@@ -116,13 +116,13 @@ describe('SupportStatement', () => {
 
   describe('Last Updated Display', () => {
     it('hides last updated when showLastUpdated is false', () => {
-      render(<SupportStatement showLastUpdated={false} />);
+      rtlRender(<SupportStatement showLastUpdated={false} />);
       
       expect(screen.queryByText('Updated: 2025-08-22')).not.toBeInTheDocument();
     });
 
     it('shows last updated when showLastUpdated is true', () => {
-      render(<SupportStatement showLastUpdated={true} />);
+      rtlRender(<SupportStatement showLastUpdated={true} />);
       
       expect(screen.getByText('Updated: 2025-08-22')).toBeInTheDocument();
     });
@@ -130,24 +130,24 @@ describe('SupportStatement', () => {
 
   describe('CSS Classes and Structure', () => {
     it('applies custom className', () => {
-      const { container } = render(<SupportStatement className="custom-class" />);
+      const { container } = rtlRender(<SupportStatement className="custom-class" />);
       
       expect(container.firstChild).toHaveClass('custom-class');
     });
 
-    it('renders different variants correctly', () => {
+    it('rtlRenders different variants correctly', () => {
       // Test full variant
-      const { rerender } = render(<SupportStatement variant="full" />);
+      const { rertlRender } = rtlRender(<SupportStatement variant="full" />);
       expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
       expect(screen.getByText(/While these are the canonical supported versions/)).toBeInTheDocument();
       
       // Test compact variant
-      rerender(<SupportStatement variant="compact" />);
+      rertlRender(<SupportStatement variant="compact" />);
       expect(screen.getByText('Supported Versions')).toBeInTheDocument();
       expect(screen.queryByText(/While these are the canonical supported versions/)).not.toBeInTheDocument();
       
       // Test badges-only variant
-      rerender(<SupportStatement variant="badges-only" />);
+      rertlRender(<SupportStatement variant="badges-only" />);
       expect(screen.queryByText('Version Support Statement')).not.toBeInTheDocument();
       expect(screen.queryByText('Supported Versions')).not.toBeInTheDocument();
       // But badges should still be present
@@ -155,7 +155,7 @@ describe('SupportStatement', () => {
     });
 
     it('has proper content structure', () => {
-      render(<SupportStatement />);
+      rtlRender(<SupportStatement />);
       
       // Test functional behavior instead of CSS classes
       expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
@@ -167,14 +167,14 @@ describe('SupportStatement', () => {
 
   describe('Accessibility', () => {
     it('uses proper heading hierarchy', () => {
-      render(<SupportStatement />);
+      rtlRender(<SupportStatement />);
       
       const heading = screen.getByRole('heading', { level: 4 });
       expect(heading).toHaveTextContent('Version Support Statement');
     });
 
     it('provides descriptive text for each version item', () => {
-      render(<SupportStatement />);
+      rtlRender(<SupportStatement />);
       
       expect(screen.getByText(/Required Go runtime version/)).toBeInTheDocument();
       expect(screen.getByText(/O-RAN Alliance L-Release/)).toBeInTheDocument();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { rtlRender as rtlRender, screen } from '@testing-library/react';
 import CompatibilityMatrix, { 
   CompatibilityData, 
   CompatibilityMatrixProps 
@@ -47,19 +47,19 @@ describe('CompatibilityMatrix', () => {
     data: mockData,
   };
 
-  it('renders with default title', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+  it('rtlRenders with default title', () => {
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     expect(screen.getByText('Compatibility Matrix')).toBeInTheDocument();
   });
 
-  it('renders with custom title', () => {
+  it('rtlRenders with custom title', () => {
     const customTitle = 'Custom Compatibility Matrix';
-    render(<CompatibilityMatrix {...defaultProps} title={customTitle} />);
+    rtlRender(<CompatibilityMatrix {...defaultProps} title={customTitle} />);
     expect(screen.getByText(customTitle)).toBeInTheDocument();
   });
 
-  it('renders table headers correctly', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+  it('rtlRenders table headers correctly', () => {
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
     expect(screen.getByText('Component')).toBeInTheDocument();
     expect(screen.getByText('Version')).toBeInTheDocument();
@@ -69,15 +69,15 @@ describe('CompatibilityMatrix', () => {
   });
 
   it('hides Last Tested column when showLastTested is false', () => {
-    render(<CompatibilityMatrix {...defaultProps} showLastTested={false} />);
+    rtlRender(<CompatibilityMatrix {...defaultProps} showLastTested={false} />);
     
     expect(screen.queryByText('Last Tested')).not.toBeInTheDocument();
   });
 
-  it('renders all data rows correctly', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+  it('rtlRenders all data rows correctly', () => {
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
-    // Check that all components are rendered
+    // Check that all components are rtlRendered
     mockData.forEach(item => {
       expect(screen.getByText(item.component)).toBeInTheDocument();
       expect(screen.getByText(item.version)).toBeInTheDocument();
@@ -90,8 +90,8 @@ describe('CompatibilityMatrix', () => {
     });
   });
 
-  it('renders status badges with correct classes', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+  it('rtlRenders status badges with correct classes', () => {
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
     const supportedBadges = screen.getAllByText('Supported');
     expect(supportedBadges[0]).toHaveClass('badge--success');
@@ -100,8 +100,8 @@ describe('CompatibilityMatrix', () => {
     expect(screen.getAllByText('Not Supported')[0]).toHaveClass('badge--danger');
   });
 
-  it('renders component names and versions in code elements', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+  it('rtlRenders component names and versions in code elements', () => {
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
     const componentCodes = screen.getAllByText('nephio')[0];
     expect(componentCodes.tagName).toBe('CODE');
@@ -111,7 +111,7 @@ describe('CompatibilityMatrix', () => {
   });
 
   it('shows N/A for missing lastTested values', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
     // The unsupported-component doesn't have lastTested, should show N/A
     const naTd = screen.getByText('N/A');
@@ -127,12 +127,12 @@ describe('CompatibilityMatrix', () => {
       }
     ];
     
-    render(<CompatibilityMatrix data={dataWithoutNotes} />);
+    rtlRender(<CompatibilityMatrix data={dataWithoutNotes} />);
     expect(screen.getByText('—')).toBeInTheDocument();
   });
 
-  it('renders status legend', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+  it('rtlRenders status legend', () => {
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
     expect(screen.getByText('Status Legend:')).toBeInTheDocument();
     
@@ -141,8 +141,8 @@ describe('CompatibilityMatrix', () => {
     expect(legendBadges.length).toBeGreaterThanOrEqual(8); // 4 in table + 4 in legend
   });
 
-  it('renders in compact mode', () => {
-    render(<CompatibilityMatrix {...defaultProps} compact />);
+  it('rtlRenders in compact mode', () => {
+    rtlRender(<CompatibilityMatrix {...defaultProps} compact />);
     
     // Test functional behavior instead of CSS classes
     expect(screen.getByRole('table')).toBeInTheDocument();
@@ -153,14 +153,14 @@ describe('CompatibilityMatrix', () => {
   });
 
   it('has responsive table container', () => {
-    const { container } = render(<CompatibilityMatrix {...defaultProps} />);
+    const { container } = rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
     const tableContainer = container.querySelector('.table-responsive');
     expect(tableContainer).toBeInTheDocument();
   });
 
   it('has proper accessibility attributes', () => {
-    render(<CompatibilityMatrix {...defaultProps} />);
+    rtlRender(<CompatibilityMatrix {...defaultProps} />);
     
     const table = screen.getByRole('table');
     expect(table).toBeInTheDocument();
@@ -173,9 +173,9 @@ describe('CompatibilityMatrix', () => {
   });
 
   it('handles empty data gracefully', () => {
-    render(<CompatibilityMatrix data={[]} />);
+    rtlRender(<CompatibilityMatrix data={[]} />);
     
-    // Should still render headers and structure
+    // Should still rtlRender headers and structure
     expect(screen.getByText('Component')).toBeInTheDocument();
     expect(screen.getByText('Status Legend:')).toBeInTheDocument();
     
@@ -193,7 +193,7 @@ describe('CompatibilityMatrix', () => {
         { component: 'comp4', version: 'v1', status: 'not-supported' },
       ];
       
-      render(<CompatibilityMatrix data={allStatusData} />);
+      rtlRender(<CompatibilityMatrix data={allStatusData} />);
       
       expect(screen.getAllByText('Supported')[0]).toBeInTheDocument();
       expect(screen.getAllByText('Deprecated')[0]).toBeInTheDocument();
