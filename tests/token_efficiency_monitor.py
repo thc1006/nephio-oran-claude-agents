@@ -16,7 +16,14 @@ class TokenEfficiencyMonitor:
         # Load configuration from YAML file
         if config_path is None:
             script_dir = Path(__file__).parent
-            config_path = script_dir.parent / "config" / "agent_config.yaml"
+            # Try new config location first, then fallback to old location
+            new_config_path = script_dir.parent / "config" / "agent_efficiency_config.yaml"
+            old_config_path = script_dir.parent / "config" / "agent_config.yaml"
+            
+            if new_config_path.exists():
+                config_path = new_config_path
+            else:
+                config_path = old_config_path
         
         self.config_path = config_path
         self.efficiency_metrics = self._load_config()
