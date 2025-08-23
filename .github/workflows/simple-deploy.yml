@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -21,10 +22,11 @@ jobs:
     
     - run: cd website && npm ci
     
-    - run: cd website && npm run build
+    - run: cd website && npx docusaurus build
     
-    - name: Deploy to GitHub Pages
+    - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./website/build
+        force_orphan: true
