@@ -9,6 +9,7 @@ This section provides comprehensive documentation for all APIs and interfaces.
 Detailed API documentation will be available in future releases.
 
 For now, please refer to:
+
 - [Overview](./overview.md)
-- [Getting Started Guide](../01-getting-started/)
-- [Agent Documentation](../agents/)
+- [Getting Started Guide](/docs/01-getting-started/)
+- [Agent Documentation](/docs/agents/)

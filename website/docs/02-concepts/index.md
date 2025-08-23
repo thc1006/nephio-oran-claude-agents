@@ -1,17 +1,21 @@
 ---
 title: 'Core Concepts'
-description: 'Fundamental concepts, architecture, and design principles behind Nephio O-RAN Claude Agents'
+description:
+  'Fundamental concepts, architecture, and design principles behind Nephio O-RAN Claude Agents'
 sidebar_position: 2
 tags: ['concepts', 'architecture', 'design', 'principles']
 ---
 
 # Core Concepts and Architecture
 
-Welcome to the core concepts section! This comprehensive guide will help you understand the fundamental principles, architecture, and design decisions behind Nephio O-RAN Claude Agents.
+Welcome to the core concepts section! This comprehensive guide will help you understand the
+fundamental principles, architecture, and design decisions behind Nephio O-RAN Claude Agents.
 
 ## Overview
 
-Nephio O-RAN Claude Agents represent a revolutionary approach to network function orchestration, combining the power of Claude AI with the flexibility of Nephio's Kubernetes-native platform. This section explores the key concepts that make this integration possible.
+Nephio O-RAN Claude Agents represent a revolutionary approach to network function orchestration,
+combining the power of Claude AI with the flexibility of Nephio's Kubernetes-native platform. This
+section explores the key concepts that make this integration possible.
 
 ## Fundamental Concepts
 
@@ -19,7 +23,8 @@ Nephio O-RAN Claude Agents represent a revolutionary approach to network functio
 
 Our agents are built on several core principles:
 
-- **AI-Driven Decision Making**: Each agent leverages Claude AI to make intelligent decisions about network function deployment and management
+- **AI-Driven Decision Making**: Each agent leverages Claude AI to make intelligent decisions about
+  network function deployment and management
 - **Kubernetes-Native**: Full integration with Kubernetes and Nephio's GitOps workflow
 - **Event-Driven Architecture**: Reactive system that responds to cluster events and changes
 - **Declarative Configuration**: Infrastructure and network functions defined as code
@@ -27,26 +32,34 @@ Our agents are built on several core principles:
 ### Agent Types and Roles
 
 #### 🎼 Orchestration Agents
+
 - **Primary Role**: High-level workflow coordination
 - **Key Functions**: Deployment planning, resource allocation, dependency management
 - **Example**: [Nephio O-RAN Orchestrator Agent](../orchestration/nephio-oran-orchestrator-agent.md)
 
-#### 🏗️ Infrastructure Agents  
+#### 🏗️ Infrastructure Agents
+
 - **Primary Role**: Cluster and infrastructure management
 - **Key Functions**: Node provisioning, network configuration, resource monitoring
-- **Examples**: [Infrastructure Agent](../infrastructure/nephio-infrastructure-agent.md), [Deployment Doctor](../infrastructure/oran-nephio-dep-doctor-agent.md)
+- **Examples**: [Infrastructure Agent](../infrastructure/nephio-infrastructure-agent.md),
+  [Deployment Doctor](../infrastructure/oran-nephio-dep-doctor-agent.md)
 
 #### 📊 Analytics and Monitoring Agents
+
 - **Primary Role**: Data collection, analysis, and observability
 - **Key Functions**: Performance monitoring, anomaly detection, capacity planning
-- **Examples**: [Data Analytics Agent](../analytics/data-analytics-agent.md), [Monitoring Agent](../monitoring/monitoring-analytics-agent.md)
+- **Examples**: [Data Analytics Agent](../analytics/data-analytics-agent.md),
+  [Monitoring Agent](../monitoring/monitoring-analytics-agent.md)
 
 #### ⚙️ Configuration Management Agents
+
 - **Primary Role**: Configuration lifecycle management
 - **Key Functions**: Config validation, drift detection, compliance checking
-- **Example**: [Configuration Management Agent](../config-management/configuration-management-agent.md)
+- **Example**:
+  [Configuration Management Agent](../config-management/configuration-management-agent.md)
 
 #### 🛡️ Security and Compliance Agents
+
 - **Primary Role**: Security posture management
 - **Key Functions**: Policy enforcement, vulnerability scanning, compliance reporting
 - **Example**: [Security Compliance Agent](../security/security-compliance-agent.md)
@@ -63,20 +76,22 @@ kind: ConfigMap
 metadata:
   name: agent-principles
 data:
-  scalability: "Horizontal scaling with Kubernetes"
-  resilience: "Self-healing and fault-tolerant"
-  observability: "Comprehensive metrics and logging"
-  security: "Zero-trust security model"
+  scalability: 'Horizontal scaling with Kubernetes'
+  resilience: 'Self-healing and fault-tolerant'
+  observability: 'Comprehensive metrics and logging'
+  security: 'Zero-trust security model'
 ```
 
 ### AI Integration Patterns
 
 #### Prompt Engineering
+
 - **Structured Prompts**: Consistent input formats for reliable AI responses
 - **Context Awareness**: Agents understand current cluster state and history
 - **Decision Transparency**: AI reasoning is logged and auditable
 
 #### Feedback Loops
+
 - **Learning from Outcomes**: Agents improve decisions based on deployment results
 - **Continuous Optimization**: Performance metrics guide future AI recommendations
 - **Human-in-the-Loop**: Critical decisions can require human approval
@@ -88,16 +103,19 @@ data:
 Our agents are designed to work seamlessly with O-RAN architecture:
 
 #### Near Real-Time RIC (nRT-RIC)
+
 - **xApp Management**: Intelligent deployment and lifecycle management of xApps
 - **Policy Coordination**: Seamless integration with RAN Intelligent Controller
 - **Performance Optimization**: AI-driven resource allocation for optimal performance
 
 #### Non-Real-Time RIC (Non-RT RIC)
+
 - **rApp Orchestration**: Coordinated deployment of RAN applications
 - **Service Management**: End-to-end service lifecycle management
 - **Data Analytics**: Integration with SMO data lake and analytics platforms
 
 #### O-Cloud Infrastructure
+
 - **Resource Management**: Intelligent allocation of compute, storage, and network resources
 - **Multi-tenancy**: Support for multiple O-RAN deployments on shared infrastructure
 - **Edge Computing**: Optimization for distributed edge deployment scenarios
@@ -151,13 +169,13 @@ spec:
   agents:
     - name: orchestrator-agent
       role: primary
-      responsibilities: ["planning", "coordination"]
+      responsibilities: ['planning', 'coordination']
     - name: infrastructure-agent
       role: secondary
-      responsibilities: ["resource-validation", "capacity-check"]
+      responsibilities: ['resource-validation', 'capacity-check']
     - name: monitoring-agent
       role: observer
-      responsibilities: ["metrics-collection", "alerting"]
+      responsibilities: ['metrics-collection', 'alerting']
 ```
 
 ### Event-Driven Communication
@@ -190,18 +208,18 @@ kind: Deployment
 metadata:
   name: claude-agent
 spec:
-  replicas: 3  # Scale based on workload
+  replicas: 3 # Scale based on workload
   template:
     spec:
       containers:
-      - name: agent
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: agent
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
 ```
 
 ### Resource Optimization
@@ -238,7 +256,7 @@ spec:
 ### Distributed Tracing
 
 - **End-to-End Tracing**: Track requests across all agent interactions
-- **Performance Analysis**: Identify bottlenecks in agent workflows  
+- **Performance Analysis**: Identify bottlenecks in agent workflows
 - **Error Correlation**: Link errors to specific agent decisions
 
 ## Next Steps
@@ -253,9 +271,9 @@ Now that you understand the core concepts, explore these areas:
 
 ### Practical Applications
 
-1. **[Examples](../examples/index.md)** - Real-world deployment scenarios
-2. **[Troubleshooting](../07-troubleshooting/index.md)** - Common issues and solutions
-3. **[Agent Guides](../agents/index.md)** - Individual agent documentation
+1. **[Examples](/docs/examples/)** - Real-world deployment scenarios
+2. **[Troubleshooting](/docs/07-troubleshooting/)** - Common issues and solutions
+3. **[Agent Guides](/docs/agents/)** - Individual agent documentation
 
 ## Community and Contribution
 
@@ -273,6 +291,7 @@ Now that you understand the core concepts, explore these areas:
 
 ---
 
-*These concepts form the foundation of Nephio O-RAN Claude Agents. Understanding them will help you effectively deploy and manage intelligent network functions.*
+_These concepts form the foundation of Nephio O-RAN Claude Agents. Understanding them will help you
+effectively deploy and manage intelligent network functions._
 
-*Last updated: August 2025*
+_Last updated: August 2025_

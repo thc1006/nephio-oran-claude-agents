@@ -3,7 +3,7 @@ title: "Create Kind cluster for Nephio management"
 description: "name: infrastructure-agent"
 sidebar_position: 4
 tags: ["claude-agent", "nephio", "o-ran", "infrastructure", "kubernetes", "network", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';

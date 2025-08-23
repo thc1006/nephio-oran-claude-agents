@@ -1,6 +1,15 @@
 {
-  "label": "新手上路",
-  "description": "開始使用 Nephio O-RAN Claude 代理的完整指南",
+  "label": "快速上手",
   "position": 1,
-  "className": "category-getting-started"
+  "link": {
+    "type": "generated-index",
+    "title": "Nephio O-RAN Claude Agents 快速上手",
+    "description": "從前置需求到第一次部署，帶您完整了解如何開始使用 Nephio O-RAN Claude Agents。",
+    "keywords": ["快速上手", "安裝", "設置", "前置需求"]
+  },
+  "customProps": {
+    "icon": "🚀",
+    "audience": "初學者",
+    "timeToComplete": "30 分鐘"
+  }
 }

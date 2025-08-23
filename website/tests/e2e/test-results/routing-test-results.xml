@@ -1,0 +1,1587 @@
+<testsuites id="" name="" tests="104" failures="29" skipped="0" errors="0" time="163.12628700000002">
+<testsuite name="routing-and-locale.spec.ts" timestamp="2025-08-23T11:18:04.591Z" hostname="routing-chromium" tests="26" failures="0" skipped="0" time="229.332" errors="0">
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should load homepage successfully" classname="routing-and-locale.spec.ts" time="8.668">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs/ to /docs/intro" classname="routing-and-locale.spec.ts" time="9.246">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs to /docs/intro" classname="routing-and-locale.spec.ts" time="12.633">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should handle deep documentation links" classname="routing-and-locale.spec.ts" time="10.798">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load English version by default" classname="routing-and-locale.spec.ts" time="10.766">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load Traditional Chinese version" classname="routing-and-locale.spec.ts" time="11.24">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle /zh-TW/docs/ navigation to Chinese docs" classname="routing-and-locale.spec.ts" time="11.839">
+<system-out>
+<![CDATA[Redirect went to English docs, navigating to Chinese version
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle locale switching" classname="routing-and-locale.spec.ts" time="8.521">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should prevent double locale paths" classname="routing-and-locale.spec.ts" time="5.272">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should navigate through main documentation sections" classname="routing-and-locale.spec.ts" time="5.927">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should handle external links correctly" classname="routing-and-locale.spec.ts" time="4.724">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should maintain navigation state across page changes" classname="routing-and-locale.spec.ts" time="6.249">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should show 404 page for invalid routes" classname="routing-and-locale.spec.ts" time="3.62">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should handle malformed URLs gracefully with sanitization" classname="routing-and-locale.spec.ts" time="28.141">
+<system-out>
+<![CDATA[Testing URL with onload handler: /nephio-oran-claude-agents/docs/intro"onload="alert(1)"
+Testing URL with script tag in path: /nephio-oran-claude-agents/docs/<script>alert(1)</script>
+Testing URL with script tag in query parameter: /nephio-oran-claude-agents/docs/intro?param=<script>
+Testing URL with script tag in hash fragment: /nephio-oran-claude-agents/docs/intro#<script>alert(1)</script>
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should recover from network errors" classname="routing-and-locale.spec.ts" time="8.014">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should prevent execution of dangerous URL patterns" classname="routing-and-locale.spec.ts" time="22.704">
+<system-out>
+<![CDATA[Testing URL security for javascript: protocol injection
+Testing URL security for HTML injection in path
+Testing URL security for SVG injection in query string
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-chromium\video.webm]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-chromium\error-context.md]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-chromium\trace.zip]]
+Testing URL security for javascript: protocol injection
+Testing URL security for HTML injection in path
+Testing URL security for SVG injection in query string
+Testing URL security for iframe injection in hash
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Security › should not execute JavaScript in URL parameters" classname="routing-and-locale.spec.ts" time="11.485">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper heading hierarchy" classname="routing-and-locale.spec.ts" time="8.045">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should be keyboard navigable" classname="routing-and-locale.spec.ts" time="6.986">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper ARIA landmarks" classname="routing-and-locale.spec.ts" time="5.697">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should load pages within acceptable time" classname="routing-and-locale.spec.ts" time="5.743">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should handle concurrent navigation" classname="routing-and-locale.spec.ts" time="6.035">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Search Functionality › should have search feature available" classname="routing-and-locale.spec.ts" time="3.859">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Mobile Responsiveness › should be responsive on mobile devices" classname="routing-and-locale.spec.ts" time="3.555">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should maintain functionality after URL sanitization" classname="routing-and-locale.spec.ts" time="7.424">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should preserve search functionality with sanitized queries" classname="routing-and-locale.spec.ts" time="2.141">
+</testcase>
+</testsuite>
+<testsuite name="routing-and-locale.spec.ts" timestamp="2025-08-23T11:18:04.591Z" hostname="routing-firefox" tests="26" failures="26" skipped="0" time="0.981" errors="0">
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should load homepage successfully" classname="routing-and-locale.spec.ts" time="0.063">
+<failure message="routing-and-locale.spec.ts:18:9 should load homepage successfully" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:18:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should load homepage successfully 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--82d75--load-homepage-successfully-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--82d75--load-homepage-successfully-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--82d75--load-homepage-successfully-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--82d75--load-homepage-successfully-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--82d75--load-homepage-successfully-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--82d75--load-homepage-successfully-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs/ to /docs/intro" classname="routing-and-locale.spec.ts" time="0.101">
+<failure message="routing-and-locale.spec.ts:50:9 should redirect /docs/ to /docs/intro" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:50:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs/ to /docs/intro 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs to /docs/intro" classname="routing-and-locale.spec.ts" time="0.066">
+<failure message="routing-and-locale.spec.ts:62:9 should redirect /docs to /docs/intro" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:62:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs to /docs/intro 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--89edb-redirect-docs-to-docs-intro-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should handle deep documentation links" classname="routing-and-locale.spec.ts" time="0.048">
+<failure message="routing-and-locale.spec.ts:74:9 should handle deep documentation links" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:74:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should handle deep documentation links 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--f1333-le-deep-documentation-links-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--f1333-le-deep-documentation-links-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--f1333-le-deep-documentation-links-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--f1333-le-deep-documentation-links-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f1333-le-deep-documentation-links-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f1333-le-deep-documentation-links-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load English version by default" classname="routing-and-locale.spec.ts" time="0.045">
+<failure message="routing-and-locale.spec.ts:103:9 should load English version by default" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:103:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load English version by default 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--ed2fa--English-version-by-default-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--ed2fa--English-version-by-default-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--ed2fa--English-version-by-default-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--ed2fa--English-version-by-default-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--ed2fa--English-version-by-default-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--ed2fa--English-version-by-default-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load Traditional Chinese version" classname="routing-and-locale.spec.ts" time="0.045">
+<failure message="routing-and-locale.spec.ts:118:9 should load Traditional Chinese version" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:118:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load Traditional Chinese version 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--7a078-Traditional-Chinese-version-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--7a078-Traditional-Chinese-version-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--7a078-Traditional-Chinese-version-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--7a078-Traditional-Chinese-version-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--7a078-Traditional-Chinese-version-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--7a078-Traditional-Chinese-version-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle /zh-TW/docs/ navigation to Chinese docs" classname="routing-and-locale.spec.ts" time="0.045">
+<failure message="routing-and-locale.spec.ts:133:9 should handle /zh-TW/docs/ navigation to Chinese docs" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:133:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle /zh-TW/docs/ navigation to Chinese docs 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--7cc72--navigation-to-Chinese-docs-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--7cc72--navigation-to-Chinese-docs-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--7cc72--navigation-to-Chinese-docs-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--7cc72--navigation-to-Chinese-docs-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--7cc72--navigation-to-Chinese-docs-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--7cc72--navigation-to-Chinese-docs-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle locale switching" classname="routing-and-locale.spec.ts" time="0.04">
+<failure message="routing-and-locale.spec.ts:174:9 should handle locale switching" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:174:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle locale switching 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--f9d51-uld-handle-locale-switching-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--f9d51-uld-handle-locale-switching-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--f9d51-uld-handle-locale-switching-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--f9d51-uld-handle-locale-switching-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f9d51-uld-handle-locale-switching-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f9d51-uld-handle-locale-switching-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should prevent double locale paths" classname="routing-and-locale.spec.ts" time="0.038">
+<failure message="routing-and-locale.spec.ts:196:9 should prevent double locale paths" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:196:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should prevent double locale paths 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--d0051-prevent-double-locale-paths-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--d0051-prevent-double-locale-paths-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--d0051-prevent-double-locale-paths-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--d0051-prevent-double-locale-paths-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--d0051-prevent-double-locale-paths-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--d0051-prevent-double-locale-paths-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should navigate through main documentation sections" classname="routing-and-locale.spec.ts" time="0.037">
+<failure message="routing-and-locale.spec.ts:219:9 should navigate through main documentation sections" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:219:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should navigate through main documentation sections 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--9eb1b-main-documentation-sections-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--9eb1b-main-documentation-sections-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--9eb1b-main-documentation-sections-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--9eb1b-main-documentation-sections-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--9eb1b-main-documentation-sections-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--9eb1b-main-documentation-sections-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should handle external links correctly" classname="routing-and-locale.spec.ts" time="0.023">
+<failure message="routing-and-locale.spec.ts:243:9 should handle external links correctly" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:243:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should handle external links correctly 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--1f5f8-le-external-links-correctly-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--1f5f8-le-external-links-correctly-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--1f5f8-le-external-links-correctly-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--1f5f8-le-external-links-correctly-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--1f5f8-le-external-links-correctly-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--1f5f8-le-external-links-correctly-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should maintain navigation state across page changes" classname="routing-and-locale.spec.ts" time="0.027">
+<failure message="routing-and-locale.spec.ts:261:9 should maintain navigation state across page changes" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:261:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should maintain navigation state across page changes 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--77275-n-state-across-page-changes-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--77275-n-state-across-page-changes-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--77275-n-state-across-page-changes-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--77275-n-state-across-page-changes-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--77275-n-state-across-page-changes-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--77275-n-state-across-page-changes-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should show 404 page for invalid routes" classname="routing-and-locale.spec.ts" time="0.029">
+<failure message="routing-and-locale.spec.ts:280:9 should show 404 page for invalid routes" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:280:9 › Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should show 404 page for invalid routes 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--935b9-404-page-for-invalid-routes-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--935b9-404-page-for-invalid-routes-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--935b9-404-page-for-invalid-routes-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--935b9-404-page-for-invalid-routes-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--935b9-404-page-for-invalid-routes-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--935b9-404-page-for-invalid-routes-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should handle malformed URLs gracefully with sanitization" classname="routing-and-locale.spec.ts" time="0.036">
+<failure message="routing-and-locale.spec.ts:299:9 should handle malformed URLs gracefully with sanitization" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:299:9 › Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should handle malformed URLs gracefully with sanitization 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--2c76b-racefully-with-sanitization-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--2c76b-racefully-with-sanitization-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--2c76b-racefully-with-sanitization-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--2c76b-racefully-with-sanitization-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--2c76b-racefully-with-sanitization-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--2c76b-racefully-with-sanitization-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should recover from network errors" classname="routing-and-locale.spec.ts" time="0.029">
+<failure message="routing-and-locale.spec.ts:393:9 should recover from network errors" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:393:9 › Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should recover from network errors 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--2667b-recover-from-network-errors-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--2667b-recover-from-network-errors-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--2667b-recover-from-network-errors-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--2667b-recover-from-network-errors-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--2667b-recover-from-network-errors-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--2667b-recover-from-network-errors-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should prevent execution of dangerous URL patterns" classname="routing-and-locale.spec.ts" time="0.03">
+<failure message="routing-and-locale.spec.ts:410:9 should prevent execution of dangerous URL patterns" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:410:9 › Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should prevent execution of dangerous URL patterns 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--f6f50-n-of-dangerous-URL-patterns-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Security › should not execute JavaScript in URL parameters" classname="routing-and-locale.spec.ts" time="0.022">
+<failure message="routing-and-locale.spec.ts:496:9 should not execute JavaScript in URL parameters" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:496:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Security › should not execute JavaScript in URL parameters 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--b7eb4-avaScript-in-URL-parameters-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--b7eb4-avaScript-in-URL-parameters-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--b7eb4-avaScript-in-URL-parameters-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--b7eb4-avaScript-in-URL-parameters-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--b7eb4-avaScript-in-URL-parameters-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--b7eb4-avaScript-in-URL-parameters-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper heading hierarchy" classname="routing-and-locale.spec.ts" time="0.024">
+<failure message="routing-and-locale.spec.ts:535:9 should have proper heading hierarchy" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:535:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper heading hierarchy 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--cc8a8-ve-proper-heading-hierarchy-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--cc8a8-ve-proper-heading-hierarchy-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--cc8a8-ve-proper-heading-hierarchy-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--cc8a8-ve-proper-heading-hierarchy-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--cc8a8-ve-proper-heading-hierarchy-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--cc8a8-ve-proper-heading-hierarchy-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should be keyboard navigable" classname="routing-and-locale.spec.ts" time="0.026">
+<failure message="routing-and-locale.spec.ts:550:9 should be keyboard navigable" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:550:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should be keyboard navigable 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--ea172-hould-be-keyboard-navigable-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--ea172-hould-be-keyboard-navigable-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--ea172-hould-be-keyboard-navigable-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--ea172-hould-be-keyboard-navigable-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--ea172-hould-be-keyboard-navigable-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--ea172-hould-be-keyboard-navigable-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper ARIA landmarks" classname="routing-and-locale.spec.ts" time="0.026">
+<failure message="routing-and-locale.spec.ts:569:9 should have proper ARIA landmarks" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:569:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper ARIA landmarks 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--ad74f--have-proper-ARIA-landmarks-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--ad74f--have-proper-ARIA-landmarks-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--ad74f--have-proper-ARIA-landmarks-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--ad74f--have-proper-ARIA-landmarks-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--ad74f--have-proper-ARIA-landmarks-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--ad74f--have-proper-ARIA-landmarks-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should load pages within acceptable time" classname="routing-and-locale.spec.ts" time="0.036">
+<failure message="routing-and-locale.spec.ts:589:9 should load pages within acceptable time" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:589:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should load pages within acceptable time 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--936d1-ages-within-acceptable-time-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--936d1-ages-within-acceptable-time-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--936d1-ages-within-acceptable-time-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--936d1-ages-within-acceptable-time-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--936d1-ages-within-acceptable-time-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--936d1-ages-within-acceptable-time-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should handle concurrent navigation" classname="routing-and-locale.spec.ts" time="0.03">
+<failure message="routing-and-locale.spec.ts:604:9 should handle concurrent navigation" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:604:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should handle concurrent navigation 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--115e5-andle-concurrent-navigation-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--115e5-andle-concurrent-navigation-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--115e5-andle-concurrent-navigation-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--115e5-andle-concurrent-navigation-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--115e5-andle-concurrent-navigation-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--115e5-andle-concurrent-navigation-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Search Functionality › should have search feature available" classname="routing-and-locale.spec.ts" time="0.024">
+<failure message="routing-and-locale.spec.ts:620:9 should have search feature available" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:620:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Search Functionality › should have search feature available 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--26f74-ve-search-feature-available-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--26f74-ve-search-feature-available-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--26f74-ve-search-feature-available-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--26f74-ve-search-feature-available-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--26f74-ve-search-feature-available-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--26f74-ve-search-feature-available-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Mobile Responsiveness › should be responsive on mobile devices" classname="routing-and-locale.spec.ts" time="0.032">
+<failure message="routing-and-locale.spec.ts:650:9 should be responsive on mobile devices" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:650:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Mobile Responsiveness › should be responsive on mobile devices 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--96d3c-esponsive-on-mobile-devices-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--96d3c-esponsive-on-mobile-devices-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--96d3c-esponsive-on-mobile-devices-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--96d3c-esponsive-on-mobile-devices-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--96d3c-esponsive-on-mobile-devices-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--96d3c-esponsive-on-mobile-devices-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should maintain functionality after URL sanitization" classname="routing-and-locale.spec.ts" time="0.031">
+<failure message="routing-and-locale.spec.ts:672:9 should maintain functionality after URL sanitization" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:672:9 › Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should maintain functionality after URL sanitization 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--8832c-lity-after-URL-sanitization-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--8832c-lity-after-URL-sanitization-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--8832c-lity-after-URL-sanitization-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--8832c-lity-after-URL-sanitization-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--8832c-lity-after-URL-sanitization-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--8832c-lity-after-URL-sanitization-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should preserve search functionality with sanitized queries" classname="routing-and-locale.spec.ts" time="0.028">
+<failure message="routing-and-locale.spec.ts:695:9 should preserve search functionality with sanitized queries" type="FAILURE">
+<![CDATA[  [routing-firefox] › routing-and-locale.spec.ts:695:9 › Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should preserve search functionality with sanitized queries 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--13964-lity-with-sanitized-queries-routing-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--13964-lity-with-sanitized-queries-routing-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\tingy\AppData\Local\ms-playwright\firefox-1490\firefox\firefox.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\routing-tests\routing-and-locale-Nephio--13964-lity-with-sanitized-queries-routing-firefox-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\routing-tests\routing-and-locale-Nephio--13964-lity-with-sanitized-queries-routing-firefox-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--13964-lity-with-sanitized-queries-routing-firefox\trace.zip]]
+
+[[ATTACHMENT|routing-tests\routing-and-locale-Nephio--13964-lity-with-sanitized-queries-routing-firefox-retry1\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="routing-and-locale.spec.ts" timestamp="2025-08-23T11:18:04.591Z" hostname="routing-mobile" tests="26" failures="0" skipped="0" time="168.316" errors="0">
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should load homepage successfully" classname="routing-and-locale.spec.ts" time="4.012">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs/ to /docs/intro" classname="routing-and-locale.spec.ts" time="5.972">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs to /docs/intro" classname="routing-and-locale.spec.ts" time="6.394">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should handle deep documentation links" classname="routing-and-locale.spec.ts" time="7.026">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load English version by default" classname="routing-and-locale.spec.ts" time="6.742">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load Traditional Chinese version" classname="routing-and-locale.spec.ts" time="7.525">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle /zh-TW/docs/ navigation to Chinese docs" classname="routing-and-locale.spec.ts" time="10.406">
+<system-out>
+<![CDATA[Redirect went to English docs, navigating to Chinese version
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle locale switching" classname="routing-and-locale.spec.ts" time="3.78">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should prevent double locale paths" classname="routing-and-locale.spec.ts" time="3.731">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should navigate through main documentation sections" classname="routing-and-locale.spec.ts" time="5.671">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should handle external links correctly" classname="routing-and-locale.spec.ts" time="3.942">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should maintain navigation state across page changes" classname="routing-and-locale.spec.ts" time="5.167">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should show 404 page for invalid routes" classname="routing-and-locale.spec.ts" time="4.229">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should handle malformed URLs gracefully with sanitization" classname="routing-and-locale.spec.ts" time="12.198">
+<system-out>
+<![CDATA[Testing URL with onload handler: /nephio-oran-claude-agents/docs/intro"onload="alert(1)"
+Testing URL with script tag in path: /nephio-oran-claude-agents/docs/<script>alert(1)</script>
+Testing URL with script tag in query parameter: /nephio-oran-claude-agents/docs/intro?param=<script>
+Testing URL with script tag in hash fragment: /nephio-oran-claude-agents/docs/intro#<script>alert(1)</script>
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should recover from network errors" classname="routing-and-locale.spec.ts" time="6.714">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should prevent execution of dangerous URL patterns" classname="routing-and-locale.spec.ts" time="10.748">
+<system-out>
+<![CDATA[Testing URL security for javascript: protocol injection
+Testing URL security for HTML injection in path
+Testing URL security for SVG injection in query string
+Testing URL security for iframe injection in hash
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Security › should not execute JavaScript in URL parameters" classname="routing-and-locale.spec.ts" time="11.107">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper heading hierarchy" classname="routing-and-locale.spec.ts" time="5.56">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should be keyboard navigable" classname="routing-and-locale.spec.ts" time="5.353">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper ARIA landmarks" classname="routing-and-locale.spec.ts" time="5.377">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should load pages within acceptable time" classname="routing-and-locale.spec.ts" time="5.941">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should handle concurrent navigation" classname="routing-and-locale.spec.ts" time="6.371">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Search Functionality › should have search feature available" classname="routing-and-locale.spec.ts" time="4.247">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Mobile Responsiveness › should be responsive on mobile devices" classname="routing-and-locale.spec.ts" time="5.001">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should maintain functionality after URL sanitization" classname="routing-and-locale.spec.ts" time="11.93">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should preserve search functionality with sanitized queries" classname="routing-and-locale.spec.ts" time="3.172">
+</testcase>
+</testsuite>
+<testsuite name="routing-and-locale.spec.ts" timestamp="2025-08-23T11:18:04.591Z" hostname="routing-edge" tests="26" failures="3" skipped="0" time="142.666" errors="0">
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should load homepage successfully" classname="routing-and-locale.spec.ts" time="9.188">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs/ to /docs/intro" classname="routing-and-locale.spec.ts" time="9.12">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should redirect /docs to /docs/intro" classname="routing-and-locale.spec.ts" time="10.276">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Basic Routing › should handle deep documentation links" classname="routing-and-locale.spec.ts" time="11.225">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load English version by default" classname="routing-and-locale.spec.ts" time="6.764">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load Traditional Chinese version" classname="routing-and-locale.spec.ts" time="0">
+<failure message="routing-and-locale.spec.ts:118:9 should load Traditional Chinese version" type="FAILURE">
+<![CDATA[  [routing-edge] › routing-and-locale.spec.ts:118:9 › Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should load Traditional Chinese version 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle /zh-TW/docs/ navigation to Chinese docs" classname="routing-and-locale.spec.ts" time="10.203">
+<system-out>
+<![CDATA[Redirect went to English docs, navigating to Chinese version
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should handle locale switching" classname="routing-and-locale.spec.ts" time="3.644">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Locale Functionality › should prevent double locale paths" classname="routing-and-locale.spec.ts" time="3.845">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should navigate through main documentation sections" classname="routing-and-locale.spec.ts" time="4.186">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should handle external links correctly" classname="routing-and-locale.spec.ts" time="2.559">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Navigation and Links › should maintain navigation state across page changes" classname="routing-and-locale.spec.ts" time="4.754">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should show 404 page for invalid routes" classname="routing-and-locale.spec.ts" time="3.016">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should handle malformed URLs gracefully with sanitization" classname="routing-and-locale.spec.ts" time="9.921">
+<system-out>
+<![CDATA[Testing URL with onload handler: /nephio-oran-claude-agents/docs/intro"onload="alert(1)"
+Testing URL with script tag in path: /nephio-oran-claude-agents/docs/<script>alert(1)</script>
+Testing URL with script tag in query parameter: /nephio-oran-claude-agents/docs/intro?param=<script>
+Testing URL with script tag in hash fragment: /nephio-oran-claude-agents/docs/intro#<script>alert(1)</script>
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should recover from network errors" classname="routing-and-locale.spec.ts" time="10.362">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › 404 and Error Handling › should prevent execution of dangerous URL patterns" classname="routing-and-locale.spec.ts" time="9.906">
+<system-out>
+<![CDATA[Testing URL security for javascript: protocol injection
+Testing URL security for HTML injection in path
+Testing URL security for SVG injection in query string
+Testing URL security for iframe injection in hash
+]]>
+</system-out>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Security › should not execute JavaScript in URL parameters" classname="routing-and-locale.spec.ts" time="10.982">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper heading hierarchy" classname="routing-and-locale.spec.ts" time="3.208">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should be keyboard navigable" classname="routing-and-locale.spec.ts" time="2.877">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Accessibility › should have proper ARIA landmarks" classname="routing-and-locale.spec.ts" time="3.651">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should load pages within acceptable time" classname="routing-and-locale.spec.ts" time="3.438">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Performance › should handle concurrent navigation" classname="routing-and-locale.spec.ts" time="3.711">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Search Functionality › should have search feature available" classname="routing-and-locale.spec.ts" time="2.753">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Mobile Responsiveness › should be responsive on mobile devices" classname="routing-and-locale.spec.ts" time="3.077">
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should maintain functionality after URL sanitization" classname="routing-and-locale.spec.ts" time="0">
+<failure message="routing-and-locale.spec.ts:672:9 should maintain functionality after URL sanitization" type="FAILURE">
+<![CDATA[  [routing-edge] › routing-and-locale.spec.ts:672:9 › Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should maintain functionality after URL sanitization 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should preserve search functionality with sanitized queries" classname="routing-and-locale.spec.ts" time="0">
+<failure message="routing-and-locale.spec.ts:695:9 should preserve search functionality with sanitized queries" type="FAILURE">
+<![CDATA[  [routing-edge] › routing-and-locale.spec.ts:695:9 › Nephio O-RAN Website Routing and Locale E2E Tests › URL Sanitization Integration › should preserve search functionality with sanitized queries 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

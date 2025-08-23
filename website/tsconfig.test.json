@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "types": ["jest", "@testing-library/jest-dom", "node"],
+    "typeRoots": ["node_modules/@types", "types"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "isolatedModules": true
+  },
+  "include": [
+    "tests/**/*",
+    "types/**/*.d.ts",
+    "tests/setup/**/*.d.ts",
+    "src/jest-dom.d.ts",
+    "jest.d.ts",
+    "test-helpers.d.ts",
+    "types/jest-dom.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    ".docusaurus",
+    "tests/e2e/**/*"
+  ]
+}

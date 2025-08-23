@@ -16,9 +16,9 @@ tags: ['api', 'reference', 'endpoints', 'grpc', 'rest']
 詳細的 API 文件將在未來版本中提供。
 
 目前，請參閱：
-- 概述
-- 入門指南
-- 代理程式文件
+- [概述](./overview.md)
+- [入門指南](/docs/01-getting-started/)
+- [代理程式文件](/docs/agents/)
 
 ## API 類型
 

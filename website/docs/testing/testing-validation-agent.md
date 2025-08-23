@@ -3,7 +3,7 @@ title: "Complete E2 interface test with RAN functions"
 description: "name: testing-validation-agent"
 sidebar_position: 10
 tags: ["claude-agent", "nephio", "o-ran", "testing", "kubernetes", "monitoring", "security", "network", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';

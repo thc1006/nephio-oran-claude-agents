@@ -3,9 +3,26 @@
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
-    "jsx": "react-jsx",
-    "target": "es2015",
-    "lib": ["dom", "es2015"],
-    "downlevelIteration": true
-  }
+    "types": ["jest", "@testing-library/jest-dom", "node"],
+    "typeRoots": ["node_modules/@types", "types"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src/**/*",
+    "types/**/*.d.ts",
+    "global-types.d.ts",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    ".docusaurus",
+    "tests/**/*"
+  ]
 }

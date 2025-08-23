@@ -1,0 +1,6 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="6.545343">
+<testsuite name="routing-and-locale.spec.ts" timestamp="2025-08-23T10:38:33.043Z" hostname="chromium" tests="1" failures="0" skipped="0" time="3.297" errors="0">
+<testcase name="Nephio O-RAN Website Routing and Locale E2E Tests › Security › should not execute JavaScript in URL parameters" classname="routing-and-locale.spec.ts" time="3.297">
+</testcase>
+</testsuite>
+</testsuites>

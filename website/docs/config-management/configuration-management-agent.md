@@ -3,7 +3,7 @@ title: "List available packages in catalog"
 description: "name: configuration-management-agent"
 sidebar_position: 1
 tags: ["claude-agent", "nephio", "o-ran", "config-management", "kubernetes", "network", "configuration"]
-last_updated: "2025-08-22"
+last_updated: "2025-08-23"
 ---
 
 import { SupportStatement } from '@site/src/components';

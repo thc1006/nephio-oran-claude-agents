@@ -1,10 +1,10 @@
 {
-  "label": "基本概念",
+  "label": "核心概念",
   "position": 2,
   "link": {
     "type": "generated-index",
     "title": "核心概念與系統架構",
-    "description": "了解 Nephio O-RAN Claude 智能代理背後的基礎概念、系統架構和設計原則。",
+    "description": "了解 Nephio O-RAN Claude 智能代理系統背後的核心概念、系統架構和設計原則。",
     "keywords": ["概念", "架構", "設計", "原則", "核心概念"]
   },
   "customProps": {

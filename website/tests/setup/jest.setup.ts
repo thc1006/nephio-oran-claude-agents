@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import './css-modules.d.ts';
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {

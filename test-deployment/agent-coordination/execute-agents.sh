@@ -5,7 +5,7 @@
 
 set -e
 
-AGENT_DIR="../../agents"
+AGENT_DIR="$(dirname "$(dirname "$(dirname "$(realpath "$0")")")")/agents"
 OUTPUT_DIR="agent-outputs"
 LOG_DIR="execution-logs"
 

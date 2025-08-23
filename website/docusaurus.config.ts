@@ -19,6 +19,8 @@ const config: Config = {
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
+  // TODO: Revert these to 'throw' after all broken links are fixed
+  // Temporarily set to 'warn' to unblock CI pipeline
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
@@ -72,14 +74,12 @@ const config: Config = {
         direction: 'ltr',
         htmlLang: 'en-US',
         calendar: 'gregory',
-        path: 'en',
       },
       'zh-TW': {
         label: '繁體中文',
         direction: 'ltr',
         htmlLang: 'zh-TW',
         calendar: 'gregory',
-        path: 'zh-TW',
       },
     },
   },
@@ -92,6 +92,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           editUrl:
             'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
+          routeBasePath: 'docs',
           // Versioning support
           includeCurrentVersion: true,
           lastVersion: 'current',
@@ -164,7 +165,7 @@ const config: Config = {
     [
       './plugins/docusaurus-plugin-security-headers',
       {
-        disableCSP: false, // Set to true to disable CSP in development if needed
+        disableCSP: process.env.NODE_ENV === 'test' || process.env.DISABLE_CSP_FOR_TESTS === 'true', // Disable CSP for testing
         customHeaders: {
           // Add any additional custom headers here
           'X-DNS-Prefetch-Control': 'on',
@@ -238,13 +239,12 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'docsSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Docs',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'docsSidebar',
-          position: 'left',
-          label: 'Guides',
+          to: 'blog',
+          label: 'Blog',
+          position: 'left'
         },
         {
           type: 'localeDropdown',
@@ -264,12 +264,20 @@ const config: Config = {
           title: 'Documentation',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Introduction',
+              to: 'docs/intro',
             },
             {
               label: 'Quick Start',
-              to: '/docs/guides/quickstart',
+              to: 'docs/guides/quickstart',
+            },
+            {
+              label: 'Architecture',
+              to: 'docs/architecture',
+            },
+            {
+              label: 'Agents',
+              to: 'docs/agents',
             },
           ],
         },
@@ -295,7 +303,7 @@ const config: Config = {
           items: [
             {
               label: 'Blog',
-              to: '/blog',
+              to: 'blog',
             },
             {
               label: 'GitHub',

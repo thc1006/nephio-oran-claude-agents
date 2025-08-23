@@ -7,18 +7,21 @@ tags: ['getting-started', 'introduction', 'setup', 'quickstart']
 
 # Getting Started with Nephio O-RAN Claude Agents
 
-Welcome to the Nephio O-RAN Claude Agents! This comprehensive guide will help you get started with deploying and managing intelligent agents for O-RAN network functions using Nephio and Claude AI.
+Welcome to the Nephio O-RAN Claude Agents! This comprehensive guide will help you get started with
+deploying and managing intelligent agents for O-RAN network functions using Nephio and Claude AI.
 
 ## Overview
 
-Nephio O-RAN Claude Agents provide intelligent automation and orchestration for Open Radio Access Network (O-RAN) deployments. These agents leverage Claude AI to make smart decisions about deployment, configuration, and management of O-RAN components.
+Nephio O-RAN Claude Agents provide intelligent automation and orchestration for Open Radio Access
+Network (O-RAN) deployments. These agents leverage Claude AI to make smart decisions about
+deployment, configuration, and management of O-RAN components.
 
 ## What You'll Learn
 
 In this section, you'll discover:
 
 - **Prerequisites**: What you need before getting started
-- **Installation**: Step-by-step setup instructions  
+- **Installation**: Step-by-step setup instructions
 - **Quick Start**: Get your first agents running in minutes
 - **Basic Configuration**: Essential settings and options
 - **Verification**: How to confirm everything is working
@@ -37,21 +40,21 @@ Our Claude agents provide:
 
 ### Essential First Steps
 
-1. **[Quick Start Guide](../guides/quickstart.md)** - Get up and running in 30 minutes
-2. **[Architecture Overview](../architecture/index.md)** - Understand the system design
-3. **[Agent Configuration](../agents/index.md)** - Learn about available agents
+1. **[Quick Start Guide](/docs/guides/quickstart)** - Get up and running in 30 minutes
+2. **[Architecture Overview](/docs/architecture/)** - Understand the system design
+3. **[Agent Configuration](/docs/agents/)** - Learn about available agents
 
 ### Core Concepts
 
-- **[O-RAN Integration](../02-concepts/)** - How agents work with O-RAN
-- **[Nephio Integration](../integration/index.md)** - Nephio-specific features
-- **[AI Decision Making](../02-concepts/)** - How Claude AI powers the agents
+- **[O-RAN Integration](/docs/02-concepts/)** - How agents work with O-RAN
+- **[Nephio Integration](/docs/integration/)** - Nephio-specific features
+- **[AI Decision Making](/docs/02-concepts/)** - How Claude AI powers the agents
 
 ### Common Tasks
 
-- **[Deploy Network Functions](../network-functions/oran-network-functions-agent.md)**
-- **[Configure Monitoring](../monitoring/monitoring-analytics-agent.md)**
-- **[Set Up Security](../security/security-compliance-agent.md)**
+- **[Deploy Network Functions](/docs/network-functions/oran-network-functions-agent)**
+- **[Configure Monitoring](/docs/monitoring/monitoring-analytics-agent)**
+- **[Set Up Security](/docs/security/security-compliance-agent)**
 
 ## Prerequisites
 
@@ -86,34 +89,39 @@ make install && make deploy
 
 ### Option 2: Step-by-Step Installation
 
-Follow the detailed [Quick Start Guide](../guides/quickstart.md) for a comprehensive walkthrough.
+Follow the detailed [Quick Start Guide](/docs/guides/quickstart) for a comprehensive walkthrough.
 
 ### Option 3: Custom Installation
 
-For advanced users, see the [API Reference](../04-api-reference/index.md) for detailed configuration options.
+For advanced users, see the [API Reference](/docs/04-api-reference/) for detailed configuration
+options.
 
 ## Next Steps
 
 Once you've reviewed the prerequisites:
 
-1. **Start Here**: [Quick Start Guide](../guides/quickstart.md) - Complete setup in 30 minutes
-2. **Learn the Concepts**: [Architecture Overview](../architecture/index.md) - Understand the system
-3. **Explore Agents**: [Agent Documentation](../agents/index.md) - Discover available agents
-4. **Configure Security**: [Security Guide](../security/security-compliance-agent.md) - Secure your deployment
+1. **Start Here**: [Quick Start Guide](/docs/guides/quickstart) - Complete setup in 30 minutes
+2. **Learn the Concepts**: [Architecture Overview](/docs/architecture/) - Understand the system
+3. **Explore Agents**: [Agent Documentation](/docs/agents/) - Discover available agents
+4. **Configure Security**: [Security Guide](/docs/security/security-compliance-agent) - Secure your
+   deployment
 
 ## Getting Help
 
 Need assistance? We're here to help:
 
 - **Documentation**: Browse our comprehensive guides
-- **Troubleshooting**: Check the [Troubleshooting Guide](../07-troubleshooting/index.md)
-- **Community**: Join the [GitHub Discussions](https://github.com/thc1006/nephio-oran-claude-agents/discussions)
-- **Issues**: Report bugs on [GitHub Issues](https://github.com/thc1006/nephio-oran-claude-agents/issues)
+- **Troubleshooting**: Check the [Troubleshooting Guide](/docs/07-troubleshooting/)
+- **Community**: Join the
+  [GitHub Discussions](https://github.com/thc1006/nephio-oran-claude-agents/discussions)
+- **Issues**: Report bugs on
+  [GitHub Issues](https://github.com/thc1006/nephio-oran-claude-agents/issues)
 
 ## What's Next?
 
-Ready to get started? Begin with our [Quick Start Guide](../guides/quickstart.md) and have your first Claude agents running within 30 minutes!
+Ready to get started? Begin with our [Quick Start Guide](/docs/guides/quickstart) and have your
+first Claude agents running within 30 minutes!
 
 ---
 
-*Last updated: August 2025*
+_Last updated: August 2025_

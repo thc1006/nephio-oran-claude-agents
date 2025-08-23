@@ -41,14 +41,26 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({ title, Svg, description }: FeatureItem) {
+  // Generate test ID based on title
+  const getTestId = (title: string) => {
+    if (title.includes('Easy')) return 'mountain-svg';
+    if (title.includes('Focus')) return 'tree-svg';
+    if (title.includes('React')) return 'react-svg';
+    return `${title.toLowerCase().replace(/\s+/g, '-')}-svg`;
+  };
+
   return (
     <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+      <div className='text--center'>
+        <Svg
+          className={styles.featureSvg}
+          role='img'
+          data-testid={getTestId(title)}
+        />
       </div>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
+      <div className='text--center padding-horiz--md'>
+        <Heading as='h3'>{title}</Heading>
         <p>{description}</p>
       </div>
     </div>
@@ -58,8 +70,8 @@ function Feature({title, Svg, description}: FeatureItem) {
 export default function HomepageFeatures(): React.ReactElement {
   return (
     <section className={styles.features}>
-      <div className="container">
-        <div className="row">
+      <div className='container'>
+        <div className='row'>
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />
           ))}
