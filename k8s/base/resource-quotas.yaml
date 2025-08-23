@@ -1,0 +1,249 @@
+# Resource Quotas for Optimized Multi-tenant O-RAN Environment
+# Implements proper resource management and prevents resource starvation
+---
+# O-RAN Core ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: oran-core-quota
+  namespace: oran-core
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "smo-nonrt-ric"
+spec:
+  hard:
+    # Compute resources
+    requests.cpu: "32"
+    requests.memory: "128Gi"
+    limits.cpu: "64"
+    limits.memory: "256Gi"
+    
+    # Storage resources
+    requests.storage: "500Gi"
+    persistentvolumeclaims: "20"
+    
+    # Object limits
+    count/pods: "100"
+    count/services: "50"
+    count/secrets: "100"
+    count/configmaps: "100"
+    count/deployments.apps: "20"
+    count/statefulsets.apps: "10"
+    
+    # Network resources
+    count/services.loadbalancers: "5"
+    count/services.nodeports: "10"
+
+---
+# O-RAN DU ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: oran-du-quota
+  namespace: oran-du
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "distributed-unit"
+spec:
+  hard:
+    # Compute resources - DU requires high performance
+    requests.cpu: "48"
+    requests.memory: "192Gi"
+    limits.cpu: "96"
+    limits.memory: "384Gi"
+    
+    # GPU resources for signal processing
+    requests.nvidia.com/gpu: "8"
+    
+    # Storage resources
+    requests.storage: "1Ti"
+    persistentvolumeclaims: "30"
+    
+    # Object limits
+    count/pods: "50"
+    count/services: "25"
+    count/secrets: "50"
+    count/configmaps: "50"
+    count/deployments.apps: "10"
+    count/statefulsets.apps: "5"
+    count/daemonsets.apps: "5"
+
+---
+# O-RAN CU ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: oran-cu-quota
+  namespace: oran-cu
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "central-unit"
+spec:
+  hard:
+    # Compute resources
+    requests.cpu: "40"
+    requests.memory: "160Gi"
+    limits.cpu: "80"
+    limits.memory: "320Gi"
+    
+    # Storage resources
+    requests.storage: "800Gi"
+    persistentvolumeclaims: "25"
+    
+    # Object limits
+    count/pods: "80"
+    count/services: "40"
+    count/secrets: "80"
+    count/configmaps: "80"
+    count/deployments.apps: "15"
+    count/statefulsets.apps: "8"
+
+---
+# O-RAN RIC ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: oran-ric-quota
+  namespace: oran-ric
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "ran-intelligent-controller"
+spec:
+  hard:
+    # Compute resources
+    requests.cpu: "24"
+    requests.memory: "96Gi"
+    limits.cpu: "48"
+    limits.memory: "192Gi"
+    
+    # Storage resources
+    requests.storage: "400Gi"
+    persistentvolumeclaims: "15"
+    
+    # Object limits
+    count/pods: "60"
+    count/services: "30"
+    count/secrets: "60"
+    count/configmaps: "60"
+    count/deployments.apps: "12"
+    count/statefulsets.apps: "6"
+
+---
+# Cache Layer ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: cache-layer-quota
+  namespace: cache-layer
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "performance-optimization"
+spec:
+  hard:
+    # Compute resources
+    requests.cpu: "12"
+    requests.memory: "48Gi"
+    limits.cpu: "24"
+    limits.memory: "96Gi"
+    
+    # Storage resources - fast SSD required
+    requests.storage: "200Gi"
+    persistentvolumeclaims: "10"
+    
+    # Object limits
+    count/pods: "30"
+    count/services: "15"
+    count/secrets: "30"
+    count/configmaps: "30"
+    count/deployments.apps: "5"
+    count/statefulsets.apps: "5"
+
+---
+# Monitoring ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: monitoring-quota
+  namespace: monitoring
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "observability"
+spec:
+  hard:
+    # Compute resources
+    requests.cpu: "16"
+    requests.memory: "64Gi"
+    limits.cpu: "32"
+    limits.memory: "128Gi"
+    
+    # Storage resources - high retention for metrics
+    requests.storage: "2Ti"
+    persistentvolumeclaims: "20"
+    
+    # Object limits
+    count/pods: "40"
+    count/services: "20"
+    count/secrets: "40"
+    count/configmaps: "40"
+    count/deployments.apps: "8"
+    count/statefulsets.apps: "4"
+
+---
+# Kafka ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: kafka-quota
+  namespace: kafka
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "messaging-platform"
+spec:
+  hard:
+    # Compute resources
+    requests.cpu: "20"
+    requests.memory: "80Gi"
+    limits.cpu: "40"
+    limits.memory: "160Gi"
+    
+    # Storage resources - high throughput required
+    requests.storage: "1Ti"
+    persistentvolumeclaims: "15"
+    
+    # Object limits
+    count/pods: "30"
+    count/services: "15"
+    count/secrets: "30"
+    count/configmaps: "30"
+    count/deployments.apps: "6"
+    count/statefulsets.apps: "6"
+
+---
+# ArgoCD ResourceQuota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: argocd-quota
+  namespace: argocd
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "gitops-deployment"
+spec:
+  hard:
+    # Compute resources
+    requests.cpu: "8"
+    requests.memory: "32Gi"
+    limits.cpu: "16"
+    limits.memory: "64Gi"
+    
+    # Storage resources
+    requests.storage: "100Gi"
+    persistentvolumeclaims: "10"
+    
+    # Object limits
+    count/pods: "20"
+    count/services: "10"
+    count/secrets: "50"  # High for Git credentials
+    count/configmaps: "50"
+    count/deployments.apps: "5"
+    count/statefulsets.apps: "3"

@@ -1,0 +1,133 @@
+# Production Namespaces for Nephio O-RAN with Optimized Resource Management
+# Implements proper namespace organization and isolation
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oran-core
+  labels:
+    nephio.org/version: r5
+    oran.org/release: l-release
+    oran.org/layer: core
+    security.nephio.org/isolation: strict
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "O-RAN Core Functions - SMO, Non-RT RIC"
+    kubernetes.io/managed-by: "nephio-r5"
+    
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oran-du
+  labels:
+    nephio.org/version: r5
+    oran.org/release: l-release
+    oran.org/layer: access
+    oran.org/function: distributed-unit
+    security.nephio.org/isolation: strict
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "O-RAN Distributed Units"
+    oran.org/interface-support: "f1-c,f1-u,fronthaul"
+    
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oran-cu
+  labels:
+    nephio.org/version: r5
+    oran.org/release: l-release
+    oran.org/layer: access
+    oran.org/function: central-unit
+    security.nephio.org/isolation: strict
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "O-RAN Central Units - CU-CP and CU-UP"
+    oran.org/interface-support: "f1-c,f1-u,e1,x2,xn"
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: oran-ric
+  labels:
+    nephio.org/version: r5
+    oran.org/release: l-release
+    oran.org/layer: control
+    oran.org/function: ran-intelligent-controller
+    security.nephio.org/isolation: strict
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "O-RAN RIC Platform - Near-RT RIC and xApps"
+    oran.org/interface-support: "e2,a1,o1"
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cache-layer
+  labels:
+    nephio.org/version: r5
+    nephio.org/component: performance
+    security.nephio.org/isolation: moderate
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "High-performance caching layer for O-RAN"
+    
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    nephio.org/version: r5
+    nephio.org/component: observability
+    security.nephio.org/monitoring-scope: cluster-wide
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "Monitoring and observability stack"
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kafka
+  labels:
+    nephio.org/version: r5
+    nephio.org/component: messaging
+    security.nephio.org/isolation: moderate
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "Kafka messaging platform for O-RAN telemetry"
+    
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+  labels:
+    nephio.org/version: r5
+    nephio.org/component: gitops
+    nephio.org/deployment-pattern: primary
+    security.nephio.org/gitops-security: hardened
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    nephio.org/description: "GitOps deployment platform"

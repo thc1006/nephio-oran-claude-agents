@@ -1,0 +1,635 @@
+# Istio Service Mesh Configuration for O-RAN Network Architecture
+# Optimized for Ultra-Low Latency O-RAN Requirements (< 1ms)
+
+---
+# Istio Control Plane with O-RAN Optimizations
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: oran-control-plane
+  namespace: istio-system
+  annotations:
+    nephio.org/version: r5
+    oran.org/release: l-release
+    oran.org/latency-class: ultra-low
+spec:
+  values:
+    # High-performance configuration for O-RAN
+    global:
+      proxy:
+        # Reduce proxy overhead for O-RAN latency requirements
+        concurrency: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+      
+      # Enable SPIFFE/SPIRE for Zero-Trust
+      meshID: oran-mesh
+      trustDomain: oran.nephio.io
+      
+      # Performance optimizations
+      pilotEnv:
+        PILOT_ENABLE_WORKLOAD_ENTRY_CROSS_CLUSTER: true
+        PILOT_ENABLE_CROSS_CLUSTER_WORKLOAD_ENTRY: true
+        PILOT_TRACE_SAMPLING: 1.0
+        EXTERNAL_ISTIOD: false
+        
+      # O-RAN specific configurations
+      istiodRemote:
+        enabled: false
+      
+      # Network optimizations for 5G
+      network: oran-network
+      
+    pilot:
+      # CPU affinity and resource isolation
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      
+      # High performance settings
+      env:
+        PILOT_MAX_REQUESTS_PER_SECOND: 10000
+        PILOT_PUSH_THROTTLE: 1000
+        PILOT_DEBOUNCE_AFTER: 100ms
+        PILOT_DEBOUNCE_MAX: 10s
+        PILOT_ENABLE_STATUS: true
+        
+    gateways:
+      istio-ingressgateway:
+        # Optimized for O-RAN traffic patterns
+        type: LoadBalancer
+        ports:
+        # E2 Interface (Near-RT RIC <-> CU/DU)
+        - port: 36421
+          targetPort: 36421
+          name: e2ap
+          protocol: TCP
+        # A1 Interface (Non-RT RIC <-> Near-RT RIC)
+        - port: 8443
+          targetPort: 8443  
+          name: a1-https
+          protocol: TCP
+        # O1 Interface (SMO <-> O-RAN Components)
+        - port: 830
+          targetPort: 830
+          name: o1-netconf
+          protocol: TCP
+        # O2 Interface (SMO <-> Infrastructure)
+        - port: 8080
+          targetPort: 8080
+          name: o2-http
+          protocol: TCP
+        # Open Fronthaul (O-RU <-> O-DU)
+        - port: 7777
+          targetPort: 7777
+          name: fronthaul
+          protocol: UDP
+        
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 2Gi
+          limits:
+            cpu: 4000m
+            memory: 4Gi
+            
+        # Node affinity for hardware-specific optimizations
+        nodeSelector:
+          oran.io/sriov-enabled: "true"
+          kubernetes.io/arch: amd64
+          
+      istio-egressgateway:
+        enabled: true
+        type: ClusterIP
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+
+  components:
+    pilot:
+      k8s:
+        # High-performance node selection
+        nodeSelector:
+          node-role.kubernetes.io/control-plane: ""
+        tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+          
+        # Resource guarantees for consistent performance
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 2Gi
+          limits:
+            cpu: 4000m
+            memory: 4Gi
+            
+        # HPA for pilot scaling based on workload
+        hpaSpec:
+          minReplicas: 2
+          maxReplicas: 5
+          metrics:
+          - type: Resource
+            resource:
+              name: cpu
+              target:
+                type: Utilization
+                averageUtilization: 70
+                
+    ingressGateways:
+    - name: istio-ingressgateway
+      enabled: true
+      k8s:
+        # Dedicated nodes for gateway performance
+        nodeSelector:
+          oran.io/gateway-node: "true"
+          node.kubernetes.io/instance-type: c5n.xlarge
+          
+        # Anti-affinity for high availability
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: istio-ingressgateway
+                topologyKey: kubernetes.io/hostname
+                
+        # Performance-optimized service configuration
+        service:
+          type: LoadBalancer
+          ports:
+          - port: 15021
+            name: status-port
+            protocol: TCP
+            targetPort: 15021
+          - port: 80
+            name: http2
+            protocol: TCP
+            targetPort: 8080
+          - port: 443
+            name: https
+            protocol: TCP
+            targetPort: 8443
+          # O-RAN specific ports
+          - port: 36421
+            name: e2ap
+            protocol: TCP
+            targetPort: 36421
+          - port: 8443
+            name: a1-https
+            protocol: TCP
+            targetPort: 8443
+          - port: 830
+            name: o1-netconf
+            protocol: TCP
+            targetPort: 830
+          - port: 7777
+            name: fronthaul
+            protocol: UDP
+            targetPort: 7777
+          
+          # AWS/cloud-specific optimizations
+          annotations:
+            service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+            service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+            service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+            service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+
+---
+# Envoy Filter for O-RAN Protocol Support
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: oran-protocol-support
+  namespace: istio-system
+spec:
+  configPatches:
+  # E2AP Protocol Support
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_INBOUND
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.filters.http.wasm
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+          config:
+            configuration:
+              "@type": type.googleapis.com/google.protobuf.StringValue
+              value: |
+                {
+                  "oran_protocol": "e2ap",
+                  "latency_threshold_ms": 1,
+                  "enable_tracing": true
+                }
+                
+  # SCTP Support for E2 Interface
+  - applyTo: LISTENER
+    match:
+      context: SIDECAR_INBOUND
+    patch:
+      operation: ADD
+      value:
+        name: e2_sctp_listener
+        address:
+          socket_address:
+            protocol: TCP
+            address: 0.0.0.0
+            port_value: 36421
+        filter_chains:
+        - filters:
+          - name: envoy.filters.network.tcp_proxy
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
+              stat_prefix: e2_sctp
+              cluster: e2_backend_cluster
+              
+  # UDP Optimization for Open Fronthaul  
+  - applyTo: LISTENER
+    match:
+      context: SIDECAR_INBOUND
+    patch:
+      operation: ADD
+      value:
+        name: fronthaul_udp_listener
+        address:
+          socket_address:
+            protocol: UDP
+            address: 0.0.0.0
+            port_value: 7777
+        udp_listener_config:
+          downstream_socket_config:
+            prefer_gro: true
+        filter_chains:
+        - filters:
+          - name: envoy.filters.network.udp_proxy
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.network.udp_proxy.v3.UdpProxyConfig
+              stat_prefix: fronthaul_udp
+              cluster: fronthaul_backend_cluster
+              
+---
+# Performance-Optimized Istio Gateway for O-RAN
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: oran-gateway
+  namespace: oran-system
+  annotations:
+    oran.org/interface-support: "e2,a1,o1,o2,fronthaul"
+    oran.org/latency-optimization: enabled
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  # E2 Interface - Near-RT RIC Communication
+  - port:
+      number: 36421
+      name: e2ap
+      protocol: TCP
+    hosts:
+    - "e2.oran.nephio.io"
+    tls:
+      mode: PASSTHROUGH
+      
+  # A1 Interface - Policy Management
+  - port:
+      number: 8443
+      name: a1-https
+      protocol: HTTPS
+    hosts:
+    - "a1.oran.nephio.io"
+    tls:
+      mode: SIMPLE
+      credentialName: oran-a1-certs
+      minProtocolVersion: TLSV1_3
+      cipherSuites:
+      - ECDHE-ECDSA-AES256-GCM-SHA384
+      - ECDHE-RSA-AES256-GCM-SHA384
+      
+  # O1 Interface - Configuration Management  
+  - port:
+      number: 830
+      name: o1-netconf
+      protocol: TCP
+    hosts:
+    - "o1.oran.nephio.io"
+    tls:
+      mode: PASSTHROUGH
+      
+  # O2 Interface - Infrastructure Management
+  - port:
+      number: 8080
+      name: o2-http
+      protocol: HTTP
+    hosts:
+    - "o2.oran.nephio.io"
+    
+  # Open Fronthaul - O-RU to O-DU Communication
+  - port:
+      number: 7777  
+      name: fronthaul
+      protocol: UDP
+    hosts:
+    - "fronthaul.oran.nephio.io"
+
+---
+# Service Entry for External O-RAN Components
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-oran-components
+  namespace: oran-system
+spec:
+  hosts:
+  - external-odu.oran.local
+  - external-oru.oran.local
+  ports:
+  - number: 36421
+    name: e2ap
+    protocol: TCP
+  - number: 7777
+    name: fronthaul
+    protocol: UDP
+  location: MESH_EXTERNAL
+  resolution: DNS
+  
+---
+# Destination Rule for O-RAN Service Optimization  
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: oran-services-dr
+  namespace: oran-system
+  annotations:
+    oran.org/traffic-optimization: ultra-low-latency
+spec:
+  host: "*.oran-system.svc.cluster.local"
+  trafficPolicy:
+    # Connection pooling for high throughput
+    connectionPool:
+      tcp:
+        maxConnections: 1000
+        connectTimeout: 1s
+        tcpKeepalive:
+          time: 300s
+          interval: 60s
+          probes: 3
+      http:
+        http1MaxPendingRequests: 1000
+        http2MaxRequests: 1000
+        maxRequestsPerConnection: 2
+        maxRetries: 3
+        consecutiveGatewayErrors: 5
+        h2UpgradePolicy: UPGRADE
+        useClientProtocol: true
+        
+    # Load balancing optimized for O-RAN
+    loadBalancer:
+      simple: LEAST_CONN
+      consistentHash:
+        useSourceIp: true
+        
+    # Circuit breaker for resilience
+    outlierDetection:
+      consecutiveGatewayErrors: 5
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+      minHealthPercent: 50
+      
+  portLevelSettings:
+  # E2 Interface Optimization
+  - port:
+      number: 36421
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 500ms
+        tcpKeepalive:
+          time: 60s
+          interval: 10s
+          probes: 2
+  
+  # A1 Interface Optimization          
+  - port:
+      number: 8443
+    connectionPool:
+      tcp:
+        maxConnections: 50
+        connectTimeout: 1s
+      http:
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 1
+        
+---
+# Virtual Service for O-RAN Traffic Management
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: oran-traffic-management
+  namespace: oran-system
+  annotations:
+    oran.org/qos-class: guaranteed
+    oran.org/latency-sla: 1ms
+spec:
+  hosts:
+  - "e2.oran.nephio.io"
+  - "a1.oran.nephio.io" 
+  - "o1.oran.nephio.io"
+  - "o2.oran.nephio.io"
+  gateways:
+  - oran-gateway
+  
+  tcp:
+  # E2 Interface Routing (Ultra-low latency)
+  - match:
+    - port: 36421
+    route:
+    - destination:
+        host: oran-near-rt-ric.oran-system.svc.cluster.local
+        port:
+          number: 36421
+    # Timeout optimized for real-time requirements
+    timeout: 100ms
+    
+  # O1 Interface Routing (NETCONF)
+  - match:
+    - port: 830  
+    route:
+    - destination:
+        host: oran-o1-manager.oran-system.svc.cluster.local
+        port:
+          number: 830
+    timeout: 5s
+  
+  http:
+  # A1 Interface Routing (Policy Management)
+  - match:
+    - headers:
+        host:
+          exact: "a1.oran.nephio.io"
+      port: 8443
+    route:
+    - destination:
+        host: oran-non-rt-ric.oran-system.svc.cluster.local
+        port:
+          number: 8443
+    timeout: 10s
+    retries:
+      attempts: 3
+      perTryTimeout: 3s
+      retryOn: 5xx,gateway-error,connect-failure,refused-stream
+      
+  # O2 Interface Routing (Infrastructure)
+  - match:
+    - headers:
+        host:
+          exact: "o2.oran.nephio.io"
+      port: 8080
+    route:
+    - destination:
+        host: oran-smo.oran-system.svc.cluster.local  
+        port:
+          number: 8080
+    timeout: 30s
+
+---
+# Peer Authentication for Zero-Trust
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: oran-zero-trust
+  namespace: oran-system
+  annotations:
+    security.istio.org/zero-trust: enabled
+    oran.org/wg11-compliance: required
+spec:
+  # Require mTLS for all O-RAN components
+  mtls:
+    mode: STRICT
+  
+  portLevelMtls:
+  # E2 Interface - Strict mTLS required
+  36421:
+    mode: STRICT
+  # A1 Interface - Strict mTLS required  
+  8443:
+    mode: STRICT
+  # O1 Interface - Passthrough (already encrypted via SSH/TLS)
+  830:
+    mode: DISABLE
+    
+---
+# Authorization Policy for O-RAN Interfaces
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: oran-interface-authz
+  namespace: oran-system
+  annotations:
+    oran.org/access-control: interface-based
+    security.istio.org/policy-type: allow
+spec:
+  action: ALLOW
+  rules:
+  # E2 Interface - Only Near-RT RIC and CU/DU components
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/oran-system/sa/near-rt-ric"
+        - "cluster.local/ns/oran-system/sa/oran-cu"
+        - "cluster.local/ns/oran-system/sa/oran-du"
+    to:
+    - operation:
+        ports: ["36421"]
+        
+  # A1 Interface - Non-RT RIC to Near-RT RIC only
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/oran-system/sa/non-rt-ric"
+    to:
+    - operation:
+        ports: ["8443"]
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        
+  # O1 Interface - SMO access only
+  - from:
+    - source:
+        principals:
+        - "cluster.local/ns/oran-system/sa/smo"
+        - "cluster.local/ns/oran-system/sa/o1-manager"
+    to:
+    - operation:
+        ports: ["830", "8080"]
+        
+  # Monitoring access
+  - from:
+    - source:
+        namespaces: ["monitoring", "istio-system"]
+    to:
+    - operation:
+        ports: ["15020", "15021", "15090"]
+
+---
+# Telemetry Configuration for O-RAN Metrics
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: oran-telemetry
+  namespace: oran-system
+  annotations:
+    oran.org/telemetry-class: ultra-low-overhead
+spec:
+  metrics:
+  - providers:
+    - name: prometheus
+  - overrides:
+    - match:
+        metric: ALL_METRICS
+      tagOverrides:
+        oran_interface:
+          operation: UPSERT
+          value: |
+            has(request.headers['x-oran-interface']) ? 
+            request.headers['x-oran-interface'] : 'unknown'
+        oran_component:
+          operation: UPSERT  
+          value: |
+            has(source.labels['oran.org/component']) ?
+            source.labels['oran.org/component'] : 'unknown'
+        latency_class:
+          operation: UPSERT
+          value: ultra_low
+  
+  # Minimal tracing overhead for latency-sensitive O-RAN
+  tracing:
+  - providers:
+    - name: jaeger
+  - randomSamplingPercentage: 0.1  # 0.1% sampling for minimal overhead
+  
+  accessLogging:
+  - providers:
+    - name: otel

@@ -1,0 +1,348 @@
+# LimitRanges for Production O-RAN Workloads
+# Enforces resource limits and requests for all containers
+---
+# O-RAN Core LimitRange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: oran-core-limits
+  namespace: oran-core
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "smo-nonrt-ric"
+spec:
+  limits:
+  # Container limits
+  - type: Container
+    default:
+      cpu: "2"
+      memory: "4Gi"
+      ephemeral-storage: "10Gi"
+    defaultRequest:
+      cpu: "500m"
+      memory: "1Gi"
+      ephemeral-storage: "2Gi"
+    min:
+      cpu: "100m"
+      memory: "128Mi"
+      ephemeral-storage: "1Gi"
+    max:
+      cpu: "8"
+      memory: "16Gi"
+      ephemeral-storage: "50Gi"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "16"
+      memory: "32Gi"
+      ephemeral-storage: "100Gi"
+  # PVC limits
+  - type: PersistentVolumeClaim
+    min:
+      storage: "1Gi"
+    max:
+      storage: "100Gi"
+
+---
+# O-RAN DU LimitRange - High performance requirements
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: oran-du-limits
+  namespace: oran-du
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "distributed-unit"
+spec:
+  limits:
+  # Container limits - DU requires high performance
+  - type: Container
+    default:
+      cpu: "4"
+      memory: "8Gi"
+      ephemeral-storage: "20Gi"
+      nvidia.com/gpu: "1"
+    defaultRequest:
+      cpu: "1"
+      memory: "2Gi"
+      ephemeral-storage: "5Gi"
+    min:
+      cpu: "500m"
+      memory: "512Mi"
+      ephemeral-storage: "2Gi"
+    max:
+      cpu: "16"
+      memory: "32Gi"
+      ephemeral-storage: "100Gi"
+      nvidia.com/gpu: "4"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "32"
+      memory: "64Gi"
+      ephemeral-storage: "200Gi"
+      nvidia.com/gpu: "8"
+  # PVC limits
+  - type: PersistentVolumeClaim
+    min:
+      storage: "10Gi"
+    max:
+      storage: "500Gi"
+
+---
+# O-RAN CU LimitRange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: oran-cu-limits
+  namespace: oran-cu
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "central-unit"
+spec:
+  limits:
+  # Container limits
+  - type: Container
+    default:
+      cpu: "3"
+      memory: "6Gi"
+      ephemeral-storage: "15Gi"
+    defaultRequest:
+      cpu: "750m"
+      memory: "1.5Gi"
+      ephemeral-storage: "3Gi"
+    min:
+      cpu: "250m"
+      memory: "256Mi"
+      ephemeral-storage: "1Gi"
+    max:
+      cpu: "12"
+      memory: "24Gi"
+      ephemeral-storage: "80Gi"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "24"
+      memory: "48Gi"
+      ephemeral-storage: "160Gi"
+  # PVC limits
+  - type: PersistentVolumeClaim
+    min:
+      storage: "5Gi"
+    max:
+      storage: "200Gi"
+
+---
+# O-RAN RIC LimitRange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: oran-ric-limits
+  namespace: oran-ric
+  annotations:
+    nephio.org/resource-tier: "high-priority"
+    oran.org/function: "ran-intelligent-controller"
+spec:
+  limits:
+  # Container limits
+  - type: Container
+    default:
+      cpu: "2"
+      memory: "4Gi"
+      ephemeral-storage: "10Gi"
+    defaultRequest:
+      cpu: "500m"
+      memory: "1Gi"
+      ephemeral-storage: "2Gi"
+    min:
+      cpu: "200m"
+      memory: "256Mi"
+      ephemeral-storage: "1Gi"
+    max:
+      cpu: "8"
+      memory: "16Gi"
+      ephemeral-storage: "50Gi"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "16"
+      memory: "32Gi"
+      ephemeral-storage: "100Gi"
+  # PVC limits
+  - type: PersistentVolumeClaim
+    min:
+      storage: "2Gi"
+    max:
+      storage: "100Gi"
+
+---
+# Cache Layer LimitRange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cache-layer-limits
+  namespace: cache-layer
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "performance-optimization"
+spec:
+  limits:
+  # Container limits
+  - type: Container
+    default:
+      cpu: "1"
+      memory: "2Gi"
+      ephemeral-storage: "5Gi"
+    defaultRequest:
+      cpu: "250m"
+      memory: "512Mi"
+      ephemeral-storage: "1Gi"
+    min:
+      cpu: "100m"
+      memory: "128Mi"
+      ephemeral-storage: "500Mi"
+    max:
+      cpu: "4"
+      memory: "8Gi"
+      ephemeral-storage: "20Gi"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "8"
+      memory: "16Gi"
+      ephemeral-storage: "40Gi"
+  # PVC limits
+  - type: PersistentVolumeClaim
+    min:
+      storage: "1Gi"
+    max:
+      storage: "50Gi"
+
+---
+# Monitoring LimitRange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: monitoring-limits
+  namespace: monitoring
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "observability"
+spec:
+  limits:
+  # Container limits
+  - type: Container
+    default:
+      cpu: "1"
+      memory: "2Gi"
+      ephemeral-storage: "5Gi"
+    defaultRequest:
+      cpu: "200m"
+      memory: "512Mi"
+      ephemeral-storage: "1Gi"
+    min:
+      cpu: "50m"
+      memory: "64Mi"
+      ephemeral-storage: "500Mi"
+    max:
+      cpu: "4"
+      memory: "8Gi"
+      ephemeral-storage: "20Gi"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "8"
+      memory: "16Gi"
+      ephemeral-storage: "40Gi"
+  # PVC limits - Large for metrics storage
+  - type: PersistentVolumeClaim
+    min:
+      storage: "10Gi"
+    max:
+      storage: "500Gi"
+
+---
+# Kafka LimitRange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: kafka-limits
+  namespace: kafka
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "messaging-platform"
+spec:
+  limits:
+  # Container limits
+  - type: Container
+    default:
+      cpu: "2"
+      memory: "4Gi"
+      ephemeral-storage: "10Gi"
+    defaultRequest:
+      cpu: "500m"
+      memory: "1Gi"
+      ephemeral-storage: "2Gi"
+    min:
+      cpu: "250m"
+      memory: "256Mi"
+      ephemeral-storage: "1Gi"
+    max:
+      cpu: "8"
+      memory: "16Gi"
+      ephemeral-storage: "50Gi"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "16"
+      memory: "32Gi"
+      ephemeral-storage: "100Gi"
+  # PVC limits
+  - type: PersistentVolumeClaim
+    min:
+      storage: "10Gi"
+    max:
+      storage: "200Gi"
+
+---
+# ArgoCD LimitRange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: argocd-limits
+  namespace: argocd
+  annotations:
+    nephio.org/resource-tier: "medium-priority"
+    nephio.org/function: "gitops-deployment"
+spec:
+  limits:
+  # Container limits
+  - type: Container
+    default:
+      cpu: "1"
+      memory: "2Gi"
+      ephemeral-storage: "5Gi"
+    defaultRequest:
+      cpu: "200m"
+      memory: "512Mi"
+      ephemeral-storage: "1Gi"
+    min:
+      cpu: "100m"
+      memory: "128Mi"
+      ephemeral-storage: "500Mi"
+    max:
+      cpu: "4"
+      memory: "8Gi"
+      ephemeral-storage: "20Gi"
+  # Pod limits
+  - type: Pod
+    max:
+      cpu: "8"
+      memory: "16Gi"
+      ephemeral-storage: "40Gi"
+  # PVC limits
+  - type: PersistentVolumeClaim
+    min:
+      storage: "1Gi"
+    max:
+      storage: "20Gi"

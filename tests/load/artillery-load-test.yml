@@ -1,0 +1,263 @@
+# Artillery Load Testing Configuration for Nephio O-RAN System
+# This configuration tests the performance and scalability of the O-RAN APIs
+
+config:
+  # Target environment configuration
+  target: "http://localhost:3000"  # Change to your API endpoint
+  
+  # Load phases - simulating realistic traffic patterns
+  phases:
+    # Phase 1: Warm-up (2 minutes)
+    - duration: 120
+      arrivalRate: 5
+      name: "System warm-up"
+      
+    # Phase 2: Normal load (5 minutes)
+    - duration: 300
+      arrivalRate: 20
+      name: "Normal traffic"
+      
+    # Phase 3: Peak load (3 minutes)
+    - duration: 180
+      arrivalRate: 50
+      name: "Peak traffic"
+      
+    # Phase 4: Stress test (2 minutes)
+    - duration: 120
+      arrivalRate: 100
+      name: "Stress test"
+      
+    # Phase 5: Cool down (1 minute)
+    - duration: 60
+      arrivalRate: 10
+      name: "Cool down"
+  
+  # HTTP settings
+  http:
+    timeout: 30
+    pool: 50  # Connection pool size
+  
+  # Custom variables
+  variables:
+    network_functions:
+      - "du-001"
+      - "cu-cp-001"
+      - "cu-up-001"
+      - "ric-001"
+    
+    namespaces:
+      - "oran-du"
+      - "oran-cu"
+      - "oran-ric"
+      - "oran-core"
+    
+    metrics_types:
+      - "cpu"
+      - "memory"
+      - "network"
+      - "latency"
+      - "throughput"
+  
+  # Performance thresholds
+  ensure:
+    p95: 500  # 95th percentile should be under 500ms
+    p99: 1000  # 99th percentile should be under 1000ms
+    max: 5000  # Maximum response time should be under 5000ms
+  
+  # Reporting
+  processor: "./load-test-processor.js"
+
+# Test scenarios
+scenarios:
+  # Scenario 1: Basic health check
+  - name: "Health Check"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/v1/health"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: status
+      - think: 1
+
+  # Scenario 2: Network Function CRUD operations
+  - name: "Network Function Operations"
+    weight: 30
+    flow:
+      # List all network functions
+      - get:
+          url: "/api/v1/network-functions"
+          capture:
+            - json: "$[0].id"
+              as: "nf_id"
+            - json: "$[0].namespace"
+              as: "namespace"
+          expect:
+            - statusCode: 200
+            - contentType: json
+      
+      - think: 2
+      
+      # Get specific network function details
+      - get:
+          url: "/api/v1/network-functions/{{ nf_id }}"
+          expect:
+            - statusCode: 200
+            - hasProperty: id
+            - hasProperty: status
+      
+      - think: 1
+      
+      # Update network function configuration
+      - patch:
+          url: "/api/v1/network-functions/{{ nf_id }}"
+          json:
+            config:
+              replicas: 3
+              resources:
+                cpu: "4"
+                memory: "8Gi"
+          expect:
+            - statusCode: 200
+      
+      - think: 2
+
+  # Scenario 3: Metrics and monitoring
+  - name: "Metrics Collection"
+    weight: 25
+    flow:
+      # Get metrics for a network function
+      - get:
+          url: "/api/v1/metrics/network-functions/{{ $randomElement(network_functions) }}"
+          qs:
+            type: "{{ $randomElement(metrics_types) }}"
+            duration: "1h"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data
+      
+      - think: 1
+      
+      # Get aggregated metrics
+      - get:
+          url: "/api/v1/metrics/aggregate"
+          qs:
+            namespace: "{{ $randomElement(namespaces) }}"
+            from: "{{ $timestamp(-3600) }}"
+            to: "{{ $timestamp() }}"
+          expect:
+            - statusCode: 200
+      
+      - think: 2
+
+  # Scenario 4: Configuration management
+  - name: "Configuration Management"
+    weight: 20
+    flow:
+      # Get configuration templates
+      - get:
+          url: "/api/v1/configurations/templates"
+          capture:
+            - json: "$[0].id"
+              as: "template_id"
+          expect:
+            - statusCode: 200
+      
+      - think: 1
+      
+      # Apply configuration
+      - post:
+          url: "/api/v1/configurations/apply"
+          json:
+            templateId: "{{ template_id }}"
+            namespace: "{{ $randomElement(namespaces) }}"
+            parameters:
+              scaling: "auto"
+              monitoring: "enabled"
+          expect:
+            - statusCode: 202
+            - hasProperty: jobId
+          capture:
+            - json: "$.jobId"
+              as: "job_id"
+      
+      - think: 3
+      
+      # Check job status
+      - get:
+          url: "/api/v1/jobs/{{ job_id }}"
+          expect:
+            - statusCode: 200
+            - hasProperty: status
+
+  # Scenario 5: Deployment operations
+  - name: "Deployment Management"
+    weight: 15
+    flow:
+      # List deployments
+      - get:
+          url: "/api/v1/deployments"
+          qs:
+            namespace: "{{ $randomElement(namespaces) }}"
+          expect:
+            - statusCode: 200
+          capture:
+            - json: "$[0].id"
+              as: "deployment_id"
+      
+      - think: 2
+      
+      # Scale deployment
+      - post:
+          url: "/api/v1/deployments/{{ deployment_id }}/scale"
+          json:
+            replicas: "{{ $randomNumber(2, 5) }}"
+          expect:
+            - statusCode: 200
+      
+      - think: 1
+      
+      # Get deployment status
+      - get:
+          url: "/api/v1/deployments/{{ deployment_id }}/status"
+          expect:
+            - statusCode: 200
+            - hasProperty: replicas
+            - hasProperty: readyReplicas
+
+# Custom metrics to track
+customMetrics:
+  - name: "api_errors"
+    type: "counter"
+    
+  - name: "response_time_by_endpoint"
+    type: "histogram"
+    
+  - name: "throughput"
+    type: "rate"
+
+# Hooks for setup and teardown
+before:
+  flow:
+    - log: "Starting load test for Nephio O-RAN system"
+    - think: 2
+
+after:
+  flow:
+    - log: "Load test completed"
+    - think: 1
+
+# Error handling
+errors:
+  - match: 
+      statusCode: 429
+    action: "retry"
+    delay: 5
+    
+  - match:
+      statusCode: 503
+    action: "retry"
+    delay: 10
+    maxRetries: 3

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+import { memo, useMemo } from 'react';
 
 type FeatureItem = {
   title: string;
@@ -41,14 +42,14 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({ title, Svg, description }: FeatureItem) {
-  // Generate test ID based on title
-  const getTestId = (title: string) => {
+const Feature = memo(function Feature({ title, Svg, description }: FeatureItem) {
+  // Generate test ID based on title - memoized for performance
+  const testId = useMemo(() => {
     if (title.includes('Easy')) return 'mountain-svg';
     if (title.includes('Focus')) return 'tree-svg';
     if (title.includes('React')) return 'react-svg';
     return `${title.toLowerCase().replace(/\s+/g, '-')}-svg`;
-  };
+  }, [title]);
 
   return (
     <div className={clsx('col col--4')}>
@@ -56,7 +57,9 @@ function Feature({ title, Svg, description }: FeatureItem) {
         <Svg
           className={styles.featureSvg}
           role='img'
-          data-testid={getTestId(title)}
+          data-testid={testId}
+          aria-label={`${title} illustration`}
+          loading="lazy"
         />
       </div>
       <div className='text--center padding-horiz--md'>
@@ -65,18 +68,26 @@ function Feature({ title, Svg, description }: FeatureItem) {
       </div>
     </div>
   );
-}
+});
 
-export default function HomepageFeatures(): React.ReactElement {
+const HomepageFeatures = memo(function HomepageFeatures(): React.ReactElement {
+  // Memoize the feature list mapping to avoid re-computation
+  const features = useMemo(() => 
+    FeatureList.map((props, idx) => (
+      <Feature key={`feature-${idx}`} {...props} />
+    )),
+    []
+  );
+
   return (
     <section className={styles.features}>
       <div className='container'>
         <div className='row'>
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
+          {features}
         </div>
       </div>
     </section>
   );
-}
+});
+
+export default HomepageFeatures;

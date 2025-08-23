@@ -1,0 +1,19 @@
+{
+  "headers": {
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), fullscreen=(self), picture-in-picture=(), display-capture=(), web-share=(), clipboard-read=(), clipboard-write=(self)",
+    "Cross-Origin-Embedder-Policy": "require-corp",
+    "Cross-Origin-Opener-Policy": "same-origin",
+    "Cross-Origin-Resource-Policy": "same-origin",
+    "X-Permitted-Cross-Domain-Policies": "none",
+    "X-DNS-Prefetch-Control": "on",
+    "X-Download-Options": "noopen",
+    "Cache-Control": "no-cache, no-store, must-revalidate, private",
+    "Pragma": "no-cache",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'strict-dynamic' https://www.google-analytics.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.algolia.net https://algolia.net https://www.algolianet.com https://algolianet.com; style-src 'self' https://fonts.googleapis.com; img-src 'self' data: https://avatars.githubusercontent.com https://www.google-analytics.com https://github.com https://img.shields.io https://raw.githubusercontent.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.github.com https://www.google-analytics.com https://www.googletagmanager.com https://www.algolia.net https://algolia.net https://www.algolianet.com https://algolianet.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; embed-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; worker-src 'self'; child-src 'none'; media-src 'self'; upgrade-insecure-requests"
+  }
+}

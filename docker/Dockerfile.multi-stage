@@ -1,0 +1,213 @@
+# Multi-stage Docker build for Nephio O-RAN Claude Agents
+# Optimized for security, size, and performance
+
+# ============================================
+# STAGE 1: Go Builder
+# ============================================
+FROM golang:1.24.6-alpine AS go-builder
+
+# Install build dependencies
+RUN apk add --no-cache git ca-certificates tzdata
+
+# Create non-root user for security
+RUN adduser -D -g '' appuser
+
+# Set working directory
+WORKDIR /build
+
+# Copy go modules files
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+RUN go mod verify
+
+# Copy source code
+COPY cmd/ cmd/
+COPY pkg/ pkg/
+COPY internal/ internal/
+
+# Build arguments
+ARG VERSION=dev
+ARG BUILD_TIME
+ARG COMMIT_SHA
+
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags="-w -s -X main.version=${VERSION} -X main.buildTime=${BUILD_TIME} -X main.commitSHA=${COMMIT_SHA}" \
+    -a -installsuffix cgo \
+    -o nephio-agent \
+    ./cmd/agent
+
+# ============================================
+# STAGE 2: Node.js Builder
+# ============================================
+FROM node:20-alpine AS node-builder
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /build
+
+# Copy package files
+COPY website/package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production --no-audit --prefer-offline
+
+# Copy source files
+COPY website/ .
+
+# Build the website
+RUN npm run build:production
+
+# ============================================
+# STAGE 3: Security Scanner
+# ============================================
+FROM aquasec/trivy:latest AS security-scanner
+
+WORKDIR /scan
+
+# Copy built artifacts for scanning
+COPY --from=go-builder /build/nephio-agent ./
+COPY --from=node-builder /build/build ./website/
+
+# Scan for vulnerabilities
+RUN trivy fs --exit-code 0 --format json --output scan-results.json .
+
+# ============================================
+# STAGE 4: Final Runtime Image
+# ============================================
+FROM scratch AS runtime
+
+# Import from builder for security
+COPY --from=go-builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=go-builder /usr/share/zoneinfo /usr/share/zoneinfo
+COPY --from=go-builder /etc/passwd /etc/passwd
+
+# Copy built artifacts
+COPY --from=go-builder /build/nephio-agent /usr/local/bin/nephio-agent
+COPY --from=node-builder /build/build /usr/share/nginx/html
+
+# Copy security scan results
+COPY --from=security-scanner /scan/scan-results.json /var/log/security-scan.json
+
+# Create necessary directories
+COPY --from=go-builder /tmp /tmp
+
+# Use non-root user
+USER appuser
+
+# Health check
+HEALTHCHEK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD ["nephio-agent", "health"]
+
+# Metadata labels
+LABEL maintainer="Nephio O-RAN Team" \
+      version="${VERSION}" \
+      description="Nephio O-RAN Claude Agents" \
+      org.opencontainers.image.title="nephio-oran-claude-agents" \
+      org.opencontainers.image.description="AI-powered automation for telecommunications with Nephio and O-RAN" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.created="${BUILD_TIME}" \
+      org.opencontainers.image.revision="${COMMIT_SHA}" \
+      org.opencontainers.image.source="https://github.com/thc1006/nephio-oran-claude-agents" \
+      org.opencontainers.image.licenses="Apache-2.0"
+
+# Expose ports
+EXPOSE 8080 8443 9090
+
+# Default command
+ENTRYPOINT ["/usr/local/bin/nephio-agent"]
+CMD ["serve", "--port=8080", "--metrics-port=9090"]
+
+# ============================================
+# STAGE 5: Debug Image (optional)
+# ============================================
+FROM alpine:3.19 AS debug
+
+# Install debugging tools
+RUN apk add --no-cache \
+    ca-certificates \
+    curl \
+    bash \
+    jq \
+    bind-tools \
+    tcpdump \
+    strace \
+    htop
+
+# Copy application
+COPY --from=go-builder /build/nephio-agent /usr/local/bin/nephio-agent
+COPY --from=node-builder /build/build /usr/share/nginx/html
+
+# Create non-root user
+RUN adduser -D -s /bin/bash appuser
+USER appuser
+
+ENTRYPOINT ["/usr/local/bin/nephio-agent"]
+CMD ["serve", "--port=8080", "--metrics-port=9090", "--debug"]
+
+# ============================================
+# STAGE 6: Development Image
+# ============================================
+FROM golang:1.24.6-alpine AS development
+
+# Install development tools
+RUN apk add --no-cache \
+    git \
+    make \
+    bash \
+    curl \
+    jq \
+    vim \
+    ca-certificates
+
+# Install air for hot reloading
+RUN go install github.com/cosmtrek/air@latest
+
+# Install delve debugger
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
+
+# Install golangci-lint
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+
+WORKDIR /workspace
+
+# Copy go mod files
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Default command for development
+CMD ["air", "-c", ".air.toml"]
+
+# ============================================
+# STAGE 7: Testing Image
+# ============================================
+FROM golang:1.24.6-alpine AS testing
+
+# Install test dependencies
+RUN apk add --no-cache \
+    git \
+    make \
+    bash \
+    curl \
+    ca-certificates
+
+# Install test tools
+RUN go install github.com/onsi/ginkgo/v2/ginkgo@latest
+RUN go install github.com/golang/mock/mockgen@latest
+RUN go install github.com/securecodewarrior/github-action-gosec@latest
+
+WORKDIR /app
+
+# Copy source code
+COPY . .
+
+# Run tests
+CMD ["make", "test"]
+
+# ============================================
+# Default target is runtime
+# ============================================
+FROM runtime

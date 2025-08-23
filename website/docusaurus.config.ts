@@ -249,17 +249,7 @@ const config: Config = {
   ],
 
   plugins: [
-    // Performance optimization plugin with graceful fallbacks
-    [
-      './plugins/performance-optimizer',
-      {
-        enableBundleAnalyzer: true, // Enable bundle analysis (if available)
-        enableTerser: true, // Enable Terser minification (if available)
-        enableCssOptimization: true, // Enable CSS optimization (if available)
-        enableWebVitals: true, // Enable Web Vitals monitoring
-        silent: false, // Show plugin status messages
-      },
-    ],
+    // './plugins/performance-optimizer-enhanced', // Temporarily disabled
     // Security Headers Plugin
     [
       './plugins/docusaurus-plugin-security-headers',

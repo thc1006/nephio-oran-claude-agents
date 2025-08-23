@@ -1,0 +1,830 @@
+# Zero-Trust Network Policies for O-RAN Architecture
+# Based on O-RAN WG11 Security Specifications and NIST Zero-Trust Framework
+
+---
+# Namespace for Zero-Trust Security Components
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zero-trust-system
+  labels:
+    istio-injection: enabled
+    nephio.org/version: r5
+    oran.org/release: l-release
+    security.nephio.org/zero-trust: enabled
+    spiffe.io/trust-domain: oran.nephio.io
+  annotations:
+    security.istio.io/strict-mode: "true"
+    oran.org/wg11-compliance: "required"
+
+---
+# Default Deny All Policy (Zero-Trust Foundation)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: oran-system
+  annotations:
+    security.nephio.org/policy-type: foundation
+    oran.org/security-level: maximum
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  # Explicit empty ingress/egress = deny all
+
+---
+# O-RAN E2 Interface Zero-Trust Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: e2-interface-zero-trust
+  namespace: oran-system
+  annotations:
+    oran.org/interface: e2
+    oran.org/security-class: ultra-high
+    security.nephio.org/latency-aware: "true"
+spec:
+  podSelector:
+    matchLabels:
+      oran.org/interface: e2
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Allow E2 traffic only from authenticated Near-RT RIC
+  - from:
+    - podSelector:
+        matchLabels:
+          oran.org/component: near-rt-ric
+          security.nephio.org/authenticated: "true"
+    - namespaceSelector:
+        matchLabels:
+          name: oran-system
+      podSelector:
+        matchLabels:
+          oran.org/component: oran-cu
+    - namespaceSelector:
+        matchLabels:
+          name: oran-system
+      podSelector:
+        matchLabels:
+          oran.org/component: oran-du
+    ports:
+    - protocol: TCP
+      port: 36421  # E2AP
+    - protocol: SCTP
+      port: 36421  # E2AP over SCTP
+      
+  # Allow monitoring with authentication
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          security.nephio.org/monitoring: "true"
+      podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 8080  # Metrics
+    - protocol: TCP  
+      port: 15020 # Istio metrics
+      
+  egress:
+  # E2 responses to authenticated sources only
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/component: near-rt-ric
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: oran-cu
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: oran-du
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 36421
+    - protocol: SCTP
+      port: 36421
+      
+  # DNS resolution (authenticated)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+---
+# O-RAN A1 Interface Zero-Trust Policy  
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: a1-interface-zero-trust
+  namespace: oran-system
+  annotations:
+    oran.org/interface: a1
+    oran.org/policy-management: "true"
+    security.nephio.org/encryption-required: "true"
+spec:
+  podSelector:
+    matchLabels:
+      oran.org/interface: a1
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # A1 policy requests only from Non-RT RIC
+  - from:
+    - podSelector:
+        matchLabels:
+          oran.org/component: non-rt-ric
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: smo
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8443  # HTTPS A1 interface
+      
+  # Service mesh sidecar communication
+  - from:
+    - podSelector:
+        matchLabels:
+          app: istio-proxy
+    ports:
+    - protocol: TCP
+      port: 15090  # Envoy admin
+      
+  egress:
+  # A1 responses and Near-RT RIC communication
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/component: near-rt-ric
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: non-rt-ric
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8443
+      
+  # External policy databases (with authentication)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443  # HTTPS only
+    # Restricted by separate egress gateway policy
+      
+  # DNS with authentication
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# O-RAN O1 Interface Zero-Trust Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy  
+metadata:
+  name: o1-interface-zero-trust
+  namespace: oran-system
+  annotations:
+    oran.org/interface: o1
+    oran.org/configuration-mgmt: "true"
+    security.nephio.org/netconf-encryption: "required"
+spec:
+  podSelector:
+    matchLabels:
+      oran.org/interface: o1
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # O1 configuration only from authenticated SMO
+  - from:
+    - podSelector:
+        matchLabels:
+          oran.org/component: smo
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: o1-manager
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 830   # NETCONF over SSH
+    - protocol: TCP  
+      port: 443   # HTTPS RESTCONF
+      
+  # Python O1 Simulator (L Release feature)
+  - from:
+    - podSelector:
+        matchLabels:
+          oran.org/component: o1-simulator
+          oran.org/release: l-release
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8080  # Simulator API
+      
+  egress:
+  # O1 responses to authenticated management components
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/component: smo
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: o1-manager
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 830
+    - protocol: TCP
+      port: 443
+      
+  # DNS resolution
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# O-RAN O2 Interface Zero-Trust Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: o2-interface-zero-trust
+  namespace: oran-system
+  annotations:
+    oran.org/interface: o2
+    oran.org/infrastructure-mgmt: "true"
+    security.nephio.org/ocloud-access: "controlled"
+spec:
+  podSelector:
+    matchLabels:
+      oran.org/interface: o2
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # O2 infrastructure management from authenticated SMO/NFVO
+  - from:
+    - podSelector:
+        matchLabels:
+          oran.org/component: smo
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: nfvo
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8080  # O2 REST API
+    - protocol: TCP
+      port: 443   # HTTPS O2
+      
+  egress:
+  # Infrastructure responses and cloud API access
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/component: smo
+    - podSelector:
+        matchLabels:
+          oran.org/component: nfvo
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 443
+      
+  # Kubernetes API for infrastructure management
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+    # Additional network policy controls API access
+      
+  # DNS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# Open Fronthaul Zero-Trust Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: fronthaul-zero-trust
+  namespace: oran-system
+  annotations:
+    oran.org/interface: fronthaul
+    oran.org/latency-critical: "true"
+    security.nephio.org/encryption: ipsec
+spec:
+  podSelector:
+    matchLabels:
+      oran.org/interface: fronthaul
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Fronthaul traffic only between authenticated O-RU and O-DU
+  - from:
+    - podSelector:
+        matchLabels:
+          oran.org/component: oran-ru
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: oran-du
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: UDP
+      port: 7777   # C/U-plane
+    - protocol: UDP
+      port: 7778   # M-plane
+    - protocol: TCP
+      port: 7779   # Synchronization
+      
+  egress:
+  # Fronthaul responses to authenticated endpoints
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/component: oran-ru
+          security.nephio.org/authenticated: "true"
+    - podSelector:
+        matchLabels:
+          oran.org/component: oran-du
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: UDP
+      port: 7777
+    - protocol: UDP
+      port: 7778
+    - protocol: TCP
+      port: 7779
+      
+  # External O-RU (with IPSec encryption)
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 7777
+    # Controlled by separate security policy
+      
+  # PTP synchronization (authenticated)
+  - to:
+    - podSelector:
+        matchLabels:
+          app: ptp-grandmaster
+    ports:
+    - protocol: UDP
+      port: 319   # PTP event
+    - protocol: UDP
+      port: 320   # PTP general
+
+---
+# Network Slicing Zero-Trust Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: network-slicing-zero-trust
+  namespace: oran-system
+  annotations:
+    oran.org/capability: network-slicing
+    nephio.org/slice-isolation: "strict"
+    security.nephio.org/tenant-separation: "required"
+spec:
+  podSelector:
+    matchLabels:
+      nephio.org/slice-capable: "true"
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Slice traffic isolated by tenant labels
+  - from:
+    - podSelector:
+        matchLabels:
+          nephio.org/tenant: tenant-a
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8080
+    # Only for tenant-a pods
+    
+  - from:
+    - podSelector:
+        matchLabels:
+          nephio.org/tenant: tenant-b  
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8081
+    # Only for tenant-b pods
+      
+  # Slice orchestrator access
+  - from:
+    - podSelector:
+        matchLabels:
+          oran.org/component: slice-orchestrator
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 9090  # Slice management API
+      
+  egress:
+  # Tenant-isolated egress
+  - to:
+    - podSelector:
+        matchLabels:
+          nephio.org/tenant: "{{ .Values.tenant }}"
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8080
+      
+  # Slice orchestrator communication
+  - to:
+    - podSelector:
+        matchLabels:
+          oran.org/component: slice-orchestrator
+    ports:
+    - protocol: TCP
+      port: 9090
+
+---
+# SPIFFE/SPIRE Zero-Trust Identity Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: spire-zero-trust
+  namespace: spire-system
+  annotations:
+    spiffe.io/trust-domain: oran.nephio.io
+    security.nephio.org/identity-provider: spire
+    oran.org/zero-trust-identity: "required"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress  
+  - Egress
+  
+  ingress:
+  # SPIRE Server API access (authenticated workloads only)
+  - from:
+    - podSelector:
+        matchLabels:
+          app: spire-agent
+          security.nephio.org/registered: "true"
+    - namespaceSelector:
+        matchLabels:
+          spiffe.io/workload: "true"
+      podSelector:
+        matchLabels:
+          security.nephio.org/spiffe-id: "true"
+    ports:
+    - protocol: TCP
+      port: 8081  # SPIRE Server API
+      
+  # Node agent registration
+  - from:
+    - podSelector:
+        matchLabels:
+          app: spire-agent
+    ports:
+    - protocol: TCP
+      port: 8080  # Registration API
+      
+  egress:
+  # SPIRE agent communication
+  - to:
+    - podSelector:
+        matchLabels:
+          app: spire-agent
+    ports:
+    - protocol: TCP
+      port: 8081
+      
+  # Kubernetes API for attestation
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+    # Controlled by RBAC
+      
+  # DNS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# Monitoring Zero-Trust Policy (Authenticated Observability)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: monitoring-zero-trust
+  namespace: monitoring
+  annotations:
+    security.nephio.org/observability: authenticated
+    oran.org/telemetry-security: "strict"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Authenticated access to monitoring dashboards
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+      podSelector:
+        matchLabels:
+          app: istio-proxy
+    ports:
+    - protocol: TCP
+      port: 3000  # Grafana (via Istio)
+    - protocol: TCP
+      port: 9090  # Prometheus (via Istio)
+      
+  # Inter-monitoring component communication (authenticated)
+  - from:
+    - podSelector:
+        matchLabels:
+          security.nephio.org/monitoring: "true"
+    ports:
+    - protocol: TCP
+      port: 9090  # Prometheus
+    - protocol: TCP
+      port: 3000  # Grafana
+    - protocol: TCP
+      port: 9093  # Alertmanager
+    - protocol: TCP
+      port: 9100  # Node exporter
+      
+  egress:
+  # Authenticated scraping of O-RAN metrics
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: oran-system
+      podSelector:
+        matchLabels:
+          security.nephio.org/metrics: "enabled"
+    ports:
+    - protocol: TCP
+      port: 8080  # Application metrics
+    - protocol: TCP
+      port: 15020 # Istio metrics
+      
+  # Alert webhooks (HTTPS only with authentication)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    # Controlled by egress gateway
+      
+  # DNS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# ArgoCD Zero-Trust Policy (Authenticated GitOps)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: argocd-zero-trust
+  namespace: argocd
+  annotations:
+    nephio.org/deployment-pattern: primary
+    security.nephio.org/gitops-authentication: required
+    oran.org/secure-deployment: "enabled"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Authenticated web interface access
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+      podSelector:
+        matchLabels:
+          app: istio-proxy
+    ports:
+    - protocol: TCP
+      port: 8080  # ArgoCD Server (via Istio)
+      
+  # Internal ArgoCD communication (authenticated)
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: argocd
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8080  # Server
+    - protocol: TCP
+      port: 8082  # Dex
+    - protocol: TCP
+      port: 6379  # Redis
+      
+  egress:
+  # Git repositories (authenticated HTTPS/SSH only)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443   # HTTPS Git
+    - protocol: TCP
+      port: 22    # SSH Git
+    # Git access controlled by separate policy
+      
+  # Kubernetes API (authenticated)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6443
+    # RBAC controls actual permissions
+      
+  # Helm/OCI registries (authenticated HTTPS only)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+      
+  # DNS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+# Egress Gateway Zero-Trust Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-gateway-zero-trust
+  namespace: istio-system
+  annotations:
+    security.nephio.org/egress-control: strict
+    oran.org/external-access: controlled
+spec:
+  podSelector:
+    matchLabels:
+      app: istio-egressgateway
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Only authenticated workloads can use egress gateway
+  - from:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+      
+  egress:
+  # Controlled external access (allowlist based)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443   # HTTPS only
+    - protocol: TCP
+      port: 80    # HTTP (for redirects)
+    # Specific destinations controlled by ServiceEntry
+      
+  # DNS (required for external resolution)
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+---
+# AI/ML Workloads Zero-Trust Policy (L Release)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aiml-zero-trust
+  namespace: kubeflow
+  annotations:
+    oran.org/release: l-release
+    oran.org/aiml-security: strict
+    kubeflow.org/security: zero-trust
+spec:
+  podSelector:
+    matchLabels:
+      oran.org/aiml: "true"
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Authenticated ML pipeline access
+  - from:
+    - podSelector:
+        matchLabels:
+          kubeflow.org/pipeline: "true"
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 8080  # ML model serving
+      
+  # O-RAN data ingestion (authenticated)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: oran-system
+      podSelector:
+        matchLabels:
+          oran.org/data-source: "true"
+          security.nephio.org/authenticated: "true"
+    ports:
+    - protocol: TCP
+      port: 9090  # Data ingestion API
+      
+  egress:
+  # Model artifact storage (authenticated)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443   # HTTPS model storage
+      
+  # O-RAN optimization results (authenticated)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: oran-system
+      podSelector:
+        matchLabels:
+          oran.org/component: optimization-engine
+    ports:
+    - protocol: TCP
+      port: 8080
+      
+  # DNS
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53

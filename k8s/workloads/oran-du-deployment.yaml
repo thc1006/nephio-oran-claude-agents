@@ -1,0 +1,374 @@
+# O-RAN Distributed Unit (DU) Production Deployment
+# High-performance deployment with optimized resource management
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oran-du
+  namespace: oran-du
+  labels:
+    app: oran-du
+    oran.org/function: distributed-unit
+    oran.org/release: l-release
+    nephio.org/version: r5
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    nephio.org/description: "O-RAN Distributed Unit with L1/L2 processing"
+spec:
+  replicas: 1  # Typically one DU per site
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: oran-du
+  template:
+    metadata:
+      labels:
+        app: oran-du
+        oran.org/function: distributed-unit
+        oran.org/layer: access
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: oran-network-function-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      
+      # Node affinity for high-performance nodes
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values: ["amd64"]
+              - key: node-type
+                operator: In
+                values: ["high-performance", "dpdk-enabled"]
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values: ["oran-du"]
+              topologyKey: kubernetes.io/hostname
+      
+      # Tolerations for dedicated nodes
+      tolerations:
+      - key: "oran.org/dedicated"
+        operator: "Equal"
+        value: "du"
+        effect: "NoSchedule"
+      - key: "node.kubernetes.io/network-unavailable"
+        operator: "Exists"
+        effect: "NoSchedule"
+      
+      # Init container for system optimization
+      initContainers:
+      - name: system-init
+        image: alpine:3.19
+        command: ["sh", "-c"]
+        args:
+        - |
+          echo "Initializing DU system parameters..."
+          # Set CPU performance mode
+          echo performance > /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor || true
+          # Configure huge pages
+          echo 2048 > /proc/sys/vm/nr_hugepages || true
+          # Network optimizations
+          echo 1 > /proc/sys/net/core/netdev_max_backlog || true
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - name: proc
+          mountPath: /proc
+        - name: sys
+          mountPath: /sys
+      
+      containers:
+      # Main DU container
+      - name: du-main
+        image: oai/du:v2.0.1
+        imagePullPolicy: IfNotPresent
+        
+        ports:
+        - containerPort: 2152
+          name: f1u-gtpu
+          protocol: UDP
+        - containerPort: 38472
+          name: f1c-sctp
+          protocol: SCTP
+        - containerPort: 9090
+          name: metrics
+          protocol: TCP
+        - containerPort: 8080
+          name: health
+          protocol: TCP
+        
+        env:
+        - name: DU_CONFIG_FILE
+          value: "/etc/du/du.conf"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: THREAD_POOL_SIZE
+          value: "16"
+        - name: USE_DPDK
+          value: "true"
+        - name: HUGE_PAGES
+          value: "true"
+        # FIPS compliance
+        - name: GODEBUG
+          value: "fips140=on"
+        - name: GO_VERSION
+          value: "1.24.6"
+        
+        resources:
+          requests:
+            cpu: "8"
+            memory: "16Gi"
+            hugepages-1Gi: "8Gi"
+            intel.com/intel_sriov_netdevice: "2"
+          limits:
+            cpu: "16"
+            memory: "32Gi"
+            hugepages-1Gi: "16Gi"
+            intel.com/intel_sriov_netdevice: "2"
+            nvidia.com/gpu: "2"
+        
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+        
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        
+        startupProbe:
+          httpGet:
+            path: /startup
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+          successThreshold: 1
+        
+        # Volume mounts
+        volumeMounts:
+        - name: du-config
+          mountPath: /etc/du
+          readOnly: true
+        - name: tls-certs
+          mountPath: /etc/ssl/certs/du
+          readOnly: true
+        - name: hugepages
+          mountPath: /mnt/hugepages
+        - name: shared-memory
+          mountPath: /dev/shm
+        
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          capabilities:
+            add: ["NET_ADMIN", "NET_RAW", "IPC_LOCK"]
+            drop: ["ALL"]
+      
+      # Sidecar for metrics and monitoring
+      - name: metrics-exporter
+        image: prom/node-exporter:v1.7.0
+        args:
+        - --path.procfs=/host/proc
+        - --path.sysfs=/host/sys
+        - --collector.filesystem.ignored-mount-points
+        - ^/(dev|proc|sys|var/lib/docker/.+)($|/)
+        ports:
+        - containerPort: 9100
+          name: node-metrics
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: sys
+          mountPath: /host/sys
+          readOnly: true
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+      
+      # SR-IOV device plugin sidecar
+      - name: sriov-device-plugin
+        image: ghcr.io/k8snetworkplumbingwg/sriov-device-plugin:v3.6.2
+        env:
+        - name: RESOURCE_NAME
+          value: "intel.com/intel_sriov_netdevice"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        volumeMounts:
+        - name: device-plugin
+          mountPath: /var/lib/kubelet/device-plugins
+        securityContext:
+          privileged: true
+      
+      # Volumes
+      volumes:
+      - name: du-config
+        configMap:
+          name: oran-du-config
+      - name: tls-certs
+        secret:
+          secretName: oran-tls-certs
+      - name: hugepages
+        emptyDir:
+          medium: HugePages-1Gi
+      - name: shared-memory
+        emptyDir:
+          medium: Memory
+          sizeLimit: 4Gi
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys
+      - name: device-plugin
+        hostPath:
+          path: /var/lib/kubelet/device-plugins
+          type: Directory
+      
+      # DNS configuration for O-RAN interfaces
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "2"
+        - name: edns0
+      
+      # Restart policy
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+
+---
+# Service for O-RAN DU
+apiVersion: v1
+kind: Service
+metadata:
+  name: oran-du-service
+  namespace: oran-du
+  labels:
+    app: oran-du
+    oran.org/function: distributed-unit
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+spec:
+  type: ClusterIP
+  ports:
+  - name: f1u-gtpu
+    port: 2152
+    targetPort: 2152
+    protocol: UDP
+  - name: f1c-sctp
+    port: 38472
+    targetPort: 38472
+    protocol: SCTP
+  - name: metrics
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  - name: health
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: oran-du
+
+---
+# ConfigMap for DU configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oran-du-config
+  namespace: oran-du
+  labels:
+    app: oran-du
+data:
+  du.conf: |
+    # O-RAN DU Configuration
+    
+    # Basic settings
+    du_id = 1
+    cell_id = 0x01
+    tracking_area_code = 100
+    
+    # F1 Interface configuration
+    f1c_bind_addr = "0.0.0.0"
+    f1c_bind_port = 38472
+    f1u_bind_addr = "0.0.0.0"
+    f1u_bind_port = 2152
+    
+    # CU connection
+    cu_f1c_addr = "oran-cu-service.oran-cu.svc.cluster.local"
+    cu_f1c_port = 38472
+    cu_f1u_addr = "oran-cu-service.oran-cu.svc.cluster.local"
+    cu_f1u_port = 2152
+    
+    # Physical layer configuration
+    num_tx_antennas = 4
+    num_rx_antennas = 4
+    carrier_freq = 3500000000
+    bandwidth = 100
+    
+    # Performance optimizations
+    thread_pool_size = 16
+    use_dpdk = true
+    huge_pages = true
+    cpu_affinity = "4-19"
+    
+    # Logging
+    log_level = "INFO"
+    log_file = "/dev/stdout"
