@@ -20,7 +20,7 @@ class TestVersionManagement(unittest.TestCase):
         
     def test_makefile_versions_defined(self):
         """Test that Makefile defines all required versions."""
-        with open(self.makefile, 'r') as f:
+        with open(self.makefile, 'r', encoding='utf-8') as f:
             content = f.read()
         
         # Extract version definitions
@@ -46,7 +46,7 @@ class TestVersionManagement(unittest.TestCase):
         
     def test_version_compatibility(self):
         """Test that versions are compatible with each other."""
-        with open(self.makefile, 'r') as f:
+        with open(self.makefile, 'r', encoding='utf-8') as f:
             content = f.read()
         
         nephio_match = re.search(r'NEPHIO_VERSION\s*:=\s*v(\d+)', content)
@@ -94,7 +94,7 @@ class TestVersionManagement(unittest.TestCase):
                     
     def test_kpt_version_consistency(self):
         """Test that kpt version is consistently referenced."""
-        with open(self.makefile, 'r') as f:
+        with open(self.makefile, 'r', encoding='utf-8') as f:
             makefile_content = f.read()
         
         kpt_match = re.search(r'KPT_VERSION\s*:=\s*(v[\d\.\-\w]+)', makefile_content)

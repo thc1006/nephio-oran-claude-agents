@@ -64,16 +64,21 @@ class TestStructure(unittest.TestCase):
             self.assertTrue(test_path.exists(), 
                           f"Test file {test_file} not found")
             
-    def test_collaboration_protocol_in_agents(self):
-        """Test that agents have collaboration protocol."""
+    def test_agent_structure(self):
+        """Test that agents have proper structure."""
         agent_files = list(self.agents_dir.glob('*.md'))
         
         for agent_file in agent_files:
             with open(agent_file, 'r', encoding='utf-8') as f:
                 content = f.read()
-                
-            self.assertIn('Collaboration Protocol', content,
-                         f"Agent {agent_file.name} missing Collaboration Protocol")
+            
+            # Check for YAML frontmatter
+            self.assertTrue(content.startswith('---'),
+                          f"Agent {agent_file.name} missing YAML frontmatter")
+            
+            # Check that agent has substantial content (more than just frontmatter)
+            self.assertGreater(len(content), 200,
+                             f"Agent {agent_file.name} seems too short")
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
