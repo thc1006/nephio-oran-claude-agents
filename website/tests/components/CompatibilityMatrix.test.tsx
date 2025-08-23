@@ -1,8 +1,8 @@
 import React from 'react';
-import { rtlRender as rtlRender, screen } from '@testing-library/react';
-import CompatibilityMatrix, { 
-  CompatibilityData, 
-  CompatibilityMatrixProps 
+import { render as testingLibraryRender, screen } from '@testing-library/react';
+import CompatibilityMatrix, {
+  CompatibilityData,
+  CompatibilityMatrixProps,
 } from '../../src/components/CompatibilityMatrix';
 
 const mockData: CompatibilityData[] = [
@@ -47,20 +47,22 @@ describe('CompatibilityMatrix', () => {
     data: mockData,
   };
 
-  it('rtlRenders with default title', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
+  it('renders with default title', () => {
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
     expect(screen.getByText('Compatibility Matrix')).toBeInTheDocument();
   });
 
-  it('rtlRenders with custom title', () => {
+  it('renders with custom title', () => {
     const customTitle = 'Custom Compatibility Matrix';
-    rtlRender(<CompatibilityMatrix {...defaultProps} title={customTitle} />);
+    testingLibraryRender(
+      <CompatibilityMatrix {...defaultProps} title={customTitle} />
+    );
     expect(screen.getByText(customTitle)).toBeInTheDocument();
   });
 
-  it('rtlRenders table headers correctly', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
+  it('renders table headers correctly', () => {
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
+
     expect(screen.getByText('Component')).toBeInTheDocument();
     expect(screen.getByText('Version')).toBeInTheDocument();
     expect(screen.getByText('Status')).toBeInTheDocument();
@@ -69,15 +71,17 @@ describe('CompatibilityMatrix', () => {
   });
 
   it('hides Last Tested column when showLastTested is false', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} showLastTested={false} />);
-    
+    testingLibraryRender(
+      <CompatibilityMatrix {...defaultProps} showLastTested={false} />
+    );
+
     expect(screen.queryByText('Last Tested')).not.toBeInTheDocument();
   });
 
-  it('rtlRenders all data rows correctly', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
-    // Check that all components are rtlRendered
+  it('renders all data rows correctly', () => {
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
+
+    // Check that all components are rendered
     mockData.forEach(item => {
       expect(screen.getByText(item.component)).toBeInTheDocument();
       expect(screen.getByText(item.version)).toBeInTheDocument();
@@ -90,29 +94,31 @@ describe('CompatibilityMatrix', () => {
     });
   });
 
-  it('rtlRenders status badges with correct classes', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
+  it('renders status badges with correct classes', () => {
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
+
     const supportedBadges = screen.getAllByText('Supported');
     expect(supportedBadges[0]).toHaveClass('badge--success');
     expect(screen.getAllByText('Experimental')[0]).toHaveClass('badge--info');
     expect(screen.getAllByText('Deprecated')[0]).toHaveClass('badge--warning');
-    expect(screen.getAllByText('Not Supported')[0]).toHaveClass('badge--danger');
+    expect(screen.getAllByText('Not Supported')[0]).toHaveClass(
+      'badge--danger'
+    );
   });
 
-  it('rtlRenders component names and versions in code elements', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
+  it('renders component names and versions in code elements', () => {
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
+
     const componentCodes = screen.getAllByText('nephio')[0];
     expect(componentCodes.tagName).toBe('CODE');
-    
+
     const versionCodes = screen.getAllByText('v2.0.0')[0];
     expect(versionCodes.tagName).toBe('CODE');
   });
 
   it('shows N/A for missing lastTested values', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
+
     // The unsupported-component doesn't have lastTested, should show N/A
     const naTd = screen.getByText('N/A');
     expect(naTd).toBeInTheDocument();
@@ -124,26 +130,28 @@ describe('CompatibilityMatrix', () => {
         component: 'test-component',
         version: 'v1.0.0',
         status: 'supported',
-      }
+      },
     ];
-    
-    rtlRender(<CompatibilityMatrix data={dataWithoutNotes} />);
+
+    testingLibraryRender(<CompatibilityMatrix data={dataWithoutNotes} />);
     expect(screen.getByText('—')).toBeInTheDocument();
   });
 
-  it('rtlRenders status legend', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
+  it('renders status legend', () => {
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
+
     expect(screen.getByText('Status Legend:')).toBeInTheDocument();
-    
+
     // Check that all status types are in the legend
-    const legendBadges = screen.getAllByText(/Supported|Deprecated|Experimental|Not Supported/);
+    const legendBadges = screen.getAllByText(
+      /Supported|Deprecated|Experimental|Not Supported/
+    );
     expect(legendBadges.length).toBeGreaterThanOrEqual(8); // 4 in table + 4 in legend
   });
 
-  it('rtlRenders in compact mode', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} compact />);
-    
+  it('renders in compact mode', () => {
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} compact />);
+
     // Test functional behavior instead of CSS classes
     expect(screen.getByRole('table')).toBeInTheDocument();
     expect(screen.getByText('Component')).toBeInTheDocument();
@@ -153,32 +161,34 @@ describe('CompatibilityMatrix', () => {
   });
 
   it('has responsive table container', () => {
-    const { container } = rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
+    const { container } = testingLibraryRender(
+      <CompatibilityMatrix {...defaultProps} />
+    );
+
     const tableContainer = container.querySelector('.table-responsive');
     expect(tableContainer).toBeInTheDocument();
   });
 
   it('has proper accessibility attributes', () => {
-    rtlRender(<CompatibilityMatrix {...defaultProps} />);
-    
+    testingLibraryRender(<CompatibilityMatrix {...defaultProps} />);
+
     const table = screen.getByRole('table');
     expect(table).toBeInTheDocument();
-    
+
     const columnHeaders = screen.getAllByRole('columnheader');
     expect(columnHeaders.length).toBeGreaterThan(0);
-    
+
     const rows = screen.getAllByRole('row');
     expect(rows.length).toBe(mockData.length + 1); // +1 for header row
   });
 
   it('handles empty data gracefully', () => {
-    rtlRender(<CompatibilityMatrix data={[]} />);
-    
-    // Should still rtlRender headers and structure
+    testingLibraryRender(<CompatibilityMatrix data={[]} />);
+
+    // Should still render headers and structure
     expect(screen.getByText('Component')).toBeInTheDocument();
     expect(screen.getByText('Status Legend:')).toBeInTheDocument();
-    
+
     // Should have only header row
     const rows = screen.getAllByRole('row');
     expect(rows).toHaveLength(1);
@@ -192,9 +202,9 @@ describe('CompatibilityMatrix', () => {
         { component: 'comp3', version: 'v1', status: 'experimental' },
         { component: 'comp4', version: 'v1', status: 'not-supported' },
       ];
-      
-      rtlRender(<CompatibilityMatrix data={allStatusData} />);
-      
+
+      testingLibraryRender(<CompatibilityMatrix data={allStatusData} />);
+
       expect(screen.getAllByText('Supported')[0]).toBeInTheDocument();
       expect(screen.getAllByText('Deprecated')[0]).toBeInTheDocument();
       expect(screen.getAllByText('Experimental')[0]).toBeInTheDocument();

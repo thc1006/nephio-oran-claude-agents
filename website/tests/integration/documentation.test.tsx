@@ -1,12 +1,16 @@
 /**
  * Comprehensive integration tests for the Nephio O-RAN website
- * Tests routing, locale functionality, documentation rtlRendering, and accessibility
+ * Tests routing, locale functionality, documentation rendering, and accessibility
  */
 
 /// <reference types="jest" />
 import '@testing-library/jest-dom';
 import React from 'react';
-import { rtlRender as rtlRender, screen, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render as testingLibraryRender,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 // Explicitly import Jest globals to ensure proper typing
@@ -54,8 +58,8 @@ jest.mock('@docusaurus/Link', () => {
     return (
       <a
         href={to}
-        data-testid="docusaurus-link"
-        onClick={(e) => {
+        data-testid='docusaurus-link'
+        onClick={e => {
           e.preventDefault();
           mockNavigate(to);
         }}
@@ -70,50 +74,110 @@ jest.mock('@docusaurus/Link', () => {
 // Mock MDX content for testing
 // Import the mocked MDX components
 const MDXComponents = {
-  h1: ({ children, ...props }: any) => <h1 data-testid="mdx-h1" {...props}>{children}</h1>,
-  h2: ({ children, ...props }: any) => <h2 data-testid="mdx-h2" {...props}>{children}</h2>,
-  h3: ({ children, ...props }: any) => <h3 data-testid="mdx-h3" {...props}>{children}</h3>,
-  p: ({ children, ...props }: any) => <p data-testid="mdx-p" {...props}>{children}</p>,
-  code: ({ children, ...props }: any) => <code data-testid="mdx-code" {...props}>{children}</code>,
-  ul: ({ children, ...props }: any) => <ul data-testid="mdx-ul" {...props}>{children}</ul>,
-  ol: ({ children, ...props }: any) => <ol data-testid="mdx-ol" {...props}>{children}</ol>,
-  li: ({ children, ...props }: any) => <li data-testid="mdx-li" {...props}>{children}</li>,
-  a: ({ children, ...props }: any) => <a data-testid="mdx-link" {...props}>{children}</a>,
-  blockquote: ({ children, ...props }: any) => <blockquote data-testid="mdx-blockquote" {...props}>{children}</blockquote>,
-  table: ({ children, ...props }: any) => <table data-testid="mdx-table" {...props}>{children}</table>,
-  th: ({ children, ...props }: any) => <th data-testid="mdx-th" {...props}>{children}</th>,
-  td: ({ children, ...props }: any) => <td data-testid="mdx-td" {...props}>{children}</td>,
+  h1: ({ children, ...props }: any) => (
+    <h1 data-testid='mdx-h1' {...props}>
+      {children}
+    </h1>
+  ),
+  h2: ({ children, ...props }: any) => (
+    <h2 data-testid='mdx-h2' {...props}>
+      {children}
+    </h2>
+  ),
+  h3: ({ children, ...props }: any) => (
+    <h3 data-testid='mdx-h3' {...props}>
+      {children}
+    </h3>
+  ),
+  p: ({ children, ...props }: any) => (
+    <p data-testid='mdx-p' {...props}>
+      {children}
+    </p>
+  ),
+  code: ({ children, ...props }: any) => (
+    <code data-testid='mdx-code' {...props}>
+      {children}
+    </code>
+  ),
+  ul: ({ children, ...props }: any) => (
+    <ul data-testid='mdx-ul' {...props}>
+      {children}
+    </ul>
+  ),
+  ol: ({ children, ...props }: any) => (
+    <ol data-testid='mdx-ol' {...props}>
+      {children}
+    </ol>
+  ),
+  li: ({ children, ...props }: any) => (
+    <li data-testid='mdx-li' {...props}>
+      {children}
+    </li>
+  ),
+  a: ({ children, ...props }: any) => (
+    <a data-testid='mdx-link' {...props}>
+      {children}
+    </a>
+  ),
+  blockquote: ({ children, ...props }: any) => (
+    <blockquote data-testid='mdx-blockquote' {...props}>
+      {children}
+    </blockquote>
+  ),
+  table: ({ children, ...props }: any) => (
+    <table data-testid='mdx-table' {...props}>
+      {children}
+    </table>
+  ),
+  th: ({ children, ...props }: any) => (
+    <th data-testid='mdx-th' {...props}>
+      {children}
+    </th>
+  ),
+  td: ({ children, ...props }: any) => (
+    <td data-testid='mdx-td' {...props}>
+      {children}
+    </td>
+  ),
 };
 
 const MockMDXContent = ({ children }: { children: React.ReactNode }) => (
-  <div data-testid="mdx-content">
-    {children}
-  </div>
+  <div data-testid='mdx-content'>{children}</div>
 );
 
 // Mock Docusaurus theme components
 jest.mock('@theme/MDXComponents', () => ({
-  h1: ({ children }: any) => <h1 data-testid="mdx-h1">{children}</h1>,
-  h2: ({ children }: any) => <h2 data-testid="mdx-h2">{children}</h2>,
-  h3: ({ children }: any) => <h3 data-testid="mdx-h3">{children}</h3>,
-  p: ({ children }: any) => <p data-testid="mdx-p">{children}</p>,
-  code: ({ children }: any) => <code data-testid="mdx-code">{children}</code>,
-  pre: ({ children }: any) => <pre data-testid="mdx-pre">{children}</pre>,
-  a: ({ children, href }: any) => <a data-testid="mdx-link" href={href}>{children}</a>,
-  ul: ({ children }: any) => <ul data-testid="mdx-ul">{children}</ul>,
-  ol: ({ children }: any) => <ol data-testid="mdx-ol">{children}</ol>,
-  li: ({ children }: any) => <li data-testid="mdx-li">{children}</li>,
-  blockquote: ({ children }: any) => <blockquote data-testid="mdx-blockquote">{children}</blockquote>,
-  table: ({ children }: any) => <table data-testid="mdx-table">{children}</table>,
-  th: ({ children }: any) => <th data-testid="mdx-th">{children}</th>,
-  td: ({ children }: any) => <td data-testid="mdx-td">{children}</td>,
+  h1: ({ children }: any) => <h1 data-testid='mdx-h1'>{children}</h1>,
+  h2: ({ children }: any) => <h2 data-testid='mdx-h2'>{children}</h2>,
+  h3: ({ children }: any) => <h3 data-testid='mdx-h3'>{children}</h3>,
+  p: ({ children }: any) => <p data-testid='mdx-p'>{children}</p>,
+  code: ({ children }: any) => <code data-testid='mdx-code'>{children}</code>,
+  pre: ({ children }: any) => <pre data-testid='mdx-pre'>{children}</pre>,
+  a: ({ children, href }: any) => (
+    <a data-testid='mdx-link' href={href}>
+      {children}
+    </a>
+  ),
+  ul: ({ children }: any) => <ul data-testid='mdx-ul'>{children}</ul>,
+  ol: ({ children }: any) => <ol data-testid='mdx-ol'>{children}</ol>,
+  li: ({ children }: any) => <li data-testid='mdx-li'>{children}</li>,
+  blockquote: ({ children }: any) => (
+    <blockquote data-testid='mdx-blockquote'>{children}</blockquote>
+  ),
+  table: ({ children }: any) => (
+    <table data-testid='mdx-table'>{children}</table>
+  ),
+  th: ({ children }: any) => <th data-testid='mdx-th'>{children}</th>,
+  td: ({ children }: any) => <td data-testid='mdx-td'>{children}</td>,
 }));
 
 jest.mock('@theme/CodeBlock', () => {
   return function MockCodeBlock({ children, language }: any) {
     return (
-      <div data-testid="code-block" data-language={language}>
-        <pre><code>{children}</code></pre>
+      <div data-testid='code-block' data-language={language}>
+        <pre>
+          <code>{children}</code>
+        </pre>
       </div>
     );
   };
@@ -130,17 +194,19 @@ describe('Nephio O-RAN Website Integration Tests', () => {
       const EnglishPage = () => {
         const context = mockUseDocusaurusContext();
         return (
-          <div data-testid="english-page" lang={context.i18n.currentLocale}>
+          <div data-testid='english-page' lang={context.i18n.currentLocale}>
             <h1>Nephio O-RAN Claude Agents</h1>
             <p>Intelligent orchestration for cloud-native O-RAN deployments</p>
           </div>
         );
       };
 
-      rtlRender(<EnglishPage />);
+      testingLibraryRender(<EnglishPage />);
 
       expect(screen.getByTestId('english-page')).toHaveAttribute('lang', 'en');
-      expect(screen.getByText('Nephio O-RAN Claude Agents')).toBeInTheDocument();
+      expect(
+        screen.getByText('Nephio O-RAN Claude Agents')
+      ).toBeInTheDocument();
     });
 
     it.skip('should handle Traditional Chinese locale correctly', () => {
@@ -154,26 +220,30 @@ describe('Nephio O-RAN Website Integration Tests', () => {
           },
         };
         return (
-          <div data-testid="chinese-page" lang={context.i18n.currentLocale}>
+          <div data-testid='chinese-page' lang={context.i18n.currentLocale}>
             <h1>Nephio O-RAN Claude 代理</h1>
             <p>雲原生 O-RAN 部署的智能協調</p>
           </div>
         );
       };
 
-      rtlRender(<ChinesePage />);
+      testingLibraryRender(<ChinesePage />);
 
-      expect(screen.getByTestId('chinese-page')).toHaveAttribute('lang', 'zh-TW');
+      expect(screen.getByTestId('chinese-page')).toHaveAttribute(
+        'lang',
+        'zh-TW'
+      );
       expect(screen.getByText('Nephio O-RAN Claude 代理')).toBeInTheDocument();
     });
 
     it.skip('should prevent double locale paths', () => {
       const RouteValidator = ({ path }: { path: string }) => {
-        const isDoubleLoc = path.includes('/zh-TW/zh-TW') || path.includes('/en/en');
+        const isDoubleLoc =
+          path.includes('/zh-TW/zh-TW') || path.includes('/en/en');
         return (
-          <div data-testid="route-validator">
-            <span data-testid="path">{path}</span>
-            <span data-testid="is-valid">{(!isDoubleLoc).toString()}</span>
+          <div data-testid='route-validator'>
+            <span data-testid='path'>{path}</span>
+            <span data-testid='is-valid'>{(!isDoubleLoc).toString()}</span>
           </div>
         );
       };
@@ -192,13 +262,17 @@ describe('Nephio O-RAN Website Integration Tests', () => {
       ];
 
       validPaths.forEach(path => {
-        const { unmount } = rtlRender(<RouteValidator path={path} />);
+        const { unmount } = testingLibraryRender(
+          <RouteValidator path={path} />
+        );
         expect(screen.getByTestId('is-valid')).toHaveTextContent('true');
         unmount();
       });
 
       invalidPaths.forEach(path => {
-        const { unmount } = rtlRender(<RouteValidator path={path} />);
+        const { unmount } = testingLibraryRender(
+          <RouteValidator path={path} />
+        );
         expect(screen.getByTestId('is-valid')).toHaveTextContent('false');
         unmount();
       });
@@ -206,30 +280,31 @@ describe('Nephio O-RAN Website Integration Tests', () => {
 
     it.skip('should handle locale switching navigation', async () => {
       const user = userEvent.setup();
-      
+
       const LocaleSwitcher = () => {
         const [currentLocale, setCurrentLocale] = React.useState('en');
-        
+
         const handleLocaleChange = (locale: string) => {
           setCurrentLocale(locale);
           const currentPath = mockLocation.pathname;
-          const newPath = locale === 'en' 
-            ? currentPath.replace(/^\/zh-TW/, '') 
-            : `/zh-TW${currentPath}`;
+          const newPath =
+            locale === 'en'
+              ? currentPath.replace(/^\/zh-TW/, '')
+              : `/zh-TW${currentPath}`;
           mockNavigate(newPath);
         };
 
         return (
-          <div data-testid="locale-switcher">
-            <span data-testid="current-locale">{currentLocale}</span>
-            <button 
-              data-testid="switch-to-zh"
+          <div data-testid='locale-switcher'>
+            <span data-testid='current-locale'>{currentLocale}</span>
+            <button
+              data-testid='switch-to-zh'
               onClick={() => handleLocaleChange('zh-TW')}
             >
               中文
             </button>
-            <button 
-              data-testid="switch-to-en"
+            <button
+              data-testid='switch-to-en'
               onClick={() => handleLocaleChange('en')}
             >
               English
@@ -238,13 +313,13 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         );
       };
 
-      rtlRender(<LocaleSwitcher />);
-      
+      testingLibraryRender(<LocaleSwitcher />);
+
       expect(screen.getByTestId('current-locale')).toHaveTextContent('en');
-      
+
       await user.click(screen.getByTestId('switch-to-zh'));
       expect(mockNavigate).toHaveBeenCalledWith('/zh-TW/docs/intro');
-      
+
       await user.click(screen.getByTestId('switch-to-en'));
       expect(mockNavigate).toHaveBeenCalledWith('/docs/intro');
     });
@@ -262,14 +337,18 @@ describe('Nephio O-RAN Website Integration Tests', () => {
           }
         }, [path]);
 
-        return <div data-testid="redirect-handler">Handling redirect for {path}</div>;
+        return (
+          <div data-testid='redirect-handler'>Handling redirect for {path}</div>
+        );
       };
 
-      const { rertlRender } = rtlRender(<RedirectHandler path="/docs/" />);
+      const { rerender } = testingLibraryRender(
+        <RedirectHandler path='/docs/' />
+      );
       expect(mockNavigate).toHaveBeenCalledWith('/docs/intro');
 
       jest.clearAllMocks();
-      rertlRender(<RedirectHandler path="/zh-TW/docs/" />);
+      rerender(<RedirectHandler path='/zh-TW/docs/' />);
       expect(mockNavigate).toHaveBeenCalledWith('/zh-TW/docs/intro');
     });
 
@@ -284,36 +363,49 @@ describe('Nephio O-RAN Website Integration Tests', () => {
 
         if (!isValidRoute) {
           return (
-            <div data-testid="not-found-page">
+            <div data-testid='not-found-page'>
               <h1>Page Not Found</h1>
               <p>The page you are looking for does not exist.</p>
-              <a href="/docs/intro">Go to Documentation</a>
+              <a href='/docs/intro'>Go to Documentation</a>
             </div>
           );
         }
 
-        return <div data-testid="valid-page">Valid page content</div>;
+        return <div data-testid='valid-page'>Valid page content</div>;
       };
 
-      const { rertlRender } = rtlRender(<NotFoundPage path="/invalid/path" />);
+      const { rerender } = testingLibraryRender(
+        <NotFoundPage path='/invalid/path' />
+      );
       expect(screen.getByTestId('not-found-page')).toBeInTheDocument();
       expect(screen.getByText('Page Not Found')).toBeInTheDocument();
 
-      rertlRender(<NotFoundPage path="/docs/intro" />);
+      rerender(<NotFoundPage path='/docs/intro' />);
       expect(screen.getByTestId('valid-page')).toBeInTheDocument();
     });
 
     it.skip('should validate internal link structure', () => {
       const NavigationMenu = () => (
-        <nav data-testid="navigation-menu">
-          <a href="/docs/intro" data-testid="docs-link">Documentation</a>
-          <a href="/docs/guides/quickstart" data-testid="quickstart-link">Quick Start</a>
-          <a href="/docs/agents/infrastructure/nephio-infrastructure-agent" data-testid="agent-link">Infrastructure Agent</a>
-          <a href="/zh-TW/docs/intro" data-testid="zh-docs-link">中文文檔</a>
+        <nav data-testid='navigation-menu'>
+          <a href='/docs/intro' data-testid='docs-link'>
+            Documentation
+          </a>
+          <a href='/docs/guides/quickstart' data-testid='quickstart-link'>
+            Quick Start
+          </a>
+          <a
+            href='/docs/agents/infrastructure/nephio-infrastructure-agent'
+            data-testid='agent-link'
+          >
+            Infrastructure Agent
+          </a>
+          <a href='/zh-TW/docs/intro' data-testid='zh-docs-link'>
+            中文文檔
+          </a>
         </nav>
       );
 
-      rtlRender(<NavigationMenu />);
+      testingLibraryRender(<NavigationMenu />);
 
       const links = screen.getAllByRole('link');
       links.forEach(link => {
@@ -331,7 +423,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         });
 
         return (
-          <nav data-testid="breadcrumb-nav" aria-label="breadcrumb">
+          <nav data-testid='breadcrumb-nav' aria-label='breadcrumb'>
             {breadcrumbs.map((crumb, index) => (
               <span key={index}>
                 <a href={crumb.href} data-testid={`breadcrumb-${index}`}>
@@ -344,18 +436,29 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         );
       };
 
-      rtlRender(<BreadcrumbNav path="/docs/agents/infrastructure/nephio-infrastructure-agent" />);
+      testingLibraryRender(
+        <BreadcrumbNav path='/docs/agents/infrastructure/nephio-infrastructure-agent' />
+      );
 
-      expect(screen.getByTestId('breadcrumb-0')).toHaveAttribute('href', '/docs');
-      expect(screen.getByTestId('breadcrumb-1')).toHaveAttribute('href', '/docs/agents');
-      expect(screen.getByTestId('breadcrumb-3')).toHaveAttribute('href', '/docs/agents/infrastructure/nephio-infrastructure-agent');
+      expect(screen.getByTestId('breadcrumb-0')).toHaveAttribute(
+        'href',
+        '/docs'
+      );
+      expect(screen.getByTestId('breadcrumb-1')).toHaveAttribute(
+        'href',
+        '/docs/agents'
+      );
+      expect(screen.getByTestId('breadcrumb-3')).toHaveAttribute(
+        'href',
+        '/docs/agents/infrastructure/nephio-infrastructure-agent'
+      );
     });
   });
 
   describe('Accessibility and Page Structure', () => {
     it.skip('should have proper heading hierarchy', () => {
       const DocumentPage = () => (
-        <main data-testid="document-page">
+        <main data-testid='document-page'>
           <h1>Nephio Infrastructure Agent</h1>
           <section>
             <h2>Overview</h2>
@@ -376,7 +479,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         </main>
       );
 
-      rtlRender(<DocumentPage />);
+      testingLibraryRender(<DocumentPage />);
 
       // Check heading hierarchy
       const h1 = screen.getByRole('heading', { level: 1 });
@@ -390,63 +493,71 @@ describe('Nephio O-RAN Website Integration Tests', () => {
 
     it.skip('should have proper landmark roles', () => {
       const PageLayout = () => (
-        <div data-testid="page-layout">
-          <header role="banner">
-            <nav role="navigation" aria-label="main navigation">
-              <a href="/docs/intro">Documentation</a>
+        <div data-testid='page-layout'>
+          <header role='banner'>
+            <nav role='navigation' aria-label='main navigation'>
+              <a href='/docs/intro'>Documentation</a>
             </nav>
           </header>
-          <main role="main">
+          <main role='main'>
             <h1>Page Title</h1>
             <p>Main content</p>
           </main>
-          <aside role="complementary" aria-label="table of contents">
+          <aside role='complementary' aria-label='table of contents'>
             <nav>
               <h2>Table of Contents</h2>
               <ul>
-                <li><a href="#section1">Section 1</a></li>
+                <li>
+                  <a href='#section1'>Section 1</a>
+                </li>
               </ul>
             </nav>
           </aside>
-          <footer role="contentinfo">
+          <footer role='contentinfo'>
             <p>© 2025 Nephio Project</p>
           </footer>
         </div>
       );
 
-      rtlRender(<PageLayout />);
+      testingLibraryRender(<PageLayout />);
 
       expect(screen.getByRole('banner')).toBeInTheDocument();
       expect(screen.getByRole('main')).toBeInTheDocument();
       expect(screen.getByRole('complementary')).toBeInTheDocument();
       expect(screen.getByRole('contentinfo')).toBeInTheDocument();
-      expect(screen.getByRole('navigation', { name: 'main navigation' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('navigation', { name: 'main navigation' })
+      ).toBeInTheDocument();
     });
 
     it.skip('should support keyboard navigation', async () => {
       const user = userEvent.setup();
-      
+
       const KeyboardNavTest = () => (
-        <div data-testid="keyboard-nav-test">
-          <a href="/docs/intro" data-testid="link1">Documentation</a>
-          <button data-testid="button1">Toggle Menu</button>
-          <input data-testid="search-input" placeholder="Search..." />
-          <a href="/docs/guides" data-testid="link2">Guides</a>
+        <div data-testid='keyboard-nav-test'>
+          <a href='/docs/intro' data-testid='link1'>
+            Documentation
+          </a>
+          <button data-testid='button1'>Toggle Menu</button>
+          <input data-testid='search-input' placeholder='Search...' />
+          <a href='/docs/guides' data-testid='link2'>
+            Guides
+          </a>
         </div>
       );
 
-      rtlRender(<KeyboardNavTest />);
+      testingLibraryRender(<KeyboardNavTest />);
 
       // Test tab navigation
       await user.tab();
       expect(screen.getByTestId('link1')).toHaveFocus();
-      
+
       await user.tab();
       expect(screen.getByTestId('button1')).toHaveFocus();
-      
+
       await user.tab();
       expect(screen.getByTestId('search-input')).toHaveFocus();
-      
+
       await user.tab();
       expect(screen.getByTestId('link2')).toHaveFocus();
     });
@@ -455,18 +566,21 @@ describe('Nephio O-RAN Website Integration Tests', () => {
   describe('Search and Content Discovery', () => {
     it.skip('should provide searchable content structure', () => {
       const SearchableDocument = () => (
-        <article data-testid="searchable-document">
+        <article data-testid='searchable-document'>
           <header>
-            <h1 data-search-content="title">Nephio Infrastructure Agent</h1>
-            <div data-search-content="tags">
+            <h1 data-search-content='title'>Nephio Infrastructure Agent</h1>
+            <div data-search-content='tags'>
               <span>nephio</span>
               <span>infrastructure</span>
               <span>kubernetes</span>
               <span>o-ran</span>
             </div>
           </header>
-          <div data-search-content="content">
-            <p>The Nephio Infrastructure Agent provides automated infrastructure management for O-RAN deployments.</p>
+          <div data-search-content='content'>
+            <p>
+              The Nephio Infrastructure Agent provides automated infrastructure
+              management for O-RAN deployments.
+            </p>
             <h2>Key Capabilities</h2>
             <ul>
               <li>Cluster provisioning and management</li>
@@ -477,11 +591,17 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         </article>
       );
 
-      rtlRender(<SearchableDocument />);
+      testingLibraryRender(<SearchableDocument />);
 
-      const title = screen.getByTestId('searchable-document').querySelector('[data-search-content="title"]');
-      const content = screen.getByTestId('searchable-document').querySelector('[data-search-content="content"]');
-      const tags = screen.getByTestId('searchable-document').querySelector('[data-search-content="tags"]');
+      const title = screen
+        .getByTestId('searchable-document')
+        .querySelector('[data-search-content="title"]');
+      const content = screen
+        .getByTestId('searchable-document')
+        .querySelector('[data-search-content="content"]');
+      const tags = screen
+        .getByTestId('searchable-document')
+        .querySelector('[data-search-content="tags"]');
 
       expect(title).toHaveTextContent('Nephio Infrastructure Agent');
       expect(content).toHaveTextContent('automated infrastructure management');
@@ -490,26 +610,29 @@ describe('Nephio O-RAN Website Integration Tests', () => {
 
     it.skip('should handle search results navigation', async () => {
       const user = userEvent.setup();
-      
+
       const SearchResults = () => {
         const [query, setQuery] = React.useState('');
         const results = [
           { title: 'Introduction', path: '/docs/intro' },
           { title: 'Quick Start Guide', path: '/docs/guides/quickstart' },
-          { title: 'Infrastructure Agent', path: '/docs/agents/infrastructure/nephio-infrastructure-agent' },
-        ].filter(result => 
+          {
+            title: 'Infrastructure Agent',
+            path: '/docs/agents/infrastructure/nephio-infrastructure-agent',
+          },
+        ].filter(result =>
           result.title.toLowerCase().includes(query.toLowerCase())
         );
 
         return (
-          <div data-testid="search-results">
-            <input 
-              data-testid="search-query"
+          <div data-testid='search-results'>
+            <input
+              data-testid='search-query'
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search documentation..."
+              onChange={e => setQuery(e.target.value)}
+              placeholder='Search documentation...'
             />
-            <ul data-testid="results-list">
+            <ul data-testid='results-list'>
               {results.map((result, index) => (
                 <li key={index}>
                   <a href={result.path} data-testid={`result-${index}`}>
@@ -522,7 +645,7 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         );
       };
 
-      rtlRender(<SearchResults />);
+      testingLibraryRender(<SearchResults />);
 
       const searchInput = screen.getByTestId('search-query');
       await user.type(searchInput, 'guide');
@@ -541,10 +664,18 @@ describe('Nephio O-RAN Website Integration Tests', () => {
         if (hasError) {
           throw new Error('Content loading failed');
         }
-        return <div data-testid="content-loaded">Content loaded successfully</div>;
+        return (
+          <div data-testid='content-loaded'>Content loaded successfully</div>
+        );
       };
 
-      const ErrorBoundary = ({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) => {
+      const ErrorBoundary = ({
+        children,
+        fallback,
+      }: {
+        children: React.ReactNode;
+        fallback: React.ReactNode;
+      }) => {
         const [hasError, setHasError] = React.useState(false);
 
         React.useEffect(() => {
@@ -561,14 +692,14 @@ describe('Nephio O-RAN Website Integration Tests', () => {
       };
 
       const FallbackComponent = () => (
-        <div data-testid="error-fallback">
+        <div data-testid='error-fallback'>
           <h2>Something went wrong</h2>
           <p>Please try refreshing the page or navigate to the home page.</p>
-          <a href="/docs/intro">Go to Documentation</a>
+          <a href='/docs/intro'>Go to Documentation</a>
         </div>
       );
 
-      rtlRender(
+      testingLibraryRender(
         <ErrorBoundary fallback={<FallbackComponent />}>
           <ErrorBoundaryTest hasError={false} />
         </ErrorBoundary>
@@ -579,17 +710,20 @@ describe('Nephio O-RAN Website Integration Tests', () => {
 
     it.skip('should validate URL parameters and handle malformed routes', () => {
       const RouteValidator = ({ path }: { path: string }) => {
-        const isValidPath = /^\/(zh-TW\/)?docs\/(intro|guides|agents|api)\//.test(path) || path === '/docs/intro' || path === '/zh-TW/docs/intro';
-        const hasSQLInjection = /[';"\-\-]/.test(path);
+        const isValidPath =
+          /^\/(zh-TW\/)?docs\/(intro|guides|agents|api)\//.test(path) ||
+          path === '/docs/intro' ||
+          path === '/zh-TW/docs/intro';
+        const hasSQLInjection = /[';"--]/.test(path);
         const hasXSS = /<script|javascript:/i.test(path);
-        
+
         const isSecure = !hasSQLInjection && !hasXSS;
         const isValid = isValidPath && isSecure;
 
         return (
-          <div data-testid="route-validation">
-            <span data-testid="is-valid">{isValid.toString()}</span>
-            <span data-testid="is-secure">{isSecure.toString()}</span>
+          <div data-testid='route-validation'>
+            <span data-testid='is-valid'>{isValid.toString()}</span>
+            <span data-testid='is-secure'>{isSecure.toString()}</span>
           </div>
         );
       };
@@ -609,14 +743,18 @@ describe('Nephio O-RAN Website Integration Tests', () => {
       ];
 
       validPaths.forEach(path => {
-        const { unmount } = rtlRender(<RouteValidator path={path} />);
+        const { unmount } = testingLibraryRender(
+          <RouteValidator path={path} />
+        );
         expect(screen.getByTestId('is-valid')).toHaveTextContent('true');
         expect(screen.getByTestId('is-secure')).toHaveTextContent('true');
         unmount();
       });
 
       invalidPaths.forEach(path => {
-        const { unmount } = rtlRender(<RouteValidator path={path} />);
+        const { unmount } = testingLibraryRender(
+          <RouteValidator path={path} />
+        );
         expect(screen.getByTestId('is-valid')).toHaveTextContent('false');
         unmount();
       });
@@ -624,38 +762,46 @@ describe('Nephio O-RAN Website Integration Tests', () => {
   });
 
   describe('Documentation Content Rendering', () => {
-  describe('Markdown Elements', () => {
-    it.skip('rtlRenders headings correctly', () => {
-      rtlRender(
-        <MockMDXContent>
-          <MDXComponents.h1>Main Title</MDXComponents.h1>
-          <MDXComponents.h2>Section Title</MDXComponents.h2>
-          <MDXComponents.h3>Subsection Title</MDXComponents.h3>
-        </MockMDXContent>
-      );
-      
-      expect(screen.getByTestId('mdx-h1')).toHaveTextContent('Main Title');
-      expect(screen.getByTestId('mdx-h2')).toHaveTextContent('Section Title');
-      expect(screen.getByTestId('mdx-h3')).toHaveTextContent('Subsection Title');
-    });
+    describe('Markdown Elements', () => {
+      it.skip('testingLibraryRenders headings correctly', () => {
+        testingLibraryRender(
+          <MockMDXContent>
+            <MDXComponents.h1>Main Title</MDXComponents.h1>
+            <MDXComponents.h2>Section Title</MDXComponents.h2>
+            <MDXComponents.h3>Subsection Title</MDXComponents.h3>
+          </MockMDXContent>
+        );
 
-    it.skip('rtlRenders paragraphs and text formatting', () => {
-      rtlRender(
-        <MockMDXContent>
-          <MDXComponents.p>This is a paragraph with <MDXComponents.code>inline code</MDXComponents.code>.</MDXComponents.p>
-          <MDXComponents.p>Another paragraph with <strong>bold</strong> and <em>italic</em> text.</MDXComponents.p>
-        </MockMDXContent>
-      );
-      
-      const paragraphs = screen.getAllByTestId('mdx-p');
-      expect(paragraphs).toHaveLength(2);
-      
-      const codeElement = screen.getByTestId('mdx-code');
-      expect(codeElement).toHaveTextContent('inline code');
-    });
+        expect(screen.getByTestId('mdx-h1')).toHaveTextContent('Main Title');
+        expect(screen.getByTestId('mdx-h2')).toHaveTextContent('Section Title');
+        expect(screen.getByTestId('mdx-h3')).toHaveTextContent(
+          'Subsection Title'
+        );
+      });
 
-    it.skip('rtlRenders lists correctly', () => {
-      const content = `
+      it.skip('testingLibraryRenders paragraphs and text formatting', () => {
+        testingLibraryRender(
+          <MockMDXContent>
+            <MDXComponents.p>
+              This is a paragraph with{' '}
+              <MDXComponents.code>inline code</MDXComponents.code>.
+            </MDXComponents.p>
+            <MDXComponents.p>
+              Another paragraph with <strong>bold</strong> and <em>italic</em>{' '}
+              text.
+            </MDXComponents.p>
+          </MockMDXContent>
+        );
+
+        const paragraphs = screen.getAllByTestId('mdx-p');
+        expect(paragraphs).toHaveLength(2);
+
+        const codeElement = screen.getByTestId('mdx-code');
+        expect(codeElement).toHaveTextContent('inline code');
+      });
+
+      it.skip('testingLibraryRenders lists correctly', () => {
+        const content = `
         <ul>
           <li>First item</li>
           <li>Second item</li>
@@ -665,45 +811,57 @@ describe('Nephio O-RAN Website Integration Tests', () => {
           <li>Ordered item 2</li>
         </ol>
       `;
-      
-      rtlRender(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
-      
-      expect(screen.getByTestId('mdx-ul')).toBeInTheDocument();
-      expect(screen.getByTestId('mdx-ol')).toBeInTheDocument();
-      
-      const listItems = screen.getAllByTestId('mdx-li');
-      expect(listItems).toHaveLength(4);
-    });
 
-    it.skip('rtlRenders links with proper attributes', () => {
-      const content = `
+        testingLibraryRender(
+          <MockMDXContent>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </MockMDXContent>
+        );
+
+        expect(screen.getByTestId('mdx-ul')).toBeInTheDocument();
+        expect(screen.getByTestId('mdx-ol')).toBeInTheDocument();
+
+        const listItems = screen.getAllByTestId('mdx-li');
+        expect(listItems).toHaveLength(4);
+      });
+
+      it.skip('testingLibraryRenders links with proper attributes', () => {
+        const content = `
         <a href="https://example.com">External Link</a>
         <a href="/docs/intro">Internal Link</a>
       `;
-      
-      rtlRender(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
-      
-      const links = screen.getAllByTestId('mdx-link');
-      expect(links).toHaveLength(2);
-      
-      expect(links[0]).toHaveAttribute('href', 'https://example.com');
-      expect(links[1]).toHaveAttribute('href', '/docs/intro');
-    });
 
-    it.skip('rtlRenders blockquotes', () => {
-      const content = `
+        testingLibraryRender(
+          <MockMDXContent>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </MockMDXContent>
+        );
+
+        const links = screen.getAllByTestId('mdx-link');
+        expect(links).toHaveLength(2);
+
+        expect(links[0]).toHaveAttribute('href', 'https://example.com');
+        expect(links[1]).toHaveAttribute('href', '/docs/intro');
+      });
+
+      it.skip('testingLibraryRenders blockquotes', () => {
+        const content = `
         <blockquote>
           <p>This is a quote from an important source.</p>
         </blockquote>
       `;
-      
-      rtlRender(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
-      
-      expect(screen.getByTestId('mdx-blockquote')).toBeInTheDocument();
-    });
 
-    it.skip('rtlRenders tables correctly', () => {
-      const content = `
+        testingLibraryRender(
+          <MockMDXContent>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </MockMDXContent>
+        );
+
+        expect(screen.getByTestId('mdx-blockquote')).toBeInTheDocument();
+      });
+
+      it.skip('testingLibraryRenders tables correctly', () => {
+        const content = `
         <table>
           <thead>
             <tr>
@@ -719,31 +877,43 @@ describe('Nephio O-RAN Website Integration Tests', () => {
           </tbody>
         </table>
       `;
-      
-      rtlRender(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
-      
-      expect(screen.getByTestId('mdx-table')).toBeInTheDocument();
-      
-      const headers = screen.getAllByTestId('mdx-th');
-      expect(headers).toHaveLength(2);
-      
-      const cells = screen.getAllByTestId('mdx-td');
-      expect(cells).toHaveLength(2);
+
+        testingLibraryRender(
+          <MockMDXContent>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </MockMDXContent>
+        );
+
+        expect(screen.getByTestId('mdx-table')).toBeInTheDocument();
+
+        const headers = screen.getAllByTestId('mdx-th');
+        expect(headers).toHaveLength(2);
+
+        const cells = screen.getAllByTestId('mdx-td');
+        expect(cells).toHaveLength(2);
+      });
     });
-  });
 
-  describe('Code Blocks', () => {
-    const CodeBlockTest = ({ language, children }: { language: string; children: string }) => {
-      // Simulate CodeBlock component
-      return (
-        <div data-testid="code-block" data-language={language}>
-          <pre><code>{children}</code></pre>
-        </div>
-      );
-    };
+    describe('Code Blocks', () => {
+      const CodeBlockTest = ({
+        language,
+        children,
+      }: {
+        language: string;
+        children: string;
+      }) => {
+        // Simulate CodeBlock component
+        return (
+          <div data-testid='code-block' data-language={language}>
+            <pre>
+              <code>{children}</code>
+            </pre>
+          </div>
+        );
+      };
 
-    it.skip('rtlRenders YAML code blocks', () => {
-      const yamlCode = `
+      it.skip('testingLibraryRenders YAML code blocks', () => {
+        const yamlCode = `
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -751,16 +921,18 @@ metadata:
 data:
   config: value
       `;
-      
-      rtlRender(<CodeBlockTest language="yaml">{yamlCode}</CodeBlockTest>);
-      
-      const codeBlock = screen.getByTestId('code-block');
-      expect(codeBlock).toHaveAttribute('data-language', 'yaml');
-      expect(codeBlock).toHaveTextContent('apiVersion: v1');
-    });
 
-    it.skip('rtlRenders Go code blocks', () => {
-      const goCode = `
+        testingLibraryRender(
+          <CodeBlockTest language='yaml'>{yamlCode}</CodeBlockTest>
+        );
+
+        const codeBlock = screen.getByTestId('code-block');
+        expect(codeBlock).toHaveAttribute('data-language', 'yaml');
+        expect(codeBlock).toHaveTextContent('apiVersion: v1');
+      });
+
+      it.skip('testingLibraryRenders Go code blocks', () => {
+        const goCode = `
 package main
 
 import "fmt"
@@ -769,259 +941,301 @@ func main() {
     fmt.Println("Hello, World!")
 }
       `;
-      
-      rtlRender(<CodeBlockTest language="go">{goCode}</CodeBlockTest>);
-      
-      const codeBlock = screen.getByTestId('code-block');
-      expect(codeBlock).toHaveAttribute('data-language', 'go');
-      expect(codeBlock).toHaveTextContent('package main');
-    });
 
-    it.skip('rtlRenders bash code blocks', () => {
-      const bashCode = `
+        testingLibraryRender(
+          <CodeBlockTest language='go'>{goCode}</CodeBlockTest>
+        );
+
+        const codeBlock = screen.getByTestId('code-block');
+        expect(codeBlock).toHaveAttribute('data-language', 'go');
+        expect(codeBlock).toHaveTextContent('package main');
+      });
+
+      it.skip('testingLibraryRenders bash code blocks', () => {
+        const bashCode = `
 #!/bin/bash
 kubectl apply -f deployment.yaml
 kubectl get pods
       `;
-      
-      rtlRender(<CodeBlockTest language="bash">{bashCode}</CodeBlockTest>);
-      
-      const codeBlock = screen.getByTestId('code-block');
-      expect(codeBlock).toHaveAttribute('data-language', 'bash');
-      expect(codeBlock).toHaveTextContent('kubectl apply');
-    });
-  });
 
-  describe('Custom Components Integration', () => {
-    it.skip('rtlRenders CompatibilityMatrix within documentation', async () => {
-      // Mock the CompatibilityMatrix component in documentation context
-      const CompatibilityMatrixInDoc = () => (
-        <div data-testid="compatibility-matrix-in-doc">
-          <h3>Compatibility Matrix</h3>
-          <table>
-            <tbody>
-              <tr>
-                <td>nephio</td>
-                <td>v2.0.0</td>
-                <td><span className="badge badge--success">Supported</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      );
-      
-      rtlRender(<CompatibilityMatrixInDoc />);
-      
-      await waitFor(() => {
-        expect(screen.getByTestId('compatibility-matrix-in-doc')).toBeInTheDocument();
-        expect(screen.getByText('nephio')).toBeInTheDocument();
-        expect(screen.getByText('Supported')).toBeInTheDocument();
+        testingLibraryRender(
+          <CodeBlockTest language='bash'>{bashCode}</CodeBlockTest>
+        );
+
+        const codeBlock = screen.getByTestId('code-block');
+        expect(codeBlock).toHaveAttribute('data-language', 'bash');
+        expect(codeBlock).toHaveTextContent('kubectl apply');
       });
     });
 
-    it.skip('rtlRenders ReleaseBadge within documentation', () => {
-      const ReleaseBadgeInDoc = () => (
-        <div data-testid="release-badge-in-doc">
-          <p>This documentation covers 
-            <span className="badge badge--primary">O-RAN L (2025-06-30)</span>
-          </p>
-        </div>
-      );
-      
-      rtlRender(<ReleaseBadgeInDoc />);
-      
-      expect(screen.getByTestId('release-badge-in-doc')).toBeInTheDocument();
-      expect(screen.getByText('O-RAN L (2025-06-30)')).toBeInTheDocument();
-    });
-  });
-
-  describe('Frontmatter and Metadata', () => {
-    it.skip('handles documentation with frontmatter', () => {
-      const DocumentWithFrontmatter = () => (
-        <article data-testid="doc-article">
-          <header>
-            <h1>Nephio Infrastructure Agent</h1>
-            <div className="doc-metadata">
-              <span className="doc-tag">infrastructure</span>
-              <span className="doc-tag">nephio</span>
-              <span className="doc-date">Last updated: 2025-08-20</span>
-            </div>
-          </header>
-          <div className="doc-content">
-            <p>Content goes here...</p>
+    describe('Custom Components Integration', () => {
+      it.skip('testingLibraryRenders CompatibilityMatrix within documentation', async () => {
+        // Mock the CompatibilityMatrix component in documentation context
+        const CompatibilityMatrixInDoc = () => (
+          <div data-testid='compatibility-matrix-in-doc'>
+            <h3>Compatibility Matrix</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td>nephio</td>
+                  <td>v2.0.0</td>
+                  <td>
+                    <span className='badge badge--success'>Supported</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </article>
-      );
-      
-      rtlRender(<DocumentWithFrontmatter />);
-      
-      expect(screen.getByTestId('doc-article')).toBeInTheDocument();
-      expect(screen.getByText('Nephio Infrastructure Agent')).toBeInTheDocument();
-      expect(screen.getByText('infrastructure')).toBeInTheDocument();
-      expect(screen.getByText('Last updated: 2025-08-20')).toBeInTheDocument();
+        );
+
+        testingLibraryRender(<CompatibilityMatrixInDoc />);
+
+        await waitFor(() => {
+          expect(
+            screen.getByTestId('compatibility-matrix-in-doc')
+          ).toBeInTheDocument();
+          expect(screen.getByText('nephio')).toBeInTheDocument();
+          expect(screen.getByText('Supported')).toBeInTheDocument();
+        });
+      });
+
+      it.skip('testingLibraryRenders ReleaseBadge within documentation', () => {
+        const ReleaseBadgeInDoc = () => (
+          <div data-testid='release-badge-in-doc'>
+            <p>
+              This documentation covers
+              <span className='badge badge--primary'>O-RAN L (2025-06-30)</span>
+            </p>
+          </div>
+        );
+
+        testingLibraryRender(<ReleaseBadgeInDoc />);
+
+        expect(screen.getByTestId('release-badge-in-doc')).toBeInTheDocument();
+        expect(screen.getByText('O-RAN L (2025-06-30)')).toBeInTheDocument();
+      });
     });
-  });
 
-  describe('Multi-language Content', () => {
-    it.skip('rtlRenders English content correctly', () => {
-      const EnglishContent = () => (
-        <div data-testid="english-content" lang="en">
-          <h1>Nephio O-RAN Claude Agents</h1>
-          <p>Intelligent orchestration for cloud-native O-RAN deployments</p>
-        </div>
-      );
-      
-      rtlRender(<EnglishContent />);
-      
-      expect(screen.getByTestId('english-content')).toHaveAttribute('lang', 'en');
-      expect(screen.getByText('Nephio O-RAN Claude Agents')).toBeInTheDocument();
+    describe('Frontmatter and Metadata', () => {
+      it.skip('handles documentation with frontmatter', () => {
+        const DocumentWithFrontmatter = () => (
+          <article data-testid='doc-article'>
+            <header>
+              <h1>Nephio Infrastructure Agent</h1>
+              <div className='doc-metadata'>
+                <span className='doc-tag'>infrastructure</span>
+                <span className='doc-tag'>nephio</span>
+                <span className='doc-date'>Last updated: 2025-08-20</span>
+              </div>
+            </header>
+            <div className='doc-content'>
+              <p>Content goes here...</p>
+            </div>
+          </article>
+        );
+
+        testingLibraryRender(<DocumentWithFrontmatter />);
+
+        expect(screen.getByTestId('doc-article')).toBeInTheDocument();
+        expect(
+          screen.getByText('Nephio Infrastructure Agent')
+        ).toBeInTheDocument();
+        expect(screen.getByText('infrastructure')).toBeInTheDocument();
+        expect(
+          screen.getByText('Last updated: 2025-08-20')
+        ).toBeInTheDocument();
+      });
     });
 
-    // Traditional Chinese content test moved to Locale section above
-  });
+    describe('Multi-language Content', () => {
+      it.skip('testingLibraryRenders English content correctly', () => {
+        const EnglishContent = () => (
+          <div data-testid='english-content' lang='en'>
+            <h1>Nephio O-RAN Claude Agents</h1>
+            <p>Intelligent orchestration for cloud-native O-RAN deployments</p>
+          </div>
+        );
 
-  describe('Link Validation', () => {
-    it.skip('validates internal links format', () => {
-      const content = `
+        testingLibraryRender(<EnglishContent />);
+
+        expect(screen.getByTestId('english-content')).toHaveAttribute(
+          'lang',
+          'en'
+        );
+        expect(
+          screen.getByText('Nephio O-RAN Claude Agents')
+        ).toBeInTheDocument();
+      });
+
+      // Traditional Chinese content test moved to Locale section above
+    });
+
+    describe('Link Validation', () => {
+      it.skip('validates internal links format', () => {
+        const content = `
         <a href="/docs/intro">Introduction</a>
         <a href="/docs/guides/quickstart">Quick Start</a>
         <a href="/docs/agents/infrastructure/nephio-infrastructure-agent">Infrastructure Agent</a>
       `;
-      
-      rtlRender(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
-      
-      const links = screen.getAllByTestId('mdx-link');
-      
-      links.forEach(link => {
-        const href = link.getAttribute('href');
-        expect(href).toMatch(/^\/docs\//);
-      });
-    });
 
-    it.skip('validates external links format', () => {
-      const content = `
+        testingLibraryRender(
+          <MockMDXContent>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </MockMDXContent>
+        );
+
+        const links = screen.getAllByTestId('mdx-link');
+
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          expect(href).toMatch(/^\/docs\//);
+        });
+      });
+
+      it.skip('validates external links format', () => {
+        const content = `
         <a href="https://nephio.org">Nephio Project</a>
         <a href="https://o-ran.org">O-RAN Alliance</a>
         <a href="https://kubernetes.io">Kubernetes</a>
       `;
-      
-      rtlRender(<MockMDXContent><div dangerouslySetInnerHTML={{__html: content}} /></MockMDXContent>);
-      
-      const links = screen.getAllByTestId('mdx-link');
-      
-      links.forEach(link => {
-        const href = link.getAttribute('href');
-        expect(href).toMatch(/^https?:\/\//);
-      });
-    });
-  });
 
-  describe('Search Integration', () => {
-    it.skip('includes searchable content with proper structure', () => {
-      const SearchableContent = () => (
-        <div data-testid="searchable-content">
-          <h1 data-searchable="title">Nephio Infrastructure Agent</h1>
-          <p data-searchable="content">
-            This agent manages infrastructure resources for Nephio deployments.
-          </p>
-          <div data-searchable="tags">
-            <span>nephio</span>
-            <span>infrastructure</span>
-            <span>kubernetes</span>
-          </div>
-        </div>
-      );
-      
-      rtlRender(<SearchableContent />);
-      
-      expect(screen.getByTestId('searchable-content')).toBeInTheDocument();
-      
-      const titleElement = screen.getByText('Nephio Infrastructure Agent');
-      expect(titleElement).toHaveAttribute('data-searchable', 'title');
-      
-      const contentElement = screen.getByText(/This agent manages infrastructure/);
-      expect(contentElement).toHaveAttribute('data-searchable', 'content');
-    });
-  });
+        testingLibraryRender(
+          <MockMDXContent>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </MockMDXContent>
+        );
 
-  describe('Performance and Loading', () => {
-    it.skip('should handle lazy loading of content', async () => {
-      const LazyContent = () => {
-        const [isLoading, setIsLoading] = React.useState(true);
-        const [content, setContent] = React.useState('');
+        const links = screen.getAllByTestId('mdx-link');
 
-        React.useEffect(() => {
-          // Simulate lazy loading
-          setTimeout(() => {
-            setContent('Lazy loaded content');
-            setIsLoading(false);
-          }, 100);
-        }, []);
-
-        if (isLoading) {
-          return <div data-testid="loading-spinner">Loading...</div>;
-        }
-
-        return <div data-testid="lazy-content">{content}</div>;
-      };
-
-      rtlRender(<LazyContent />);
-
-      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-
-      await waitFor(() => {
-        expect(screen.getByTestId('lazy-content')).toBeInTheDocument();
-        expect(screen.getByTestId('lazy-content')).toHaveTextContent('Lazy loaded content');
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          expect(href).toMatch(/^https?:\/\//);
+        });
       });
     });
 
-    it.skip('should handle progressive enhancement', () => {
-      const ProgressiveComponent = ({ enhanced }: { enhanced: boolean }) => (
-        <div data-testid="progressive-component">
-          <div data-testid="base-content">
-            <h1>Basic Content</h1>
-            <p>This content works without JavaScript</p>
-          </div>
-          {enhanced && (
-            <div data-testid="enhanced-content">
-              <button>Interactive Feature</button>
-              <div>Enhanced UI Elements</div>
+    describe('Search Integration', () => {
+      it.skip('includes searchable content with proper structure', () => {
+        const SearchableContent = () => (
+          <div data-testid='searchable-content'>
+            <h1 data-searchable='title'>Nephio Infrastructure Agent</h1>
+            <p data-searchable='content'>
+              This agent manages infrastructure resources for Nephio
+              deployments.
+            </p>
+            <div data-searchable='tags'>
+              <span>nephio</span>
+              <span>infrastructure</span>
+              <span>kubernetes</span>
             </div>
-          )}
-        </div>
-      );
+          </div>
+        );
 
-      const { rertlRender } = rtlRender(<ProgressiveComponent enhanced={false} />);
-      
-      expect(screen.getByTestId('base-content')).toBeInTheDocument();
-      expect(screen.queryByTestId('enhanced-content')).not.toBeInTheDocument();
+        testingLibraryRender(<SearchableContent />);
 
-      rertlRender(<ProgressiveComponent enhanced={true} />);
-      
-      expect(screen.getByTestId('base-content')).toBeInTheDocument();
-      expect(screen.getByTestId('enhanced-content')).toBeInTheDocument();
+        expect(screen.getByTestId('searchable-content')).toBeInTheDocument();
+
+        const titleElement = screen.getByText('Nephio Infrastructure Agent');
+        expect(titleElement).toHaveAttribute('data-searchable', 'title');
+
+        const contentElement = screen.getByText(
+          /This agent manages infrastructure/
+        );
+        expect(contentElement).toHaveAttribute('data-searchable', 'content');
+      });
     });
-  });
+
+    describe('Performance and Loading', () => {
+      it.skip('should handle lazy loading of content', async () => {
+        const LazyContent = () => {
+          const [isLoading, setIsLoading] = React.useState(true);
+          const [content, setContent] = React.useState('');
+
+          React.useEffect(() => {
+            // Simulate lazy loading
+            window.setTimeout(() => {
+              setContent('Lazy loaded content');
+              setIsLoading(false);
+            }, 100);
+          }, []);
+
+          if (isLoading) {
+            return <div data-testid='loading-spinner'>Loading...</div>;
+          }
+
+          return <div data-testid='lazy-content'>{content}</div>;
+        };
+
+        testingLibraryRender(<LazyContent />);
+
+        expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+
+        await waitFor(() => {
+          expect(screen.getByTestId('lazy-content')).toBeInTheDocument();
+          expect(screen.getByTestId('lazy-content')).toHaveTextContent(
+            'Lazy loaded content'
+          );
+        });
+      });
+
+      it.skip('should handle progressive enhancement', () => {
+        const ProgressiveComponent = ({ enhanced }: { enhanced: boolean }) => (
+          <div data-testid='progressive-component'>
+            <div data-testid='base-content'>
+              <h1>Basic Content</h1>
+              <p>This content works without JavaScript</p>
+            </div>
+            {enhanced && (
+              <div data-testid='enhanced-content'>
+                <button>Interactive Feature</button>
+                <div>Enhanced UI Elements</div>
+              </div>
+            )}
+          </div>
+        );
+
+        const { rerender } = testingLibraryRender(
+          <ProgressiveComponent enhanced={false} />
+        );
+
+        expect(screen.getByTestId('base-content')).toBeInTheDocument();
+        expect(
+          screen.queryByTestId('enhanced-content')
+        ).not.toBeInTheDocument();
+
+        rerender(<ProgressiveComponent enhanced={true} />);
+
+        expect(screen.getByTestId('base-content')).toBeInTheDocument();
+        expect(screen.getByTestId('enhanced-content')).toBeInTheDocument();
+      });
+    });
   });
 
   describe('CI/CD Integration', () => {
     it.skip('should pass lighthouse accessibility audit simulation', () => {
       const AccessibilityCompliantPage = () => (
-        <div data-testid="a11y-compliant-page">
+        <div data-testid='a11y-compliant-page'>
           <header>
             <h1>Page Title</h1>
-            <nav aria-label="main navigation">
+            <nav aria-label='main navigation'>
               <ul>
-                <li><a href="/docs/intro">Documentation</a></li>
-                <li><a href="/docs/guides">Guides</a></li>
+                <li>
+                  <a href='/docs/intro'>Documentation</a>
+                </li>
+                <li>
+                  <a href='/docs/guides'>Guides</a>
+                </li>
               </ul>
             </nav>
           </header>
           <main>
             <article>
               <h2>Article Title</h2>
-              <p>Article content with sufficient <a href="#contrast">color contrast</a>.</p>
-              <img src="/img/logo.svg" alt="Nephio O-RAN Claude Agents Logo" />
+              <p>
+                Article content with sufficient{' '}
+                <a href='#contrast'>color contrast</a>.
+              </p>
+              <img src='/img/logo.svg' alt='Nephio O-RAN Claude Agents Logo' />
             </article>
           </main>
           <footer>
@@ -1030,7 +1244,7 @@ kubectl get pods
         </div>
       );
 
-      rtlRender(<AccessibilityCompliantPage />);
+      testingLibraryRender(<AccessibilityCompliantPage />);
 
       // Check for proper landmark structure
       expect(screen.getByRole('banner')).toBeInTheDocument(); // header
@@ -1054,7 +1268,7 @@ kubectl get pods
         const content = data?.content || 'Default content';
 
         return (
-          <div data-testid="static-page">
+          <div data-testid='static-page'>
             <h1>{title}</h1>
             <div dangerouslySetInnerHTML={{ __html: content }} />
           </div>
@@ -1066,10 +1280,14 @@ kubectl get pods
         content: '<p>This content is generated at build time.</p>',
       };
 
-      rtlRender(<StaticPage data={staticData} />);
+      testingLibraryRender(<StaticPage data={staticData} />);
 
-      expect(screen.getByText('Nephio Infrastructure Agent')).toBeInTheDocument();
-      expect(screen.getByText('This content is generated at build time.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Nephio Infrastructure Agent')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('This content is generated at build time.')
+      ).toBeInTheDocument();
     });
 
     it.skip('should handle build-time validation', () => {
@@ -1081,14 +1299,14 @@ kubectl get pods
         });
 
         return (
-          <div data-testid="build-validator">
-            <span data-testid="missing-vars-count">{missingVars.length}</span>
-            <span data-testid="is-valid">{missingVars.length === 0}</span>
+          <div data-testid='build-validator'>
+            <span data-testid='missing-vars-count'>{missingVars.length}</span>
+            <span data-testid='is-valid'>{missingVars.length === 0}</span>
           </div>
         );
       };
 
-      rtlRender(<BuildValidator />);
+      testingLibraryRender(<BuildValidator />);
 
       // In a real CI environment, this would validate environment setup
       expect(screen.getByTestId('is-valid')).toBeInTheDocument();
