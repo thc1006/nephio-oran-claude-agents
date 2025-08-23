@@ -1,5 +1,12 @@
 name: Website Routing and Locale Tests
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  actions: read
+  checks: read
+
 on:
   push:
     branches: [ main, develop ]
@@ -286,39 +293,74 @@ jobs:
           echo "## Test Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
+          # Initialize counters
+          PASSED_TESTS=0
+          TOTAL_TESTS=0
+          
           # Check if unit tests passed
+          TOTAL_TESTS=$((TOTAL_TESTS + 1))
           if [ "${{ needs.unit-integration-tests.result }}" == "success" ]; then
             echo "✅ Unit & Integration Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+            PASSED_TESTS=$((PASSED_TESTS + 1))
+          elif [ "${{ needs.unit-integration-tests.result }}" == "skipped" ]; then
+            echo "⏭️ Unit & Integration Tests: SKIPPED" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Unit & Integration Tests: FAILED" >> $GITHUB_STEP_SUMMARY
           fi
           
           # Check if E2E tests passed
+          TOTAL_TESTS=$((TOTAL_TESTS + 1))
           if [ "${{ needs.e2e-routing-tests.result }}" == "success" ]; then
             echo "✅ E2E Routing Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+            PASSED_TESTS=$((PASSED_TESTS + 1))
+          elif [ "${{ needs.e2e-routing-tests.result }}" == "skipped" ]; then
+            echo "⏭️ E2E Routing Tests: SKIPPED" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ E2E Routing Tests: FAILED" >> $GITHUB_STEP_SUMMARY
           fi
           
           # Check if accessibility tests passed
+          TOTAL_TESTS=$((TOTAL_TESTS + 1))
           if [ "${{ needs.accessibility-tests.result }}" == "success" ]; then
             echo "✅ Accessibility Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+            PASSED_TESTS=$((PASSED_TESTS + 1))
+          elif [ "${{ needs.accessibility-tests.result }}" == "skipped" ]; then
+            echo "⏭️ Accessibility Tests: SKIPPED" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Accessibility Tests: FAILED" >> $GITHUB_STEP_SUMMARY
           fi
           
           # Check if performance tests passed
+          TOTAL_TESTS=$((TOTAL_TESTS + 1))
           if [ "${{ needs.performance-tests.result }}" == "success" ]; then
             echo "✅ Performance Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+            PASSED_TESTS=$((PASSED_TESTS + 1))
+          elif [ "${{ needs.performance-tests.result }}" == "skipped" ]; then
+            echo "⏭️ Performance Tests: SKIPPED" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Performance Tests: FAILED" >> $GITHUB_STEP_SUMMARY
           fi
           
           # Check if security tests passed
+          TOTAL_TESTS=$((TOTAL_TESTS + 1))
           if [ "${{ needs.security-tests.result }}" == "success" ]; then
             echo "✅ Security Tests: PASSED" >> $GITHUB_STEP_SUMMARY
+            PASSED_TESTS=$((PASSED_TESTS + 1))
+          elif [ "${{ needs.security-tests.result }}" == "skipped" ]; then
+            echo "⏭️ Security Tests: SKIPPED" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Security Tests: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Overall Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Test Results: $PASSED_TESTS/$TOTAL_TESTS passed**" >> $GITHUB_STEP_SUMMARY
+          
+          if [ $PASSED_TESTS -eq $TOTAL_TESTS ]; then
+            echo "🎉 **All tests passed successfully!**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Some tests failed. Please review the results above.**" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -332,18 +374,53 @@ jobs:
         with:
           script: |
             const { owner, repo, number } = context.issue;
-            const summary = `
-            ## 🧪 Test Results Summary
+            
+            // Helper function to get test status
+            function getTestStatus(result) {
+              if (result === 'success') return '✅ PASSED';
+              if (result === 'skipped') return '⏭️ SKIPPED';
+              return '❌ FAILED';
+            }
+            
+            // Helper function to get status with warning for non-critical tests
+            function getWarningStatus(result) {
+              if (result === 'success') return '✅ PASSED';
+              if (result === 'skipped') return '⏭️ SKIPPED';
+              return '⚠️ FAILED';
+            }
+            
+            const unitStatus = getTestStatus('${{ needs.unit-integration-tests.result }}');
+            const e2eStatus = getTestStatus('${{ needs.e2e-routing-tests.result }}');
+            const a11yStatus = getWarningStatus('${{ needs.accessibility-tests.result }}');
+            const perfStatus = getWarningStatus('${{ needs.performance-tests.result }}');
+            const secStatus = getWarningStatus('${{ needs.security-tests.result }}');
+            
+            // Count passed tests
+            const results = [
+              '${{ needs.unit-integration-tests.result }}',
+              '${{ needs.e2e-routing-tests.result }}',
+              '${{ needs.accessibility-tests.result }}',
+              '${{ needs.performance-tests.result }}',
+              '${{ needs.security-tests.result }}'
+            ];
+            
+            const passedCount = results.filter(r => r === 'success').length;
+            const totalCount = results.length;
+            const overallStatus = passedCount === totalCount ? '🎉 All tests passed!' : `⚠️ ${passedCount}/${totalCount} tests passed`;
+            
+            const summary = `## 🧪 Test Results Summary
+            
+            ${overallStatus}
             
             | Test Suite | Status |
             |------------|--------|
-            | Unit & Integration | ${{ needs.unit-integration-tests.result == 'success' && '✅ PASSED' || '❌ FAILED' }} |
-            | E2E Routing | ${{ needs.e2e-routing-tests.result == 'success' && '✅ PASSED' || '❌ FAILED' }} |
-            | Accessibility | ${{ needs.accessibility-tests.result == 'success' && '✅ PASSED' || '⚠️ FAILED' }} |
-            | Performance | ${{ needs.performance-tests.result == 'success' && '✅ PASSED' || '⚠️ FAILED' }} |
-            | Security | ${{ needs.security-tests.result == 'success' && '✅ PASSED' || '⚠️ FAILED' }} |
+            | Unit & Integration | ${unitStatus} |
+            | E2E Routing | ${e2eStatus} |
+            | Accessibility | ${a11yStatus} |
+            | Performance | ${perfStatus} |
+            | Security | ${secStatus} |
             
-            View detailed results in the [workflow run](${context.payload.pull_request.html_url}/checks).
+            View detailed results in the [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
             `;
             
             await github.rest.issues.createComment({
