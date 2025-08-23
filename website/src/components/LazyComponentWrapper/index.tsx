@@ -8,7 +8,7 @@ interface LazyComponentWrapperProps {
 /**
  * Higher-order component for lazy loading components with error boundaries
  */
-export function withLazyLoading<T extends {}>(
+export function withLazyLoading<T extends Record<string, any>>(
   componentImporter: () => Promise<{ default: ComponentType<T> }>,
   fallback?: ReactElement
 ): ComponentType<T> {
@@ -17,7 +17,7 @@ export function withLazyLoading<T extends {}>(
   return function WrappedLazyComponent(props: T) {
     return (
       <Suspense fallback={fallback || <div>Loading...</div>}>
-        <LazyComponent {...props} />
+        <LazyComponent {...(props as any)} />
       </Suspense>
     );
   };

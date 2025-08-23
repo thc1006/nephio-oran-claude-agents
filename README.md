@@ -39,6 +39,30 @@ npm start
 npm run build
 ```
 
+## 🌐 GitHub Pages Deployment
+
+The documentation website is automatically deployed to GitHub Pages from the main branch. The site is built using Docusaurus and hosted at:
+
+**Live Site**: [https://thc1006.github.io/nephio-oran-claude-agents/](https://thc1006.github.io/nephio-oran-claude-agents/)
+
+### Building and Deploying Locally
+
+```bash
+# Build the documentation website
+cd website
+npm install
+npm run build
+
+# The built site will be in website/dist/
+# Copy to root for GitHub Pages deployment
+cp -r website/dist/* ../
+```
+
+### Important Notes:
+- The `.nojekyll` file in the root disables Jekyll processing (we use Docusaurus instead)
+- The site is served from the root directory of the main branch
+- Automatic deployment occurs on push to main via GitHub Actions
+
 ## 🚀 Quick Start (2 minutes)
 
 ```bash

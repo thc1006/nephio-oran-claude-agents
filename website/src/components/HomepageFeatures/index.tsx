@@ -59,7 +59,6 @@ const Feature = memo(function Feature({ title, Svg, description }: FeatureItem) 
           role='img'
           data-testid={testId}
           aria-label={`${title} illustration`}
-          loading="lazy"
         />
       </div>
       <div className='text--center padding-horiz--md'>

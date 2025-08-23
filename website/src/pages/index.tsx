@@ -26,7 +26,7 @@ const HomepageHeader = memo(function HomepageHeader() {
     // Pre-load the docs route for better UX
     if ('requestIdleCallback' in window) {
       window.requestIdleCallback(() => {
-        import('@docusaurus/router').then(({ navigate }) => {
+        import('@docusaurus/router').then(() => {
           // Pre-warm the route but don't navigate yet
         });
       });
