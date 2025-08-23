@@ -8,21 +8,11 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "resolveJsonModule": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src/**/*",
-    "types/**/*.d.ts",
-    "global-types.d.ts",
-    "**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "build",
-    ".docusaurus",
-    "tests/**/*"
-  ]
+  "include": ["src/**/*", "types/**/*.d.ts", "global-types.d.ts", "**/*.d.ts"],
+  "exclude": ["node_modules", "build", ".docusaurus", "tests/**/*"]
 }

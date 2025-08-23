@@ -1,15 +1,14 @@
 import React from 'react';
 import BlogPostPage from '@theme-original/BlogPostPage';
-import type BlogPostPageType from '@theme/BlogPostPage';
 import type { WrapperProps } from '@docusaurus/types';
-import { useDoc } from '@docusaurus/theme-common/internal';
 import Head from '@docusaurus/Head';
 
-type Props = WrapperProps<typeof BlogPostPageType>;
+type Props = WrapperProps<typeof BlogPostPage>;
 
 export default function BlogPostPageWrapper(props: Props): JSX.Element {
-  const { metadata } = useDoc();
-  const { title, description, permalink, date, authors } = metadata;
+  // Extract metadata from props instead of useDoc
+  const metadata = (props as any)?.content?.metadata || {};
+  const { title, description, permalink, date, authors = [] } = metadata;
 
   // Generate structured data for blog post
   const structuredData = {

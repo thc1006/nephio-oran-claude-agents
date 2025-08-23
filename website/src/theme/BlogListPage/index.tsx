@@ -1,10 +1,9 @@
 import React from 'react';
 import BlogListPage from '@theme-original/BlogListPage';
-import type BlogListPageType from '@theme/BlogListPage';
 import type { WrapperProps } from '@docusaurus/types';
 import Head from '@docusaurus/Head';
 
-type Props = WrapperProps<typeof BlogListPageType>;
+type Props = WrapperProps<typeof BlogListPage>;
 
 export default function BlogListPageWrapper(props: Props): JSX.Element {
   // Generate structured data for blog landing page
