@@ -191,7 +191,7 @@ jobs:
           CRITICAL_PATHS=(
             ""  # homepage
             "docs/"
-            "blog/"
+            "blog"  # no trailing slash to match trailingSlash: false config
           )
           
           for path in "${CRITICAL_PATHS[@]}"; do

@@ -109,6 +109,7 @@ const config: Config = {
           breadcrumbs: true,
         },
         blog: {
+          routeBasePath: 'blog',
           showReadingTime: true,
           editUrl:
             'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
@@ -165,7 +166,9 @@ const config: Config = {
     [
       './plugins/docusaurus-plugin-security-headers',
       {
-        disableCSP: process.env.NODE_ENV === 'test' || process.env.DISABLE_CSP_FOR_TESTS === 'true', // Disable CSP for testing
+        disableCSP:
+          process.env.NODE_ENV === 'test' ||
+          process.env.DISABLE_CSP_FOR_TESTS === 'true', // Disable CSP for testing
         customHeaders: {
           // Add any additional custom headers here
           'X-DNS-Prefetch-Control': 'on',
@@ -244,7 +247,7 @@ const config: Config = {
         {
           to: 'blog',
           label: 'Blog',
-          position: 'left'
+          position: 'left',
         },
         {
           type: 'localeDropdown',
