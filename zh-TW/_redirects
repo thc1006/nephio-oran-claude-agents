@@ -1,0 +1,5 @@
+# Netlify redirects
+/docs              /docs/intro        301
+/docs/             /docs/intro        301
+/zh-TW/docs        /zh-TW/docs/intro  301
+/zh-TW/docs/       /zh-TW/docs/intro  301

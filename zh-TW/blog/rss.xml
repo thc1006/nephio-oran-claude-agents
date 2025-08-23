@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>Nephio O-RAN Claude Agents Blog - 5G Orchestration Insights</title>
+        <link>https://thc1006.github.io/nephio-oran-claude-agents/zh-TW/blog</link>
+        <description>Get the latest updates on O-RAN L Release support, Nephio R5 integration, AI-powered automation, and cloud-native 5G network orchestration strategies.</description>
+        <lastBuildDate>Sat, 21 Dec 2024 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en-US</language>
+        <copyright>Copyright © 2025 Nephio O-RAN Claude Agents Project. All rights reserved.</copyright>
+        <item>
+            <title><![CDATA[Welcome to Nephio O-RAN Claude Agents]]></title>
+            <link>https://thc1006.github.io/nephio-oran-claude-agents/zh-TW/blog/welcome</link>
+            <guid>https://thc1006.github.io/nephio-oran-claude-agents/zh-TW/blog/welcome</guid>
+            <pubDate>Sat, 21 Dec 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[Discover intelligent orchestration for cloud-native O-RAN deployments with AI-powered Claude agents. Full O-RAN L Release support, Nephio R5 integration, and multi-cluster automation.]]></description>
+            <content:encoded><![CDATA[<p>Welcome to the Nephio O-RAN Claude Agents documentation site! This project provides intelligent
+orchestration for cloud-native O-RAN deployments using advanced AI-powered agents.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="key-features">Key Features<a href="https://thc1006.github.io/nephio-oran-claude-agents/zh-TW/blog/welcome#key-features" class="hash-link" aria-label="Key Features的直接連結" title="Key Features的直接連結">​</a></h2>
+<ul>
+<li><strong>O-RAN L Release Support</strong>: Full compatibility with O-RAN L (released 2025-06-30)</li>
+<li><strong>Nephio R5 Integration</strong>: Leveraging Nephio R5 (v5.x) for cloud-native orchestration</li>
+<li><strong>AI-Powered Automation</strong>: Claude agents for intelligent deployment and management</li>
+<li><strong>Multi-Cluster Support</strong>: Orchestrate across edge, regional, and core clusters</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="getting-started">Getting Started<a href="https://thc1006.github.io/nephio-oran-claude-agents/zh-TW/blog/welcome#getting-started" class="hash-link" aria-label="Getting Started的直接連結" title="Getting Started的直接連結">​</a></h2>
+<p>Check out our <a href="https://thc1006.github.io/nephio-oran-claude-agents/zh-TW/docs/guides/quickstart">quickstart guide</a> to deploy your first O-RAN network with
+Nephio agents.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="latest-updates">Latest Updates<a href="https://thc1006.github.io/nephio-oran-claude-agents/zh-TW/blog/welcome#latest-updates" class="hash-link" aria-label="Latest Updates的直接連結" title="Latest Updates的直接連結">​</a></h2>
+<ul>
+<li>Full support for O-RAN L release specifications</li>
+<li>Integration with Nephio R5 package management</li>
+<li>Enhanced security compliance with WG11 standards</li>
+<li>Kubernetes (latest three minor releases) compatibility</li>
+</ul>
+<p>Stay tuned for more updates as we continue to enhance the platform!</p>]]></content:encoded>
+            <author>noreply@nephio.org (Nephio Team)</author>
+            <category>nephio</category>
+            <category>o-ran</category>
+            <category>announcement</category>
+            <category>claude-agents</category>
+            <category>kubernetes</category>
+            <category>telco-automation</category>
+        </item>
+    </channel>
+</rss>
