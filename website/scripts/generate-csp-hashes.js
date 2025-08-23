@@ -123,17 +123,22 @@ async function updateCSPHeaders(buildDir, hashes) {
     console.warn('vercel.json not found or invalid');
   }
   
-  // Build script-src with hashes
+  // Build script-src with hashes - ultra-strict production configuration
   const scriptSrc = [
     "'self'",
     ...hashes.scriptHashes,
+    "'strict-dynamic'", // Enable strict-dynamic for better security
     'https://www.google-analytics.com',
     'https://www.googletagmanager.com',
-    'https://*.algolia.net',
-    'https://*.algolianet.com'
+    'https://cdn.jsdelivr.net',
+    // Remove wildcards for production
+    'https://www.algolia.net',
+    'https://algolia.net',
+    'https://www.algolianet.com',
+    'https://algolianet.com'
   ].join(' ');
   
-  // Build style-src with hashes
+  // Build style-src with hashes - strict configuration
   const styleSrc = [
     "'self'",
     ...hashes.styleHashes,

@@ -30,38 +30,13 @@ declare global {
   }
 }
 
-// Mock Docusaurus components BEFORE importing the component
-jest.mock('@theme/Layout', () => {
-  const React = require('react');
-  return function MockLayout({ title, description, children }: any) {
-    return React.createElement(
-      'div',
-      {
-        'data-testid': 'layout',
-        'data-title': title,
-        'data-description': description,
-      },
-      children
-    );
-  };
-});
-
-jest.mock('@docusaurus/Link', () => {
-  const React = require('react');
-  return function MockLink({ to, className, children, ...props }: any) {
-    const { 'data-testid': _dataTestId, ...restProps } = props;
-    return React.createElement(
-      'a',
-      {
-        href: to,
-        className,
-        'data-testid': 'home-link',
-        ...restProps,
-      },
-      children
-    );
-  };
-});
+// Mock the URLSanitizer from Root component
+jest.mock('../../src/theme/Root', () => ({
+  URLSanitizer: {
+    sanitize: (url: string) => url.replace(/[<>"'&]/g, ''),
+    isDangerous: (url: string) => false,
+  },
+}));
 
 // Import AFTER mocking
 import NotFound from '../../src/pages/404';

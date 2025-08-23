@@ -20,7 +20,18 @@ module.exports = {
   Redirect: ({ to }) => `Redirect to ${to}`,
   Head: ({ children }) => children,
   Link: ({ to, children, ...props }) => 
-    React.createElement('a', { href: to, ...props }, children),
+    React.createElement('a', { 
+      href: to, 
+      'data-testid': 'home-link',
+      ...props 
+    }, children),
+  Layout: ({ title, description, children, ...props }) => 
+    React.createElement('div', { 
+      'data-testid': 'layout',
+      'data-title': title,
+      'data-description': description,
+      ...props 
+    }, children),
   NavbarItem: ({ children, ...props }) => 
     React.createElement('div', props, children),
   useColorMode: () => ({
@@ -55,6 +66,19 @@ module.exports = {
     canUseIntersectionObserver: false,
     canUseViewport: false,
   },
+  // Router hooks
+  useLocation: () => ({
+    pathname: '/test-path',
+    search: '',
+    hash: '',
+  }),
+  useHistory: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    go: jest.fn(),
+    goBack: jest.fn(),
+    goForward: jest.fn(),
+  }),
 };
 
 // For ES modules compatibility

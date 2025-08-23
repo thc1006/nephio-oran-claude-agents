@@ -25,6 +25,12 @@ module.exports = [
         window: 'readonly',
         document: 'readonly',
         console: 'readonly',
+        HTMLElement: 'readonly',
+        HTMLHeadingElement: 'readonly',
+        URLSearchParams: 'readonly',
+        navigator: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
         
         // Node.js globals
         process: 'readonly',
@@ -125,13 +131,33 @@ module.exports = [
     },
   },
   
+  // TypeScript declaration files
+  {
+    files: ['**/*.d.ts'],
+    languageOptions: {
+      parser: typescriptParser,
+      globals: {
+        // DOM globals for declaration files
+        HTMLElement: 'readonly',
+        HTMLHeadingElement: 'readonly',
+        Element: 'readonly',
+        Node: 'readonly',
+        Document: 'readonly',
+        Window: 'readonly',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'no-undef': 'error',
+    },
+  },
+  
   // Ignore patterns (equivalent to ignorePatterns in legacy config)
   {
     ignores: [
       'build/',
       '.docusaurus/',
       'node_modules/',
-      '*.d.ts',
       'static/',
       'i18n/',
       '**/*.generated.*',
