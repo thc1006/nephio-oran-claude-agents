@@ -1,0 +1,68 @@
+# Agent Efficiency Configuration for Token Monitoring
+# This configuration defines token usage metrics and cost parameters for each agent
+
+agent_models:
+  nephio-infrastructure-agent:
+    model: haiku
+    avg_tokens_per_task: 500
+    max_acceptable: 1000
+    cost_per_1k_tokens: 0.0015
+    
+  oran-network-functions-agent:
+    model: sonnet
+    avg_tokens_per_task: 1500
+    max_acceptable: 3000
+    cost_per_1k_tokens: 0.015
+    
+  security-compliance-agent:
+    model: opus
+    avg_tokens_per_task: 3000
+    max_acceptable: 6000
+    cost_per_1k_tokens: 0.075
+    
+  performance-optimization-agent:
+    model: opus
+    avg_tokens_per_task: 2800
+    max_acceptable: 5500
+    cost_per_1k_tokens: 0.075
+    
+  nephio-oran-orchestrator-agent:
+    model: opus
+    avg_tokens_per_task: 3500
+    max_acceptable: 7000
+    cost_per_1k_tokens: 0.075
+    
+  configuration-management-agent:
+    model: sonnet
+    avg_tokens_per_task: 1200
+    max_acceptable: 2500
+    cost_per_1k_tokens: 0.015
+    
+  monitoring-analytics-agent:
+    model: sonnet
+    avg_tokens_per_task: 1800
+    max_acceptable: 3500
+    cost_per_1k_tokens: 0.015
+    
+  data-analytics-agent:
+    model: haiku
+    avg_tokens_per_task: 600
+    max_acceptable: 1200
+    cost_per_1k_tokens: 0.0015
+    
+  oran-nephio-dep-doctor-agent:
+    model: sonnet
+    avg_tokens_per_task: 1000
+    max_acceptable: 2000
+    cost_per_1k_tokens: 0.015
+    
+  testing-validation-agent:
+    model: sonnet
+    avg_tokens_per_task: 1400
+    max_acceptable: 2800
+    cost_per_1k_tokens: 0.015
+
+settings:
+  csv_log_file: token_usage_log.csv
+  monitoring_enabled: true
+  alert_threshold: 0.8  # Alert when usage exceeds 80% of max_acceptable

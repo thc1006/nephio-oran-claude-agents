@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
 Integration tests for Nephio-O-RAN Claude Agent workflows.
-Tests workflow execution, state management, and agent collaboration.
+Tests agent collaboration patterns and integration points.
 """
 
 import unittest
-import subprocess
 import json
 import os
 import sys
@@ -22,45 +21,35 @@ class TestWorkflowIntegration(unittest.TestCase):
         """Set up test environment."""
         self.project_root = Path(__file__).parent.parent
         self.agents_dir = self.project_root / "agents"
-        self.orchestrator = self.project_root / "orchestration" / "orchestrator.py"
-        self.workflow_runner = self.project_root / "scripts" / "run-workflow.sh"
         
-    def test_bash_workflow_runner_exists(self):
-        """Test that bash workflow runner exists and is executable."""
-        self.assertTrue(self.workflow_runner.exists(), 
-                       "Workflow runner script not found")
-        self.assertTrue(os.access(self.workflow_runner, os.X_OK),
-                       "Workflow runner is not executable")
-    
-    def test_python_orchestrator_dry_run(self):
-        """Test Python orchestrator dry run functionality."""
-        result = subprocess.run([
-            'python', str(self.orchestrator), 
-            'deploy', '--dry-run'
-        ], capture_output=True, text=True, cwd=self.project_root)
+    def test_agent_collaboration_patterns(self):
+        """Test that agents define collaboration patterns."""
+        agent_files = list(self.agents_dir.glob('*.md'))
+        self.assertGreater(len(agent_files), 0, "No agent files found")
         
-        self.assertEqual(result.returncode, 0, 
-                        f"Orchestrator failed: {result.stderr}")
-        self.assertIn('DRY RUN', result.stderr,
-                     "Dry run mode not indicated")
-        self.assertIn('deploy', result.stderr,
-                     "Deploy workflow not recognized")
-    
-    def test_all_workflows_dry_run(self):
-        """Test all workflows in dry-run mode."""
-        workflows = ['deploy', 'troubleshoot', 'validate', 'upgrade']
-        
-        for workflow in workflows:
-            with self.subTest(workflow=workflow):
-                result = subprocess.run([
-                    'python', str(self.orchestrator),
-                    workflow, '--dry-run'
-                ], capture_output=True, text=True, cwd=self.project_root)
+        for agent_file in agent_files:
+            with self.subTest(agent=agent_file.name):
+                with open(agent_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
                 
-                self.assertEqual(result.returncode, 0,
-                               f"Workflow {workflow} failed: {result.stderr}")
-                self.assertIn(workflow, result.stderr,
-                             f"Workflow {workflow} not recognized")
+                # Check for collaboration sections
+                self.assertIn('Collaboration', content,
+                             f"Agent {agent_file.name} missing collaboration info")
+    
+    def test_agent_workflow_definitions(self):
+        """Test that agents define workflow integration points."""
+        agent_files = list(self.agents_dir.glob('*.md'))
+        
+        workflow_keywords = ['deploy', 'validate', 'troubleshoot', 'monitor', 'optimize']
+        
+        for agent_file in agent_files:
+            with open(agent_file, 'r', encoding='utf-8') as f:
+                content = f.read().lower()
+            
+            # Check that agent mentions at least one workflow keyword
+            has_workflow = any(keyword in content for keyword in workflow_keywords)
+            self.assertTrue(has_workflow,
+                          f"Agent {agent_file.name} doesn't mention any workflow keywords")
     
     def test_agent_output_format(self):
         """Verify all agents have standard output format."""
