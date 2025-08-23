@@ -1,5 +1,5 @@
 import React from 'react';
-import { render as testingLibraryRender, screen } from '@testing-library/react';
+import { render as renderComponent, screen } from '@testing-library/react';
 import HomepageFeatures from '../../src/components/HomepageFeatures';
 
 // Mock the Docusaurus Heading component
@@ -28,7 +28,7 @@ jest.mock('@site/static/img/undraw_docusaurus_react.svg', () => ({
 
 describe('HomepageFeatures', () => {
   it('renders all feature items', () => {
-    testingLibraryRender(<HomepageFeatures />);
+    renderComponent(<HomepageFeatures />);
 
     expect(screen.getByText('Easy to Use')).toBeInTheDocument();
     expect(screen.getByText('Focus on What Matters')).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe('HomepageFeatures', () => {
   });
 
   it('renders feature descriptions', () => {
-    testingLibraryRender(<HomepageFeatures />);
+    renderComponent(<HomepageFeatures />);
 
     expect(
       screen.getByText(
@@ -56,7 +56,7 @@ describe('HomepageFeatures', () => {
   });
 
   it('renders SVG icons with correct roles', () => {
-    testingLibraryRender(<HomepageFeatures />);
+    renderComponent(<HomepageFeatures />);
 
     const svgs = screen.getAllByRole('img');
     expect(svgs).toHaveLength(3);
@@ -67,7 +67,7 @@ describe('HomepageFeatures', () => {
   });
 
   it('has proper container structure', () => {
-    const { container } = testingLibraryRender(<HomepageFeatures />);
+    const { container } = renderComponent(<HomepageFeatures />);
 
     const section = container.querySelector('section');
     expect(section).toBeInTheDocument();
@@ -80,7 +80,7 @@ describe('HomepageFeatures', () => {
   });
 
   it('renders features in responsive grid columns', () => {
-    testingLibraryRender(<HomepageFeatures />);
+    renderComponent(<HomepageFeatures />);
 
     const features = screen.getAllByText(
       /Easy to Use|Focus on What Matters|Powered by React/
@@ -93,7 +93,7 @@ describe('HomepageFeatures', () => {
   });
 
   it('has accessible headings', () => {
-    testingLibraryRender(<HomepageFeatures />);
+    renderComponent(<HomepageFeatures />);
 
     const headings = screen
       .getAllByRole('heading')
@@ -106,14 +106,14 @@ describe('HomepageFeatures', () => {
   });
 
   it('includes code element in the second feature description', () => {
-    testingLibraryRender(<HomepageFeatures />);
+    renderComponent(<HomepageFeatures />);
 
     const codeElement = screen.getByText('docs');
     expect(codeElement.tagName).toBe('CODE');
   });
 
   it('centers text content appropriately', () => {
-    testingLibraryRender(<HomepageFeatures />);
+    renderComponent(<HomepageFeatures />);
 
     const textCenterElements = document.querySelectorAll('.text--center');
     expect(textCenterElements.length).toBeGreaterThan(0);

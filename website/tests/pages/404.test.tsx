@@ -1,5 +1,5 @@
 import React from 'react';
-import { render as testingLibraryRender, screen } from '@testing-library/react';
+import { render as renderComponent, screen } from '@testing-library/react';
 
 // Mock Docusaurus components BEFORE importing the component
 jest.mock('@theme/Layout', () => {
@@ -59,7 +59,7 @@ describe('404 Page', () => {
   });
 
   it('renders the 404 page with correct content', () => {
-    testingLibraryRender(<NotFound />);
+    renderComponent(<NotFound />);
 
     // Check main heading
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
@@ -85,7 +85,7 @@ describe('404 Page', () => {
   });
 
   it('uses correct Layout props', () => {
-    testingLibraryRender(<NotFound />);
+    renderComponent(<NotFound />);
 
     // Due to mocking complexity, just check that the content is rendered correctly
     // The Layout component is mocked so we just verify the main content exists
@@ -109,7 +109,7 @@ describe('404 Page', () => {
   });
 
   it('has proper semantic structure', () => {
-    testingLibraryRender(<NotFound />);
+    renderComponent(<NotFound />);
 
     const main = screen.getByRole('main');
     expect(main).toHaveClass('container', 'margin-vert--xl');
@@ -123,7 +123,7 @@ describe('404 Page', () => {
   });
 
   it('has accessible heading hierarchy', () => {
-    testingLibraryRender(<NotFound />);
+    renderComponent(<NotFound />);
 
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveClass('hero__title');
@@ -131,7 +131,7 @@ describe('404 Page', () => {
   });
 
   it('provides helpful error message and guidance', () => {
-    testingLibraryRender(<NotFound />);
+    renderComponent(<NotFound />);
 
     // Check that all expected text content is present
     expect(
@@ -148,7 +148,7 @@ describe('404 Page', () => {
   });
 
   it('provides navigation back to homepage', () => {
-    testingLibraryRender(<NotFound />);
+    renderComponent(<NotFound />);
 
     const homeLink = screen.getByText('Return to Homepage');
     expect(homeLink.closest('a')).toHaveAttribute('href', '/');

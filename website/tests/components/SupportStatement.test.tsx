@@ -1,5 +1,5 @@
 import React from 'react';
-import { render as testingLibraryRender, screen } from '@testing-library/react';
+import { render as renderComponent, screen } from '@testing-library/react';
 import SupportStatement, {
   SupportStatementProps,
 } from '../../src/components/SupportStatement';
@@ -40,7 +40,7 @@ describe('SupportStatement', () => {
 
   describe('Full variant (default)', () => {
     it('renders full variant with all content', () => {
-      testingLibraryRender(<SupportStatement {...defaultProps} />);
+      renderComponent(<SupportStatement {...defaultProps} />);
 
       expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
       expect(
@@ -61,13 +61,13 @@ describe('SupportStatement', () => {
     });
 
     it('shows last updated date by default', () => {
-      testingLibraryRender(<SupportStatement {...defaultProps} />);
+      renderComponent(<SupportStatement {...defaultProps} />);
 
       expect(screen.getByText('Updated: 2025-08-22')).toBeInTheDocument();
     });
 
     it('displays additional info in full variant', () => {
-      testingLibraryRender(<SupportStatement {...defaultProps} />);
+      renderComponent(<SupportStatement {...defaultProps} />);
 
       expect(
         screen.getByText(/While these are the canonical supported versions/)
@@ -78,7 +78,7 @@ describe('SupportStatement', () => {
     });
 
     it('renders all release badges with correct props', () => {
-      testingLibraryRender(<SupportStatement {...defaultProps} />);
+      renderComponent(<SupportStatement {...defaultProps} />);
 
       expect(screen.getByTestId('release-badge-go')).toHaveAttribute(
         'data-variant',
@@ -105,7 +105,7 @@ describe('SupportStatement', () => {
 
   describe('Compact variant', () => {
     it('renders compact variant with reduced content', () => {
-      testingLibraryRender(<SupportStatement variant='compact' />);
+      renderComponent(<SupportStatement variant='compact' />);
 
       expect(screen.getByText('Supported Versions')).toBeInTheDocument();
       expect(
@@ -119,7 +119,7 @@ describe('SupportStatement', () => {
     });
 
     it('still shows version descriptions in compact variant', () => {
-      testingLibraryRender(<SupportStatement variant='compact' />);
+      renderComponent(<SupportStatement variant='compact' />);
 
       expect(
         screen.getByText(/Required Go runtime version/)
@@ -132,7 +132,7 @@ describe('SupportStatement', () => {
 
   describe('Badges-only variant', () => {
     it('renders only badges without text content', () => {
-      testingLibraryRender(<SupportStatement variant='badges-only' />);
+      renderComponent(<SupportStatement variant='badges-only' />);
 
       expect(
         screen.queryByText('Version Support Statement')
@@ -150,7 +150,7 @@ describe('SupportStatement', () => {
     });
 
     it('renders badges with small size in badges-only variant', () => {
-      testingLibraryRender(<SupportStatement variant='badges-only' />);
+      renderComponent(<SupportStatement variant='badges-only' />);
 
       expect(screen.getByTestId('release-badge-go')).toHaveAttribute(
         'data-size',
@@ -173,13 +173,13 @@ describe('SupportStatement', () => {
 
   describe('Last Updated Display', () => {
     it('hides last updated when showLastUpdated is false', () => {
-      testingLibraryRender(<SupportStatement showLastUpdated={false} />);
+      renderComponent(<SupportStatement showLastUpdated={false} />);
 
       expect(screen.queryByText('Updated: 2025-08-22')).not.toBeInTheDocument();
     });
 
     it('shows last updated when showLastUpdated is true', () => {
-      testingLibraryRender(<SupportStatement showLastUpdated={true} />);
+      renderComponent(<SupportStatement showLastUpdated={true} />);
 
       expect(screen.getByText('Updated: 2025-08-22')).toBeInTheDocument();
     });
@@ -187,7 +187,7 @@ describe('SupportStatement', () => {
 
   describe('CSS Classes and Structure', () => {
     it('applies custom className', () => {
-      const { container } = testingLibraryRender(
+      const { container } = renderComponent(
         <SupportStatement className='custom-class' />
       );
 
@@ -196,9 +196,7 @@ describe('SupportStatement', () => {
 
     it('renders different variants correctly', () => {
       // Test full variant
-      const { rerender } = testingLibraryRender(
-        <SupportStatement variant='full' />
-      );
+      const { rerender } = renderComponent(<SupportStatement variant='full' />);
       expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
       expect(
         screen.getByText(/While these are the canonical supported versions/)
@@ -222,7 +220,7 @@ describe('SupportStatement', () => {
     });
 
     it('has proper content structure', () => {
-      testingLibraryRender(<SupportStatement />);
+      renderComponent(<SupportStatement />);
 
       // Test functional behavior instead of CSS classes
       expect(screen.getByText('Version Support Statement')).toBeInTheDocument();
@@ -240,14 +238,14 @@ describe('SupportStatement', () => {
 
   describe('Accessibility', () => {
     it('uses proper heading hierarchy', () => {
-      testingLibraryRender(<SupportStatement />);
+      renderComponent(<SupportStatement />);
 
       const heading = screen.getByRole('heading', { level: 4 });
       expect(heading).toHaveTextContent('Version Support Statement');
     });
 
     it('provides descriptive text for each version item', () => {
-      testingLibraryRender(<SupportStatement />);
+      renderComponent(<SupportStatement />);
 
       expect(
         screen.getByText(/Required Go runtime version/)
