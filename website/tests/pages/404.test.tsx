@@ -31,11 +31,13 @@ declare global {
 }
 
 // Mock the URLSanitizer from Root component
+const mockURLSanitizer = {
+  sanitize: jest.fn((url: string) => url.replace(/[<>"'&]/g, '')),
+  isDangerous: jest.fn((url: string) => false),
+};
+
 jest.mock('../../src/theme/Root', () => ({
-  URLSanitizer: {
-    sanitize: (url: string) => url.replace(/[<>"'&]/g, ''),
-    isDangerous: (url: string) => false,
-  },
+  URLSanitizer: mockURLSanitizer,
 }));
 
 // Import AFTER mocking
@@ -44,6 +46,8 @@ import NotFound from '../../src/pages/404';
 describe('404 Page', () => {
   // Suppress console warnings for nested anchor tags in these tests
   const originalError = console.error;
+  const originalWarn = console.warn;
+  const mockConsoleWarn = jest.fn();
 
   beforeAll(() => {
     console.error = (...args: any[]) => {
@@ -56,6 +60,17 @@ describe('404 Page', () => {
       }
       originalError.call(console, ...args);
     };
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    console.warn = mockConsoleWarn;
+    mockURLSanitizer.sanitize.mockImplementation((url: string) => url.replace(/[<>"'&]/g, ''));
+    mockURLSanitizer.isDangerous.mockReturnValue(false);
+  });
+
+  afterEach(() => {
+    console.warn = originalWarn;
   });
 
   afterAll(() => {
@@ -156,5 +171,183 @@ describe('404 Page', () => {
 
     const homeLink = screen.getByText('Return to Homepage');
     expect(homeLink.closest('a')).toHaveAttribute('href', '/');
+  });
+
+  describe('Security Warning Scenarios', () => {
+    it('should display security warning when error parameter is malformed_url', () => {
+      // Mock location to include error parameter
+      const mockLocation = {
+        pathname: '/404',
+        search: '?error=malformed_url',
+        hash: '',
+      };
+      
+      // Mock useLocation hook
+      const useLocationSpy = jest.spyOn(require('@docusaurus/router'), 'useLocation');
+      useLocationSpy.mockReturnValue(mockLocation);
+
+      renderComponent(<NotFound />);
+
+      // Check for security warning heading
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('⚠️ Security Warning');
+      
+      // Check for security alert
+      expect(screen.getByText('Malicious URL Detected')).toBeInTheDocument();
+      expect(screen.getByText(/The URL you attempted to access contained potentially dangerous/)).toBeInTheDocument();
+      
+      // Check for explanation text
+      expect(screen.getByText(/What happened?/)).toBeInTheDocument();
+      expect(screen.getByText(/What should you do?/)).toBeInTheDocument();
+      
+      useLocationSpy.mockRestore();
+    });
+
+    it('should log security incidents when dangerous URL is detected', () => {
+      const mockLocation = {
+        pathname: '/test',
+        search: '?param=malicious',
+        hash: '#hash',
+      };
+      
+      // Mock URLSanitizer to detect dangerous URL
+      mockURLSanitizer.isDangerous.mockReturnValue(true);
+      mockURLSanitizer.sanitize.mockReturnValue('sanitized-url');
+      
+      const useLocationSpy = jest.spyOn(require('@docusaurus/router'), 'useLocation');
+      useLocationSpy.mockReturnValue(mockLocation);
+
+      renderComponent(<NotFound />);
+
+      // Check that security warning was logged (this covers line 26)
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        '[Security] 404 page accessed with potentially malicious URL:',
+        expect.objectContaining({
+          originalUrl: '/test?param=malicious#hash',
+          sanitizedUrl: 'sanitized-url',
+          timestamp: expect.any(String),
+          referrer: expect.any(String),
+        })
+      );
+      
+      useLocationSpy.mockRestore();
+    });
+
+    it('should log security incidents when security error parameter is present', () => {
+      const mockLocation = {
+        pathname: '/404',
+        search: '?error=malformed_url&original=test',
+        hash: '',
+      };
+      
+      // Mock URLSanitizer - even if URL is not dangerous, should log due to error param
+      mockURLSanitizer.isDangerous.mockReturnValue(false);
+      mockURLSanitizer.sanitize.mockReturnValue('/404?error=malformed_url&original=test');
+      
+      const useLocationSpy = jest.spyOn(require('@docusaurus/router'), 'useLocation');
+      useLocationSpy.mockReturnValue(mockLocation);
+
+      renderComponent(<NotFound />);
+
+      // Check that security warning was logged due to isSecurityError being true
+      expect(mockConsoleWarn).toHaveBeenCalledWith(
+        '[Security] 404 page accessed with potentially malicious URL:',
+        expect.objectContaining({
+          originalUrl: '/404?error=malformed_url&original=test',
+          sanitizedUrl: '/404?error=malformed_url&original=test',
+          timestamp: expect.any(String),
+          referrer: expect.any(String),
+        })
+      );
+      
+      useLocationSpy.mockRestore();
+    });
+
+    it('should display sanitized URL when available and different from 404', () => {
+      const mockLocation = {
+        pathname: '/some-path',
+        search: '?param=value',
+        hash: '#section',
+      };
+      
+      mockURLSanitizer.sanitize.mockReturnValue('/some-path?param=value#section');
+      
+      const useLocationSpy = jest.spyOn(require('@docusaurus/router'), 'useLocation');
+      useLocationSpy.mockReturnValue(mockLocation);
+
+      renderComponent(<NotFound />);
+
+      // Check that sanitized URL is displayed
+      expect(screen.getByText('Requested URL:')).toBeInTheDocument();
+      expect(screen.getByText('/some-path?param=value#section')).toBeInTheDocument();
+      
+      useLocationSpy.mockRestore();
+    });
+
+    it('should not display sanitized URL when it equals /404', () => {
+      const mockLocation = {
+        pathname: '/404',
+        search: '',
+        hash: '',
+      };
+      
+      mockURLSanitizer.sanitize.mockReturnValue('/404');
+      
+      const useLocationSpy = jest.spyOn(require('@docusaurus/router'), 'useLocation');
+      useLocationSpy.mockReturnValue(mockLocation);
+
+      renderComponent(<NotFound />);
+
+      // Check that sanitized URL is NOT displayed
+      expect(screen.queryByText('Requested URL:')).not.toBeInTheDocument();
+      
+      useLocationSpy.mockRestore();
+    });
+
+    it('should handle empty sanitized URL', () => {
+      const mockLocation = {
+        pathname: '/test',
+        search: '',
+        hash: '',
+      };
+      
+      mockURLSanitizer.sanitize.mockReturnValue('');
+      
+      const useLocationSpy = jest.spyOn(require('@docusaurus/router'), 'useLocation');
+      useLocationSpy.mockReturnValue(mockLocation);
+
+      renderComponent(<NotFound />);
+
+      // Check that sanitized URL is NOT displayed when empty
+      expect(screen.queryByText('Requested URL:')).not.toBeInTheDocument();
+      
+      useLocationSpy.mockRestore();
+    });
+  });
+
+  describe('Security Information Section', () => {
+    it('should render security information details', () => {
+      renderComponent(<NotFound />);
+
+      // Find and expand the security information details
+      const securityDetails = screen.getByText('Security Information');
+      expect(securityDetails).toBeInTheDocument();
+      
+      // Check for security features list
+      expect(screen.getByText('Our Security Features:')).toBeInTheDocument();
+      expect(screen.getByText('Real-time URL pattern analysis')).toBeInTheDocument();
+      expect(screen.getByText('XSS attack prevention')).toBeInTheDocument();
+      expect(screen.getByText('Malicious content filtering')).toBeInTheDocument();
+      expect(screen.getByText('Safe URL sanitization')).toBeInTheDocument();
+    });
+  });
+
+  describe('Navigation Links', () => {
+    it('should provide link to documentation', () => {
+      renderComponent(<NotFound />);
+
+      const docsLink = screen.getByText('Browse Documentation');
+      expect(docsLink.closest('a')).toHaveAttribute('href', '/docs');
+      expect(docsLink.closest('a')).toHaveClass('button', 'button--secondary', 'button--lg');
+    });
   });
 });

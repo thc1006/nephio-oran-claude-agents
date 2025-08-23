@@ -8,7 +8,7 @@ declare module '@theme/Root' {
   export interface RootProps {
     readonly children: React.ReactNode;
   }
-  
+
   export class URLSanitizer {
     static isDangerous(url: string): boolean;
     static sanitize(url: string): string;

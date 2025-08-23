@@ -16,38 +16,38 @@ class URLSanitizer {
     /javascript:/gi,
     /vbscript:/gi,
     /data:text\/html/gi,
-    
+
     // Event handlers that can execute JavaScript
     /on\w+\s*=/gi,
     /onload\s*=/gi,
     /onerror\s*=/gi,
     /onclick\s*=/gi,
     /onmouseover\s*=/gi,
-    
+
     // Iframe and object injection
     /<iframe[^>]*>/gi,
     /<object[^>]*>/gi,
     /<embed[^>]*>/gi,
     /<applet[^>]*>/gi,
-    
+
     // Meta refresh and other redirects
     /<meta[^>]*http-equiv[^>]*refresh[^>]*>/gi,
-    
+
     // Style injection
     /<style[^>]*>.*?<\/style>/gi,
     /expression\s*\(/gi,
-    
+
     // Data URIs that could contain scripts
     /data:\s*[^,]*script/gi,
-    
+
     // Common XSS vectors - but be selective about HTML entities and URL encoding
     /&#x?[0-9a-f]+;?/gi, // HTML entities that could hide scripts
-    
+
     // SQL injection patterns (for additional safety)
     /union\s+select/gi,
     /drop\s+table/gi,
     /delete\s+from/gi,
-    
+
     // Protocol handlers
     /feed:/gi,
     /chrome:/gi,
@@ -64,9 +64,9 @@ class URLSanitizer {
     }
 
     const decodedUrl = this.safeDecodeURI(url);
-    
-    return this.DANGEROUS_PATTERNS.some(pattern => 
-      pattern.test(url) || pattern.test(decodedUrl)
+
+    return this.DANGEROUS_PATTERNS.some(
+      pattern => pattern.test(url) || pattern.test(decodedUrl)
     );
   }
 
@@ -91,7 +91,7 @@ class URLSanitizer {
     }
 
     let sanitized = url;
-    
+
     // Remove dangerous patterns
     this.DANGEROUS_PATTERNS.forEach(pattern => {
       sanitized = sanitized.replace(pattern, '[REMOVED]');
@@ -126,7 +126,7 @@ export default function Root({ children }: RootProps): JSX.Element {
   useEffect(() => {
     // Check current URL for dangerous patterns
     const currentPath = location.pathname + location.search + location.hash;
-    
+
     if (URLSanitizer.isDangerous(currentPath)) {
       // Log the attempt for security monitoring
       console.warn('[Security] Dangerous URL pattern detected:', {
@@ -137,7 +137,7 @@ export default function Root({ children }: RootProps): JSX.Element {
 
       // Redirect to safe 404 page
       const safe404Path = URLSanitizer.createSafe404Path();
-      
+
       // Use replace to avoid adding to browser history
       window.location.replace(safe404Path);
       return;
@@ -169,16 +169,21 @@ export default function Root({ children }: RootProps): JSX.Element {
   useEffect(() => {
     const addSecurityHeaders = () => {
       // Content Security Policy meta tag
-      const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+      const cspMeta = document.querySelector(
+        'meta[http-equiv="Content-Security-Policy"]'
+      );
       if (!cspMeta) {
         const meta = document.createElement('meta');
         meta.httpEquiv = 'Content-Security-Policy';
-        meta.content = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
+        meta.content =
+          "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
         document.head.appendChild(meta);
       }
 
       // X-Content-Type-Options
-      const noSniffMeta = document.querySelector('meta[http-equiv="X-Content-Type-Options"]');
+      const noSniffMeta = document.querySelector(
+        'meta[http-equiv="X-Content-Type-Options"]'
+      );
       if (!noSniffMeta) {
         const meta = document.createElement('meta');
         meta.httpEquiv = 'X-Content-Type-Options';
@@ -187,7 +192,9 @@ export default function Root({ children }: RootProps): JSX.Element {
       }
 
       // X-Frame-Options
-      const frameOptionsMeta = document.querySelector('meta[http-equiv="X-Frame-Options"]');
+      const frameOptionsMeta = document.querySelector(
+        'meta[http-equiv="X-Frame-Options"]'
+      );
       if (!frameOptionsMeta) {
         const meta = document.createElement('meta');
         meta.httpEquiv = 'X-Frame-Options';

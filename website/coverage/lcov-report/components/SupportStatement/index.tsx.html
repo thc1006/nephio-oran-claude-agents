@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -177,18 +177,13 @@
 <a name='L112'></a><a href='#L112'>112</a>
 <a name='L113'></a><a href='#L113'>113</a>
 <a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,6 +192,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -291,15 +295,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import clsx from 'clsx';
-import { 
-  GO_VERSION as _GO_VERSION, 
-  ORAN_L_RELEASE as _ORAN_L_RELEASE, 
-  NEPHIO_VERSION as _NEPHIO_VERSION, 
+import {
+  GO_VERSION as _GO_VERSION,
+  ORAN_L_RELEASE as _ORAN_L_RELEASE,
+  NEPHIO_VERSION as _NEPHIO_VERSION,
   KPT_VERSION as _KPT_VERSION,
   VERSION_DISPLAY as _VERSION_DISPLAY,
-  LAST_UPDATED 
+  LAST_UPDATED,
 } from '../../data/siteConfig';
 import ReleaseBadge from '../ReleaseBadge';
 import styles from './styles.module.css';
@@ -325,10 +333,10 @@ export default function SupportStatement({
     return (
       &lt;div className={containerClasses}&gt;
         &lt;div className={styles.badges}&gt;
-          &lt;ReleaseBadge type="go" size="small" /&gt;
-          &lt;ReleaseBadge type="oran" size="small" /&gt;
-          &lt;ReleaseBadge type="nephio" size="small" /&gt;
-          &lt;ReleaseBadge type="kpt" size="small" /&gt;
+          &lt;ReleaseBadge type='go' size='small' /&gt;
+          &lt;ReleaseBadge type='oran' size='small' /&gt;
+          &lt;ReleaseBadge type='nephio' size='small' /&gt;
+          &lt;ReleaseBadge type='kpt' size='small' /&gt;
         &lt;/div&gt;
       &lt;/div&gt;
     );
@@ -338,47 +346,48 @@ export default function SupportStatement({
     &lt;div className={containerClasses}&gt;
       &lt;div className={styles.header}&gt;
         &lt;h4 className={styles.title}&gt;
-          {variant === 'compact' ? 'Supported Versions' : 'Version Support Statement'}
+          {variant === 'compact'
+            ? 'Supported Versions'
+            : 'Version Support Statement'}
         &lt;/h4&gt;
         {showLastUpdated &amp;&amp; (
-          &lt;span className={styles.lastUpdated}&gt;
-            Updated: {LAST_UPDATED}
-          &lt;/span&gt;
+          &lt;span className={styles.lastUpdated}&gt;Updated: {LAST_UPDATED}&lt;/span&gt;
         )}
       &lt;/div&gt;
 &nbsp;
       &lt;div className={styles.content}&gt;
         {variant === 'full' &amp;&amp; (
           &lt;p className={styles.description}&gt;
-            This documentation and the associated Claude agents are tested and supported 
-            with the following canonical versions of O-RAN, Nephio, and related technologies.
+            This documentation and the associated Claude agents are tested and
+            supported with the following canonical versions of O-RAN, Nephio,
+            and related technologies.
           &lt;/p&gt;
         )}
 &nbsp;
         &lt;div className={styles.versionList}&gt;
           &lt;div className={styles.versionItem}&gt;
-            &lt;ReleaseBadge type="go" variant="outline" size="medium" /&gt;
+            &lt;ReleaseBadge type='go' variant='outline' size='medium' /&gt;
             &lt;span className={styles.versionDescription}&gt;
               Required Go runtime version for agent execution
             &lt;/span&gt;
           &lt;/div&gt;
 &nbsp;
           &lt;div className={styles.versionItem}&gt;
-            &lt;ReleaseBadge type="oran" variant="outline" size="medium" /&gt;
+            &lt;ReleaseBadge type='oran' variant='outline' size='medium' /&gt;
             &lt;span className={styles.versionDescription}&gt;
               O-RAN Alliance L-Release specifications and implementations
             &lt;/span&gt;
           &lt;/div&gt;
 &nbsp;
           &lt;div className={styles.versionItem}&gt;
-            &lt;ReleaseBadge type="nephio" variant="outline" size="medium" /&gt;
+            &lt;ReleaseBadge type='nephio' variant='outline' size='medium' /&gt;
             &lt;span className={styles.versionDescription}&gt;
               Nephio R5 package orchestration and GitOps workflows
             &lt;/span&gt;
           &lt;/div&gt;
 &nbsp;
           &lt;div className={styles.versionItem}&gt;
-            &lt;ReleaseBadge type="kpt" variant="outline" size="medium" /&gt;
+            &lt;ReleaseBadge type='kpt' variant='outline' size='medium' /&gt;
             &lt;span className={styles.versionDescription}&gt;
               Configuration as Data package management with kpt
             &lt;/span&gt;
@@ -388,14 +397,16 @@ export default function SupportStatement({
         {variant === 'full' &amp;&amp; (
           &lt;div className={styles.additionalInfo}&gt;
             &lt;div className={styles.note}&gt;
-              &lt;strong&gt;Note:&lt;/strong&gt; While these are the canonical supported versions, 
-              many agents may work with adjacent versions. Please refer to individual 
-              agent documentation for specific compatibility requirements.
+              &lt;strong&gt;Note:&lt;/strong&gt; While these are the canonical supported
+              versions, many agents may work with adjacent versions. Please
+              refer to individual agent documentation for specific compatibility
+              requirements.
             &lt;/div&gt;
-            
+&nbsp;
             &lt;div className={styles.policy}&gt;
-              &lt;strong&gt;Support Policy:&lt;/strong&gt; We follow Kubernetes' support policy 
-              of maintaining compatibility with the latest three minor releases.
+              &lt;strong&gt;Support Policy:&lt;/strong&gt; We follow Kubernetes' support
+              policy of maintaining compatibility with the latest three minor
+              releases.
             &lt;/div&gt;
           &lt;/div&gt;
         )}
@@ -405,14 +416,15 @@ export default function SupportStatement({
 }
 &nbsp;
 // Convenience export for MDX usage
-export { SupportStatement };</pre></td></tr></table></pre>
+export { SupportStatement };
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-22T22:12:42.220Z
+                at 2025-08-23T11:15:40.094Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -19,19 +19,21 @@ module.exports = {
   }),
   Redirect: ({ to }) => `Redirect to ${to}`,
   Head: ({ children }) => children,
-  Link: ({ to, children, ...props }) => 
+  Link: React.forwardRef(({ to, children, ...props }, ref) => 
     React.createElement('a', { 
+      ref,
       href: to, 
       'data-testid': 'home-link',
       ...props 
-    }, children),
-  Layout: ({ title, description, children, ...props }) => 
+    }, children)),
+  Layout: React.forwardRef(({ title, description, children, ...props }, ref) => 
     React.createElement('div', { 
+      ref,
       'data-testid': 'layout',
       'data-title': title,
       'data-description': description,
       ...props 
-    }, children),
+    }, children)),
   NavbarItem: ({ children, ...props }) => 
     React.createElement('div', props, children),
   useColorMode: () => ({
@@ -81,5 +83,20 @@ module.exports = {
   }),
 };
 
-// For ES modules compatibility
+// For ES modules compatibility - export specific named exports
 module.exports.default = module.exports;
+
+// Export individual components for named imports and default exports
+// For @theme/Layout
+const Layout = module.exports.Layout;
+Layout.default = Layout;
+module.exports.Layout = Layout;
+
+// For @docusaurus/Link  
+const Link = module.exports.Link;
+Link.default = Link;
+module.exports.Link = Link;
+
+// For router hooks
+module.exports.useLocation = module.exports.useLocation;
+module.exports.useHistory = module.exports.useHistory;

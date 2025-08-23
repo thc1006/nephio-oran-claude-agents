@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -166,9 +166,10 @@
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -185,20 +186,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,9 +254,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">60x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,9 +291,9 @@ export interface CompatibilityMatrixProps {
 }
 &nbsp;
 const statusMap = {
-  'supported': { label: 'Supported', className: 'success' },
-  'deprecated': { label: 'Deprecated', className: 'warning' },
-  'experimental': { label: 'Experimental', className: 'info' },
+  supported: { label: 'Supported', className: 'success' },
+  deprecated: { label: 'Deprecated', className: 'warning' },
+  experimental: { label: 'Experimental', className: 'info' },
   'not-supported': { label: 'Not Supported', className: 'danger' },
 };
 &nbsp;
@@ -304,11 +306,13 @@ export default function CompatibilityMatrix({
   return (
     &lt;div className={clsx('compatibility-matrix', styles.compatibilityMatrix)}&gt;
       &lt;h3 className={styles.title}&gt;{title}&lt;/h3&gt;
-      
+&nbsp;
       &lt;div className={clsx('table-responsive', styles.tableContainer)}&gt;
-        &lt;table className={clsx('table table-striped', styles.table, {
-          [styles.compact]: compact,
-        })}&gt;
+        &lt;table
+          className={clsx('table table-striped', styles.table, {
+            [styles.compact]: compact,
+          })}
+        &gt;
           &lt;thead&gt;
             &lt;tr&gt;
               &lt;th&gt;Component&lt;/th&gt;
@@ -328,7 +332,7 @@ export default function CompatibilityMatrix({
                   &lt;code&gt;{item.version}&lt;/code&gt;
                 &lt;/td&gt;
                 &lt;td className={styles.status}&gt;
-                  &lt;span 
+                  &lt;span
                     className={clsx(
                       'badge',
                       `badge--${statusMap[item.status].className}`,
@@ -343,9 +347,7 @@ export default function CompatibilityMatrix({
                     {item.lastTested || 'N/A'}
                   &lt;/td&gt;
                 )}
-                &lt;td className={styles.notes}&gt;
-                  {item.notes || '—'}
-                &lt;/td&gt;
+                &lt;td className={styles.notes}&gt;{item.notes || '—'}&lt;/td&gt;
               &lt;/tr&gt;
             ))}
           &lt;/tbody&gt;
@@ -357,7 +359,7 @@ export default function CompatibilityMatrix({
         &lt;div className={styles.legendItems}&gt;
           {Object.entries(statusMap).map(([key, value]) =&gt; (
             &lt;span key={key} className={styles.legendItem}&gt;
-              &lt;span 
+              &lt;span
                 className={clsx(
                   'badge',
                   `badge--${value.className}`,
@@ -372,14 +374,15 @@ export default function CompatibilityMatrix({
       &lt;/div&gt;
     &lt;/div&gt;
   );
-}</pre></td></tr></table></pre>
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-22T22:12:42.306Z
+                at 2025-08-23T11:15:40.205Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

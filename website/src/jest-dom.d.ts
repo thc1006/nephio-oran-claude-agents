@@ -12,7 +12,9 @@ declare global {
       toHaveAttribute(attr: string, value?: string | RegExp): R;
       toHaveClass(...classNames: string[]): R;
       toHaveFocus(): R;
-      toHaveFormValues(expectedValues: Record<string, string | string[] | boolean>): R;
+      toHaveFormValues(
+        expectedValues: Record<string, string | string[] | boolean>
+      ): R;
       toHaveStyle(css: string | Record<string, string | number>): R;
       toHaveTextContent(text: string | RegExp): R;
       toHaveValue(value: string | number | string[]): R;

@@ -11,7 +11,7 @@ export default function NotFound() {
 
   useEffect(() => {
     const currentUrl = location.pathname + location.search + location.hash;
-    
+
     // Check if this is a security-related 404 (from malformed URL detection)
     const urlParams = new URLSearchParams(location.search);
     const isSecurityError = urlParams.get('error') === 'malformed_url';
@@ -23,12 +23,15 @@ export default function NotFound() {
 
     // Log security incidents
     if (isSecurityError || URLSanitizer.isDangerous(currentUrl)) {
-      console.warn('[Security] 404 page accessed with potentially malicious URL:', {
-        originalUrl: currentUrl,
-        sanitizedUrl: sanitized,
-        timestamp: new Date().toISOString(),
-        referrer: document.referrer,
-      });
+      console.warn(
+        '[Security] 404 page accessed with potentially malicious URL:',
+        {
+          originalUrl: currentUrl,
+          sanitizedUrl: sanitized,
+          timestamp: new Date().toISOString(),
+          referrer: document.referrer,
+        }
+      );
     }
   }, [location]);
 
@@ -45,26 +48,28 @@ export default function NotFound() {
                 <h1 className='hero__title' style={{ color: '#d73a49' }}>
                   ⚠️ Security Warning
                 </h1>
-                <div 
-                  className='alert alert--danger' 
+                <div
+                  className='alert alert--danger'
                   style={{ marginBottom: '2rem' }}
                 >
                   <h4>Malicious URL Detected</h4>
                   <p>
-                    The URL you attempted to access contained potentially dangerous 
-                    patterns that could be used for cross-site scripting (XSS) attacks. 
-                    For your security, you have been redirected to this safe page.
+                    The URL you attempted to access contained potentially
+                    dangerous patterns that could be used for cross-site
+                    scripting (XSS) attacks. For your security, you have been
+                    redirected to this safe page.
                   </p>
                 </div>
                 <p>
-                  <strong>What happened?</strong> Our security system detected 
-                  suspicious patterns in the URL that could potentially execute 
+                  <strong>What happened?</strong> Our security system detected
+                  suspicious patterns in the URL that could potentially execute
                   malicious code in your browser.
                 </p>
                 <p>
-                  <strong>What should you do?</strong> If you believe you reached 
-                  this page in error, please contact the site administrator. 
-                  Otherwise, you can safely continue to our homepage.
+                  <strong>What should you do?</strong> If you believe you
+                  reached this page in error, please contact the site
+                  administrator. Otherwise, you can safely continue to our
+                  homepage.
                 </p>
               </>
             ) : (
@@ -72,18 +77,20 @@ export default function NotFound() {
                 <h1 className='hero__title'>404 - Page Not Found</h1>
                 <p>We could not find what you were looking for.</p>
                 {sanitizedUrl && sanitizedUrl !== '/404' && (
-                  <div 
-                    className='alert alert--secondary' 
+                  <div
+                    className='alert alert--secondary'
                     style={{ marginBottom: '1rem' }}
                   >
                     <strong>Requested URL:</strong>{' '}
-                    <code style={{ 
-                      wordBreak: 'break-all',
-                      background: '#f6f8fa',
-                      padding: '0.2em 0.4em',
-                      borderRadius: '3px',
-                      fontSize: '0.85em'
-                    }}>
+                    <code
+                      style={{
+                        wordBreak: 'break-all',
+                        background: '#f6f8fa',
+                        padding: '0.2em 0.4em',
+                        borderRadius: '3px',
+                        fontSize: '0.85em',
+                      }}
+                    >
                       {sanitizedUrl}
                     </code>
                   </div>
@@ -94,35 +101,34 @@ export default function NotFound() {
                 </p>
               </>
             )}
-            
+
             <div style={{ marginTop: '2rem' }}>
-              <Link 
-                className='button button--primary button--lg' 
+              <Link
+                className='button button--primary button--lg'
                 to='/'
                 style={{ marginRight: '1rem' }}
               >
                 Return to Homepage
               </Link>
-              <Link 
-                className='button button--secondary button--lg' 
-                to='/docs'
-              >
+              <Link className='button button--secondary button--lg' to='/docs'>
                 Browse Documentation
               </Link>
             </div>
-            
+
             {/* Additional security information */}
             <details style={{ marginTop: '2rem', fontSize: '0.9em' }}>
               <summary style={{ cursor: 'pointer', color: '#666' }}>
                 Security Information
               </summary>
-              <div style={{ 
-                marginTop: '1rem', 
-                padding: '1rem', 
-                background: '#f8f9fa', 
-                borderRadius: '4px',
-                border: '1px solid #e1e4e8'
-              }}>
+              <div
+                style={{
+                  marginTop: '1rem',
+                  padding: '1rem',
+                  background: '#f8f9fa',
+                  borderRadius: '4px',
+                  border: '1px solid #e1e4e8',
+                }}
+              >
                 <p>
                   <strong>Our Security Features:</strong>
                 </p>
@@ -133,7 +139,7 @@ export default function NotFound() {
                   <li>Safe URL sanitization</li>
                 </ul>
                 <p style={{ marginBottom: 0 }}>
-                  If you believe you've encountered a security issue, please 
+                  If you believe you've encountered a security issue, please
                   report it to our security team.
                 </p>
               </div>

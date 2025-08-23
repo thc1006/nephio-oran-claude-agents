@@ -24,12 +24,13 @@ module.exports = {
         types: ['jest', '@testing-library/jest-dom', 'node'],
         moduleResolution: 'node',
       },
-      useESM: true,
+      useESM: false, // Use CommonJS for compatibility with mocks
       diagnostics: {
         ignoreCodes: [2339, 2554] // Ignore property does not exist and argument count errors
       }
     }],
-    '^.+\\.(js|jsx)$': 'babel-jest',
+    // Exclude mock files from babel transformation
+    '^(?!.*__mocks__).+\\.(js|jsx)$': 'babel-jest',
   },
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
@@ -51,6 +52,9 @@ module.exports = {
     '\\.(css|less|scss|sass)$': '<rootDir>/tests/setup/__mocks__/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/setup/__mocks__/fileMock.js',
     '^@site/(.*)$': '<rootDir>/$1',
+    '^@theme/Layout$': '<rootDir>/tests/setup/__mocks__/@theme/Layout.js',
+    '^@docusaurus/Link$': '<rootDir>/tests/setup/__mocks__/@docusaurus/Link.js',
+    '^@docusaurus/router$': '<rootDir>/tests/setup/__mocks__/@docusaurus/router.js',
     '^@docusaurus/(.*)$': '<rootDir>/tests/setup/__mocks__/docusaurus.js',
     '^@theme/(.*)$': '<rootDir>/tests/setup/__mocks__/docusaurus.js',
   },
@@ -65,6 +69,5 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(prism-react-renderer|@docusaurus|clsx)/)',
   ],
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
