@@ -26,6 +26,7 @@ const config: Config = {
 
   // Enhanced SEO configuration
   headTags: [
+    // Open Graph tags
     {
       tagName: 'meta',
       attributes: {
@@ -43,6 +44,28 @@ const config: Config = {
     {
       tagName: 'meta',
       attributes: {
+        property: 'og:locale',
+        content: 'en_US',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:image:width',
+        content: '1200',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        property: 'og:image:height',
+        content: '630',
+      },
+    },
+    // Twitter Card tags
+    {
+      tagName: 'meta',
+      attributes: {
         name: 'twitter:card',
         content: 'summary_large_image',
       },
@@ -55,10 +78,65 @@ const config: Config = {
       },
     },
     {
+      tagName: 'meta',
+      attributes: {
+        name: 'twitter:creator',
+        content: '@nephio_org',
+      },
+    },
+    // Additional SEO tags
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'robots',
+        content:
+          'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'googlebot',
+        content: 'index, follow',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'theme-color',
+        content: '#25c2a0',
+      },
+    },
+    // Canonical URL
+    {
       tagName: 'link',
       attributes: {
         rel: 'canonical',
         href: 'https://thc1006.github.io/nephio-oran-claude-agents/',
+      },
+    },
+    // Performance optimization
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+    },
+    // Additional meta for blog
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'article:publisher',
+        content: 'https://github.com/thc1006/nephio-oran-claude-agents',
       },
     },
   ],
@@ -113,19 +191,39 @@ const config: Config = {
           showReadingTime: true,
           editUrl:
             'https://github.com/thc1006/nephio-oran-claude-agents/tree/main/website/',
-          // Enhanced blog features
-          blogTitle: 'Nephio O-RAN Claude Agents Blog',
+          // Enhanced blog features with SEO optimization
+          blogTitle:
+            'Nephio O-RAN Claude Agents Blog - Cloud-Native 5G Orchestration',
           blogDescription:
-            'Latest updates and insights on O-RAN orchestration with Claude agents',
+            'Expert insights on O-RAN L Release, Nephio R5 integration, AI-powered automation, and cloud-native 5G network orchestration. Latest updates on intelligent telco infrastructure.',
+          blogSidebarTitle: 'Recent Posts',
+          blogSidebarCount: 'ALL',
           postsPerPage: 10,
+          include: ['**/*.md', '**/*.mdx'],
+          exclude: ['**/node_modules/**'],
+          path: 'blog',
+          // Enhanced RSS/Atom feeds
           feedOptions: {
-            type: 'all',
-            title: 'Nephio O-RAN Claude Agents Blog',
+            type: ['rss', 'atom'],
+            title:
+              'Nephio O-RAN Claude Agents Blog - 5G Orchestration Insights',
             description:
-              'Latest updates and insights on O-RAN orchestration with Claude agents',
-            copyright: `Copyright © ${new Date().getFullYear()} Nephio O-RAN Claude Agents Project`,
+              'Get the latest updates on O-RAN L Release support, Nephio R5 integration, AI-powered automation, and cloud-native 5G network orchestration strategies.',
+            copyright: `Copyright © ${new Date().getFullYear()} Nephio O-RAN Claude Agents Project. All rights reserved.`,
             language: 'en-US',
+            createFeedItems: async params => {
+              const { blogPosts, defaultCreateFeedItems, ...rest } = params;
+              return defaultCreateFeedItems({
+                blogPosts: blogPosts.filter((item, index) => index < 10),
+                ...rest,
+              });
+            },
           },
+          // Enhanced meta tags for blog pages
+          blogPostComponent: '@theme/BlogPostPage',
+          blogListComponent: '@theme/BlogListPage',
+          blogTagsListComponent: '@theme/BlogTagsListPage',
+          blogTagsPostsComponent: '@theme/BlogTagsPostsPage',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -214,17 +312,30 @@ const config: Config = {
       {
         name: 'keywords',
         content:
-          'O-RAN, Nephio, cloud-native orchestration, Kubernetes operators, telco automation, 5G orchestration, O-RAN L release, Nephio R5 agents',
+          'O-RAN L Release 2025, Nephio R5, cloud-native orchestration, Kubernetes operators, telco automation, 5G orchestration, Claude AI agents, multi-cluster support, O-RAN WG11 security, telco edge computing',
       },
       {
         name: 'description',
         content:
-          'Advanced cloud-native orchestration for telecom infrastructure. Leverage Nephio and O-RAN technologies with intelligent Claude agents for seamless 5G network automation.',
+          'Advanced cloud-native orchestration for telecom infrastructure with O-RAN L Release support. Leverage Nephio R5 and intelligent Claude agents for seamless 5G network automation, multi-cluster orchestration, and telco edge deployments.',
       },
-      { name: 'robots', content: 'index, follow' },
+      {
+        name: 'robots',
+        content:
+          'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+      },
+      { name: 'googlebot', content: 'index, follow' },
       { name: 'revisit-after', content: '7 days' },
       { name: 'language', content: 'English' },
       { name: 'generator', content: 'Docusaurus' },
+      { name: 'theme-color', content: '#25c2a0' },
+      { name: 'msapplication-TileColor', content: '#25c2a0' },
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
+      {
+        name: 'apple-mobile-web-app-status-bar-style',
+        content: 'black-translucent',
+      },
+      { name: 'format-detection', content: 'telephone=no' },
     ],
     colorMode: {
       defaultMode: 'light',

@@ -7,7 +7,6 @@ on:
     paths:
       - 'website/**'
       - 'agents/**'
-      - 'docs/**'
       - '.github/workflows/deploy.yml'
   
   # Allow manual trigger

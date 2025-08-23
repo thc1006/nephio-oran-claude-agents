@@ -18,7 +18,7 @@ function HomepageHeader() {
         <p className='hero__subtitle'>{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link className='button button--secondary button--lg' to='docs/intro'>
-            Get Started - 5min ⏱️
+            Get Started with Nephio O-RAN Claude Agents - 5min Setup ⏱️
           </Link>
         </div>
       </div>
@@ -30,8 +30,8 @@ export default function Home(): React.ReactElement {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description='Description will go into a meta tag in <head />'
+      title={`${siteConfig.title} - Cloud-Native O-RAN Orchestration`}
+      description='Intelligent orchestration for cloud-native O-RAN deployments using AI-powered Claude agents. Full O-RAN L Release support with Nephio R5 integration for 5G network automation.'
     >
       <HomepageHeader />
       <main>

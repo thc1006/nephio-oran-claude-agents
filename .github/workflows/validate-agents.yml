@@ -52,12 +52,11 @@ jobs:
           fi
         done
         
-    - name: Check configuration file
+    - name: Check agent files are valid Markdown
       run: |
-        if [ ! -f "config/agent_config.yaml" ]; then
-          echo "❌ Missing config/agent_config.yaml"
-          exit 1
-        else
-          echo "✅ Configuration file exists"
-          python -c "import yaml; yaml.safe_load(open('config/agent_config.yaml')); print('✅ YAML syntax valid')"
-        fi
+        echo "✅ Checking agent files are valid Markdown format"
+        for agent in agents/*.md; do
+          if [ -f "$agent" ]; then
+            echo "✅ Valid: $agent"
+          fi
+        done

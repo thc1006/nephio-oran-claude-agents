@@ -95,13 +95,14 @@ show-versions:
 # Development targets
 .PHONY: test
 test:
-	@echo "Running tests..."
-	@go test ./... -v
+	@echo "Running Python tests..."
+	@cd tests && python validate_agents.py
+	@cd tests && python test_agent_scenarios.py
 
-.PHONY: lint
-lint:
-	@echo "Running linting..."
-	@golangci-lint run
+.PHONY: validate
+validate:
+	@echo "Validating agent files..."
+	@cd tests && python validate_agents.py
 
 .PHONY: help
 help:
@@ -112,8 +113,8 @@ help:
 	@echo "  update-kpt-references Update all kpt version references"
 	@echo "  clean-backups       Remove backup files created during updates"
 	@echo "  show-versions       Display current version configuration"
-	@echo "  test                Run tests"
-	@echo "  lint                Run linting"
+	@echo "  test                Run Python tests for agents"
+	@echo "  validate            Validate agent files"
 	@echo "  help                Show this help message"
 
 .DEFAULT_GOAL := help

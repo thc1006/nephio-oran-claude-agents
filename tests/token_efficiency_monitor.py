@@ -16,7 +16,8 @@ class TokenEfficiencyMonitor:
         # Load configuration from YAML file
         if config_path is None:
             script_dir = Path(__file__).parent
-            config_path = script_dir.parent / "config" / "agent_config.yaml"
+            # Config directory was removed during cleanup - use None to trigger defaults
+            config_path = None
         
         self.config_path = config_path
         self.efficiency_metrics = self._load_config()
