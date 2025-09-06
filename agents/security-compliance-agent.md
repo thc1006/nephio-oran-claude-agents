@@ -256,11 +256,17 @@ EOF
 enforce_fips_mode() {
   echo "=== FIPS 140-3 Enforcement ==="
   
-  # Set FIPS mode for all deployments
+  # Set FIPS mode for all deployments - Go 1.24 起支援 fips140，1.25 的 only 模式較完整；為相容故預設使用 on
+  GO_VER=$(go version | cut -d' ' -f3 | cut -d'.' -f2)
+  if [[ $GO_VER -ge 25 ]]; then
+    FIPS_MODE="only"
+  else
+    FIPS_MODE="on"
+  fi
   for ns in oran nonrtric nephio-system ocloud-system; do
     kubectl get deployments -n $ns -o name | while read deploy; do
       echo "Enabling FIPS for $deploy in $ns"
-      kubectl set env $deploy -n $ns GODEBUG=fips140=on
+      kubectl set env $deploy -n $ns GODEBUG=fips140=$FIPS_MODE
       kubectl set env $deploy -n $ns OPENSSL_FIPS=1
     done
   done
@@ -504,9 +510,10 @@ quick_security_fix() {
   # Apply network policy
   apply_zero_trust_policies
   
-  # Enable FIPS mode
+  # Enable FIPS mode - Go 1.24 起支援 fips140，1.25 的 only 模式較完整；為相容故預設使用 on
+  FIPS_MODE=${GODEBUG_FIPS:-on}
   kubectl get deployments -n $NAMESPACE -o name | while read deploy; do
-    kubectl set env $deploy -n $NAMESPACE GODEBUG=fips140=on
+    kubectl set env $deploy -n $NAMESPACE GODEBUG=fips140=$FIPS_MODE
   done
   
   echo "Security fixes applied"
@@ -522,3 +529,8 @@ quick_security_fix() {
 5. **Enable FIPS mode**: `enforce_fips_mode`
 6. **Quick security fix**: `quick_security_fix oran`
 7. **Scan containers**: `scan_all_containers`
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。

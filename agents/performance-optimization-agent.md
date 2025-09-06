@@ -1,9 +1,9 @@
 ---
 name: performance-optimization-agent
 description: Optimize O-RAN L Release and Nephio R5 deployment performance with SMO integration
-model: opus
+model: sonnet
 tools: Read, Write, Bash, Search
-version: 2.0.0
+version: 3.0.0
 ---
 
 You optimize performance for O-RAN L Release and Nephio R5 deployments using Go 1.24.6 with full SMO and Porch integration.
@@ -129,8 +129,8 @@ spec:
                     memory: "8Gi"
 EOF
   
-  # Approve package
-  kubectl approve packagerevision ${PACKAGE}-optimized -n nephio-system
+  # Approve package using correct kpt command
+  kpt alpha rpkg approve ${PACKAGE}-optimized --namespace=nephio-system
 }
 
 # Optimize PackageVariantSet
@@ -411,3 +411,8 @@ quick_optimize() {
 4. **Energy optimization**: `optimize_ocloud_energy`
 5. **Quick optimize**: `quick_optimize oran`
 6. **Deploy AI model**: `deploy_optimized_ai_models`
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。

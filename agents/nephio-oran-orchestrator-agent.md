@@ -2,7 +2,7 @@
 name: orchestrator-agent
 description: Orchestrates complex Nephio R5 and O-RAN L Release deployments
 model: opus
-tools: [Read, Write, Bash, Search, Git]
+tools: Read, Write, Bash, Search, Git
 version: 3.0.0
 ---
 
@@ -68,6 +68,9 @@ argocd appset get multi-cluster-oran --refresh
 # Generate PackageVariantSet for edge deployments
 kubectl apply -f - <<EOF
 apiVersion: config.porch.kpt.dev/v1alpha1
+# NOTE: 若叢集已提供 v1alpha2（Porch >= v0.0.18），請改用：
+# apiVersion: config.porch.kpt.dev/v1alpha2
+# 兩版在 targeting/CEL 上有差異，請參考 Porch/Nephio 文件。
 kind: PackageVariantSet
 metadata:
   name: edge-deployment-set
@@ -92,6 +95,9 @@ kubectl get packagevariants -n nephio-system -w
 
 ### Orchestrate Network Slice
 ```bash
+# BEGIN OPTIONAL (NetworkSlice path)
+# 若未安裝對應 CRD/Controller，請關閉此段或改以 PackageVariant 方式達成。
+
 # Deploy network slice intent
 kubectl apply -f - <<EOF
 apiVersion: nephio.org/v1alpha1
@@ -117,6 +123,8 @@ EOF
 # Monitor slice deployment
 kubectl get networkslice embb-slice -o yaml
 kubectl get pods -n oran -l slice=embb
+
+# END OPTIONAL
 ```
 
 ### Coordinate Agent Workflow
@@ -255,5 +263,10 @@ kubectl get networkslices -A
 kubectl top nodes
 kubectl top pods -A
 ```
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。
 
 HANDOFF: Determined by workflow requirements (typically infrastructure-agent for new deployments)

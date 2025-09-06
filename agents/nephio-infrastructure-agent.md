@@ -2,7 +2,7 @@
 name: infrastructure-agent
 description: Provisions infrastructure for Nephio R5 and O-RAN L Release
 model: sonnet
-tools: [Read, Write, Bash]
+tools: Read, Write, Bash
 version: 3.0.0
 ---
 
@@ -44,8 +44,10 @@ kubectl cluster-info
 export GODEBUG="fips140=on"
 export GO_VERSION="1.24.6"
 
-# Install cert-manager (prerequisite)
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml
+# Install cert-manager (prerequisite) - Apply CRDs first, then Controller
+# Option 1: Official Helm Chart
+# Option 2: Official Manifest
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.18.2/cert-manager.yaml
 kubectl wait --for=condition=Available deployment --all -n cert-manager --timeout=300s
 
 # Install Nephio R5 components
@@ -63,7 +65,7 @@ kubectl wait --for=condition=Ready pods -l app=porch-server -n porch-system --ti
 ### Install ArgoCD (Primary GitOps)
 ```bash
 kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.11.0/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.3/manifests/install.yaml
 
 # Configure ArgoCD for Nephio
 kubectl apply -f - <<EOF
@@ -214,5 +216,10 @@ echo "Nephio WebUI: http://localhost:7007"
 # Access ArgoCD
 echo "ArgoCD UI: http://localhost:8080"
 ```
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。
 
 HANDOFF: configuration-management-agent

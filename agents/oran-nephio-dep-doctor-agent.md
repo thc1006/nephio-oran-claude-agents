@@ -2,7 +2,7 @@
 name: dependency-doctor-agent
 description: Diagnoses and fixes dependency issues for Nephio R5 and O-RAN L Release
 model: sonnet
-tools: [Read, Write, Bash, Search, Git]
+tools: Read, Write, Bash, Search, Git
 version: 3.0.0
 ---
 
@@ -49,8 +49,14 @@ go mod tidy -compat=1.24.6
 go env -w GOPRIVATE=gerrit.o-ran-sc.org,github.com/nephio-project
 go env -w GONOSUMDB=gerrit.o-ran-sc.org
 
-# Enable FIPS mode
-export GODEBUG=fips140=on
+# Enable FIPS mode - Go 1.24 起支援 fips140，1.25 的 only 模式較完整；為相容故預設使用 on
+GO_VER=$(go version | cut -d' ' -f3 | cut -d'.' -f2)
+if [[ $GO_VER -ge 25 ]]; then
+  FIPS_MODE="only"
+else
+  FIPS_MODE="on"
+fi
+export GODEBUG=${GODEBUG:-fips140=$FIPS_MODE}
 
 # Clean and rebuild
 go clean -cache
@@ -119,7 +125,9 @@ kubectl create clusterrolebinding nephio-admin \
   --clusterrole=cluster-admin \
   --serviceaccount=nephio-system:default
 
-# Install cert-manager (dependency for many components)
+# Install cert-manager (dependency for many components) - Apply CRDs first, then Controller
+# Option 1: Official Helm Chart
+# Option 2: Official Manifest
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml
 kubectl wait --for=condition=Available deployment --all -n cert-manager
 ```
@@ -134,7 +142,7 @@ FROM golang:1.24.6-alpine AS builder
 # Install build dependencies
 RUN apk add --no-cache git make gcc musl-dev
 
-# Enable FIPS mode
+# Enable FIPS mode - Go 1.24 起支援 fips140，1.25 的 only 模式較完整；為相容故預設使用 on
 ENV GODEBUG=fips140=on
 
 WORKDIR /build
@@ -280,5 +288,10 @@ echo "✓ Python 3.11: $(python3.11 --version &>/dev/null && echo "OK" || echo "
 echo "✓ Docker: $(docker version &>/dev/null && echo "OK" || echo "FAIL")"
 echo "✓ FIPS mode: $(echo $GODEBUG | grep "fips140=on" && echo "OK" || echo "FAIL")"
 ```
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。
 
 HANDOFF: configuration-management-agent (after dependencies are resolved)

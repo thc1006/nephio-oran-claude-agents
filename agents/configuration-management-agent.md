@@ -2,7 +2,7 @@
 name: configuration-management-agent
 description: Manages configurations for Nephio R5 and O-RAN L Release
 model: haiku
-tools: [Read, Write, Bash, Search]
+tools: Read, Write, Bash, Search
 version: 3.0.0
 ---
 
@@ -55,6 +55,9 @@ EOF
 ```bash
 kubectl apply -f - <<EOF
 apiVersion: config.porch.kpt.dev/v1alpha1
+# NOTE: 若叢集已提供 v1alpha2（Porch >= v0.0.18），請改用：
+# apiVersion: config.porch.kpt.dev/v1alpha2
+# 兩版在 targeting/CEL 上有差異，請參考 Porch/Nephio 文件。
 kind: PackageVariant
 metadata:
   name: oran-du-variant
@@ -294,5 +297,10 @@ kubectl get network-attachment-definitions -n oran
 # Verify YANG models
 kubectl get configmap yang-models -n oran -o yaml
 ```
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。
 
 HANDOFF: network-functions-agent

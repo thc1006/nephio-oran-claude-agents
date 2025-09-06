@@ -2,7 +2,7 @@
 name: network-functions-agent
 description: Deploys O-RAN network functions on Nephio R5
 model: haiku
-tools: [Read, Write, Bash]
+tools: Read, Write, Bash
 version: 3.0.0
 ---
 
@@ -13,8 +13,31 @@ You deploy O-RAN L Release network functions on Nephio R5 infrastructure.
 ### Deploy Near-RT RIC Platform
 ```bash
 # Add O-RAN SC Helm repository
-helm repo add o-ran-sc https://nexus3.o-ran-sc.org:10001/repository/helm-ricplt/
+# NOTE: Official recommendation is to use ric-dep deployment scripts
+# Public helm repository may not be available or up-to-date
+# Consider using ric-dep for production deployments
+helm repo add o-ran-sc https://nexus3.o-ran-sc.org:10001/repository/helm-ricplt/ || true
 helm repo update
+
+# Verify chart availability
+if ! helm search repo o-ran-sc/ric-platform &>/dev/null; then
+  echo "⚠️  o-ran-sc/ric-platform chart not found. Consider using ric-dep deployment scripts instead."
+fi
+
+# Fallback to ric-dep script if helm chart not available
+if ! helm search repo o-ran-sc/ric-platform >/dev/null 2>&1; then
+  echo "⚠️ 未找到 'o-ran-sc/ric-platform'。官方建議使用 ric-dep 腳本。"
+  read -r -p "要改用 ric-dep 腳本執行 dry-run 安裝嗎？[y/N] " ans
+  if [[ "$ans" =~ ^[Yy]$ ]]; then
+    set -e
+    git clone https://gerrit.o-ran-sc.org/r/ric-plt/ric-dep || true
+    pushd ric-dep >/dev/null
+    ./bin/install -f examples/RECIPE_EXAMPLE.yaml --dry-run || true
+    popd >/dev/null
+    set +e
+    echo "✅ ric-dep dry-run 完成（僅檢視，不落地）。"
+  fi
+fi
 
 # Create namespace
 kubectl create namespace ricplt
@@ -305,7 +328,7 @@ metadata:
   namespace: oran
 data:
   e2.conf: |
-    E2_TERM_ADDRESS=ric-e2term.ricplt:36422
+    E2_TERM_ADDRESS=ric-e2term.ricplt:36421
     E2_NODE_ID=gnb_001_001
     E2AP_VERSION=3.0
     RAN_FUNCTIONS=KPM,RC,CCC
@@ -476,5 +499,10 @@ curl http://a1mediator.ricplt:8080/A1-P/v2/policytypes
 # Check service endpoints
 kubectl get svc -A | grep -E "ric|oran"
 ```
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。
 
 HANDOFF: monitoring-agent

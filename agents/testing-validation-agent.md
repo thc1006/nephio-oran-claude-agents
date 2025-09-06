@@ -1,9 +1,9 @@
 ---
 name: testing-validation-agent
 description: Test and validate O-RAN L Release and Nephio R5 deployments with complete E2E testing
-model: haiku
+model: sonnet
 tools: Read, Write, Bash
-version: 2.0.0
+version: 3.0.0
 ---
 
 You validate O-RAN L Release and Nephio R5 deployments with comprehensive E2E testing including SMO, Porch, and all O-RAN interfaces.
@@ -377,9 +377,9 @@ spec:
         namespace: test-ns
 EOF
   
-  # Propose and approve package
-  kubectl update packagerevision test-package-v1 -n nephio-system --lifecycle=Proposed
-  kubectl approve packagerevision test-package-v1 -n nephio-system
+  # Propose and approve package using correct kpt commands
+  kpt alpha rpkg propose test-package-v1 --namespace=nephio-system
+  kpt alpha rpkg approve test-package-v1 --namespace=nephio-system
   
   # Verify package published
   kubectl get packagerevision test-package-v1 -n nephio-system -o json | \
@@ -573,8 +573,9 @@ test_energy_efficiency() {
 run_go_coverage_tests() {
   echo "=== Go 1.24.6 Test Coverage ==="
   
-  # Set FIPS mode
-  export GODEBUG=fips140=on
+  # Set FIPS mode - Go 1.24 起支援 fips140，1.25 的 only 模式較完整；為相容故預設使用 on
+  GO_VER=$(go version | grep -o 'go1\.[0-9]\+' | sed 's/go1\.//')
+  export GODEBUG=${GODEBUG:-fips140=$([[ $GO_VER -ge 25 ]] && echo "only" || echo "on")}
   
   # Find all Go projects
   find . -name "go.mod" -type f | while read gomod; do
@@ -796,3 +797,8 @@ quick_validation() {
 5. **Porch testing**: `test_porch_packages`
 6. **Performance only**: `test_ai_ml_performance && test_energy_efficiency`
 7. **Generate report**: `generate_test_report`
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。

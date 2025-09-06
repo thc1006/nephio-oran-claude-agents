@@ -2,7 +2,7 @@
 name: data-analytics-agent
 description: Processes telemetry data from O-RAN L Release
 model: sonnet
-tools: [Read, Write, Bash, Search]
+tools: Read, Write, Bash, Search
 version: 3.0.0
 ---
 
@@ -59,18 +59,38 @@ kafka-topics.sh --bootstrap-server kafka:9092 \
 
 ### Deploy InfluxDB for Time Series
 ```bash
+# Create InfluxDB credentials secret (users must populate values)
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: influxdb-credentials
+  namespace: analytics
+type: Opaque
+# Base64 encoded password - populate via kubectl create secret or CI
+# Base64 encoded token - populate via kubectl create secret or CI
+data:
+  INFLUXDB_ADMIN_PASSWORD: ""
+  INFLUXDB_TOKEN: ""
+# Example to create:
+# kubectl create secret generic influxdb-credentials \
+#   --from-literal=INFLUXDB_ADMIN_PASSWORD=your-secure-password \
+#   --from-literal=INFLUXDB_TOKEN=your-secure-token \
+#   -n analytics
+EOF
+
 # Install InfluxDB 2.x
 helm repo add influxdata https://helm.influxdata.com/
 helm repo update
 
+# Deploy with secret reference (remove hardcoded credentials)
 helm install influxdb influxdata/influxdb2 \
   --namespace analytics \
   --set persistence.enabled=true \
   --set persistence.size=100Gi \
   --set adminUser.organization=oran \
   --set adminUser.bucket=oran-metrics \
-  --set adminUser.password=admin123 \
-  --set adminUser.token=oran-token-123
+  --set adminUser.existingSecret=influxdb-credentials
 
 # Create additional buckets
 kubectl exec -it -n analytics influxdb-0 -- influx bucket create \
@@ -185,7 +205,7 @@ import numpy as np
 # Configuration
 KAFKA_BOOTSTRAP = os.getenv('KAFKA_BOOTSTRAP', 'kafka.analytics:9092')
 INFLUX_URL = os.getenv('INFLUX_URL', 'http://influxdb.analytics:8086')
-INFLUX_TOKEN = os.getenv('INFLUX_TOKEN', 'oran-token-123')
+INFLUX_TOKEN = os.getenv('INFLUX_TOKEN')  # Read from secret via environment
 INFLUX_ORG = 'oran'
 INFLUX_BUCKET = 'kpi-data'
 
@@ -277,7 +297,10 @@ spec:
         - name: INFLUX_URL
           value: "http://influxdb.analytics:8086"
         - name: INFLUX_TOKEN
-          value: "oran-token-123"
+          valueFrom:
+            secretKeyRef:
+              name: influxdb-credentials
+              key: INFLUXDB_TOKEN
         volumeMounts:
         - name: script
           mountPath: /scripts
@@ -365,6 +388,26 @@ kubectl apply -f anomaly-detection-pipeline.yaml
 
 ### Create Analytics Dashboard
 ```bash
+# Create Superset credentials secret (users must populate values)
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: superset-credentials
+  namespace: analytics
+type: Opaque
+data:
+  ADMIN_USERNAME: ""     # Base64 encoded admin username - populate via kubectl create secret or CI
+  ADMIN_PASSWORD: ""     # Base64 encoded admin password - populate via kubectl create secret or CI
+  DATABASE_URI: ""       # Base64 encoded database connection string - populate via kubectl create secret or CI
+# Example to create:
+# kubectl create secret generic superset-credentials \
+#   --from-literal=ADMIN_USERNAME=admin \
+#   --from-literal=ADMIN_PASSWORD=your-secure-password \
+#   --from-literal=DATABASE_URI=influxdb://oran:your-token@influxdb.analytics:8086/oran-metrics \
+#   -n analytics
+EOF
+
 # Deploy Superset for analytics
 helm repo add superset https://apache.github.io/superset
 helm repo update
@@ -376,16 +419,47 @@ helm install superset superset/superset \
   --set supersetNode.connections.db_host=superset-postgresql \
   --set supersetNode.connections.redis_host=superset-redis-headless
 
-# Configure data sources
+# Configure data sources (credentials from secret)
 kubectl exec -it -n analytics superset-0 -- superset db upgrade
-kubectl exec -it -n analytics superset-0 -- superset fab create-admin \
-  --username admin --firstname Admin --lastname User \
-  --email admin@oran.org --password admin
 
-# Add InfluxDB connection
-kubectl exec -it -n analytics superset-0 -- superset set-database-uri \
-  -d "O-RAN Metrics" \
-  -u "influxdb://oran:admin123@influxdb.analytics:8086/oran-metrics"
+# Create admin user using environment variables from secret
+kubectl apply -f - <<EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: superset-init-admin
+  namespace: analytics
+spec:
+  template:
+    spec:
+      containers:
+      - name: create-admin
+        image: apache/superset:latest
+        command: ["bash", "-c"]
+        args:
+        - |
+          superset fab create-admin \
+            --username \$ADMIN_USERNAME \
+            --firstname Admin \
+            --lastname User \
+            --email admin@oran.org \
+            --password \$ADMIN_PASSWORD
+        env:
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: superset-credentials
+              key: ADMIN_USERNAME
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: superset-credentials
+              key: ADMIN_PASSWORD
+      restartPolicy: OnFailure
+EOF
+
+# Add InfluxDB connection using secret
+# Note: Connection must be configured through Superset UI using DATABASE_URI from secret
 ```
 
 ### Query Analytics Data
@@ -400,8 +474,11 @@ from(bucket: "kpi-data")
   |> yield(name: "prb_utilization")
 EOF
 
+# Get token from secret
+INFLUX_TOKEN=$(kubectl get secret influxdb-credentials -n analytics -o jsonpath='{.data.INFLUXDB_TOKEN}' | base64 -d)
+
 curl -X POST http://localhost:8086/api/v2/query \
-  -H "Authorization: Token oran-token-123" \
+  -H "Authorization: Token $INFLUX_TOKEN" \
   -H "Content-Type: application/vnd.flux" \
   -d @query-kpis.flux
 
@@ -409,7 +486,7 @@ curl -X POST http://localhost:8086/api/v2/query \
 kubectl exec -it -n analytics influxdb-0 -- influx query \
   'from(bucket:"kpi-data") |> range(start: -24h) |> filter(fn: (r) => r._measurement == "oran_kpis")' \
   --org oran \
-  --token oran-token-123 \
+  --token "$INFLUX_TOKEN" \
   --raw > daily-kpis.csv
 ```
 
@@ -464,10 +541,15 @@ echo "Flink UI: http://localhost:8081"
 
 # Access Superset
 kubectl port-forward -n analytics svc/superset 8088:8088 &
-echo "Superset: http://localhost:8088 (admin/admin)"
+echo "Superset: http://localhost:8088 (credentials from secret)"
 
 # Check data flow
 kubectl logs -n analytics job/kpi-calculator --tail=50
 ```
+
+## Guardrails
+- Non-destructive by default：預設只做 dry-run 或輸出 unified diff；需經同意才落盤寫入。
+- Consolidation first：多檔修改先彙總變更點，產生單一合併補丁再套用。
+- Scope fences：僅作用於本 repo 既定目錄；不得外呼未知端點；敏感資訊一律以 Secret 注入。
 
 HANDOFF: performance-optimization-agent (if exists) or monitoring-agent (for feedback loop)
